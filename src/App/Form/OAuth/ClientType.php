@@ -15,6 +15,7 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name')
             ->add('allowedGrantTypes', 'choice', array(
                 'choices' => array(
                     'authorization_code' => 'authorization_code',
@@ -26,6 +27,9 @@ class ClientType extends AbstractType
                 'type' => 'text',
                 'allow_add' => true,
                 'allow_delete'=>true
+            ))
+            ->add('preApproved', 'checkbox', array(
+                'required' => false,
             ))
             ->add('submit', 'submit')
         ;

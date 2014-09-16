@@ -16,4 +16,37 @@ class Client extends BaseClient
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $preApproved;
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function isPreApproved()
+    {
+        return $this->preApproved;
+    }
+
+    public function setPreApproved($preApproved)
+    {
+        $this->preApproved = $preApproved;
+
+        return $this;
+    }
 }
