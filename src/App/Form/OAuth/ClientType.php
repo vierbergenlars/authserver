@@ -16,13 +16,6 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('allowedGrantTypes', 'choice', array(
-                'choices' => array(
-                    'authorization_code' => 'authorization_code',
-                ),
-                'multiple'=>true,
-                'expanded' => true,
-            ))
             ->add('redirectUris', 'collection', array(
                 'type' => 'text',
                 'allow_add' => true,
