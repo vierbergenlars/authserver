@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * @ORM\Table(name="auth_users")
- * @ORM\Entity(repositoryClass="vierbergenlars\Bundle\RadRestBundle\Doctrine\EntityRepository")
+ * @ORM\Entity(repositoryClass="App\Doctrine\EntityRepository")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
