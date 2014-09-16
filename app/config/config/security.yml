@@ -1,0 +1,42 @@
+security:
+    encoders:
+        App\Entity\User: bcrypt
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+            id: app.user_provider
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            form_login:
+                login_path: app_oauth_login
+                check_path: app_oauth_login_check
+
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
+
+        admin:
+            pattern: ^/admin
+            form_login:
+                login_path: app_admin_login
+                check_path: app_admin_login_check
+            # Add authentication method
+
+    access_control:
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/admin, roles: [ ROLE_ADMIN ] }

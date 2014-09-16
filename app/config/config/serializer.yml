@@ -1,0 +1,6 @@
+jms_serializer:
+    metadata:
+        directories:
+            Knp:
+                namespace_prefix: "Knp"
+                path: "%kernel.root_dir%/Resources/serializer/Knp"

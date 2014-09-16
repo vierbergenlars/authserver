@@ -1,0 +1,8 @@
+/web/bundles/
+/app/cache/*
+/app/logs/*
+/vendor/
+/bin/
+/node_modules
+/components
+/app/database.sqlite

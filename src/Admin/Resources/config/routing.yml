@@ -1,0 +1,11 @@
+admin_user:
+    resource: app.admin.user.controller
+    type: rest
+    name_prefix: admin_user_
+    prefix: users
+
+admin_oauth_client:
+    resource: app.admin.oauth.client.controller
+    type: rest
+    name_prefix: admin_oauth_client_
+    prefix: oauth/clients

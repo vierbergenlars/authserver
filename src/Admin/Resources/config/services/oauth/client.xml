@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="app.admin.oauth.client.resource_manager" class="AppBundle:OAuth\Client">
+            <tag name="radrest.entity_repository" />
+            <tag name="radrest.resource_manager" resource="oauth.client" />
+        </service>
+        <service id="app.admin.oauth.client.authorization_checker" class="Admin\Security\DefaultAuthorizationChecker">
+            <tag name="radrest.authorization_checker" resource="oauth.client" />
+        </service>
+        <service id="app.admin.oauth.client.controller" class="Admin\Controller\DefaultController">
+            <tag name="radrest.controller" resource="oauth.client" />
+            <argument type="service" id="knp_paginator" />
+            <argument>admin_oauth_client</argument>
+        </service>
+    </services>
+</container>

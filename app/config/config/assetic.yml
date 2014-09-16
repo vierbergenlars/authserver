@@ -1,0 +1,12 @@
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    bundles:        [ ]
+    filters:
+        cssrewrite: ~
+        less:
+            node_paths: [ %kernel.root_dir%/../node_modules ]
+
+braincrafted_bootstrap:
+    jquery_path: %kernel.root_dir%/../vendor/components/jquery/jquery.min.js

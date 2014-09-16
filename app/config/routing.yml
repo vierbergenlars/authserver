@@ -1,0 +1,13 @@
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+app_security:
+    resource: "@AppBundle/Resources/config/routing/security.yml"
+
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix: /admin
+    type: rest

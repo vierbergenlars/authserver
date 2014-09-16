@@ -1,0 +1,8 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: config/security.yml }
+    - { resource: config/framework.yml }
+    - { resource: config/assetic.yml }
+    - { resource: config/rest_api.yml }
+    - { resource: config/oauth_server.yml }
+    - { resource: config/serializer.yml }
