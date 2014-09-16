@@ -19,24 +19,21 @@ security:
             pattern:    ^/oauth/v2/token
             security:   false
 
-        oauth_authorize:
-            pattern:    ^/oauth/v2/auth
-            form_login:
-                login_path: app_oauth_login
-                check_path: app_oauth_login_check
-
         api:
             pattern:    ^/api
             fos_oauth:  true
             stateless:  true
 
-        admin:
-            pattern: ^/admin
+        public:
+            pattern: ^/
             form_login:
-                login_path: app_admin_login
-                check_path: app_admin_login_check
-            # Add authentication method
+                login_path: app_login
+                check_path: app_login_check
+            logout: ~
+            anonymous: ~
 
     access_control:
+        - { path: ^/login$, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/oauth/v2/auth, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/admin, roles: [ ROLE_ADMIN ] }

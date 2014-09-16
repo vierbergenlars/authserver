@@ -20,7 +20,6 @@ class SecurityController extends Controller
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        $loginUrl = $this->generateUrl($request->attributes->get('login_check'));
         // Add the following lines
         if ($session->has('_security.target_path')) {
             if (false !== strpos($session->get('_security.target_path'), $this->generateUrl('fos_oauth_server_authorize'))) {
@@ -32,7 +31,6 @@ class SecurityController extends Controller
             // last username entered by the user
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
-            'login_check'   => $loginUrl,
         ));
     }
 }

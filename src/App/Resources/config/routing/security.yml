@@ -1,16 +1,10 @@
-app_admin_login:
-    path: /login/admin
+app_login:
+    path: /login
     defaults:
         _controller: AppBundle:Security:login
-        login_check: app_admin_login_check
 
-app_admin_login_check:
-    path: /admin/login_check
+app_login_check:
+    path: /login_check
 
-app_oauth_login:
-    path: /login/oauth
-    defaults:
-        _controller: AppBundle:Security:login
-        login_check: app_oauth_login_check
-app_oauth_login_check:
-    path: /oauth/v2/auth/login_check
+logout:
+    path: /logout
