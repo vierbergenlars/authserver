@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="auth_users")
@@ -43,10 +44,18 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @var Group[]
+     *
+     * @ORM\ManyToMany(targetEntity="Group", mappedBy="members")
+     */
+    private $groups;
+
     public function __construct()
     {
         $this->roles = array('ROLE_USER');
         $this->isActive = true;
+        $this->groups = new ArrayCollection();
     }
 
     public function getUsername()
@@ -204,5 +213,49 @@ class User implements AdvancedUserInterface, \Serializable
         $this->roles = $roles;
 
         return $this;
+    }
+
+    /**
+     * Add groups
+     *
+     * @param \App\Entity\Group $groups
+     * @return User
+     */
+    public function addGroup(\App\Entity\Group $groups)
+    {
+        $this->groups[] = $groups;
+        $groups->addMember($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \App\Entity\Group $groups
+     */
+    public function removeGroup(\App\Entity\Group $groups)
+    {
+        $this->groups->removeElement($groups);
+        $groups->removeMember($this);
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    public function _getAllGroupNames()
+    {
+        $groups = array();
+        foreach($this->groups as $group) {
+            $groups = array_merge($groups, $group->_getAllGroupNames());
+        }
+        return $groups;
     }
 }

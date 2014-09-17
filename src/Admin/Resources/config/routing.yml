@@ -3,6 +3,12 @@ admin_user:
     type: rest
     name_prefix: admin_user_
     prefix: users
+    
+admin_group:
+    resource: app.admin.group.controller
+    type: rest
+    name_prefix: admin_group_
+    prefix: groups
 
 admin_oauth_client:
     resource: app.admin.oauth.client.controller
