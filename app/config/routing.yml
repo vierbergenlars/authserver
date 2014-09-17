@@ -11,3 +11,8 @@ admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
     prefix: /admin
     type: rest
+
+api:
+    resource: "@AppBundle/Resources/config/routing/api.yml"
+    prefix: /api
+    type: rest

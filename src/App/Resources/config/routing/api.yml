@@ -1,0 +1,5 @@
+api_membership:
+    resource: "@AppBundle/Controller/Api/MembershipController.php"
+    type: rest
+    prefix: memberships
+    name_prefix: api_membership_
