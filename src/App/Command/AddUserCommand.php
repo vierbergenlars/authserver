@@ -24,11 +24,13 @@ class AddUserCommand extends Command
     {
         $em = $this->getDoctrine()->getManagerForClass('AppBundle:User');
 
-        $user = new User($input->getArgument('username'), $input->getArgument('password'), $input->getArgument('email'));
+        $user = new User();
+        $user->setUsername($input->getArgument('username'));
+        $user->setEmail($input->getArgument('email'));
 
         $encoderFactory = $this->getService('security.encoder_factory');
         $encoder = $encoderFactory->getEncoder(get_class($user));
-        $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+        $user->setPassword($encoder->encodePassword($input->getArgument('password'), $user->getSalt()));
 
         foreach($input->getOption('role') as $role) {
             $user->addRole($role);
