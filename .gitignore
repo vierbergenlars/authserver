@@ -6,3 +6,5 @@
 /node_modules
 /components
 /app/database.sqlite
+/web/css
+/web/js
