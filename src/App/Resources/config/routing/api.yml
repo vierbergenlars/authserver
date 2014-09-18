@@ -1,5 +1,4 @@
-api_membership:
-    resource: "@AppBundle/Controller/Api/MembershipController.php"
-    type: rest
-    prefix: memberships
-    name_prefix: api_membership_
+api_user_get:
+    pattern: user
+    defaults:
+        _controller: App\Controller\Api\UserController::getAction

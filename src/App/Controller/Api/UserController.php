@@ -7,17 +7,21 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
-class MembershipController extends Controller
+class UserController extends Controller
 {
     /**
      * @View
      * @throws AccessDeniedException
      */
-    public function cgetAction()
+    public function getAction()
     {
         if(!($user = $this->getUser())) {
             throw new AccessDeniedException();
         }
-        return array_keys($user->_getAllGroupNames());
+        return array(
+            'user_id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'groups' => array_keys($user->_getAllGroupNames()),
+        );
     }
 }
