@@ -1,0 +1,12 @@
+{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Delete</h3>
+    </div>
+    <div class="panel-body">
+        {% if form is defined %}
+            {{ form(form, {action: path(controller.route('delete'), {id: id})}) }}
+        {% endif %}
+    </div>
+    {% include 'VlRadRestBundle:Default:links.html.twig' with {data: form.vars.value} %}
+{% endblock %}

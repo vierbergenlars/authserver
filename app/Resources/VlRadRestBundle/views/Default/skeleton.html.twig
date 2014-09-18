@@ -3,8 +3,23 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12">
-                {% block radrest_content %}
-                {% endblock %}
+                <div class="panel panel-
+                {%- spaceless %}
+                    {% set _route = app.request.attributes.get('_route') %}
+                    {% if _route ends with '_get' or _route ends with '_gets' %}
+                        info
+                    {% elseif _route ends with '_post' or _route ends with '_put' or _route ends with '_delete' %}
+                        warning
+                    {% elseif _route ends with '_remove' %}
+                        danger
+                    {% else %}
+                        primary
+                    {% endif %}
+                {% endspaceless -%}
+                ">
+                    {% block radrest_content %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
     </div>

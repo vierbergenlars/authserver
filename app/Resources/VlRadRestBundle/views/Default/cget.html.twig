@@ -1,0 +1,51 @@
+{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">List</h3>
+    </div>
+    <div class="table-responsive">
+        {% if data|length > 0 %}
+          <table class="table">
+            <thead>
+              {% set keys = data[0]|radrest_object_keys %}
+              <tr>
+                {% for name in keys %}
+                  <th>{{ name|humanize }}</th>
+                {% endfor %}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in data %}
+                <tr>
+                  {% for key in keys %}
+                    <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
+                  {% endfor %}
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                        {% if controller.may('get', obj) %}
+                            <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}">View</a>
+                        {% endif %}
+                        {% if controller.may('edit', obj) %}
+                            <a class="btn btn-default" href="{{ url(controller.route('edit'), {id: obj.id}) }}">Edit</a>
+                        {% endif %}
+                        {% if controller.may('remove', obj) %}
+                            <a class="btn btn-danger" href="{{ url(controller.route('remove'), {id: obj.id}) }}">Delete</a>
+                        {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {% if controller.may('new') %}
+            <a class="btn btn-primary btn-sm" href="{{url(controller.route('new'))}}">Create</a>
+        {% endif %}
+    </div>
+    <div class="panel-body text-center">
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+{% endblock %}
