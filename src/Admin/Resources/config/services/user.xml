@@ -11,7 +11,7 @@
         <service id="app.admin.user.form" class="App\Form\UserType">
             <tag name="radrest.form" resource="user" />
         </service>
-        <service id="app.admin.user.controller" class="Admin\Controller\DefaultController">
+        <service id="app.admin.user.controller" class="Admin\Controller\UserController">
             <tag name="radrest.controller" resource="user" />
             <argument type="service" id="knp_paginator" />
             <argument>admin_user</argument>

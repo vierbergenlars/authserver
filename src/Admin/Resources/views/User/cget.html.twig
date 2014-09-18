@@ -1,0 +1,53 @@
+{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Users</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Groups {{ label('WIP')}}</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in data %}
+                    <tr>
+                        <td>
+                            {{ obj.username }}
+                            {% if 'ROLE_ADMIN' in obj.roles %}
+                                {{ label_danger('Admin') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ obj.email }}</td>
+                        <td>...</td>
+                        <td>
+                          <div class="btn-group btn-group-sm">
+                              {% if controller.may('get', obj) %}
+                                  <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}">View</a>
+                              {% endif %}
+                              {% if controller.may('edit', obj) %}
+                                  <a class="btn btn-default" href="{{ url(controller.route('edit'), {id: obj.id}) }}">Edit</a>
+                              {% endif %}
+                              {% if controller.may('remove', obj) %}
+                                  <a class="btn btn-danger" href="{{ url(controller.route('remove'), {id: obj.id}) }}">Delete</a>
+                              {% endif %}
+                          </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-body">
+        {% if controller.may('new') %}
+            <a class="btn btn-primary btn-sm" href="{{url(controller.route('new'))}}">Create</a>
+        {% endif %}
+    </div>
+    <div class="panel-body text-center">
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+{% endblock %}
