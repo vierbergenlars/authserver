@@ -25,7 +25,7 @@
         "willdurand/hateoas-bundle": "1.0.*@dev",
         "hautelook/templated-uri-bundle": "~2.0",
         "willdurand/rest-extra-bundle": "~1.0",
-        "braincrafted/bootstrap-bundle": "~2.0.0",
+        "braincrafted/bootstrap-bundle": "~2.1.0",
         "twbs/bootstrap": "~3.0",
         "components/jquery": "~1.11.0",
         "doctrine/migrations": "dev-master",
