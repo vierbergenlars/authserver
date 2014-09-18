@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
         {% if form is defined %}
-            {{ form(form, {action: path(controller.route('post'))}) }}
+            {{ form(form, {action: path(controller.route('post')), style: 'horizontal'}) }}
         {% endif %}
     </div>
     {% include 'VlRadRestBundle:Default:links.html.twig' with { controller: controller } only %}

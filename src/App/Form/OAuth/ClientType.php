@@ -16,13 +16,16 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('redirectUris', 'collection', array(
+            ->add('redirectUris', 'bootstrap_collection', array(
                 'type' => 'text',
                 'allow_add' => true,
                 'allow_delete'=>true
             ))
             ->add('preApproved', 'checkbox', array(
                 'required' => false,
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
             ))
             ->add('submit', 'submit')
         ;

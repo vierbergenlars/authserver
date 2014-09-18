@@ -24,27 +24,3 @@
         </div>
     </div>
 {% endblock %}
-{% block javascript %}
-    {{ parent() }}
-    <script>
-        $('form [data-prototype]').each(function() {
-            var $this = $(this);
-            var proto = $(this).data('prototype');
-            var $add = $('<span>+ Add</span>');
-            $this.append($add);
-            $add.on('click', function() {
-                var field = proto.replace(/\[__name__\]/g, '[]');
-                var field = field.replace(/__name__(label__)?/g, $this.find(':input').length);
-                $add.before(field);
-            });
-        });
-        $('form [data-prototype] .form-group').each(function() {
-            var $this = $(this);
-            var $delete = $('<span>x</span>');
-            $this.append($delete);
-            $delete.on('click', function() {
-                $this.remove();
-            });
-        })
-    </script>
-{% endblock %}

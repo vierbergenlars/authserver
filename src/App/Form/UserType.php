@@ -27,7 +27,11 @@ class UserType extends AbstractType
                 'multiple'=>true,
                 'expanded' => true,
             ))
-            ->add('enabled')
+            ->add('enabled', 'checkbox', array(
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
+            ))
             ->add('submit', 'submit')
         ;
     }

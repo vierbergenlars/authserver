@@ -26,6 +26,9 @@ class GroupType extends AbstractType
             ))
             ->add('exportable', 'checkbox', array(
                 'required' => false,
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
             ))
             ->add('submit', 'submit')
         ;
