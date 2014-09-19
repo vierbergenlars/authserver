@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="auth_users")
- * @ORM\Entity(repositoryClass="App\Doctrine\EntityRepository")
+ * @ORM\Entity(repositoryClass="UserRepository")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
