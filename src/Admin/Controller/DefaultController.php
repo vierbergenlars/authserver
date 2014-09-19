@@ -22,7 +22,7 @@ use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\DeleteTrait;
 use vierbergenlars\Bundle\RadRestBundle\View\View;
 use vierbergenlars\Bundle\RadRestBundle\Twig\ControllerVariables;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Search\SearchFieldException;
+use App\Search\SearchException;
 
 class DefaultController implements RadRestControllerInterface
 {
@@ -86,7 +86,7 @@ class DefaultController implements RadRestControllerInterface
                 $view = View::create($this->getPagination($data, $request->query->get('page', 1)));
                 $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
                 return $this->handleView($view);
-            } catch(SearchFieldException $ex) {
+            } catch(SearchException $ex) {
                 throw new BadRequestHttpException($ex->getMessage(), $ex);
             }
         } else {

@@ -2,7 +2,7 @@
 
 namespace App\Search;
 
-class SearchFieldException extends \RuntimeException
+class SearchFieldException extends SearchException
 {
     private $fieldname;
     private $whitelist;
