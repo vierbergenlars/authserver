@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% extends 'VlRadRestBundle:Default:cget.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">Users</h3>
@@ -9,7 +9,6 @@
                 <tr>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Groups {{ label('WIP')}}</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -19,11 +18,10 @@
                         <td>
                             {{ obj.username }}
                             {% if 'ROLE_ADMIN' in obj.roles %}
-                                {{ label_danger('Admin') }}
+                                <a href="{{ url(controller.route('cget'), {q: 'is: admin'})}}">{{ label_danger('Admin') }}</a>
                             {% endif %}
                         </td>
                         <td>{{ obj.email }}</td>
-                        <td>...</td>
                         <td>
                           <div class="btn-group btn-group-sm">
                               {% if controller.may('get', obj) %}
