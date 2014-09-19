@@ -2,7 +2,7 @@ namespace App\Search;
 
 grammar SearchGrammar {
     start Query =
-        r:(_ r:Parameter { return $r; })* _? {
+        r:(_? r:Parameter { return $r; })* _? {
             return $r;
         };
     Parameter =
