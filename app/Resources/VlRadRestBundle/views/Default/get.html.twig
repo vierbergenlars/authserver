@@ -3,11 +3,14 @@
     <div class="panel-heading">
         <h3 class="panel-title">View</h3>
     </div>
-    
+
     <div class="panel-body">
-        {% for key in data|radrest_object_keys %}
-            <p>{{ key }}: {{ attribute(data, key)|radrest_object_stringify }}</p>
-        {% endfor %}
+        <dl class="dl-horizontal">
+            {% for key in data|radrest_object_keys %}
+                <dt>{{ key|humanize }}</dt>
+                <dd>{{ attribute(data, key)|radrest_object_stringify }}</dd>
+            {% endfor %}
+        </dl>
     </div>
     {% include 'VlRadRestBundle:Default:links.html.twig' %}
 {% endblock %}
