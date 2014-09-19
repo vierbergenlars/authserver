@@ -1,0 +1,31 @@
+{% extends 'VlRadRestBundle:Default:get.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">User {{ data.username }}</h3>
+    </div>
+
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Username</dt><dd>{{ data.username }}</dd>
+            <dt>Email</dt><dd>{{ data.email }}</dd>
+            <dt>Local flags</dt><dd>
+                {% if 'ROLE_SUPER_ADMIN' == data.role %}
+                    {{ label_danger('Super admin') }}
+                {% elseif 'ROLE_ADMIN' == data.role %}
+                    {{ label_danger('Admin') }}
+                {% else %}
+                    {{ label_success('User') }}
+                {% endif %}
+                {% if not data.enabled %}
+                    {{ label('Disabled') }}
+                {% endif %}
+            </dd>
+            <dt>Member of</dt><dd>
+                {% for g in data.groups %}
+                    {{ g.name }}<br>
+                {% endfor %}
+            </dd>
+        </dl>
+    </div>
+    {% include 'VlRadRestBundle:Default:links.html.twig' %}
+{% endblock %}

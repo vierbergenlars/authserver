@@ -17,8 +17,13 @@
                     <tr>
                         <td>
                             {{ obj.username }}
-                            {% if 'ROLE_ADMIN' in obj.roles %}
+                            {% if 'ROLE_SUPER_ADMIN' == obj.role %}
+                                <a href="{{ url(controller.route('cget'), {q: 'is: superadmin'})}}">{{ label_danger('Super admin') }}</a>
+                            {% elseif 'ROLE_ADMIN' == obj.role %}
                                 <a href="{{ url(controller.route('cget'), {q: 'is: admin'})}}">{{ label_danger('Admin') }}</a>
+                            {% endif %}
+                            {% if not obj.enabled %}
+                                <a href="{{ url(controller.route('cget'), {q: 'is: disabled'}) }}">{{ label('Disabled') }}</a>
                             {% endif %}
                         </td>
                         <td>{{ obj.email }}</td>
