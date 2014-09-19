@@ -35,9 +35,9 @@ class User implements AdvancedUserInterface, \Serializable
     private $email;
 
     /**
-     * @ORM\Column(type="simple_array")
+     * @ORM\Column(name="roles", type="string")
      */
-    private $roles;
+    private $role;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -53,7 +53,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function __construct()
     {
-        $this->roles = array('ROLE_USER');
+        $this->role = 'ROLE_USER';
         $this->isActive = true;
         $this->groups = new ArrayCollection();
     }
@@ -75,23 +75,18 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function getRoles()
     {
-        return $this->roles;
+        return array($this->role);
     }
 
-    public function addRole($role)
+    public function getRole()
     {
-        if(!in_array($role, $this->roles)) {
-            $this->roles[] = $role;
-        }
-        return $this;
+        return $this->role;
     }
 
-    public function removeRole($role)
+    public function setRole($role)
     {
-        $k = array_search($role, $this->roles);
-        if($k !== false) {
-            unset($this->roles[$k]);
-        }
+        $this->role = $role;
+
         return $this;
     }
 
@@ -200,19 +195,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set roles
-     *
-     * @param array $roles
-     * @return User
-     */
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
