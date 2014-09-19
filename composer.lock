@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6599a16004ec8b99eec5668b80ec00c7",
+    "hash": "5cb72391dfb216ea34c31a7dc0360db6",
     "packages": [
         {
             "name": "bmatzner/fontawesome-bundle",
@@ -3073,17 +3073,17 @@
         },
         {
             "name": "vierbergenlars/rad-rest-bundle",
-            "version": "0.4.2",
+            "version": "0.5.0",
             "target-dir": "vierbergenlars/Bundle/RadRestBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vierbergenlars/VlRadRestBundle.git",
-                "reference": "6a3eec7097ccfa553bd7e04888c972e419dfba2c"
+                "reference": "bc01faf6350b7db790778163ec8fc3259213487f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierbergenlars/VlRadRestBundle/zipball/6a3eec7097ccfa553bd7e04888c972e419dfba2c",
-                "reference": "6a3eec7097ccfa553bd7e04888c972e419dfba2c",
+                "url": "https://api.github.com/repos/vierbergenlars/VlRadRestBundle/zipball/bc01faf6350b7db790778163ec8fc3259213487f",
+                "reference": "bc01faf6350b7db790778163ec8fc3259213487f",
                 "shasum": ""
             },
             "require": {
@@ -3122,7 +3122,7 @@
             ],
             "description": "Symfony RadRestBundle",
             "homepage": "https://github.com/vierbergenlars/VlRadRestBundle",
-            "time": "2014-09-16 06:48:12"
+            "time": "2014-09-19 08:01:23"
         },
         {
             "name": "willdurand/hateoas",
@@ -3385,7 +3385,54 @@
             "time": "2014-08-23 16:56:20"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "scato/phpeg",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scato/phpeg.git",
+                "reference": "ec746b9eff5bb59bcba01b0fe6e1622eb7d18739"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scato/phpeg/zipball/ec746b9eff5bb59bcba01b0fe6e1622eb7d18739",
+                "reference": "ec746b9eff5bb59bcba01b0fe6e1622eb7d18739",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/console": "~2.1"
+            },
+            "require-dev": {
+                "behat/behat": "2.4.*@stable",
+                "phpspec/phpspec": "~2.0",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "bin": [
+                "bin/phpeg"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "": "src"
+                },
+                "psr-4": {
+                    "PHPeg\\Example\\": "examples"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PEG Parser Generator",
+            "keywords": [
+                "parser",
+                "peg"
+            ],
+            "time": "2014-08-25 07:57:51"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {

@@ -33,7 +33,7 @@
         "knplabs/knp-paginator-bundle": "~2.4",
         "friendsofsymfony/oauth-server-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "vierbergenlars/rad-rest-bundle": "~0.4"
+        "vierbergenlars/rad-rest-bundle": "~0.5"
     },
     "conflict": {
         "symfony/routing": "2.4.1"
@@ -60,5 +60,8 @@
         "branch-alias": {
             "dev-master": "2.3-dev"
         }
+    },
+    "require-dev": {
+        "scato/phpeg": "~1.0"
     }
 }

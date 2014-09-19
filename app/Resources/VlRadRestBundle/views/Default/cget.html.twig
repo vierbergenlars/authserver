@@ -49,3 +49,14 @@
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
 {% endblock %}
+
+{% block navigation %}
+    {{ parent() }}
+    <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+            <label for="navbar-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" placeholder="Search" name="q" id="navbar-search" value="{{ app.request.query.get('q', '') }}">
+        </div>
+    </form>
+{% endblock %}
+

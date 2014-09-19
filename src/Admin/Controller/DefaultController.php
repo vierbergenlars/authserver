@@ -21,6 +21,8 @@ use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\EditTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\DeleteTrait;
 use vierbergenlars\Bundle\RadRestBundle\View\View;
 use vierbergenlars\Bundle\RadRestBundle\Twig\ControllerVariables;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Search\SearchFieldException;
 
 class DefaultController implements RadRestControllerInterface
 {
@@ -78,7 +80,18 @@ class DefaultController implements RadRestControllerInterface
      */
     public function cgetAction(Request $request)
     {
-        return $this->_LT_cgetAction($request);
+        if($request->query->has('q')) {
+            try {
+                $data = $this->getFrontendManager()->search($request->query->get('q'));
+                $view = View::create($this->getPagination($data, $request->query->get('page', 1)));
+                $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
+                return $this->handleView($view);
+            } catch(SearchFieldException $ex) {
+                throw new BadRequestHttpException($ex->getMessage(), $ex);
+            }
+        } else {
+            return $this->_LT_cgetAction($request);
+        }
     }
 
     public function getRouteName($action)
