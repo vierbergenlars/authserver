@@ -28,17 +28,7 @@
                         </td>
                         <td>{{ obj.email }}</td>
                         <td>
-                          <div class="btn-group btn-group-sm">
-                              {% if controller.may('get', obj) %}
-                                  <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}">View</a>
-                              {% endif %}
-                              {% if controller.may('edit', obj) %}
-                                  <a class="btn btn-default" href="{{ url(controller.route('edit'), {id: obj.id}) }}">Edit</a>
-                              {% endif %}
-                              {% if controller.may('remove', obj) %}
-                                  <a class="btn btn-danger" href="{{ url(controller.route('remove'), {id: obj.id}) }}">Delete</a>
-                              {% endif %}
-                          </div>
+                            {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
                         </td>
                     </tr>
                 {% endfor %}
