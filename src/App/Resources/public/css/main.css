@@ -14,13 +14,13 @@ body {
 .panel-mobile-search  .panel-heading {
     cursor: pointer;
 }
-.panel-mobile-search .list-group-item:first-child {
+.panel-mobile-search > .list-group .list-group-item:first-child {
     border-top-width: 1px;
 }
-.panel-mobile-search .list-group-item {
+.panel-mobile-search > .list-group .list-group-item {
     border-width: 0;
 }
-.panel-mobile-search .list-group .divider {
+.panel-mobile-search > .list-group .divider {
     border-width: 1px 0;
     height: 0;
     padding: 0;
