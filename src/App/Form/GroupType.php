@@ -15,13 +15,16 @@ class GroupType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id = $options['data']->getId()?:0;
         $builder
             ->add('name')
             ->add('groups', null, array(
                 'label'=>'Member of',
-                'query_builder'=>function(EntityRepository $repo) {
+                'query_builder'=>function(EntityRepository $repo)use($id) {
                     return $repo->createQueryBuilder('g')
-                        ->where('g.noGroups = false');
+                        ->where('g.noGroups = false')
+                        ->andWhere('g.id != :id')
+                        ->setParameter('id', $id);
                 },
                 'property'=>'name',
                 'required'=>false,
