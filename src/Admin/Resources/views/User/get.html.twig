@@ -27,6 +27,11 @@
                     {{ g.name }}<br>
                 {% endfor %}
             </dd>
+            <dt>Exported groups</dt><dd>
+                {% for g in data._getAllGroupNames()|keys %}
+                    {{ g }}<br>
+                {% endfor %}
+            </dd>
         </dl>
     </div>
     {% include 'VlRadRestBundle:Default:links.html.twig' %}
