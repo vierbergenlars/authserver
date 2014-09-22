@@ -1,3 +1,4 @@
+// Keep in sync with src/App/Resources/public/js/searchgrammar.pegjs
 namespace App\Search;
 
 grammar SearchGrammar {
