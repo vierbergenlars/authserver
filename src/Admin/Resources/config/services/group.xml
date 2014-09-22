@@ -11,7 +11,7 @@
         <service id="app.admin.group.form" class="App\Form\GroupType">
             <tag name="radrest.form" resource="group" />
         </service>
-        <service id="app.admin.group.controller" class="Admin\Controller\DefaultController">
+        <service id="app.admin.group.controller" class="Admin\Controller\GroupController">
             <tag name="radrest.controller" resource="group" />
             <argument type="service" id="knp_paginator" />
             <argument>admin_group</argument>
