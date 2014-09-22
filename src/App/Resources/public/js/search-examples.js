@@ -10,7 +10,8 @@ $(function() {
      * Show a property as active
      */
     var setPropertyActive = function($property) {
-        $property.parent().addClass('active');
+        $property.addClass('active');
+        $property.parent('li').addClass('active');
         $property.find('.fa').removeClass('fa-circle-o').addClass('fa-dot-circle-o');
     }
 
@@ -18,7 +19,8 @@ $(function() {
      * Show a property as inactive
      */
     var setPropertyInactive = function($property) {
-        $property.parent().removeClass('active');
+        $property.removeClass('active');
+        $property.parent('li').removeClass('active');
         $property.find('.fa').addClass('fa-circle-o').removeClass('fa-dot-circle-o');
     }
 
@@ -82,17 +84,6 @@ $(function() {
         };
     })($('.js-search-field'));
 
-    /**
-     * Normalize the search field when the examples dropdown gets opened
-     */
-    $('.js-search-field').parent().find('[data-toggle=dropdown]').on('click', function() {
-        try {
-            searchQuery.disassemble();
-            searchQuery.assemble();
-        } catch(e) {
-            // noop
-        }
-    });
 
     /**
      * Mark search field as errored on syntax error
@@ -146,4 +137,10 @@ $(function() {
         searchQuery.assemble();
         searchQuery.restyleProperties();
     });
+
+    /**
+     * Normalize the search field on load
+     */
+     searchQuery.disassemble();
+     searchQuery.assemble();
 });

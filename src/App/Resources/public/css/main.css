@@ -6,12 +6,21 @@ body {
     margin: 3px 20px;
 }
 
-.dropdown-menu input {
-    min-width: 150px;
+#navbar-search {
+    min-width: 300px;
 }
 
-@media (min-width: 768px) {
-    #navbar-search {
-        min-width: 500px;
-    }
+.panel-mobile-search  .panel-heading {
+    cursor: pointer;
+}
+.panel-mobile-search .list-group-item:first-child {
+    border-top-width: 1px;
+}
+.panel-mobile-search .list-group-item {
+    border-width: 0;
+}
+.panel-mobile-search .list-group .divider {
+    border-width: 1px 0;
+    height: 0;
+    padding: 0;
 }

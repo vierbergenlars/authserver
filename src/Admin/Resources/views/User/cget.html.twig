@@ -82,6 +82,34 @@
         </li>
     </ul>
 {% endblock %}
+{% block mobile_search_examples %}
+    <span data-property="user" data-remove-property="admin,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Users</span>
+    <span data-property="admin" data-remove-property="user,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Admins</span>
+    <span data-property="superadmin" data-remove-property="user,admin" class="js-search-example list-group-item">{{ icon('circle-o') }} Super admins</span>
+    <span class="divider list-group-item" role="presentation"></span>
+    <span data-property="enabled" data-remove-property="disabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Enabled</span>
+    <span data-property="disabled" data-remove-property="enabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Disabled</span>
+    <span class="divider list-group-item" role="presentation"></span>
+    <span class="list-group-item">
+        <span class="input-group menu-input">
+            <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
+            <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
+        </span>
+    </span>
+    <span class="divider list-group-item" role="presentation"></span>
+    <span class="list-group-item">
+        <span class="input-group menu-input">
+            <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
+            <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
+        </span>
+    </span>
+    <span class="divider list-group-item" role="presentation"></span>
+    <span class="list-group-item">
+        <div class="menu-input">
+            <input type="submit" value="Search" class="btn btn-primary btn-block">
+        </div>
+    </span>
+{% endblock %}
 {% block javascript %}
 {{ parent() }}
 <script src="{{ asset('bundles/app/js/searchgrammar.js') }}"></script>
