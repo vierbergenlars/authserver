@@ -24,17 +24,13 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groups %}
-                    {{ g.name }}<br>
+                    <a href="{{ url('admin_group_get', { id: g.id }) }}">{{ icon('group') }} {{ g.name }}</a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
             <dt>Exported groups</dt><dd>
-                {% for g in data._getAllGroupNames()|keys %}
-                    {{ g }}<br>
-                {% else %}
-                    <span class="text-muted">(None)</span>
-                {% endfor %}
+                {{ data._getAllGroupNames()|keys|join(', ') }}
             </dd>
         </dl>
     </div>

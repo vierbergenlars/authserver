@@ -47,7 +47,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", inversedBy="members")
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="members", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="group_user")
      */
     private $groups;
