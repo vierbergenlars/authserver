@@ -47,4 +47,9 @@ class EntityRepository extends BaseRepository
     {
         throw new SearchFieldException($block['name'], $this->fieldSearchWhitelist);
     }
+
+    public function createQueryBuilder($alias)
+    {
+        return parent::createQueryBuilder($alias)->orderBy($alias.'.id', 'DESC');
+    }
 }
