@@ -19,17 +19,21 @@
                 {% elseif 'ROLE_ADMIN' == data.role %}
                     {{ label_danger('Admin') }}
                 {% else %}
-                    {{ label_success('User') }}
+                    <span class="text-muted">(None)</span>
                 {% endif %}
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groups %}
                     {{ g.name }}<br>
+                {% else %}
+                    <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
             <dt>Exported groups</dt><dd>
                 {% for g in data._getAllGroupNames()|keys %}
                     {{ g }}<br>
+                {% else %}
+                    <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
         </dl>
