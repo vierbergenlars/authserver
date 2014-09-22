@@ -5,6 +5,7 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class UserType extends AbstractType
 {
@@ -26,6 +27,15 @@ class UserType extends AbstractType
                 ),
                 'multiple'=>false,
                 'expanded' => true,
+            ))
+            ->add('groups', null, array(
+                'property'=>'name',
+                'query_builder'=>function(EntityRepository $repo) {
+                    return $repo->createQueryBuilder('g')
+                    ->where('g.noUsers = false');
+                },
+                'required'=>false,
+                'expanded'=>true,
             ))
             ->add('enabled', 'checkbox', array(
                 'required' => false,

@@ -5,6 +5,7 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class GroupType extends AbstractType
 {
@@ -16,16 +17,32 @@ class GroupType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('members', null, array(
-                'property'=>'username',
-                'required'=>false,
-            ))
-            ->add('memberGroups', null, array(
+            ->add('groups', null, array(
+                'label'=>'Member of',
+                'query_builder'=>function(EntityRepository $repo) {
+                    return $repo->createQueryBuilder('g')
+                        ->where('g.noGroups = false');
+                },
                 'property'=>'name',
                 'required'=>false,
+                'expanded' => true,
             ))
             ->add('exportable', 'checkbox', array(
                 'required' => false,
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
+            ))
+            ->add('noGroups', 'checkbox', array(
+                'required' => false,
+                'label'=>'No groups can be member of this group',
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
+            ))
+            ->add('noUsers', 'checkbox', array(
+                'required' => false,
+                'label'=> 'No users can be member of this group',
                 'attr' => array(
                     'align_with_widget' => true,
                 ),

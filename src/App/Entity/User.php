@@ -47,7 +47,8 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", mappedBy="members")
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="members")
+     * @ORM\JoinTable(name="group_user")
      */
     private $groups;
 
@@ -206,7 +207,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function addGroup(\App\Entity\Group $groups)
     {
         $this->groups[] = $groups;
-        $groups->addMember($this);
 
         return $this;
     }
@@ -219,7 +219,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function removeGroup(\App\Entity\Group $groups)
     {
         $this->groups->removeElement($groups);
-        $groups->removeMember($this);
     }
 
     /**

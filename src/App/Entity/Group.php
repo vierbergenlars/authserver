@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Config\Definition\BooleanNode;
 
 /**
  * Group
@@ -31,7 +32,7 @@ class Group
     /**
      * @var User[]
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="groups")
      */
     private $members;
 
@@ -40,7 +41,7 @@ class Group
      * The groups that are member of this group
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="Group", mappedBy="groups")
      */
     private $memberGroups;
 
@@ -48,7 +49,11 @@ class Group
      * The groups this group is member of
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", mappedBy="memberGroups")
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="memberGroups")
+     * @ORM\JoinTable(name="group_group",
+     *      joinColumns={@ORM\JoinColumn(name="group_target", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_source", referencedColumnName="id")}
+     * )
      */
     private $groups;
 
@@ -58,7 +63,27 @@ class Group
      *
      * @ORM\Column(name="exportable", type="boolean")
      */
-    private $exportable;
+    private $exportable = true;
+
+    /**
+     * Marks the group as not containing any users
+     *
+     * This is an advisory flag only, adding users will not be blocked
+     * @var boolean
+     *
+     * @ORM\Column(name="no_users", type="boolean")
+     */
+    private $noUsers = false;
+
+    /**
+     * Marks the group as not containing any groups
+     *
+     * This is an advisory flag only, adding groups will not be blocked
+     * @var boolean
+     *
+     * @ORM\Column(name="no_groups", type="boolean")
+     */
+    private $noGroups = false;
 
     /**
      * Get id
@@ -174,7 +199,6 @@ class Group
     public function addGroup(\App\Entity\Group $groups)
     {
         $this->groups[] = $groups;
-        $groups->addMemberGroup($this);
 
         return $this;
     }
@@ -187,7 +211,6 @@ class Group
     public function removeGroup(\App\Entity\Group $groups)
     {
         $this->groups->removeElement($groups);
-        $groups->removeMemberGroup($this);
     }
 
     /**
@@ -208,7 +231,6 @@ class Group
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
         $this->memberGroups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->exportable = true;
     }
 
     public function _getAllGroupNames()
@@ -245,5 +267,61 @@ class Group
     public function isExportable()
     {
         return $this->exportable;
+    }
+
+    /**
+     * Get exportable
+     *
+     * @return boolean
+     */
+    public function getExportable()
+    {
+        return $this->exportable;
+    }
+
+    /**
+     * Set noUsers
+     *
+     * @param boolean $noUsers
+     * @return Group
+     */
+    public function setNoUsers($noUsers)
+    {
+        $this->noUsers = $noUsers;
+
+        return $this;
+    }
+
+    /**
+     * Get noUsers
+     *
+     * @return boolean
+     */
+    public function getNoUsers()
+    {
+        return $this->noUsers;
+    }
+
+    /**
+     * Set noGroups
+     *
+     * @param boolean $noGroups
+     * @return Group
+     */
+    public function setNoGroups($noGroups)
+    {
+        $this->noGroups = $noGroups;
+
+        return $this;
+    }
+
+    /**
+     * Get noGroups
+     *
+     * @return boolean 
+     */
+    public function getNoGroups()
+    {
+        return $this->noGroups;
     }
 }
