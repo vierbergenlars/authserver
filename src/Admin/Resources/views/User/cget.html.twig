@@ -68,17 +68,23 @@
         <li><a href="{{ url(controller.route('cget'), {q:'is:disabled'}) }}" data-property="disabled" data-remove-property="enabled" class="js-search-example">{{ icon('circle-o') }} Disabled</a></li>
         <li class="divider" role="presentation"></li>
         <li>
-            <span class="input-group">
+            <span class="input-group menu-input">
                 <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
                 <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
             </span>
         </li>
         <li class="divider" role="presentation"></li>
         <li>
-            <span class="input-group">
+            <span class="input-group menu-input">
                 <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
                 <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
             </span>
+        </li>
+        <li class="divider" role="presentation"></li>
+        <li>
+            <div class="menu-input">
+                <input type="submit" value="Search" class="btn btn-primary btn-block">
+            </div>
         </li>
     </ul>
 {% endblock %}

@@ -2,7 +2,7 @@ $(function() {
     /**
      * Disable dropdown menu collapse on click on input field.
      */
-    $('.dropdown-menu .input-group').on('click', function(e) {
+    $('.dropdown-menu .menu-input').on('click', function(e) {
         e.stopPropagation();
     });
 

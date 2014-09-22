@@ -2,8 +2,9 @@ body {
     padding-top: 70px;
 }
 
-.dropdown-menu > li > span {
+.dropdown-menu .menu-input {
     margin: 3px 20px;
+    width: 300px;
 }
 
 #navbar-search {
