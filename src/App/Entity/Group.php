@@ -32,7 +32,7 @@ class Group
     /**
      * @var User[]
      *
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="groups")
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="groups", fetch="EXTRA_LAZY")
      */
     private $members;
 
@@ -41,7 +41,7 @@ class Group
      * The groups that are member of this group
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", mappedBy="groups")
+     * @ORM\ManyToMany(targetEntity="Group", mappedBy="groups", fetch="EXTRA_LAZY")
      */
     private $memberGroups;
 
@@ -49,7 +49,7 @@ class Group
      * The groups this group is member of
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group", inversedBy="memberGroups")
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="memberGroups", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="group_group",
      *      joinColumns={@ORM\JoinColumn(name="group_target", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_source", referencedColumnName="id")}
@@ -318,7 +318,7 @@ class Group
     /**
      * Get noGroups
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getNoGroups()
     {

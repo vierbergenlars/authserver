@@ -1,0 +1,15 @@
+{% if obj.exportable %}
+    <span title="Exportable">{{ label_success('Ex') }}</span>
+{% else %}
+    <span title="Not exportable">{{ label('Ex') }}</span>
+{% endif %}
+{% if obj.noUsers %}
+    <span title="No users">{{ label('U') }}</span>
+{% else %}
+    <span title="Users allowed">{{ label_success('U') }}</span>
+{% endif %}
+{% if obj.noGroups %}
+    <span title="No groups">{{ label('G')}}</span>
+{% else %}
+    <span title="Groups allowed">{{ label_success('G') }}</span>
+{% endif %}
