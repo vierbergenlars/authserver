@@ -6,7 +6,12 @@
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Username</dt><dd>{{ data.username }}</dd>
+            <dt>Username</dt><dd>
+                {{ data.username }}
+                {% if not data.enabled %}
+                    {{ label('Disabled') }}
+                {% endif %}
+            </dd>
             <dt>Email</dt><dd>{{ data.email }}</dd>
             <dt>Local flags</dt><dd>
                 {% if 'ROLE_SUPER_ADMIN' == data.role %}
@@ -15,9 +20,6 @@
                     {{ label_danger('Admin') }}
                 {% else %}
                     {{ label_success('User') }}
-                {% endif %}
-                {% if not data.enabled %}
-                    {{ label('Disabled') }}
                 {% endif %}
             </dd>
             <dt>Member of</dt><dd>
