@@ -28,15 +28,12 @@ class EntityRepository extends BaseRepository
                 $this->handleUnknownSearchField($block);
             }
 
-            switch($block['type']) {
-                case ':':
-                    $and->add($queryBuilder->expr()->eq('u.'.$block['name'], '?'.$i));
-                    $queryBuilder->setParameter($i, $block['value']);
-                    break;
-                case '~':
-                    $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
-                    $queryBuilder->setParameter($i, '%'.$block['value'].'%');
-                    break;
+            if(strpos($block['value'], '*') !== false) {
+                $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
+                $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
+            } else {
+                $and->add($queryBuilder->expr()->eq('u.'.$block['name'], '?'.$i));
+                $queryBuilder->setParameter($i, $block['value']);
             }
         }
 

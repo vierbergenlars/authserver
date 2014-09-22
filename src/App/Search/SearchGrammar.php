@@ -145,7 +145,7 @@ class SearchGrammar
             return $_success;
         }
 
-        $_value16 = array();
+        $_value14 = array();
 
         $_success = $this->parseIdentifier();
 
@@ -154,7 +154,7 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value16[] = $this->value;
+            $_value14[] = $this->value;
 
             $_position10 = $this->position;
             $_cut11 = $this->cut;
@@ -172,12 +172,8 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value16[] = $this->value;
+            $_value14[] = $this->value;
 
-            $_position12 = $this->position;
-            $_cut13 = $this->cut;
-
-            $this->cut = false;
             if (substr($this->string, $this->position, strlen(":")) === ":") {
                 $_success = true;
                 $this->value = substr($this->string, $this->position, strlen(":"));
@@ -187,48 +183,28 @@ class SearchGrammar
 
                 $this->report($this->position, '":"');
             }
-
-            if (!$_success && !$this->cut) {
-                $this->position = $_position12;
-
-                if (substr($this->string, $this->position, strlen("~")) === "~") {
-                    $_success = true;
-                    $this->value = substr($this->string, $this->position, strlen("~"));
-                    $this->position += strlen("~");
-                } else {
-                    $_success = false;
-
-                    $this->report($this->position, '"~"');
-                }
-            }
-
-            $this->cut = $_cut13;
-
-            if ($_success) {
-                $t = $this->value;
-            }
         }
 
         if ($_success) {
-            $_value16[] = $this->value;
+            $_value14[] = $this->value;
 
-            $_position14 = $this->position;
-            $_cut15 = $this->cut;
+            $_position12 = $this->position;
+            $_cut13 = $this->cut;
 
             $this->cut = false;
             $_success = $this->parse_();
 
             if (!$_success && !$this->cut) {
                 $_success = true;
-                $this->position = $_position14;
+                $this->position = $_position12;
                 $this->value = null;
             }
 
-            $this->cut = $_cut15;
+            $this->cut = $_cut13;
         }
 
         if ($_success) {
-            $_value16[] = $this->value;
+            $_value14[] = $this->value;
 
             $_success = $this->parseStr();
 
@@ -238,14 +214,14 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value16[] = $this->value;
+            $_value14[] = $this->value;
 
-            $this->value = $_value16;
+            $this->value = $_value14;
         }
 
         if ($_success) {
-            $this->value = call_user_func(function () use (&$name, &$t, &$value) {
-                return array('type' => $t, 'name'=>$name, 'value'=>$value);
+            $this->value = call_user_func(function () use (&$name, &$value) {
+                return array('name'=>$name, 'value'=>$value);
             });
         }
 
@@ -283,11 +259,11 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value18 = array($this->value);
-            $_cut19 = $this->cut;
+            $_value16 = array($this->value);
+            $_cut17 = $this->cut;
 
             while (true) {
-                $_position17 = $this->position;
+                $_position15 = $this->position;
 
                 $this->cut = false;
                 if (preg_match('/^[a-zA-Z0-9]$/', substr($this->string, $this->position, 1))) {
@@ -302,16 +278,16 @@ class SearchGrammar
                     break;
                 }
 
-                $_value18[] = $this->value;
+                $_value16[] = $this->value;
             }
 
             if (!$this->cut) {
                 $_success = true;
-                $this->position = $_position17;
-                $this->value = $_value18;
+                $this->position = $_position15;
+                $this->value = $_value16;
             }
 
-            $this->cut = $_cut19;
+            $this->cut = $_cut17;
         }
 
         if ($_success) {
@@ -349,16 +325,16 @@ class SearchGrammar
             return $_success;
         }
 
-        $_position25 = $this->position;
-        $_cut26 = $this->cut;
+        $_position23 = $this->position;
+        $_cut24 = $this->cut;
 
         $this->cut = false;
         $_success = $this->parseIdentifier();
 
         if (!$_success && !$this->cut) {
-            $this->position = $_position25;
+            $this->position = $_position23;
 
-            $_value24 = array();
+            $_value22 = array();
 
             if (substr($this->string, $this->position, strlen("'")) === "'") {
                 $_success = true;
@@ -371,7 +347,7 @@ class SearchGrammar
             }
 
             if ($_success) {
-                $_value24[] = $this->value;
+                $_value22[] = $this->value;
 
                 $_success = $this->parseChars();
 
@@ -381,21 +357,21 @@ class SearchGrammar
             }
 
             if ($_success) {
-                $_value24[] = $this->value;
+                $_value22[] = $this->value;
 
-                $_value22 = array();
-                $_cut23 = $this->cut;
+                $_value20 = array();
+                $_cut21 = $this->cut;
 
                 while (true) {
-                    $_position21 = $this->position;
+                    $_position19 = $this->position;
 
                     $this->cut = false;
-                    $_value20 = array();
+                    $_value18 = array();
 
                     $_success = $this->parse_();
 
                     if ($_success) {
-                        $_value20[] = $this->value;
+                        $_value18[] = $this->value;
 
                         $_success = $this->parseChars();
 
@@ -405,9 +381,9 @@ class SearchGrammar
                     }
 
                     if ($_success) {
-                        $_value20[] = $this->value;
+                        $_value18[] = $this->value;
 
-                        $this->value = $_value20;
+                        $this->value = $_value18;
                     }
 
                     if ($_success) {
@@ -420,16 +396,16 @@ class SearchGrammar
                         break;
                     }
 
-                    $_value22[] = $this->value;
+                    $_value20[] = $this->value;
                 }
 
                 if (!$this->cut) {
                     $_success = true;
-                    $this->position = $_position21;
-                    $this->value = $_value22;
+                    $this->position = $_position19;
+                    $this->value = $_value20;
                 }
 
-                $this->cut = $_cut23;
+                $this->cut = $_cut21;
 
                 if ($_success) {
                     $tail = $this->value;
@@ -437,7 +413,7 @@ class SearchGrammar
             }
 
             if ($_success) {
-                $_value24[] = $this->value;
+                $_value22[] = $this->value;
 
                 if (substr($this->string, $this->position, strlen("'")) === "'") {
                     $_success = true;
@@ -451,9 +427,9 @@ class SearchGrammar
             }
 
             if ($_success) {
-                $_value24[] = $this->value;
+                $_value22[] = $this->value;
 
-                $this->value = $_value24;
+                $this->value = $_value22;
             }
 
             if ($_success) {
@@ -463,7 +439,7 @@ class SearchGrammar
             }
         }
 
-        $this->cut = $_cut26;
+        $this->cut = $_cut24;
 
         $this->cache['Str'][$_position] = array(
             'success' => $_success,
@@ -499,11 +475,11 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value28 = array($this->value);
-            $_cut29 = $this->cut;
+            $_value26 = array($this->value);
+            $_cut27 = $this->cut;
 
             while (true) {
-                $_position27 = $this->position;
+                $_position25 = $this->position;
 
                 $this->cut = false;
                 if (preg_match('/^[^\']$/', substr($this->string, $this->position, 1))) {
@@ -518,16 +494,16 @@ class SearchGrammar
                     break;
                 }
 
-                $_value28[] = $this->value;
+                $_value26[] = $this->value;
             }
 
             if (!$this->cut) {
                 $_success = true;
-                $this->position = $_position27;
-                $this->value = $_value28;
+                $this->position = $_position25;
+                $this->value = $_value26;
             }
 
-            $this->cut = $_cut29;
+            $this->cut = $_cut27;
         }
 
         if ($_success) {
@@ -576,11 +552,11 @@ class SearchGrammar
         }
 
         if ($_success) {
-            $_value31 = array($this->value);
-            $_cut32 = $this->cut;
+            $_value29 = array($this->value);
+            $_cut30 = $this->cut;
 
             while (true) {
-                $_position30 = $this->position;
+                $_position28 = $this->position;
 
                 $this->cut = false;
                 if (substr($this->string, $this->position, strlen(" ")) === " ") {
@@ -597,16 +573,16 @@ class SearchGrammar
                     break;
                 }
 
-                $_value31[] = $this->value;
+                $_value29[] = $this->value;
             }
 
             if (!$this->cut) {
                 $_success = true;
-                $this->position = $_position30;
-                $this->value = $_value31;
+                $this->position = $_position28;
+                $this->value = $_value29;
             }
 
-            $this->cut = $_cut32;
+            $this->cut = $_cut30;
         }
 
         $this->cache['_'][$_position] = array(

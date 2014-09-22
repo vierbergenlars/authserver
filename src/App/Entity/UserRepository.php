@@ -20,29 +20,24 @@ class UserRepository extends EntityRepository
                 switch(strtolower($block['value'])) {
                     case 'admin':
                         $block['name']  = 'role';
-                        $block['type']  = '~';
-                        $block['value'] = 'ROLE_%ADMIN'; // ROLE_ADMIN and ROLE_SUPER_ADMIN
+                        $block['value'] = 'ROLE_*ADMIN'; // ROLE_ADMIN and ROLE_SUPER_ADMIN
                         break;
                     case 'superadmin':
                     case 'super_admin':
                     case 'su':
                         $block['name']  = 'role';
-                        $block['type']  = ':';
                         $block['value'] = 'ROLE_SUPER_ADMIN';
                         break;
                     case 'user':
                         $block['name']  = 'role';
-                        $block['type']  = ':';
                         $block['value'] = 'ROLE_USER';
                         break;
                     case 'enabled':
                         $block['name']  = 'isActive';
-                        $block['type']  = ':';
                         $block['value'] = true;
                         break;
                     case 'disabled':
                         $block['name']  = 'isActive';
-                        $block['type']  = ':';
                         $block['value'] = false;
                         break;
                     default:

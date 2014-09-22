@@ -6,8 +6,8 @@ grammar SearchGrammar {
             return $r;
         };
     Parameter =
-        name:Identifier _? t:(":"/"~") _? value:Str {
-            return array('type' => $t, 'name'=>$name, 'value'=>$value);
+        name:Identifier _? ":" _? value:Str {
+            return array('name'=>$name, 'value'=>$value);
         };
 
     Identifier =
