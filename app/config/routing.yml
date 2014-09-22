@@ -9,8 +9,15 @@ app_security:
 
 admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
-    prefix: /admin
+    prefix: admin
     type: rest
+
+# Added here to avoid getting .{_format} appended by FOSRestBundle
+admin_dashboard:
+    path: admin/
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: AdminBundle::dashboard.html.twig
 
 api:
     resource: "@AppBundle/Resources/config/routing/api.yml"

@@ -94,6 +94,15 @@ class DefaultController implements RadRestControllerInterface
         }
     }
 
+    /**
+     * @AView
+     * @Get()
+     */
+    public function dashboardAction()
+    {
+        return $this->handleView(View::create($this->getFrontendManager()->getList(true)->getSlice(0, 15)));
+    }
+
     public function getRouteName($action)
     {
         if($action == 'cget') {
