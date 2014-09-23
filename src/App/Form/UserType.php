@@ -15,6 +15,8 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id = $options['data']->getId()?:0;
+
         $builder
             ->add('username')
             ->add('password')
@@ -30,9 +32,11 @@ class UserType extends AbstractType
             ))
             ->add('groups', null, array(
                 'property'=>'name',
-                'query_builder'=>function(EntityRepository $repo) {
+                'query_builder'=>function(EntityRepository $repo) use($id) {
                     return $repo->createQueryBuilder('g')
-                    ->where('g.noUsers = false');
+                        ->leftJoin('g.members', 'm')
+                        ->where('g.noUsers = false OR m.id = :id')
+                        ->setParameter('id', $id);
                 },
                 'required'=>false,
                 'expanded'=>true,

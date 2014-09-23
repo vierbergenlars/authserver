@@ -22,7 +22,8 @@ class GroupType extends AbstractType
                 'label'=>'Member of',
                 'query_builder'=>function(EntityRepository $repo)use($id) {
                     return $repo->createQueryBuilder('g')
-                        ->where('g.noGroups = false')
+                        ->leftJoin('g.memberGroups', 'm')
+                        ->where('g.noGroups = false OR m.id = :id')
                         ->andWhere('g.id != :id')
                         ->setParameter('id', $id);
                 },
