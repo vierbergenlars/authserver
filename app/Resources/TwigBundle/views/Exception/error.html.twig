@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{ status_text }} - {{ parent() }}{% endblock %}
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <h1>
+        <span class="fa-stack fa-3x">
+          {% block error_icon %}
+            <i class="fa fa-hdd-o fa-stack-2x" style="z-index: -1"></i>
+            <i class="fa fa-times-circle text-danger fa-stack-1x" style="z-index: -1; text-align: left; top: 0.58em"></i>
+          {% endblock %}
+        </span>
+        </h1>
+        <h1>{% block error_title %}Oops! An error occured.{% endblock %} <small>{{ status_code }} {{ status_text }}</small></h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-md-offset-3">
+        {% block error_description %}
+        <p>This should not have happened.</p>
+        {% endblock %}
+        <p class="text-muted">Error message: {{ exception.message }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

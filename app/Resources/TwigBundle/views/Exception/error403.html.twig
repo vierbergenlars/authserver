@@ -1,0 +1,9 @@
+{% extends 'TwigBundle:Exception:error.html.twig' %}
+{% block error_icon %}
+    <i class="fa fa-hdd-o fa-stack-2x" style="z-index: -1"></i>
+    <i class="fa fa-shield text-warning fa-stack-1x" style="z-index: -1; text-align: left; top: 0.58em"></i>
+{% endblock %}
+{% block error_title %}Access denied{% endblock %}
+{% block error_description %}
+  <p>You do not have access to this page</p>
+{% endblock %}
