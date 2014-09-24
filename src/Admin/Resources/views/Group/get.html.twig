@@ -19,31 +19,35 @@
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
-            {% if not data.noUsers or data.members|length > 0 %}
-                <dt>Members{% if data.noUsers %} <span class="text-warning">{{ icon('exclamation-triangle') }}</span>{% endif %}</dt><dd>
+            {% if data.members|length > 0 %}
+                <dt>Members</dt><dd>
                     {% if data.members|length < 20 %}
                         {% for u in data.members %}
                             <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} {{ u.username }}</a><br>
-                        {% else %}
-                            <span class="text-muted">(None)</span>
                         {% endfor %}
                     {% else %}
                         {{ badge(data.members|length) }}
                     {% endif %}
                 </dd>
             {% endif %}
-            {% if not data.noGroups or data.memberGroups|length > 0 %}
-                <dt>Members{% if data.noGroups %} <span class="text-warning">{{ icon('exclamation-triangle') }}</span>{% endif %}</dt><dd>
+            {% if data.memberGroups|length > 0 %}
+                <dt>Members</dt><dd>
                     {% for g in data.memberGroups %}
                         <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} {{ g.name }}</a><br>
-                    {% else %}
-                        <span class="text-muted">(None)</span>
                     {% endfor %}
                 </dd>
             {% endif %}
             <dt>Exported groups</dt><dd>
                 {{ data._getAllGroupNames()|keys|join(', ') }}
             </dd>
+            {% if data.noGroups and data.memberGroups|length > 0 %}
+                <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
+                <dd><span class="text-warning">Group marked as {{ label('G') }}, but {{ badge(data.memberGroups|length) }} groups are member of this group.</span></dd>
+            {% endif %}
+            {% if data.noUsers and data.members|length > 0 %}
+                <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
+                <dd><span class="text-warning">Group marked as {{ label('U') }}, but {{ badge(data.members|length) }} users are member of this group.</span></dd>
+            {% endif %}
         </dl>
     </div>
     {% include 'VlRadRestBundle:Default:links.html.twig' %}
