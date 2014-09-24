@@ -170,7 +170,9 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        if($password) {
+            $this->password = $password;
+        }
 
         return $this;
     }
