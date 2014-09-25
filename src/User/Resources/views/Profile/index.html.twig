@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Profile</h2>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Username</dt><dd>{{ data.username }}</dd>
+                        <dt>Email</dt><dd>{{ data.email }}</dd>
+                        <dt>Password</dt><dd>******</dd>
+                        <dt>Groups</dt><dd>
+                            {% for group in data.groups %}
+                                {{ icon('group') }} {{ group.name }}<br>
+                            {% else %}
+                                <span class="text-muted">(None)</span>
+                            {% endfor %}
+                        </dd>
+                        {% if data.role != 'ROLE_USER' %}
+                            <dt>Permissions</dt><dd>
+                                {% if data.role == 'ROLE_ADMIN' %}
+                                    {{ label_danger('Admin') }}
+                                {% elseif data.role == 'ROLE_SUPER_ADMIN' %}
+                                    {{ label_danger('Super admin') }}
+                                {% else %}
+                                    {{ data.role }}
+                                {% endif %}
+                            </dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Authorized apps</h2>
+                </div>
+                <div class="panel-body">
+                    <p class="text-muted">WIP</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

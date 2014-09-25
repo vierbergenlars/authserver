@@ -23,3 +23,7 @@ api:
     resource: "@AppBundle/Resources/config/routing/api.yml"
     prefix: /api
     type: rest
+    
+user:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix: /usr

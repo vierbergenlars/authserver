@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new vierbergenlars\Bundle\RadRestBundle\VlRadRestBundle(),
             new App\AppBundle(),
             new Admin\AdminBundle(),
+            new User\UserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

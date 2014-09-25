@@ -37,3 +37,4 @@ security:
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/oauth/v2/auth, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/admin, roles: [ ROLE_ADMIN ] }
+        - { path: ^/usr, roles: [ ROLE_USER ] }
