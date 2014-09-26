@@ -52,11 +52,20 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $groups;
 
+    /**
+     * @var App\Entity\OAuth\Client[]
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\OAuth\Client", fetch="EXTRA_LAZY")
+     * @ORM\JoinTable(name="user_oauthclient")
+     */
+    private $authorizedApplications;
+
     public function __construct()
     {
         $this->role = 'ROLE_USER';
         $this->isActive = true;
         $this->groups = new ArrayCollection();
+        $this->authorizedApplications = new ArrayCollection();
     }
 
     public function getUsername()
@@ -240,5 +249,38 @@ class User implements AdvancedUserInterface, \Serializable
             $groups = array_merge($groups, $group->_getAllGroupNames());
         }
         return $groups;
+    }
+
+    /**
+     * Add authorizedApplications
+     *
+     * @param \App\Entity\OAuth\Client $authorizedApplications
+     * @return User
+     */
+    public function addAuthorizedApplication(\App\Entity\OAuth\Client $authorizedApplications)
+    {
+        $this->authorizedApplications[] = $authorizedApplications;
+
+        return $this;
+    }
+
+    /**
+     * Remove authorizedApplications
+     *
+     * @param \App\Entity\OAuth\Client $authorizedApplications
+     */
+    public function removeAuthorizedApplication(\App\Entity\OAuth\Client $authorizedApplications)
+    {
+        $this->authorizedApplications->removeElement($authorizedApplications);
+    }
+
+    /**
+     * Get authorizedApplications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuthorizedApplications()
+    {
+        return $this->authorizedApplications;
     }
 }
