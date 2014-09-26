@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+    <class name="App\Entity\User">
+        <property name="username">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">25</option>
+            </constraint>
+        </property>
+        <property name="email">
+            <constraint name="NotBlank" />
+            <constraint name="Email" />
+        </property>
+        <property name="role">
+            <constraint name="NotBlank" />
+            <constraint name="Choice">
+                <option name="choices">
+                    <value>ROLE_USER</value>
+                    <value>ROLE_ADMIN</value>
+                    <value>ROLE_SUPER_ADMIN</value>
+                </option>
+            </constraint>
+        </property>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">username</constraint>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>
+    </class>
+    <class name="App\Entity\Group">
+        <property name="name">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">255</option>
+            </constraint>
+        </property>
+        <property name="exportable">
+            <constraint name="NotNull" />
+        </property>
+        <property name="noUsers">
+            <constraint name="NotNull" />
+        </property>
+        <property name="noGroups">
+            <constraint name="NotNull" />
+        </property>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">name</constraint>
+    </class>
+    <class name="App\Entity\OAuth\Client">
+        <property name="name">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">10</option>
+                <option name="max">255</option>
+            </constraint>
+        </property>
+        <property name="redirectUris">
+            <constraint name="Count">
+                <option name="min">1</option>
+            </constraint>
+            <constraint name="All">
+                <constraint name="NotBlank"></constraint>
+                <constraint name="Url"></constraint>
+            </constraint>
+        </property>
+    </class>
+</constraint-mapping>
