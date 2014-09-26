@@ -2,3 +2,10 @@ user_profile:
     path: profile
     defaults:
         _controller: UserBundle:Profile:index
+
+user_app_auth_delete:
+    path: app_auth_delete
+    defaults:
+        _controller: UserBundle:Profile:deleteAuthorizedApp
+    requirements:
+        _method: DELETE

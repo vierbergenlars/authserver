@@ -1,4 +1,31 @@
 {% extends '::base.html.twig' %}
+{% block head %}
+    <style>
+        .panel-authorized-apps form {
+            display: inline;
+        }
+
+        .panel-authorized-apps .list-group-item {
+            min-height: 30px;
+            line-height: 30px;
+        }
+
+        .panel-authorized-apps .list-group-item .app-name {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+            width: 100%;
+        }
+
+        .panel-authorized-apps .list-group-item .btn {
+            margin-left: 10px;
+        }
+
+        #usr_auth_app_delete {
+            display: inline;
+        }
+    </style>
+{% endblock %}
 {% block body %}
 <div class="container-fluid">
     <div class="row">
@@ -35,12 +62,21 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-4">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-authorized-apps">
                 <div class="panel-heading">
                     <h2 class="panel-title">Authorized apps</h2>
                 </div>
-                <div class="panel-body">
-                    <p class="text-muted">WIP</p>
+                <div class="list-group">
+                    {% for app in data.authorizedApplications %}
+                        <div class="list-group-item">
+                            <span class="app-name">
+                                {{ render(controller('UserBundle:Profile:removeAuthorizedApp', {
+                                    appId: app.id
+                                })) -}}
+                                {{- app.name }}
+                            </span>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
