@@ -5,10 +5,12 @@
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">{{ icon('user') }} Users</h1>
+                    <a href="{{ url('admin_user_gets') }}">
+                        <h1 class="panel-title">{{ icon('user') }} Users</h1>
+                    </a>
                 </div>
                 {{ render(controller('app.admin.user.controller:dashboardAction')) }}
-                <div class="panel-body">
+                <div class="panel-body hidden-xs">
                     <a href="{{ url('admin_user_gets') }}" class="btn btn-primary">{{ icon('list-alt') }} Full list</a>
                 </div>
             </div>
@@ -16,10 +18,12 @@
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">{{ icon('group') }} Groups</h1>
+                    <a href="{{ url('admin_group_gets') }}">
+                        <h1 class="panel-title">{{ icon('group') }} Groups</h1>
+                    </a>
                 </div>
                 {{ render(controller('app.admin.group.controller:dashboardAction')) }}
-                <div class="panel-body">
+                <div class="panel-body hidden-xs">
                     <a href="{{ url('admin_group_gets') }}" class="btn btn-primary">{{ icon('list-alt') }} Full list</a>
                 </div>
             </div>
@@ -27,10 +31,12 @@
         <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h1 class="panel-title">{{ icon('cube') }} OAuth Applications</h1>
+                    <a href="{{ url('admin_oauth_client_gets') }}">
+                        <h1 class="panel-title">{{ icon('cube') }} OAuth Applications</h1>
+                    </a>
                 </div>
                 {{ render(controller('app.admin.oauth.client.controller:dashboardAction')) }}
-                <div class="panel-body">
+                <div class="panel-body hidden-xs">
                     <a href="{{ url('admin_oauth_client_gets') }}" class="btn btn-primary">{{ icon('list-alt') }} Full list</a>
                 </div>
             </div>

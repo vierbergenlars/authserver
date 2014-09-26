@@ -1,0 +1,16 @@
+<div class="panel-body">
+    <form action="{{ url(controller.route('cget')) }}">
+        <label for="dashboard_user_search" class="sr-only">Search for groups</label>
+        <div class="input-group">
+            <input id="dashboard_user_search" type="search" name="q" placeholder="Search for groups" class="form-control">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search groups</span></button>
+            </span>
+        </div>
+    </form>
+</div>
+<div class="list-group hidden-xs">
+    {% for group in data %}
+        <a class="list-group-item" href="{{ url(controller.route('get'), { id: group.id }) }}">{{ group.name }}</a>
+    {% endfor %}
+</div>

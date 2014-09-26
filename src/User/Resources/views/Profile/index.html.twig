@@ -76,6 +76,10 @@
                                 {{- app.name }}
                             </span>
                         </div>
+                    {% else %}
+                        <div class="list-group-item">
+                            <span class="text-muted">(No authorized applications)</span>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
