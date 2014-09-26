@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\BooleanNode;
  * Group
  *
  * @ORM\Table(name="auth_group")
- * @ORM\Entity(repositoryClass="App\Doctrine\EntityRepository")
+ * @ORM\Entity(repositoryClass="GroupRepository")
  */
 class Group
 {

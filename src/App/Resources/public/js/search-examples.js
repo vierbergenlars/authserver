@@ -75,7 +75,11 @@ $(function() {
                 });
                 var properties = $searchField.data('properties');
                 var assembledProperties = $.map(properties, function(v) {
-                    return 'is:'+v;
+                    if(/^[a-zA-Z0-9]+$/.exec(v)) { // Must match Identifier regexp in search grammar
+                        return 'is:'+v;
+                    } else {
+                        return 'is: \''+v+'\'';
+                    }
                 });
                 var join = Array.prototype.join;
                 var val = join.call(assembledFields, ' ') + ' ' + join.call(assembledProperties, ' ');
