@@ -1,0 +1,39 @@
+{% extends 'VlRadRestBundle:Default:cget.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">OAuth Applications</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in data %}
+                    <tr>
+                        <td>
+                            {{ obj.name }}
+                            {% if obj.preApproved %}
+                                <span title="Pre approved">{{ label_success('PA') }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-body">
+        {% if controller.may('new') %}
+            <a class="btn btn-primary btn-sm" href="{{url(controller.route('new'))}}">Create</a>
+        {% endif %}
+    </div>
+    <div class="panel-body text-center">
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+{% endblock %}

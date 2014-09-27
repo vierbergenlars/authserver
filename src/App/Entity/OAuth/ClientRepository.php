@@ -3,6 +3,7 @@
 namespace App\Entity\OAuth;
 
 use App\Doctrine\EntityRepository;
+use vierbergenlars\Bundle\RadRestBundle\Doctrine\QueryBuilderPageDescription;
 
 class ClientRepository extends EntityRepository
 {
@@ -29,5 +30,11 @@ class ClientRepository extends EntityRepository
             ->execute();
         parent::delete($object);
         $this->getEntityManager()->commit();
+    }
+
+    public function search($terms)
+    {
+        $name = str_replace('*', '%', $terms);
+        return new QueryBuilderPageDescription($this->createQueryBuilder('e')->where('e.name LIKE :name')->setParameter('name', '%'.$name.'%'));
     }
 }

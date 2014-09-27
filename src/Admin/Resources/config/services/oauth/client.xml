@@ -11,7 +11,7 @@
         <service id="app.admin.oauth.client.form" class="App\Form\OAuth\ClientType">
             <tag name="radrest.form" resource="oauth.client" />
         </service>
-        <service id="app.admin.oauth.client.controller" class="Admin\Controller\DefaultController">
+        <service id="app.admin.oauth.client.controller" class="Admin\Controller\OAuthClientController">
             <tag name="radrest.controller" resource="oauth.client" />
             <argument type="service" id="knp_paginator" />
             <argument>admin_oauth_client</argument>
