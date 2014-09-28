@@ -8,7 +8,17 @@
         <dl class="dl-horizontal">
             {% for key in data|radrest_object_keys %}
                 <dt>{{ key|humanize }}</dt>
-                <dd>{{ attribute(data, key)|radrest_object_stringify }}</dd>
+                {% if attribute(data, key)|radrest_object_stringify == '(Array)' %}
+                    <dd>
+                        {% for elem in attribute(data, key) %}
+                            {{ elem|radrest_object_stringify }}<br>
+                        {% else %}
+                            <span class="text-muted">None</span>
+                        {% endfor %}
+                    </dd>
+                {% else %}
+                    <dd>{{ attribute(data, key)|radrest_object_stringify }}</dd>
+                {% endif %}
             {% endfor %}
         </dl>
     </div>
