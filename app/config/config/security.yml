@@ -3,8 +3,19 @@ security:
         App\Entity\User: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN:
+            - ROLE_USER
+            - ROLE_SCOPE_R_PROFILE_EMAIL
+            - ROLE_SCOPE_W_PROFILE
+            - ROLE_SCOPE_W_GROUP
+        ROLE_SUPER_ADMIN:
+            - ROLE_ADMIN
+            - ROLE_ALLOWED_TO_SWITCH
+            - ROLE_SCOPE_W_PROFILE_ADMIN
+        ROLE_SCOPE_R_PROFILE_EMAIL: ROLE_SCOPE_R_PROFILE
+        ROLE_SCOPE_W_PROFILE: ROLE_SCOPE_R_PROFILE
+        ROLE_SCOPE_W_GROUP: ROLE_SCOPE_R_GROUP
+        ROLE_SCOPE_W_PROFILE_ADMIN: ROLE_SCOPE_W_PROFILE
 
     providers:
         main:
@@ -29,12 +40,20 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login_check
+            simple_preauth:
+                authenticator: app.admin.security.apikey_authenticator
             logout: ~
             anonymous: ~
 
     access_control:
-        - { path: ^/login$, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
-        - { path: ^/oauth/v2/auth, roles: [ IS_AUTHENTICATED_FULLY ] }
-        - { path: ^/admin, roles: [ ROLE_ADMIN ] }
-        - { path: ^/usr, roles: [ ROLE_USER ] }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, role: IS_AUTHENTICATED_FULLY }
+        - { path: ^/oauth/v2/auth, role: ROLE_USER }
+        - { path: ^/admin/apikeys, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/oauth, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/groups, methods: GET, role: ROLE_SCOPE_R_GROUP }
+        - { path: ^/admin/groups, role: ROLE_SCOPE_W_GROUP }
+        - { path: ^/admin/users, methods: GET, role: ROLE_SCOPE_R_PROFILE }
+        - { path: ^/admin/users, role: ROLE_SCOPE_W_PROFILE_ADMIN } # Temporary, until block on form app_user[role] is in place
+        - { path: ^/admin, role: ROLE_ADMIN }
+        - { path: ^/usr, roles: ROLE_USER }

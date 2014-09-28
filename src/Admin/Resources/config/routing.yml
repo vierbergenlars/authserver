@@ -3,7 +3,7 @@ admin_user:
     type: rest
     name_prefix: admin_user_
     prefix: users
-    
+
 admin_group:
     resource: app.admin.group.controller
     type: rest
@@ -15,3 +15,9 @@ admin_oauth_client:
     type: rest
     name_prefix: admin_oauth_client_
     prefix: oauth/clients
+
+admin_apikey:
+    resource: app.admin.apikey.controller
+    type: rest
+    name_prefix: admin_apikey_
+    prefix: apikeys
