@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\User" xml-root-name="user" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="username" groups="list,object" xml-attribute="true" />
+        <property name="email" groups="admin_user_object" xml-attribute="true" />
+        <property name="role" groups="admin_user_object" xml-attribute="true" />
+        <property name="isActive" serialized-name="active" groups="admin_user_object" xml-attribute="true" />
+        <property name="groups" groups="admin_user_object">
+            <xml-list entry-name="group" />
+        </property>
+        <h:relation rel="self">
+            <h:href route="admin_user_get">
+                <h:parameter name="id" value="expr(object.getId())" />
+            </h:href>
+            <h:exclusion groups="list,object" />
+        </h:relation>
+    </class>
+</serializer>

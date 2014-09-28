@@ -23,6 +23,7 @@ use vierbergenlars\Bundle\RadRestBundle\View\View;
 use vierbergenlars\Bundle\RadRestBundle\Twig\ControllerVariables;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Search\SearchException;
+use JMS\Serializer\SerializationContext;
 
 class DefaultController implements RadRestControllerInterface
 {
@@ -133,6 +134,7 @@ class DefaultController implements RadRestControllerInterface
         $view->setExtraData(array(
             'controller' => new ControllerVariables($this),
         ));
+        $view->getSerializationContext()->enableMaxDepthChecks();
         return $view;
     }
 }

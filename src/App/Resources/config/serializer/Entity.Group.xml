@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\Group" xml-root-name="group" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="name" groups="list,object" xml-attribute="true" />
+        <property name="groups" serialized-name="parents" groups="admin_group_object" max-depth="1">
+            <xml-list entry-name="group" />
+        </property>
+        <property name="members" groups="admin_group_object">
+            <xml-list entry-name="user" />
+        </property>
+        <property name="memberGroups" serialized-name="members" groups="admin_group_object" max-depth="1">
+            <xml-list entry-name="group" />
+        </property>
+        <h:relation rel="self">
+            <h:href route="admin_group_get">
+                <h:parameter name="id" value="expr(object.getId())" />
+            </h:href>
+            <h:exclusion groups="list,object" />
+        </h:relation>
+    </class>
+</serializer>
