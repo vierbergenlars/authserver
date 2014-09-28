@@ -37,3 +37,5 @@ fos_http_cache:
                     cache_control: { public: true, max_age: 15, s_maxage: 30 }
                     last_modified: "-1 hour"
                     vary: [Accept-Encoding, Accept-Language]
+bazinga_rest_extra:
+    link_request_listener: true
