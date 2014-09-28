@@ -26,7 +26,13 @@
                                 {{ label('Disabled') }}
                             {% endif %}
                         </td>
-                        <td>{{ obj.email }}</td>
+                        <td>
+                            {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
+                                {{ obj.email }}
+                            {% else %}
+                                <span class="text-muted">(Hidden)</span>
+                            {% endif %}
+                        </td>
                         <td>
                             {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
                         </td>

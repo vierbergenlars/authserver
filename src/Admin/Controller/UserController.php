@@ -4,6 +4,7 @@ namespace Admin\Controller;
 
 use App\Entity\Group;
 use Admin\Controller\Traits\Routes\LinkUnlinkTrait;
+use vierbergenlars\Bundle\RadRestBundle\View\View;
 
 class UserController extends DefaultController
 {
@@ -39,5 +40,14 @@ class UserController extends DefaultController
             default:
                 throw new BadRequestHttpException('Invalid relationship (allowed: group)');
         }
+    }
+
+    public function getSerializationGroups($action)
+    {
+        $groups = parent::getSerializationGroups($action);
+        if($action == 'get'&&$this->getFrontendManager()->getAuthorizationChecker()->hasRole('ROLE_SCOPE_R_PROFILE_EMAIL')) {
+            $groups[] = 'admin_user_object_scope_email';
+        }
+        return $groups;
     }
 }

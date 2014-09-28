@@ -12,7 +12,9 @@
                     {{ label('Disabled') }}
                 {% endif %}
             </dd>
-            <dt>Email</dt><dd>{{ data.email }}</dd>
+            {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
+                <dt>Email<dt><dd>{{ data.email }}</dd>
+            {% endif %}
             <dt>Local flags</dt><dd>
                 {% if 'ROLE_SUPER_ADMIN' == data.role %}
                     {{ label_danger('Super admin') }}

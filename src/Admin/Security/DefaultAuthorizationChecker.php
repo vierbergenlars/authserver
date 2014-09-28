@@ -2,9 +2,9 @@
 
 namespace Admin\Security;
 
-use vierbergenlars\Bundle\RadRestBundle\Security\AuthorizationCheckerInterface;
+use vierbergenlars\Bundle\RadRestBundle\Security\AbstractAuthorizationChecker;
 
-class DefaultAuthorizationChecker implements AuthorizationCheckerInterface
+class DefaultAuthorizationChecker extends AbstractAuthorizationChecker
 {
     public function mayList()
     {
@@ -29,5 +29,10 @@ class DefaultAuthorizationChecker implements AuthorizationCheckerInterface
     public function mayDelete($o)
     {
         return true;
+    }
+
+    public function hasRole($role)
+    {
+        return parent::hasRole($role);
     }
 }

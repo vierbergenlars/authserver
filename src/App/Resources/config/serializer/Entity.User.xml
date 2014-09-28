@@ -2,7 +2,7 @@
 <serializer>
     <class name="App\Entity\User" xml-root-name="user" xmlns:h="https://github.com/willdurand/Hateoas">
         <property name="username" groups="list,object" xml-attribute="true" />
-        <property name="email" groups="admin_user_object" xml-attribute="true" />
+        <property name="email" groups="admin_user_object_scope_email" xml-attribute="true" />
         <property name="role" groups="admin_user_object" xml-attribute="true" />
         <property name="isActive" serialized-name="active" groups="admin_user_object" xml-attribute="true" />
         <property name="groups" groups="admin_user_object">
