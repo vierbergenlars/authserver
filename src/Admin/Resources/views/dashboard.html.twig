@@ -41,6 +41,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="{{ url('admin_apikey_gets') }}">
+                        <h1 class="panel-title">{{ icon('key') }} API Keys</h1>
+                    </a>
+                </div>
+                {{ render(controller('app.admin.apikey.controller:dashboardAction')) }}
+                <div class="panel-body hidden-xs">
+                    <a href="{{ url('admin_apikey_gets') }}" class="btn btn-primary">{{ icon('list-alt') }} Full list</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
