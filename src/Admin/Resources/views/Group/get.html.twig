@@ -38,7 +38,7 @@
                 </dd>
             {% endif %}
             <dt>Exported groups</dt><dd>
-                {{ data._getAllGroupNames()|keys|join(', ') }}
+                {{ data._getAllGroupNames()|keys|json_encode }}
             </dd>
             {% if data.noGroups and data.memberGroups|length > 0 %}
                 <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>

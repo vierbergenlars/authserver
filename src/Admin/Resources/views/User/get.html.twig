@@ -32,7 +32,7 @@
                 {% endfor %}
             </dd>
             <dt>Exported groups</dt><dd>
-                {{ data._getAllGroupNames()|keys|join(', ') }}
+                {{ data._getAllGroupNames()|keys|json_encode }}
             </dd>
         </dl>
     </div>
