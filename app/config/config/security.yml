@@ -54,6 +54,6 @@ security:
         - { path: ^/admin/groups, methods: GET, role: ROLE_SCOPE_R_GROUP }
         - { path: ^/admin/groups, role: ROLE_SCOPE_W_GROUP }
         - { path: ^/admin/users, methods: GET, role: ROLE_SCOPE_R_PROFILE }
-        - { path: ^/admin/users, role: ROLE_SCOPE_W_PROFILE_ADMIN } # Temporary, until block on form app_user[role] is in place
+        - { path: ^/admin/users, role: ROLE_SCOPE_W_PROFILE }
         - { path: ^/admin, role: ROLE_ADMIN }
         - { path: ^/usr, roles: ROLE_USER }

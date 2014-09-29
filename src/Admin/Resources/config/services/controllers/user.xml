@@ -9,6 +9,11 @@
             <tag name="radrest.authorization_checker" resource="user" />
         </service>
         <service id="app.admin.user.form" class="App\Form\UserType">
+            <argument type="service">
+                <service class="Admin\Form\EventListener\UserTypeLocalFlagsEventListener">
+                    <argument type="service" id="app.admin.user.authorization_checker" />
+                </service>
+            </argument>
             <tag name="radrest.form" resource="user" />
         </service>
         <service id="app.admin.user.controller" class="Admin\Controller\UserController">

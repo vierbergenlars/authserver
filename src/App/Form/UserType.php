@@ -6,9 +6,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserType extends AbstractType
 {
+    private $subscriber;
+    public function __construct(EventSubscriberInterface $subscriber)
+    {
+        $this->subscriber = $subscriber;
+    }
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -50,6 +56,7 @@ class UserType extends AbstractType
                 ),
             ))
             ->add('submit', 'submit')
+            ->addEventSubscriber($this->subscriber)
         ;
     }
 
