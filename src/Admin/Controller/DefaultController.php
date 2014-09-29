@@ -24,15 +24,15 @@ use vierbergenlars\Bundle\RadRestBundle\Twig\ControllerVariables;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Search\SearchException;
 use JMS\Serializer\SerializationContext;
+use FOS\RestBundle\Controller\Annotations\NoRoute;
 
 class DefaultController implements RadRestControllerInterface
 {
     use ListTrait {
         ListTrait::cgetAction as private _LT_cgetAction;
     }
-    use CreateTrait;
-    // Note: ViewTrait is below CreateTrait to avoid calling ViewTrait::getAction('new') instead of CreateTrait::newAction()
     use ViewTrait;
+    use CreateTrait;
     use EditTrait;
     use DeleteTrait;
     use DefaultsTrait;
@@ -97,7 +97,7 @@ class DefaultController implements RadRestControllerInterface
 
     /**
      * @AView
-     * @Get()
+     * @NoRoute
      */
     public function dashboardAction()
     {

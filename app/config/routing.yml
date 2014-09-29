@@ -15,6 +15,8 @@ admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
     prefix: admin
     type: rest
+    requirements:
+        id: "[0-9]+"
 
 # Added here to avoid getting .{_format} appended by FOSRestBundle
 admin_dashboard:
