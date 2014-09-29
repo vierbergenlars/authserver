@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Search\SearchException;
 use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
+use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\PatchTrait;
 
 class DefaultController implements RadRestControllerInterface
 {
@@ -34,6 +35,7 @@ class DefaultController implements RadRestControllerInterface
     use ViewTrait;
     use CreateTrait;
     use EditTrait;
+    use PatchTrait;
     use DeleteTrait;
     use DefaultsTrait;
     use KnpPaginationTrait {
