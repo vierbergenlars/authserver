@@ -17,7 +17,7 @@ class AddUserCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'The username of the user to add')
             ->addArgument('password', InputArgument::REQUIRED, 'The password of the user to add')
             ->addArgument('email', InputArgument::REQUIRED, 'The email address of the user to add')
-            ->addOption('role', 'r', InputOption::VALUE_REQUIRED|InputOption::VALUE_IS_ARRAY, 'The role of the user to add');
+            ->addOption('super-admin', 's', InputOption::VALUE_NONE, 'Create a superadmin');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -32,8 +32,8 @@ class AddUserCommand extends Command
         $encoder = $encoderFactory->getEncoder(get_class($user));
         $user->setPassword($encoder->encodePassword($input->getArgument('password'), $user->getSalt()));
 
-        foreach($input->getOption('role') as $role) {
-            $user->addRole($role);
+        if($input->getOption('super-admin')) {
+            $user->setRole('ROLE_SUPER_ADMIN');
         }
 
         $em->persist($user);

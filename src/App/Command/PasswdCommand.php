@@ -16,7 +16,6 @@ class PasswdCommand extends Command
         $this->setName('app:passwd')
             ->addArgument('username', InputArgument::REQUIRED, 'The username of the user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The new password of the user')
-            ->addOption('role', 'r', InputOption::VALUE_REQUIRED|InputOption::VALUE_IS_ARRAY, 'The roles to add to the user, and the ones to remove from the user (prefixed by -)')
             ->addOption('lock', 'l', InputOption::VALUE_NONE, 'Lock the user')
             ->addOption('unlock', 'u', InputOption::VALUE_NONE, 'Unlocks the user')
         ;
@@ -29,13 +28,6 @@ class PasswdCommand extends Command
         $user = $em->getRepository('AppBundle:User')->findOneBy(array('username'=>$input->getArgument('username')));
         if(!$user) {
             throw new \RuntimeException('User not found');
-        }
-        foreach($input->getOption('role') as $role) {
-            if($role[0] == '-') {
-                $user->removeRole(substr($role, 1));
-            } else {
-                $user->addRole($role);
-            }
         }
 
         if($input->getOption('lock')) {
