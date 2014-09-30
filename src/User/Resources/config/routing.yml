@@ -9,3 +9,9 @@ user_app_auth_delete:
         _controller: UserBundle:Profile:deleteAuthorizedApp
     requirements:
         _method: DELETE
+        
+user_kill_session:
+    path: kill-session
+    defaults:
+        _controller: FrameworkBundle:redirect:redirect
+        route: logout
