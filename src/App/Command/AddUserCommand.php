@@ -17,7 +17,7 @@ class AddUserCommand extends Command
             ->addArgument('username', InputArgument::REQUIRED, 'The username of the user to add')
             ->addArgument('password', InputArgument::REQUIRED, 'The password of the user to add')
             ->addArgument('email', InputArgument::REQUIRED, 'The email address of the user to add')
-            ->addOption('super-admin', 's', InputOption::VALUE_NONE, 'Create a superadmin');
+            ->addOption('super-admin', 'a', InputOption::VALUE_NONE, 'Create a superadmin');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
