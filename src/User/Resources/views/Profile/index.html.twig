@@ -38,7 +38,7 @@
                     <dl class="dl-horizontal">
                         <dt>Username</dt><dd>{{ data.username }}</dd>
                         <dt>Email</dt><dd>{{ data.email }}</dd>
-                        <dt>Password</dt><dd>******</dd>
+                        <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
                         <dt>Groups</dt><dd>
                             {% for group in data.groups %}
                                 {{ icon('group') }} {{ group.name }}<br>

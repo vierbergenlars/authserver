@@ -2,6 +2,8 @@ user_profile:
     path: profile
     defaults:
         _controller: UserBundle:Profile:index
+    requirements:
+        _method: GET
 
 user_app_auth_delete:
     path: app_auth_delete
@@ -9,9 +11,16 @@ user_app_auth_delete:
         _controller: UserBundle:Profile:deleteAuthorizedApp
     requirements:
         _method: DELETE
-        
+
 user_kill_session:
     path: kill-session
     defaults:
         _controller: FrameworkBundle:redirect:redirect
         route: logout
+
+user_change_password:
+    path: passwd
+    defaults:
+        _controller: UserBundle:Profile:changePassword
+    requirements:
+        _method: GET|POST

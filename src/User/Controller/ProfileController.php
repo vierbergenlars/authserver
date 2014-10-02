@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use User\Form\DeleteAuthorizedAppType;
 use App\Entity\User;
+use User\Form\ChangePasswordType;
 
 class ProfileController extends Controller
 {
@@ -44,12 +45,38 @@ class ProfileController extends Controller
                 $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
                 $this->get('braincrafted_bootstrap.flash')->success('Authorized application has been removed');
 
-                return $this->redirect($this->generateUrl('user_profile'));
+                return $this->redirectToProfile();
             }
         }
 
         $this->get('braincrafted_bootstrap.flash')->error('Error removing authorized application');
 
+        return $this->redirectToProfile();
+    }
+
+    /**
+     * @Template
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(new ChangePasswordType());
+
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $user->setPassword($form->get('password')->getData());
+            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->get('braincrafted_bootstrap.flash')->success('Password has been changed successfully');
+
+            return $this->redirectToProfile();
+        }
+
+        return $form;
+    }
+
+    private function redirectToProfile()
+    {
         return $this->redirect($this->generateUrl('user_profile'));
     }
 }
