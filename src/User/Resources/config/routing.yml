@@ -15,7 +15,7 @@ user_app_auth_delete:
 user_kill_session:
     path: kill-session
     defaults:
-        _controller: FrameworkBundle:redirect:redirect
+        _controller: FrameworkBundle:Redirect:redirect
         route: logout
 
 user_change_password:
