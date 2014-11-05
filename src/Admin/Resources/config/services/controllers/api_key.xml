@@ -1,18 +1,14 @@
 <?xml version="1.0" ?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="app.admin.apikey.resource_manager" class="AdminBundle:ApiKey">
-            <tag name="radrest.entity_repository" />
-            <tag name="radrest.resource_manager" resource="apikey" />
+        <service id="app.admin.apikey.resource_manager" class="App\Doctrine\EntityRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>Admin\Entity\ApiKey</argument>
         </service>
-        <service id="app.admin.apikey.authorization_checker" class="Admin\Security\DefaultAuthorizationChecker">
-            <tag name="radrest.authorization_checker" resource="apikey" />
-        </service>
-        <service id="app.admin.apikey.form" class="Admin\Form\ApiKeyType">
-            <tag name="radrest.form" resource="apikey" />
-        </service>
+        <service id="app.admin.apikey.form" class="Admin\Form\ApiKeyType" />
         <service id="app.admin.apikey.controller" class="Admin\Controller\ApiKeyController">
-            <tag name="radrest.controller" resource="apikey" />
+            <argument type="service" id="app.admin.apikey.resource_manager" />
+            <argument type="service" id="app.admin.apikey.form" />
+            <argument type="service" id="form.factory" />
             <argument type="service" id="knp_paginator" />
             <argument>admin_apikey</argument>
         </service>

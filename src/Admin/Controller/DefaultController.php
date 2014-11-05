@@ -26,26 +26,20 @@ use App\Search\SearchException;
 use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\PatchTrait;
+use vierbergenlars\Bundle\RadRestBundle\Manager\ResourceManagerInterface;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
-class DefaultController implements RadRestControllerInterface
+class DefaultController extends ControllerServiceController
 {
     use ListTrait {
         ListTrait::cgetAction as private _LT_cgetAction;
     }
-    use ViewTrait;
-    use CreateTrait;
-    use EditTrait;
-    use PatchTrait;
-    use DeleteTrait;
-    use DefaultsTrait;
     use KnpPaginationTrait {
         KnpPaginationTrait::getPagination insteadof DefaultsTrait;
     }
 
-    /**
-     * @var FrontendManager
-     */
-    private $frontendManager;
+    use DefaultsTrait;
 
     /**
      *
@@ -58,34 +52,23 @@ class DefaultController implements RadRestControllerInterface
      */
     private $routePrefix;
 
-    /**
-     *
-     * @param FrontendManager $frontendManager
-     * @param Paginator $paginator
-     * @param string $routePrefix
-     */
-    public function __construct(FrontendManager $frontendManager, Paginator $paginator, $routePrefix)
+    public function __construct(ResourceManagerInterface $resourceManager, FormTypeInterface $formType, FormFactoryInterface $formFactory, Paginator $paginator, $routePrefix)
     {
-        $this->frontendManager = $frontendManager;
+        parent::__construct($resourceManager, $formType, $formFactory);
         $this->paginator = $paginator;
         $this->routePrefix = $routePrefix;
-    }
-
-    public function getFrontendManager()
-    {
-        return $this->frontendManager;
     }
 
     /**
      * @AView
      * @ApiDoc(resource=true)
-     * @Get("", name="s")
+     * @Get(name="s")
      */
     public function cgetAction(Request $request)
     {
         if($request->query->has('q')) {
             try {
-                $data = $this->getFrontendManager()->search($request->query->get('q'));
+                $data = $this->getResourceManager()->search($request->query->get('q'));
                 $view = View::create($this->getPagination($data, $request->query->get('page', 1)));
                 $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
                 return $this->handleView($view);
@@ -103,15 +86,12 @@ class DefaultController implements RadRestControllerInterface
      */
     public function dashboardAction()
     {
-        return $this->handleView(View::create($this->getFrontendManager()->getList(true)->getSlice(0, 15)));
+        return $this->handleView(View::create($this->getResourceManager()->getPageDescription()->getSlice(0, 15)));
     }
 
     public function getRouteName($action)
     {
-        if($action == 'cget') {
-            $action = 'gets';
-        }
-        return $this->routePrefix.'_'.$action;
+        return $this->routePrefix.'_'.($action=='cget'?'gets':$action);
     }
 
     public function getSerializationGroups($action)

@@ -1,6 +1,7 @@
 <?php
 
 namespace Admin\Controller\Traits\Routes;
+
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\AbstractBaseTrait;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -30,7 +31,7 @@ trait LinkUnlinkTrait
             }
         }
 
-        $this->_LinkUnlinkTrait__save($subject);
+        $this->getResourceManager()->update($subject);
     }
 
     /**
@@ -48,7 +49,7 @@ trait LinkUnlinkTrait
             }
         }
 
-        $this->_LinkUnlinkTrait__save($subject);
+        $this->getResourceManager()->update($subject);
     }
 
     private function _LinkUnlinkTrait__preCheck(Request $request, $id)
@@ -57,19 +58,6 @@ trait LinkUnlinkTrait
             throw new BadRequestHttpException('Missing Link header');
         }
 
-        $subject = $this->getFrontendManager()->getResource($id);
-        if(!$this->getFrontendManager()->getAuthorizationChecker()->mayEdit($subject)) {
-            throw new AccessDeniedException();
-        }
-        return $subject;
-    }
-
-    private function _LinkUnlinkTrait__save($obj)
-    {
-        // XXX: Fix ugly hack
-        $repoRefl = new \ReflectionProperty(get_class($this->getFrontendManager()), "resourceManager");
-        $repoRefl->setAccessible(true);
-        $repo = $repoRefl->getValue($this->getFrontendManager());
-        $repo->update($obj);
+        return $this->getResourceManager()->find($id);
     }
 }

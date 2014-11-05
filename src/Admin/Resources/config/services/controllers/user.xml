@@ -1,23 +1,24 @@
 <?xml version="1.0" ?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="app.admin.user.resource_manager" class="AppBundle:User">
-            <tag name="radrest.entity_repository" />
-            <tag name="radrest.resource_manager" resource="user" />
+        <service id="app.admin.user.repo" class="App\Doctrine\EntityRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>App\Entity\User</argument>
         </service>
-        <service id="app.admin.user.authorization_checker" class="Admin\Security\DefaultAuthorizationChecker">
-            <tag name="radrest.authorization_checker" resource="user" />
+        <service id="app.admin.user.resource_manager" class="App\Manager\SecuredResourceManager">
+            <argument type="service" id="app.admin.user.repo" />
+            <argument type="service" id="app.admin.default_authorization_checker" />
         </service>
         <service id="app.admin.user.form" class="App\Form\UserType">
             <argument type="service">
                 <service class="Admin\Form\EventListener\UserTypeLocalFlagsEventListener">
-                    <argument type="service" id="app.admin.user.authorization_checker" />
+                    <argument type="service" id="app.admin.default_authorization_checker" />
                 </service>
             </argument>
-            <tag name="radrest.form" resource="user" />
         </service>
         <service id="app.admin.user.controller" class="Admin\Controller\UserController">
-            <tag name="radrest.controller" resource="user" />
+            <argument type="service" id="app.admin.user.resource_manager" />
+            <argument type="service" id="app.admin.user.form" />
+            <argument type="service" id="form.factory" />
             <argument type="service" id="knp_paginator" />
             <argument>admin_user</argument>
         </service>

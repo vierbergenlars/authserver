@@ -9,7 +9,7 @@ use vierbergenlars\Bundle\RadRestBundle\Doctrine\QueryBuilderPageDescription;
 
 class EntityRepository extends BaseRepository
 {
-    public function create()
+    public function newInstance()
     {
         $n = $this->getClassName();
         return new $n();
