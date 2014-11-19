@@ -23,9 +23,9 @@ class PasswdCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getDoctrine()->getManagerForClass('AppBundle:User');
+        $repo = $this->getService('app.admin.user.repo');
 
-        $user = $em->getRepository('AppBundle:User')->findOneBy(array('username'=>$input->getArgument('username')));
+        $user = $repo->findOneBy(array('username'=>$input->getArgument('username')));
         if(!$user) {
             throw new \RuntimeException('User not found');
         }
@@ -42,16 +42,8 @@ class PasswdCommand extends Command
             $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
         }
 
-        $em->flush();
+        $repo->update($user);
         $output->writeln(sprintf('User %s updated', $input->getArgument('username')));
-    }
-
-    /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
-     */
-    private function getDoctrine()
-    {
-        return $this->getService('doctrine');
     }
 
     private function getService($id)

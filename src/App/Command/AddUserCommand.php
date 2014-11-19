@@ -23,7 +23,7 @@ class AddUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repo = $this->getDoctrine()->getManagerForClass('AppBundle:User')->getRepository('AppBundle:User');
+        $repo = $this->getService('app.admin.user.repo');
 
         $user = $repo->newInstance();
         $user->setUsername($input->getArgument('username'));
@@ -46,14 +46,6 @@ class AddUserCommand extends Command
 
         $repo->update($user);
         $output->writeln(sprintf('User %s created', $input->getArgument('username')));
-    }
-
-    /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
-     */
-    private function getDoctrine()
-    {
-        return $this->getService('doctrine');
     }
 
     private function getService($id)
