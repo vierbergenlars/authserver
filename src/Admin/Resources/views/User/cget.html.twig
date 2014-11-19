@@ -24,11 +24,16 @@
                             {% endif %}
                             {% if not obj.enabled %}
                                 {{ label('Disabled') }}
+                            {% elseif not obj.accountNonLocked %}
+                                {{ label('Locked') }}
                             {% endif %}
                         </td>
                         <td>
                             {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
-                                {{ obj.email }}
+                                {{ obj.primaryEmailAddress.email }}
+                                {% if not obj.primaryEmailAddress.verified %}
+                                    <span class="text-muted">(Not verified)</span>
+                                {% endif %}
                             {% else %}
                                 <span class="text-muted">(Hidden)</span>
                             {% endif %}

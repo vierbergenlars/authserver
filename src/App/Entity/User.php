@@ -336,14 +336,14 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getPrimaryEmailAddress()
     {
-        if($this->primaryEmailAddress) {
+        if($this->primaryEmailAddress && !$this->getEmailAddresses()) {
             return $this->primaryEmailAddress;
         }
         foreach($this->getEmailAddresses()->toArray() as $email) {
             if($email->isPrimary())
                 return $this->primaryEmailAddress = $email;
         }
-        return null;
+        return $this->getEmailAddresses()->get(0)->setPrimary(true);
     }
 
 }
