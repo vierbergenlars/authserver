@@ -37,7 +37,15 @@
                 <div class="panel-body">
                     <dl class="dl-horizontal">
                         <dt>Username</dt><dd>{{ data.username }}</dd>
-                        <dt>Email</dt><dd>{{ data.email }}</dd>
+                        <dt>Email</dt><dd>
+                            {% for email in data.emailAddresses %}
+                                {{ email.email }}
+                                {% if not email.verified %}
+                                    <span class="text-muted">(Pending verification)</span>
+                                {% endif %}
+                                <br>
+                            {% endfor %}
+                        </dd>
                         <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
                         <dt>Groups</dt><dd>
                             {% for group in data.groups %}
