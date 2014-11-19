@@ -9,9 +9,6 @@
                 <option name="max">25</option>
             </constraint>
         </property>
-        <property name="email">
-            <constraint name="Blank" />
-        </property>
         <property name="emailAddresses">
             <constraint name="Count">
                 <option name="min">1</option>

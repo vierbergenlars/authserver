@@ -30,12 +30,6 @@ class User implements AdvancedUserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
-     * @ORM\Column(nullable=true)
-     */
-    private $email;
-
-    /**
      * @var EmailAddress[]
      *
      * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"ALL"})
@@ -55,7 +49,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    private $enabled;
 
     /**
      * @var Group[]
@@ -155,12 +149,12 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->enabled;
     }
 
     public function setEnabled($enabled)
     {
-        $this->isActive = $enabled;
+        $this->enabled = $enabled;
         return $this;
     }
 
@@ -318,14 +312,6 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getEmailAddresses()
     {
-        if($this->email) {
-            $email = new EmailAddress();
-            $email->setEmail($this->email);
-            $email->setUser($this);
-            $email->setPrimary(true);
-            $this->emailAddresses->add($email);
-            $this->email = null;
-        }
         return $this->emailAddresses;
     }
 
