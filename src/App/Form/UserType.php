@@ -28,7 +28,11 @@ class UserType extends AbstractType
             ->add('password', 'app_password', array(
                 'required'=>false,
             ))
-            ->add('email')
+            ->add('emailAddresses', 'bootstrap_collection', array(
+                'type' => new EmailAddressType(),
+                'allow_add' => true,
+                'allow_delete'=>true
+            ))
             ->add('role', 'choice', array(
                 'choices' => array(
                     'ROLE_USER' => 'User',

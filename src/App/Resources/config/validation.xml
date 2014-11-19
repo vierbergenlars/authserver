@@ -10,8 +10,13 @@
             </constraint>
         </property>
         <property name="email">
-            <constraint name="NotBlank" />
-            <constraint name="Email" />
+            <constraint name="Blank" />
+        </property>
+        <property name="emailAddresses">
+            <constraint name="Count">
+                <option name="min">1</option>
+            </constraint>
+            <constraint name="Valid" />
         </property>
         <property name="role">
             <constraint name="NotBlank" />
@@ -24,7 +29,13 @@
             </constraint>
         </property>
         <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">username</constraint>
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>
+    </class>
+    <class name="App\Entity\EmailAddress">
+        <property name="email">
+            <constraint name="NotBlank" />
+            <constraint name="Email" />
+        </property>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>        
     </class>
     <class name="App\Entity\Group">
         <property name="name">

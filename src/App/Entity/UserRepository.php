@@ -48,4 +48,22 @@ class UserRepository extends EntityRepository
                 parent::handleUnknownSearchField($block);
         }
     }
+
+    private function updateEmails($object) {
+        foreach($object->getEmailAddresses() as $email) {
+            $email->setUser($object);
+            $this->getEntityManager()->persist($email);
+        }
+    }
+    public function create($object) {
+        $this->updateEmails($object);
+        parent::create($object);
+        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+    }
+
+    public function update($object) {
+        $this->updateEmails($object);
+        parent::update($object);
+        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+    }
 }
