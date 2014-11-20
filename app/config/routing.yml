@@ -33,3 +33,7 @@ api:
 user:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix: /usr
+    
+user_public:
+    resource: "@UserBundle/Resources/config/routing_public.yml"
+    prefix: /www

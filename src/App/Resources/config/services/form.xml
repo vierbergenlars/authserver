@@ -5,5 +5,9 @@
             <argument type="service" id="security.encoder_factory" />
             <tag name="form.type" alias="app_password" />
         </service>
+        <service id="app.form.type.username" class="App\Form\Type\UsernameType">
+            <argument type="service" id="app.admin.user.repo" />
+            <tag name="form.type" alias="app_username" />
+        </service>
     </services>
 </container>

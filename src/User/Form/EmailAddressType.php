@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
-class EditEmailAddressType extends AbstractType
+class EmailAddressType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,24 +16,16 @@ class EditEmailAddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->setMethod('PUT')
-            ->add('id', 'hidden')
-            ->add('setPrimary', 'submit', array(
-                'label'=>'Set as primary address',
+            ->setMethod('POST')
+            ->add('email', 'text', array(
                 'attr' => array(
-                    'class' => 'btn-link',
+                    'class' => 'input-sm',
                 )
             ))
-            ->add('sendConfirmation', 'submit', array(
-                'label' => 'Resend confirmation',
+            ->add('submit', 'submit', array(
+                'label' => 'Add email address',
                 'attr' => array(
-                    'class' => 'btn-link',
-                )
-            ))
-            ->add('remove', 'submit', array(
-                'label' => 'Remove',
-                'attr' => array(
-                    'class' => 'btn-link',
+                    'class' => 'btn-sm',
                 )
             ))
         ;
@@ -45,6 +37,7 @@ class EditEmailAddressType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'data_class' => 'App\Entity\EmailAddress',
         ));
     }
 
@@ -53,6 +46,6 @@ class EditEmailAddressType extends AbstractType
      */
     public function getName()
     {
-        return 'usr_edit_email_address';
+        return 'usr_new_email_address';
     }
 }

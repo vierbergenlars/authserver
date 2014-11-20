@@ -18,6 +18,13 @@ user_put_email_addresses:
         _controller: UserBundle:Profile:putEmailAddresses
     requirements:
         _method: PUT
+        
+user_post_email_addresses:
+    path: mailaddr
+    defaults:
+        _controller: UserBundle:Profile:postEmailAddresses
+    requirements:
+        _method: POST
 
 user_kill_session:
     path: kill-session

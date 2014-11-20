@@ -48,6 +48,7 @@
                                 })) }}
                                 <br>
                             {% endfor %}
+                            {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
                         </dd>
                         <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
                         <dt>Groups</dt><dd>
