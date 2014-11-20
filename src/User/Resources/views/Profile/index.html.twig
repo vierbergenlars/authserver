@@ -43,6 +43,9 @@
                                 {% if not email.verified %}
                                     <span class="text-muted">(Pending verification)</span>
                                 {% endif %}
+                                {{ render(controller('UserBundle:Profile:editEmailAddresses', {
+                                    addr: email
+                                })) }}
                                 <br>
                             {% endfor %}
                         </dd>

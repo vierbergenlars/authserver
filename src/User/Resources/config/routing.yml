@@ -11,6 +11,13 @@ user_app_auth_delete:
         _controller: UserBundle:Profile:deleteAuthorizedApp
     requirements:
         _method: DELETE
+        
+user_put_email_addresses:
+    path: mailaddr
+    defaults:
+        _controller: UserBundle:Profile:putEmailAddresses
+    requirements:
+        _method: PUT
 
 user_kill_session:
     path: kill-session
