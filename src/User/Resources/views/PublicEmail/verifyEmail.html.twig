@@ -14,7 +14,7 @@
                             <p>Your email address has been verified, and your account has been activated.</p>
                         {% else %}
                             <p>Your email address could not be verified, because you tried to submit an old verification code.</p>
-                            <p>You can <a href="{{ url('user_email_resend') }}">request a new verification code</a>
+                            <p>You can <a href="{{ url('user_email_resend', { user: data.user.username }) }}">request a new verification code</a>
                         {% endif %}
                     </div>
                 </div>
