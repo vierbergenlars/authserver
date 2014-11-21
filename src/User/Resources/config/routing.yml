@@ -6,7 +6,7 @@ user_profile:
         _method: GET
 
 user_app_auth_delete:
-    path: app_auth_delete
+    path: oauthapp
     defaults:
         _controller: UserBundle:Profile:deleteAuthorizedApp
     requirements:
