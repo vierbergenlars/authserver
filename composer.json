@@ -33,7 +33,7 @@
         "knplabs/knp-paginator-bundle": "~2.4",
         "friendsofsymfony/oauth-server-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "vierbergenlars/rad-rest-bundle": "~0.5",
+        "vierbergenlars/rad-rest-bundle": "dev-develop",
         "ircmaxell/password-compat": "~1.0"
     },
     "conflict": {

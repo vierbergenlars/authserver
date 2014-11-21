@@ -16,7 +16,7 @@ class DefaultAuthorizationChecker extends AbstractAuthorizationChecker
         return true;
     }
 
-    public function mayCreate()
+    public function mayCreate($o)
     {
         return true;
     }
