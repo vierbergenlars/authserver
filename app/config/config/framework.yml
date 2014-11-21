@@ -36,4 +36,5 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
+    encryption: %mailer_encryption%
     spool:     { type: memory }
