@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\User;
+use App\Entity\EmailAddress;
 
 class AddUserCommand extends Command
 {
@@ -22,11 +23,11 @@ class AddUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getDoctrine()->getManagerForClass('AppBundle:User');
+        $repo = $this->getService('app.admin.user.repo');
 
-        $user = new User();
+        $user = $repo->newInstance();
         $user->setUsername($input->getArgument('username'));
-        $user->setEmail($input->getArgument('email'));
+        $user->setEnabled(true);
 
         $encoderFactory = $this->getService('security.encoder_factory');
         $encoder = $encoderFactory->getEncoder(get_class($user));
@@ -36,17 +37,15 @@ class AddUserCommand extends Command
             $user->setRole('ROLE_SUPER_ADMIN');
         }
 
-        $em->persist($user);
-        $em->flush();
-        $output->writeln(sprintf('User %s created', $input->getArgument('username')));
-    }
+        $repo->create($user);
 
-    /**
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
-     */
-    private function getDoctrine()
-    {
-        return $this->getService('doctrine');
+        $email = new EmailAddress();
+        $email->setEmail($input->getArgument('email'));
+        $email->setPrimary(true);
+        $user->addEmailAddress($email);
+
+        $repo->update($user);
+        $output->writeln(sprintf('User %s created', $input->getArgument('username')));
     }
 
     private function getService($id)

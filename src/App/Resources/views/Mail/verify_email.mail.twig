@@ -1,0 +1,9 @@
+{% block subject %}Confirm your email address for AuthServer{% endblock %}
+{% block body_html %}
+Confirmation code: <b>{{ data.verificationCode }}</b>
+Link: <a href="{{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}">Click to verify</a>
+{% endblock %}
+{% block body_text %}
+Confirmation code: {{ data.verificationCode }}
+Link: {{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}
+{% endblock %}

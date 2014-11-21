@@ -30,9 +30,16 @@ class User implements AdvancedUserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @var EmailAddress[]
+     *
+     * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"ALL"})
      */
-    private $email;
+    private $emailAddresses;
+
+    /**
+     * @var EmailAddress
+     */
+    private $primaryEmailAddress;
 
     /**
      * @ORM\Column(name="roles", type="string")
@@ -42,7 +49,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
+    private $enabled;
 
     /**
      * @var Group[]
@@ -66,6 +73,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->isActive = true;
         $this->groups = new ArrayCollection();
         $this->authorizedApplications = new ArrayCollection();
+        $this->emailAddresses = new ArrayCollection();
     }
 
     public function getUsername()
@@ -110,6 +118,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->getPrimaryEmailAddress(),
         ));
     }
 
@@ -119,6 +128,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
             $this->username,
             $this->password,
+            $this->primaryEmailAddress,
         ) = unserialize($serialized);
     }
 
@@ -129,7 +139,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        return true;
+        return $this->getPrimaryEmailAddress()->isVerified()||$this->role === 'ROLE_SUPER_ADMIN';
     }
 
     public function isCredentialsNonExpired()
@@ -139,12 +149,12 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isEnabled()
     {
-        return $this->isActive;
+        return $this->enabled;
     }
 
     public function setEnabled($enabled)
     {
-        $this->isActive = $enabled;
+        $this->enabled = $enabled;
         return $this;
     }
 
@@ -187,26 +197,14 @@ class User implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
      * Get email
      *
+     * @deprecated
      * @return string
      */
     public function getEmail()
     {
-        return $this->email;
+        return $this->getPrimaryEmailAddress()->getEmail();
     }
 
     /**
@@ -283,4 +281,55 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->authorizedApplications;
     }
+
+    /**
+     * Add emailAddresses
+     *
+     * @param \App\Entity\EmailAddress $emailAddresses
+     * @return User
+     */
+    public function addEmailAddress(\App\Entity\EmailAddress $emailAddresses)
+    {
+        $this->emailAddresses[] = $emailAddresses;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailAddresses
+     *
+     * @param \App\Entity\EmailAddress $emailAddresses
+     */
+    public function removeEmailAddress(\App\Entity\EmailAddress $emailAddresses)
+    {
+        $this->emailAddresses->removeElement($emailAddresses);
+    }
+
+    /**
+     * Get emailAddresses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmailAddresses()
+    {
+        return $this->emailAddresses;
+    }
+
+    /**
+     * Get primaryEmailAddress
+     *
+     * @return \App\Entity\EmailAddress
+     */
+    public function getPrimaryEmailAddress()
+    {
+        if($this->primaryEmailAddress && !$this->getEmailAddresses()) {
+            return $this->primaryEmailAddress;
+        }
+        foreach($this->getEmailAddresses()->toArray() as $email) {
+            if($email->isPrimary())
+                return $this->primaryEmailAddress = $email;
+        }
+        return $this->getEmailAddresses()->get(0)->setPrimary(true);
+    }
+
 }

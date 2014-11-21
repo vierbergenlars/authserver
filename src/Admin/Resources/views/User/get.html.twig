@@ -11,9 +11,25 @@
                 {% if not data.enabled %}
                     {{ label('Disabled') }}
                 {% endif %}
+                {% if not data.accountNonLocked %}
+                    {{ label('Locked') }}
+                {% endif %}
             </dd>
             {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
-                <dt>Email<dt><dd>{{ data.email }}</dd>
+                <dt>Email<dt><dd>
+                    {% for e in data.emailAddresses %}
+                        {{ e.email }}
+                        {% if e.verified %}
+                            <span title="Verified">{{ label_success('V') }}</span>
+                        {% else %}
+                            <span title="Not verified">{{ label('V') }}</span>
+                        {% endif %}
+                        {% if e.primary %}
+                            {{ label_primary('Primary') }}
+                        {% endif %}
+                        <br>
+                    {% endfor %}
+                </dd>
             {% endif %}
             <dt>Local flags</dt><dd>
                 {% if 'ROLE_SUPER_ADMIN' == data.role %}

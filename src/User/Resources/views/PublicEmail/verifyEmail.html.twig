@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <div class="panel {% if  data and data.verified %}panel-success{% else %}panel-danger{% endif %}">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Email verification</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% if not data %}
+                            <p>Your email address could not be verified, because it was removed from your account.</p>
+                        {% elseif data.verified %}
+                            <p>Your email address has been verified, and your account has been activated.</p>
+                        {% else %}
+                            <p>Your email address could not be verified, because you tried to submit an old verification code.</p>
+                            <p>You can <a href="{{ url('user_email_resend', { user: data.user.username }) }}">request a new verification code</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

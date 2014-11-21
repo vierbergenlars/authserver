@@ -1,0 +1,9 @@
+user_email_verify:
+    pattern: email/verify/{id}/{verificationCode}
+    defaults:
+        _controller: UserBundle:PublicEmail:verifyEmail
+        
+user_email_resend:
+    pattern: email/verify
+    defaults:
+        _controller: UserBundle:PublicEmail:resendVerification

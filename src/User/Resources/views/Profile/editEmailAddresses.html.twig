@@ -1,0 +1,12 @@
+{{ form_start(form, { action: url('user_put_email_addresses'), style: 'inline' , attr: { 'style': 'display: inline' } }) }}
+    {{ form_row(form.id) }}
+    {% if data.verified %}<span style="display: none">{% else %}<span>{% endif %}
+        {{ form_row(form.sendConfirmation) }}
+    </span>
+    {% if not data.verified or data.primary %}<span style="display: none">{% else %}<span>{% endif %}
+        {{ form_row(form.setPrimary) }}
+    </span>
+    {% if data.primary %}<span style="display: none">{% else %}<span>{% endif %}
+        {{ form_row(form.remove) }}
+    </span>
+{{ form_end(form) }}

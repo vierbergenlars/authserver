@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\EmailAddress">
+        <property name="email" groups="admin_user_object_scope_email" xml-attribute="true" serialized-name="addr"/>
+        <property name="verified" groups="admin_user_object_scope_email" xml-attribute="true" />
+        <property name="primary" groups="admin_user_object_scope_email" xml-attribute="true" />
+    </class>
+</serializer>
