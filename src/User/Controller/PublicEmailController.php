@@ -63,6 +63,8 @@ class PublicEmailController extends Controller
             } else {
                 $flash->error('Email address has already been verified');
             }
+
+            return $this->redirect($this->generateUrl('app_login'));
         }
 
         return $form;
