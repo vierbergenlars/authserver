@@ -11,7 +11,14 @@
                     </div>
                     <div class="panel-body">
                         {% if error %}
-                            <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+                            <div class="alert alert-danger" role="alert">
+                                {% if error_type == "Symfony\\Component\\Security\\Core\\Exception\\LockedException" %}
+                                    <p>Your email address has not yet been validated.</p>
+                                    <p>If you did not receive a verification mail, you can <a class="alert-link" href="{{ url('user_email_resend', { user: last_username }) }}">resend the verification email.</a></p>
+                                {% else %}
+                                    <p>{{ error.message }}</p>
+                                {% endif %}
+                            </div>
                         {% endif %}
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -24,7 +31,6 @@
                     </div>
                     <div class="panel-footer text-center">
                         <button class="btn btn-primary btn-block" type="submit">Login</button>
-                        <a class="btn btn-link" href="{{ url('user_email_resend') }}">Resend verification email</a>
                     </div>
                 </div>
             </form>

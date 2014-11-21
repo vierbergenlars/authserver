@@ -12,6 +12,7 @@ class SecurityController extends Controller
         $request = $this->getRequest();
         $session = $request->getSession();
 
+        $error = null;
         // get the login error if there is one
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
@@ -31,6 +32,7 @@ class SecurityController extends Controller
             // last username entered by the user
             'last_username' => $session->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
+            'error_type'    => $error?get_class($error):null,
         ));
     }
 }
