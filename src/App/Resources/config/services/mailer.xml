@@ -6,5 +6,9 @@
             <argument type="service" id="mailer" />
             <argument>noreply@vbgn.be</argument>
         </service>
+        <service id="app.mailer.user.verify_email" class="App\Mail\PrimedTwigMailer">
+            <argument type="service" id="app.mailer" />
+            <argument>AppBundle:Mail:verify_email.mail.twig</argument>
+        </service>
     </services>
 </container>

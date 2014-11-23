@@ -74,6 +74,8 @@ class ProfileController extends Controller
     public function putEmailAddressesAction(Request $request)
     {
         $flash = $this->get('braincrafted_bootstrap.flash');
+        $mailer = $this->get('app.mailer.user.verify_email');
+
 
         $form  = $this->createForm(new EditEmailAddressType());
 
@@ -96,14 +98,11 @@ class ProfileController extends Controller
                 case 'sendConfirmation':
                     if(!$addr->isVerified()) {
                         $addr->setVerified(false);
-                        $this->get('app.mailer')
-                            ->sendMessage(
-                                'AppBundle:Mail:verify_email.mail.twig',
-                                array('data'=>$addr),
-                                $addr->getEmail()
-                            );
-
-                        $flash->success('A new confirmation email has been sent');
+                        if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                            $flash->success('A new confirmation email has been sent');
+                        } else {
+                            $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
+                        }
                     }
                     break;
                 case 'setPrimary':
@@ -146,7 +145,7 @@ class ProfileController extends Controller
         $form  = $this->createForm(new EmailAddressType());
 
         $em = $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress');
-
+        $mailer = $this->get('app.mailer.user.verify_email');
 
         $form->handleRequest($request);
 
@@ -156,13 +155,12 @@ class ProfileController extends Controller
             $addr->setUser($this->getUser());
             $em->persist($addr);
             $em->flush($addr);
-            $this->get('app.mailer')
-                ->sendMessage(
-                    'AppBundle:Mail:verify_email.mail.twig',
-                    array('data'=>$addr),
-                    $addr->getEmail()
-                );
-            $flash->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
+
+            if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                $flash->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
+            } else {
+                $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
+            }
         } else {
             $errString = 'Problems with email address '.$form->get('email')->getData().'.';
             foreach($form->getErrors(true) as $e) {

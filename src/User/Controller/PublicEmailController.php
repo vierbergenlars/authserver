@@ -41,6 +41,7 @@ class PublicEmailController extends Controller
     {
         $form  = $this->createForm(new AccountResendVerificationType(), array('user'=>$request->query->get('user', '')));
         $flash = $this->get('braincrafted_bootstrap.flash');
+        $mailer = $this->get('app.mailer.user.verify_email');
 
         $form->handleRequest($request);
 
@@ -52,14 +53,13 @@ class PublicEmailController extends Controller
             $addr = $user->getPrimaryEmailAddress();
             if(!$addr->isVerified()) {
                 $addr->setVerified(false);
-                $this->get('app.mailer')
-                    ->sendMessage(
-                        'AppBundle:Mail:verify_email.mail.twig',
-                        array('data'=>$addr),
-                        $addr->getEmail()
-                    );
-                $em->flush($addr);
-                $flash->success('A new confirmation email has been sent');
+
+                if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                    $em->flush($addr);
+                    $flash->success('A new confirmation email has been sent');
+                } else {
+                    $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
+                }
             } else {
                 $flash->error('Email address has already been verified');
             }
