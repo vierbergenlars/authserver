@@ -38,7 +38,7 @@ class EmailAddress implements \Serializable
     private $primary = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="emailAddresses")
      * @ORM\JoinColumn(nullable=false)
      * @var User
      */
