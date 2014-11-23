@@ -4,7 +4,7 @@
         <service id="app.mailer" class="App\Mail\TwigMailer">
             <argument type="service" id="twig" />
             <argument type="service" id="mailer" />
-            <argument>noreply@vbgn.be</argument>
+            <argument>%mailer_sender%</argument>
         </service>
         <service id="app.mailer.user.verify_email" class="App\Mail\PrimedTwigMailer">
             <argument type="service" id="app.mailer" />
