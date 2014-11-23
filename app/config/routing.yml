@@ -36,4 +36,4 @@ user:
     
 user_public:
     resource: "@UserBundle/Resources/config/routing_public.yml"
-    prefix: /www
+    prefix: /pub
