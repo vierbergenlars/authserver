@@ -17,8 +17,18 @@ class EntityRepository extends BaseRepository
 
     public function search($terms)
     {
-        $parser = new SearchGrammar();
-        $blocks = $parser->parse($terms);
+        if(is_string($terms)) {
+            $parser = new SearchGrammar();
+            $blocks = $parser->parse($terms);
+        } else if(is_array($terms)) {
+            $blocks = array();
+            foreach($terms as $name=>$value) {
+                $blocks[] = array(
+                    'name' => $name,
+                    'value' => $value,
+                );
+            }
+        }
 
         $queryBuilder = $this->createQueryBuilder('u');
         $and = $queryBuilder->expr()->andX();
