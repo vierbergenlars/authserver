@@ -21,6 +21,8 @@ class ApiKeyType extends AbstractType
                     'r_profile' => 'Read-only user profile (no email)',
                     'r_profile_email' => 'Read user profile email',
                     'w_profile' => 'Write user profile',
+                    'w_profile_email' => 'Write user profile email',
+                    'w_profile_cred' => 'Write user profile password',
                     'w_profile_admin' => 'Write user profile (make users admin)',
                     'r_group' => 'Read-only group',
                     'w_group' => 'Write group',
