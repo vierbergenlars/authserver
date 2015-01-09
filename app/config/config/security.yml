@@ -48,6 +48,7 @@ security:
                 authenticator: app.admin.security.apikey_authenticator
             logout: ~
             anonymous: ~
+            switch_user: true
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
