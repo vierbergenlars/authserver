@@ -26,6 +26,7 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
+        $data = $event->getData();
         if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ADMIN')) {
             $form->remove('role');
         }
@@ -34,6 +35,21 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
         }
         if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_EMAIL')) {
             $form->remove('emailAddresses');
+        }
+        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+            $form->remove('groups');
+        }
+        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_USERNAME')) {
+            $form->remove('username');
+        }
+        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
+            $form->remove('enabled');
+        }
+        if($data instanceof \App\Entity\User) {
+            /* @var $data \App\Entity\User */
+            if($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
+                $form->remove('enabled');
+            }
         }
     }
 }

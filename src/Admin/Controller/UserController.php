@@ -4,9 +4,10 @@ namespace Admin\Controller;
 
 use App\Entity\Group;
 use Admin\Controller\Traits\Routes\LinkUnlinkTrait;
-use vierbergenlars\Bundle\RadRestBundle\View\View;
 use vierbergenlars\Bundle\RadRestBundle\Manager\SecuredResourceManager;
 use Admin\Security\DefaultAuthorizationChecker;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends DefaultController
 {
@@ -16,6 +17,9 @@ class UserController extends DefaultController
     {
         switch($type) {
             case 'group':
+                if(!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+                    throw new AccessDeniedException();
+                }
                 $group = $link->getData();
                 if(!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
@@ -33,6 +37,10 @@ class UserController extends DefaultController
     {
         switch($type) {
             case 'group':
+                if(!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+                    throw new AccessDeniedException();
+                }
+
                 $group = $link->getData();
                 if(!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
@@ -47,16 +55,23 @@ class UserController extends DefaultController
     public function getSerializationGroups($action)
     {
         $groups = parent::getSerializationGroups($action);
-        $resourceManager = $this->getResourceManager();
-        if($action == 'get' && $resourceManager instanceof SecuredResourceManager) {
-            $authorizationChecker = $resourceManager->getAuthorizationChecker();
-            if($authorizationChecker instanceof DefaultAuthorizationChecker) {
-                if($authorizationChecker->hasRole('ROLE_SCOPE_R_PROFILE_EMAIL')) {
-                    $groups[] = 'admin_user_object_scope_email';
-                }
-
+        if($action == 'get') {
+            if($this->hasRole('ROLE_SCOPE_R_PROFILE_EMAIL')) {
+                $groups[] = 'admin_user_object_scope_email';
             }
         }
         return $groups;
     }
+    
+    private function hasRole($role) {
+        if(($rm = $this->getResourceManager()) instanceof SecuredResourceManager) {
+            /* @var $rm SecuredResourceManager */
+            if(($ac = $rm->getAuthorizationChecker()) instanceof DefaultAuthorizationChecker) {
+                /* @var $ac DefaultAuthorizationChecker */
+                return $ac->hasRole($role);
+            }
+        }
+        return false;
+    }
+
 }
