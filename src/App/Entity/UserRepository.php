@@ -11,6 +11,13 @@ use App\Search\SearchValueException;
 
 class UserRepository extends EntityRepository
 {
+    public function find($id) {
+        if(is_array($id)||is_int($id)||is_numeric($id)) {
+            return parent::find($id);
+        } else {
+            return $this->findOneBy(array('guid'=>$id));
+        }
+    }
     protected $fieldSearchWhitelist = array('username', 'email');
 
     public function handleUnknownSearchField(array &$block)
@@ -56,6 +63,9 @@ class UserRepository extends EntityRepository
         }
     }
     public function create($object) {
+        $generator = new \Doctrine\ORM\Id\UuidGenerator();
+        $uuid = $generator->generate($this->getEntityManager(), $object);
+        $object->setGuid($uuid);
         $this->updateEmails($object);
         parent::create($object);
         $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());

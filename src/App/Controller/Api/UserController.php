@@ -19,7 +19,8 @@ class UserController extends Controller
             throw new AccessDeniedException();
         }
         return array(
-            'user_id' => $user->getId(),
+            'user_id' => $user->getMigrateId(),
+            'guid' => $user->getId(),
             'username' => $user->getUsername(),
             'groups' => array_keys($user->_getAllGroupNames()),
         );
