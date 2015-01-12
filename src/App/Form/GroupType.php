@@ -17,7 +17,11 @@ class GroupType extends AbstractType
     {
         $id = $options['data']->getId()?:0;
         $builder
-            ->add('name')
+            ->add('name', 'text', array(
+                // Disable editing of the name after the initial submission
+                // If the id is set, the form is used for an edit operation
+                'disabled' => $id > 0 
+            ))
             ->add('displayName')
             ->add('groups', null, array(
                 'label'=>'Member of',

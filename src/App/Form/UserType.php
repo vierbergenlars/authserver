@@ -24,7 +24,11 @@ class UserType extends AbstractType
         $id = $options['data']->getId()?:0;
 
         $builder
-            ->add('username')
+            ->add('username', 'text', array(
+                // Disable editing of the name after the initial submission
+                // If the id is set, the form is used for an edit operation
+                'disabled' => $id > 0
+            ))
             ->add('displayName')
             ->add('password', 'app_password', array(
                 'required'=>false,
