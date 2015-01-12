@@ -12,6 +12,12 @@
                 <option name="pattern">/^[a-z0-9]+$/</option>
             </constraint>
         </property>
+        <property name="displayName">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="max">255</option>
+            </constraint>
+        </property>
         <property name="emailAddresses">
             <constraint name="Count">
                 <option name="min">1</option>
@@ -39,6 +45,16 @@
     </class>
     <class name="App\Entity\Group">
         <property name="name">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">255</option>
+            </constraint>
+            <constraint name="Regex">
+                <option name="pattern">/^%?[a-z0-9_]+$/</option>
+            </constraint>
+        </property>
+        <property name="displayName">
             <constraint name="NotBlank" />
             <constraint name="Length">
                 <option name="min">2</option>

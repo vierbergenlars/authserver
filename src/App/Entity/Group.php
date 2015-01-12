@@ -28,6 +28,13 @@ class Group
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="display_name", type="string", length=255, unique=true)
+     */
+    private $displayName;
 
     /**
      * @var User[]
@@ -99,7 +106,7 @@ class Group
      * Set name
      *
      * @param string $name
-     * @return Group_
+     * @return Group
      */
     public function setName($name)
     {
@@ -117,6 +124,30 @@ class Group
     {
         return $this->name;
     }
+    
+    /**
+     * Set displayName
+     *
+     * @param string $name
+     * @return Group
+     */
+    public function setDisplayName($name)
+    {
+        $this->displayName = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
 
     /**
      * Add members

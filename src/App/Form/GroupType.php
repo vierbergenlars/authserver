@@ -18,6 +18,7 @@ class GroupType extends AbstractType
         $id = $options['data']->getId()?:0;
         $builder
             ->add('name')
+            ->add('displayName')
             ->add('groups', null, array(
                 'label'=>'Member of',
                 'query_builder'=>function(EntityRepository $repo)use($id) {

@@ -25,6 +25,7 @@ class UserType extends AbstractType
 
         $builder
             ->add('username')
+            ->add('displayName')
             ->add('password', 'app_password', array(
                 'required'=>false,
             ))

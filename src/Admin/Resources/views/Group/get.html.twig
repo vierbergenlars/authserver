@@ -1,12 +1,13 @@
 {% extends 'VlRadRestBundle:Default:get.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
-        <h3 class="panel-title">Group {{ data.name }}</h3>
+        <h3 class="panel-title">{{ icon('group') }} {{ data.displayName }}</h3>
     </div>
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Name</dt><dd>
+            <dt>Name</dt><dd>{{ data.displayName }}</dd>
+            <dt>Technical Name</dt><dd>
                 {{ data.name }}
             </dd>
             <dt>Flags</dt><dd>
@@ -14,7 +15,7 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groups %}
-                    <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} {{ g.name }}</a><br>
+                    <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} {{ g.displayName }}</a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
@@ -23,7 +24,7 @@
                 <dt>Members</dt><dd>
                     {% if data.members|length < 20 %}
                         {% for u in data.members %}
-                            <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} {{ u.username }}</a><br>
+                            <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} {{ u.displayName }}</a><br>
                         {% endfor %}
                     {% else %}
                         {{ badge(data.members|length) }}
@@ -33,7 +34,7 @@
             {% if data.memberGroups|length > 0 %}
                 <dt>Members</dt><dd>
                     {% for g in data.memberGroups %}
-                        <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} {{ g.name }}</a><br>
+                        <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} {{ g.displayName }}</a><br>
                     {% endfor %}
                 </dd>
             {% endif %}

@@ -30,8 +30,10 @@
                         <ul class="nav navbar-nav navbar-right">
                             {% if app.user %}
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user') }} {{ app.user.username }} <span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user') }} {{ app.user.displayName }} <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
+                                        <li><a href="{{ url('user_profile') }}">{{ icon('user') }} Profile</a></li>
+                                        <li class="divider" role="presentation"></li>
                                         <li><a href="{{ url('logout') }}">{{ icon('sign-out') }} Sign out</a></li>
                                     </ul>
                                 </li>
