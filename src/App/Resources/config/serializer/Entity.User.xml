@@ -2,6 +2,7 @@
 <serializer>
     <class name="App\Entity\User" xml-root-name="user" xmlns:h="https://github.com/willdurand/Hateoas">
         <property name="username" groups="list,object" xml-attribute="true" />
+        <property name="displayName" groups="list,object" xml-attribute="true" />
         <property name="emailAddresses" groups="admin_user_object_scope_email" serialized-name="emails">
             <xml-list entry-name="email" />
         </property>

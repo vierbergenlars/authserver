@@ -8,6 +8,7 @@
             <thead>
                 <tr>
                     <th>Username</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Actions</th>
                 </tr>
@@ -28,6 +29,7 @@
                                 {{ label('Locked') }}
                             {% endif %}
                         </td>
+                        <td>{{ obj.displayName }}</td>
                         <td>
                             {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
                                 {{ obj.primaryEmailAddress.email }}

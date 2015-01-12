@@ -1,11 +1,12 @@
 {% extends 'VlRadRestBundle:Default:get.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
-        <h3 class="panel-title">User {{ data.username }}</h3>
+        <h3 class="panel-title">{{ icon('user') }} {{ data.username }} ({{ data.displayName}})</h3>
     </div>
 
     <div class="panel-body">
         <dl class="dl-horizontal">
+            <dt>Name</dt><dd>{{ data.displayName }}</dd>
             <dt>Username</dt><dd>
                 {{ data.username }}
                 {% if not data.enabled %}
@@ -42,7 +43,7 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groups %}
-                    <a href="{{ url('admin_group_get', { id: g.id }) }}">{{ icon('group') }} {{ g.name }}</a><br>
+                    <a href="{{ url('admin_group_get', { id: g.id }) }}">{{ icon('group') }} {{ g.displayName }}</a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}

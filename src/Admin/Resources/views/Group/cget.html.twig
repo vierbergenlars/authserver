@@ -8,6 +8,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Technical name</th>
                     <th>Flags</th>
                     <th>Actions</th>
                 </tr>
@@ -15,6 +16,7 @@
             <tbody>
                 {% for obj in data %}
                     <tr>
+                        <td>{{ obj.displayName }}</td>
                         <td>{{ obj.name }}</td>
                         <td>
                             {% include 'AdminBundle:Group:flags.html.twig' with {obj: obj} only %}

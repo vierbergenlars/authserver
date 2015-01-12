@@ -23,6 +23,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=25, unique=true)
      */
     private $username;
+    
+    /**
+     * @ORM\Column(name="display_name", type="string", length=255)
+     */
+    private $displayName;
 
     /**
      * @ORM\Column(type="string", length=64)
@@ -180,7 +185,26 @@ class User implements AdvancedUserInterface, \Serializable
 
         return $this;
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    public function getDisplayName() {
+        return $this->displayName;
+    }
 
+    /**
+     * 
+     * @param string $displayName
+     * @return User
+     */
+    public function setDisplayName($displayName) {
+        $this->displayName = $displayName;
+        return $this;
+    }
+
+    
     /**
      * Set password
      *

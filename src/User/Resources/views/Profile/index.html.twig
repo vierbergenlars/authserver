@@ -37,6 +37,7 @@
                 <div class="panel-body">
                     <dl class="dl-horizontal">
                         <dt>Username</dt><dd>{{ data.username }}</dd>
+                        <dt>Name</dt><dd>{{ data.displayName }}</dd>
                         <dt>Email</dt><dd>
                             {% for email in data.emailAddresses %}
                                 {{ email.email }}
@@ -53,7 +54,7 @@
                         <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
                         <dt>Groups</dt><dd>
                             {% for group in data.groups %}
-                                {{ icon('group') }} {{ group.name }}<br>
+                                {{ icon('group') }} {{ group.displayName }}<br>
                             {% else %}
                                 <span class="text-muted">(None)</span>
                             {% endfor %}
