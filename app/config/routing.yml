@@ -16,7 +16,7 @@ admin:
     prefix: admin
     type: rest
     requirements:
-        id: "[0-9]+"
+        id: "[0-9]+|([0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12})"
 
 # Added here to avoid getting .{_format} appended by FOSRestBundle
 admin_dashboard:

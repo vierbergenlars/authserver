@@ -18,6 +18,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @ORM\Column(type="guid")
+     */
+    private $guid;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
@@ -169,6 +174,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @return integer
      */
     public function getId()
+    {
+        return $this->guid;
+    }
+    
+    public function getMigrateId()
     {
         return $this->id;
     }
@@ -355,5 +365,13 @@ class User implements AdvancedUserInterface, \Serializable
         }
         return $this->getEmailAddresses()->get(0)->setPrimary(true);
     }
+    
+    public function getGuid() {
+        return $this->guid;
+    }
 
+    public function setGuid($guid) {
+        $this->guid = $guid;
+        return $this;
+    }
 }
