@@ -22,6 +22,7 @@ class UserController extends Controller
             'user_id' => $user->getMigrateId(),
             'guid' => $user->getId(),
             'username' => $user->getUsername(),
+            'name' => $user->getDisplayName(),
             'groups' => array_keys($user->_getAllGroupNames()),
         );
     }
