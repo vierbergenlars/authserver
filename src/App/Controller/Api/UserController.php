@@ -21,6 +21,7 @@ class UserController extends Controller
         return array(
             'user_id' => $user->getId(),
             'username' => $user->getUsername(),
+            'name' => $user->getDisplayName(),
             'groups' => array_keys($user->_getAllGroupNames()),
         );
     }
