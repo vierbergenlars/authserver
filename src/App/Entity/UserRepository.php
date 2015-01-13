@@ -44,6 +44,9 @@ class UserRepository extends EntityRepository
                         throw new SearchValueException($block['name'], $block['value'], array('admin', 'superadmin', 'super_admin', 'su', 'enabled', 'disabled'));
                 }
                 break;
+            case 'name':
+                $block['name'] = 'displayName';
+                break;
             default:
                 parent::handleUnknownSearchField($block);
         }
