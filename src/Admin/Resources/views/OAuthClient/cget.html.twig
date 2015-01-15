@@ -28,11 +28,6 @@
             </tbody>
         </table>
     </div>
-    <div class="panel-body">
-        {% if controller.may('new') %}
-            <a class="btn btn-primary btn-sm" href="{{url(controller.route('new'))}}">Create</a>
-        {% endif %}
-    </div>
     <div class="panel-body text-center">
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>

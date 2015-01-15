@@ -8,5 +8,4 @@
             {{ form(form, {action: path(controller.route('delete'), {id: id})}) }}
         {% endif %}
     </div>
-    {% include 'VlRadRestBundle:Default:links.html.twig' with {data: form.vars.value} %}
 {% endblock %}
