@@ -21,3 +21,10 @@ admin_apikey:
     type: rest
     name_prefix: admin_apikey_
     prefix: apikeys
+
+admin_dashboard:
+    path: dashboard
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: AdminBundle::dashboard.html.twig
+        _format: html

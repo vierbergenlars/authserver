@@ -1,3 +1,9 @@
+home:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: user_profile
+
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /admin/apidoc
@@ -18,12 +24,11 @@ admin:
     requirements:
         id: "[0-9]+|([0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12})"
 
-# Added here to avoid getting .{_format} appended by FOSRestBundle
-admin_dashboard:
-    path: admin/
+admin_dashboard_redirect:
+    path: /admin
     defaults:
-        _controller: FrameworkBundle:Template:template
-        template: AdminBundle::dashboard.html.twig
+        _controller: FrameworkBundle:Redirect:redirect
+        route: admin_dashboard
 
 api:
     resource: "@AppBundle/Resources/config/routing/api.yml"
