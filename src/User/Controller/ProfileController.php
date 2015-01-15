@@ -50,7 +50,25 @@ class ProfileController extends Controller
 
             if($client && ($user = $this->getUser()) && $user instanceof User) {
                 $user->removeAuthorizedApplication($client);
+                $this->getDoctrine()->getManager()->beginTransaction();
                 $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+                $this->getDoctrine()->getRepository('AppBundle:OAuth\\RefreshToken')
+                        ->createQueryBuilder('t')
+                        ->delete()
+                        ->where('t.client = :client AND t.user = :user')
+                        ->setParameter('client', $client)
+                        ->setParameter('user', $user)
+                        ->getQuery()
+                        ->execute();
+                $this->getDoctrine()->getRepository('AppBundle:OAuth\\AccessToken')
+                        ->createQueryBuilder('t')
+                        ->delete()
+                        ->where('t.client = :client AND t.user = :user')
+                        ->setParameter('client', $client)
+                        ->setParameter('user', $user)
+                        ->getQuery()
+                        ->execute();
+                $this->getDoctrine()->getManager()->commit();
                 $this->get('braincrafted_bootstrap.flash')->success('Authorized application has been removed');
 
                 return $this->redirectToProfile();
