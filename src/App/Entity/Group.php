@@ -99,6 +99,16 @@ class Group
      */
     public function getId()
     {
+        return $this->name;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getMigrateId()
+    {
         return $this->id;
     }
 

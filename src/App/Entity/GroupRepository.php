@@ -11,6 +11,14 @@ use App\Search\SearchValueException;
 
 class GroupRepository extends EntityRepository
 {
+    public function find($id) {
+        if(is_array($id)||is_int($id)||is_numeric($id)) {
+            return parent::find($id);
+        } else {
+            return $this->findOneBy(array('name'=>$id));
+        }
+    }
+
     protected $fieldSearchWhitelist = array();
 
     public function handleUnknownSearchField(array &$block)
