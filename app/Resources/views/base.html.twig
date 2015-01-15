@@ -24,21 +24,20 @@
                         {% macro render_link(route, ico, text) %}
                             <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico) }} {{ text }}</a></li>
                         {% endmacro %}
+                        {% macro render_admin_link(routepfx, ico, text) %}
+                                <li{% if app.request.attributes.get('_route') starts with routepfx %} class="active"{% endif %}><a href="{{ url(routepfx~'_gets') }}">{{ icon(ico) }} {{ text }}</a></li>
+                        {% endmacro %}
                         {% import _self as self %}
                         <ul class="nav navbar-nav navbar-left">
-                            {% set _route = app.request.attributes.get('_route') %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                {{ self.render_link('admin_dashboard', 'user-md', 'Admin') }}
-                            {% endif %}
                             {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
-                                {{ self.render_link('admin_user_gets', 'user', 'Users') }}
+                                {{ self.render_admin_link('admin_user', 'user', 'Users') }}
                             {% endif %}
                             {% if is_granted('ROLE_SCOPE_R_GROUP') %}
-                                {{ self.render_link('admin_group_gets', 'group', 'Groups') }}
+                                {{ self.render_admin_link('admin_group', 'group', 'Groups') }}
                             {% endif %}
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                {{ self.render_link('admin_oauth_client_gets', 'cube', 'OAuth Apps') }}
-                                {{ self.render_link('admin_apikey_gets', 'key', 'API keys') }}
+                                {{ self.render_admin_link('admin_oauth_client', 'cube', 'OAuth Apps') }}
+                                {{ self.render_admin_link('admin_apikey', 'key', 'API keys') }}
                             {% endif %}
                         </ul>
                     {% block navigation %}
