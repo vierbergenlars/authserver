@@ -37,7 +37,7 @@
 
 {% block navigation %}
     {{ parent() }}
-    <form class="navbar-form navbar-right hidden-xs" role="search">
+    <form class="navbar-form navbar-right visible-lg-block" role="search">
         <div class="form-group">
             <label for="navbar-search" class="sr-only">Search</label>
             <div class="input-group">
@@ -55,10 +55,9 @@
 {% endblock %}
 
 {% block mobile_search %}
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-4 col-md-3">
             <form role="search">
-                <div class="panel visible-xs-block panel-default panel-mobile-search">
+                <div class="panel hidden-lg panel-default panel-mobile-search">
                     <div class="panel-heading" data-toggle="collapse" data-target=".panel-mobile-search > .list-group">
                         <h3 class="panel-title">Search</h3>
                     </div>
@@ -80,5 +79,4 @@
                 </div>
             </form>
         </div>
-    </div>
 {% endblock %}
