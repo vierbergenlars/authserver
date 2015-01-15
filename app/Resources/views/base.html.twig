@@ -21,9 +21,24 @@
                     <a class="navbar-brand" href="{{ url('user_profile') }}">AuthServer</a>
                 </div>
                 <div class="collapse navbar-collapse">
+                        {% macro render_link(route, ico, text) %}
+                            <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico) }} {{ text }}</a></li>
+                        {% endmacro %}
+                        {% import _self as self %}
                         <ul class="nav navbar-nav navbar-left">
+                            {% set _route = app.request.attributes.get('_route') %}
                             {% if is_granted('ROLE_ADMIN') %}
-                                <li><a href="{{ url('admin_dashboard') }}">{{ icon('user-md') }} Admin dashboard</a></li>
+                                {{ self.render_link('admin_dashboard', 'user-md', 'Admin') }}
+                            {% endif %}
+                            {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
+                                {{ self.render_link('admin_user_gets', 'user', 'Users') }}
+                            {% endif %}
+                            {% if is_granted('ROLE_SCOPE_R_GROUP') %}
+                                {{ self.render_link('admin_group_gets', 'group', 'Groups') }}
+                            {% endif %}
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                {{ self.render_link('admin_oauth_client_gets', 'cube', 'OAuth Apps') }}
+                                {{ self.render_link('admin_apikey_gets', 'key', 'API keys') }}
                             {% endif %}
                         </ul>
                     {% block navigation %}
@@ -32,13 +47,13 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user') }} {{ app.user.displayName }} <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ url('user_profile') }}">{{ icon('user') }} Profile</a></li>
+                                        {{ self.render_link('user_profile', 'user', 'Profile') }}
                                         <li class="divider" role="presentation"></li>
-                                        <li><a href="{{ url('logout') }}">{{ icon('sign-out') }} Sign out</a></li>
+                                        {{ self.render_link('logout', 'sign-out', 'Sign out') }}
                                     </ul>
                                 </li>
                             {% else %}
-                                <li><a href="{{ url('app_login') }}">{{ icon('sign-in') }} Sign in</a></li>
+                                {{ self.render_link('app_login', 'sign-in', 'Sign in') }}
                             {% endif %}
                         </ul>
                     {% endblock %}
