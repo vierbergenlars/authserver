@@ -30,7 +30,7 @@ class UserType extends AbstractType
                 'disabled' => $id > 0
             ))
             ->add('displayName')
-            ->add('password', 'app_password', array(
+            ->add('password', new Type\NoPasswordType($id == 0), array(
                 'required'=>false,
             ))
             ->add('emailAddresses', 'bootstrap_collection', array(
