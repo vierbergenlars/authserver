@@ -201,9 +201,14 @@ class ProfileController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $user->setPassword($form->get('password')->getData());
+            $user->setPassword(
+                $this->get('security.encoder_factory')
+                    ->getEncoder('App\Entity\User')
+                    ->encodePassword($form->get('password')->getData(), null)
+            );
             $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
-            $this->get('braincrafted_bootstrap.flash')->success('Password has been changed successfully');
+            $this->get('braincrafted_bootstrap.flash')
+                    ->success('Password has been changed successfully');
 
             return $this->redirectToProfile();
         }

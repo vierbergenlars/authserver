@@ -5,6 +5,7 @@ namespace User\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ChangePasswordType extends AbstractType
@@ -16,11 +17,19 @@ class ChangePasswordType extends AbstractType
                 'mapped' => false,
                 'constraints' => new UserPassword(),
             ))
-            ->add('password', 'app_password', array(
+            ->add('password', 'repeated', array(
+                'type' => 'password',
                 'constraints' => array(
                     new NotBlank(),
+                    new Length(array('min'=>8)),
                 ),
-                'label' => 'New password',
+                'first_options' => array(
+                    'label' => 'New password',
+                ),
+                'second_options' => array(
+                    'label' => 'Repeat new password',
+                ),
+                'invalid_message' => 'Your repeated password does not match',
             ))
             ->add('submit', 'submit')
         ;
