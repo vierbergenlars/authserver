@@ -20,6 +20,48 @@ class UserRepository extends EntityRepository
     }
     protected $fieldSearchWhitelist = array('username', 'email');
 
+    public function search($terms)
+    {
+        if(is_string($terms)) {
+            $parser = new SearchGrammar();
+            $blocks = $parser->parse($terms);
+        } else if(is_array($terms)) {
+            $blocks = array();
+            foreach($terms as $name=>$value) {
+                $blocks[] = array(
+                    'name' => $name,
+                    'value' => $value,
+                );
+            }
+        }
+
+        $queryBuilder = $this->createQueryBuilder('u');
+        $and = $queryBuilder->expr()->andX();
+
+        foreach($blocks as $i=>$block) {
+            if(!in_array($block['name'], $this->fieldSearchWhitelist)) {
+                $this->handleUnknownSearchField($block);
+            }
+
+            if($block['name'] === 'email') {
+                $queryBuilder->select('DISTINCT u')
+                        ->leftJoin('AppBundle:EmailAddress', 'e', 'WITH', 'e.email LIKE ?'.$i);
+                $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
+            } else if(strpos($block['value'], '*') !== false) {
+                $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
+                $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
+            } else {
+                $and->add($queryBuilder->expr()->eq('u.'.$block['name'], '?'.$i));
+                $queryBuilder->setParameter($i, $block['value']);
+            }
+        }
+
+        if($and->count()) {
+            $queryBuilder->where($and);
+        }
+        return new QueryBuilderPageDescription($queryBuilder);
+    }
+    
     public function handleUnknownSearchField(array &$block)
     {
         switch($block['name']) {
