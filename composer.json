@@ -28,7 +28,7 @@
         "twbs/bootstrap": "~3.0",
         "components/jquery": "~1.11",
         "doctrine/migrations": "dev-master",
-        "bmatzner/fontawesome-bundle": "~4.1",
+        "fortawesome/font-awesome": "~4.1",
         "knplabs/knp-paginator-bundle": "~2.4",
         "friendsofsymfony/oauth-server-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "~1.0",
