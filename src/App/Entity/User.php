@@ -38,6 +38,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     private $password;
+    
+    /**
+     * @ORM\Column(name="password_enabled", type="integer")
+     */
+    private $passwordEnabled;
 
     /**
      * @var EmailAddress[]
@@ -98,7 +103,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function getPassword()
     {
-        return $this->password;
+        return $this->passwordEnabled == 1?$this->password:'!';
     }
 
     public function getRoles()
@@ -372,6 +377,15 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function setGuid($guid) {
         $this->guid = $guid;
+        return $this;
+    }
+
+    public function getPasswordEnabled() {
+        return $this->passwordEnabled;
+    }
+
+    public function setPasswordEnabled($passwordEnabled) {
+        $this->passwordEnabled = $passwordEnabled;
         return $this;
     }
 }

@@ -196,6 +196,11 @@ class ProfileController extends Controller
     public function changePasswordAction(Request $request)
     {
         $user = $this->getUser();
+        if($user->getPasswordEnabled() != 1) {
+            $this->get('braincrafted_bootstrap.flash')
+                ->error('Password authentication is disabled for your account');
+            return $this->redirectToProfile();
+        }
         $form = $this->createForm(new ChangePasswordType());
 
         $form->handleRequest($request);

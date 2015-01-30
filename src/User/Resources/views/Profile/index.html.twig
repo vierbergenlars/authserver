@@ -51,7 +51,9 @@
                             {% endfor %}
                             {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
                         </dd>
-                        <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
+                        {% if data.passwordEnabled %}
+                            <dt>Password</dt><dd>****** <a href="{{ url('user_change_password') }}">Edit</a></dd>
+                        {% endif %}
                         <dt>Groups</dt><dd>
                             {% for group in data.groups %}
                                 {{ icon('group') }} {{ group.displayName }}<br>
