@@ -32,6 +32,15 @@
                     {% endfor %}
                 </dd>
             {% endif %}
+            <dt>Password authentication</dt><dd>
+                {% if data.passwordEnabled == 1 %}
+                    Enabled
+                {% elseif data.passwordEnabled == 2 %}
+                    Allow user to set initial password
+                {% else %}
+                    Disabled
+                {% endif %}
+            </dd>
             <dt>Local flags</dt><dd>
                 {% if 'ROLE_SUPER_ADMIN' == data.role %}
                     {{ label_danger('Super admin') }}

@@ -44,6 +44,7 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
         }
         if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
             $form->remove('enabled');
+            $form->remove('passwordEnabled');
         }
         if($data instanceof \App\Entity\User) {
             /* @var $data \App\Entity\User */
