@@ -44,8 +44,8 @@ class UserRepository extends EntityRepository
             }
 
             if($block['name'] === 'email') {
-                $queryBuilder->select('DISTINCT u')
-                        ->leftJoin('AppBundle:EmailAddress', 'e', 'WITH', 'e.email LIKE ?'.$i);
+                $queryBuilder->leftJoin('AppBundle:EmailAddress', 'e', 'WITH', 'e.user = u');
+                $and->add($queryBuilder->expr()->like('e.email', '?'.$i));
                 $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
             } else if(strpos($block['value'], '*') !== false) {
                 $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
