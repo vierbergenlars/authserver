@@ -28,7 +28,7 @@ class UserType extends AbstractType
             // If the id is set, the form is used for an edit operation
             ->add('username',  $id > 0?'bs_static':'text')
             ->add('displayName')
-            ->add('password', new Type\NoPasswordType($id == 0), array(
+            ->add('password', 'app_password', array(
                 'required'=>false,
             ))
             ->add('emailAddresses', 'bootstrap_collection', array(
