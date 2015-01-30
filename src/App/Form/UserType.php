@@ -34,8 +34,9 @@ class UserType extends AbstractType
             ->add('passwordEnabled', 'choice', array(
                 'label' => 'Password authentication',
                 'choices' => array(
-                    false => 'Disabled',
-                    true => 'Enabled',
+                    0 => 'Disabled',
+                    1 => 'Enabled',
+                    2 => 'Allow user to set password',
                 ),
                 'expanded' => true
             ))

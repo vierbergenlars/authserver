@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use User\Form\DeleteAuthorizedAppType;
 use App\Entity\User;
+use User\Form\AddPasswordType;
 use User\Form\ChangePasswordType;
 use User\Form\EditEmailAddressType;
 use App\Entity\EmailAddress;
@@ -196,12 +197,20 @@ class ProfileController extends Controller
     public function changePasswordAction(Request $request)
     {
         $user = $this->getUser();
-        if($user->getPasswordEnabled() != 1) {
-            $this->get('braincrafted_bootstrap.flash')
-                ->error('Password authentication is disabled for your account');
-            return $this->redirectToProfile();
+        switch($user->getPasswordEnabled()) {
+            default:
+            case 0:
+                $this->get('braincrafted_bootstrap.flash')
+                    ->error('Password authentication is disabled for your account');
+                return $this->redirectToProfile();
+                break;
+            case 1:
+                $form = $this->createForm(new ChangePasswordType());
+                break;
+            case 2:
+                $form = $this->createForm(new AddPasswordType());
+                break;
         }
-        $form = $this->createForm(new ChangePasswordType());
 
         $form->handleRequest($request);
 
@@ -211,6 +220,7 @@ class ProfileController extends Controller
                     ->getEncoder('App\Entity\User')
                     ->encodePassword($form->get('password')->getData(), null)
             );
+            $user->setPasswordEnabled(1);
             $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
             $this->get('braincrafted_bootstrap.flash')
                     ->success('Password has been changed successfully');
