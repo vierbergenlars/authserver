@@ -36,7 +36,7 @@ class UserType extends AbstractType
                 'choices' => array(
                     0 => 'Disabled',
                     1 => 'Enabled',
-                    2 => 'Allow user to set password',
+                    2 => 'Allow user to set initial password',
                 ),
                 'expanded' => true
             ))
