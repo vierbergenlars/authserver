@@ -35,7 +35,7 @@ class User implements AdvancedUserInterface, \Serializable
     private $displayName;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $password;
     
