@@ -121,6 +121,14 @@ class UserRepository extends EntityRepository
         }
         return $user;
     }
+    
+    private function postProcess(User $object) {
+        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        foreach($object->getUserProperties() as $prop) {
+            $this->getEntityManager()->persist($prop);
+        }
+        $this->getEntityManager()->flush($object->getUserProperties()->toArray());
+    }
 
     public function create($object) {
         $generator = new \Doctrine\ORM\Id\UuidGenerator();
@@ -128,12 +136,12 @@ class UserRepository extends EntityRepository
         $object->setGuid($uuid);
         $this->updateEmails($object);
         parent::create($object);
-        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        $this->postProcess($object);
     }
 
     public function update($object) {
         $this->updateEmails($object);
         parent::update($object);
-        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        $this->postProcess($object);
     }
 }
