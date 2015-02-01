@@ -81,6 +81,13 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\JoinTable(name="user_oauthclient")
      */
     private $authorizedApplications;
+    
+    /**
+     * @var UserProperty[]
+     * 
+     * @ORM\OneToMany(targetEntity="UserProperty", mappedBy="user", cascade={"ALL"})
+     */
+    private $userProperties;
 
     public function __construct()
     {
@@ -89,6 +96,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->groups = new ArrayCollection();
         $this->authorizedApplications = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
+        $this->userProperties = new ArrayCollection();
     }
 
     public function getUsername()
@@ -387,5 +395,9 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPasswordEnabled($passwordEnabled) {
         $this->passwordEnabled = $passwordEnabled;
         return $this;
+    }
+    
+    public function getUserProperties() {
+        return $this->userProperties;
     }
 }

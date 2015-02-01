@@ -107,6 +107,21 @@ class UserRepository extends EntityRepository
             $this->getEntityManager()->persist($email);
         }
     }
+
+    public function newInstance() {
+        $user = parent::newInstance();
+        /* @var $user \App\Entity\User */
+        $emailAddress = new EmailAddress;
+        $emailAddress->setPrimary(true);
+        $user->addEmailAddress($emailAddress);
+        $userProperties = $user->getUserProperties();
+        /* @var $userProperties \Doctrine\Common\Collections\Collection */
+        foreach($this->getEntityManager()->getRepository('AppBundle:Property')->findAll() as $property) {
+            $userProperties->add(new UserProperty($user, $property));
+        }
+        return $user;
+    }
+
     public function create($object) {
         $generator = new \Doctrine\ORM\Id\UuidGenerator();
         $uuid = $generator->generate($this->getEntityManager(), $object);
