@@ -134,14 +134,18 @@ class UserRepository extends EntityRepository
         $generator = new \Doctrine\ORM\Id\UuidGenerator();
         $uuid = $generator->generate($this->getEntityManager(), $object);
         $object->setGuid($uuid);
+        $this->getEntityManager()->beginTransaction();
         $this->updateEmails($object);
         parent::create($object);
         $this->postProcess($object);
+        $this->getEntityManager()->commit();
     }
 
     public function update($object) {
+        $this->getEntityManager()->beginTransaction();
         $this->updateEmails($object);
         parent::update($object);
         $this->postProcess($object);
+        $this->getEntityManager()->commit();
     }
 }
