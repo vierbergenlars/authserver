@@ -60,6 +60,10 @@
             <dt>Exported groups</dt><dd>
                 {{ data._getAllGroupNames()|keys|json_encode }}
             </dd>
+            {% for property in data.userProperties %}
+                <dt>{% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ url('admin_userproperty_edit', {id: property.property.id }) }}">{{ icon('pencil') }}</a> {% endif %}{{ property.property.name }}</dt>
+                <dd>{% if property.data %}{{ property.data }}{% else %}<span class="text-muted">(Empty)</span>{% endif %}</dd>
+            {% endfor %}
         </dl>
     </div>
 {% endblock %}

@@ -22,10 +22,10 @@
                 </div>
                 <div class="collapse navbar-collapse">
                         {% macro render_link(route, ico, text) %}
-                            <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico) }} {{ text }}</a></li>
+                            <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
                         {% endmacro %}
                         {% macro render_admin_link(routepfx, ico, text) %}
-                                <li{% if app.request.attributes.get('_route') starts with routepfx %} class="active"{% endif %}><a href="{{ url(routepfx~'_gets') }}">{{ icon(ico) }} {{ text }}</a></li>
+                                <li{% if app.request.attributes.get('_route') starts with routepfx %} class="active"{% endif %}><a href="{{ url(routepfx~'gets') }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
                         {% endmacro %}
                         {% import _self as self %}
                         <ul class="nav navbar-nav navbar-left">

@@ -10,7 +10,7 @@
             <argument type="service" id="app.admin.user_property.form" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="knp_paginator" />
-            <argument>admin_user_property</argument>
+            <argument>admin_userproperty</argument>
         </service>
     </services>
 </container>
