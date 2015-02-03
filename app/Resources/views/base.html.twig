@@ -38,6 +38,7 @@
                             {% if is_granted('ROLE_SUPER_ADMIN') %}
                                 {{ self.render_admin_link('admin_oauth_client', 'cube', 'OAuth Apps') }}
                                 {{ self.render_admin_link('admin_apikey', 'key', 'API keys') }}
+                                            {{ self.render_admin_link('admin_userproperty_', 'list', 'User Properties') }}
                             {% endif %}
                         </ul>
                     {% block navigation %}
