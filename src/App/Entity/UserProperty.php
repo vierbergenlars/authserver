@@ -18,7 +18,7 @@ class UserProperty {
     
     /**
      * @var Property
-     * @ORM\ManyToOne(targetEntity="Property")
+     * @ORM\ManyToOne(targetEntity="Property", inversedBy="userProperties")
      * @ORM\Id
      */
     private $property;

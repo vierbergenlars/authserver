@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Property
  *
  * @ORM\Table(name="properties")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="PropertyRepository")
  */
 class Property
 {    
@@ -39,6 +39,13 @@ class Property
      * @ORM\Column(name="required", type="boolean")
      */
     private $required;
+    
+    /**
+     * @var UserProperty[]
+     * 
+     * @ORM\OneToMany(targetEntity="UserProperty", mappedBy="property", cascade={"REMOVE"})
+     */
+    private $userProperties;
         
     /**
      * Get id
