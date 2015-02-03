@@ -30,22 +30,29 @@
                         {% endmacro %}
                         {% import _self as self %}
                         <ul class="nav navbar-nav navbar-left">
-                            {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
-                                {{ self.render_admin_link('admin_user', 'user', 'Users') }}
-                            {% endif %}
-                            {% if is_granted('ROLE_SCOPE_R_GROUP') %}
-                                {{ self.render_admin_link('admin_group', 'group', 'Groups') }}
-                            {% endif %}
-                            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                {{ self.render_admin_link('admin_oauth_client', 'cube', 'OAuth Apps') }}
-                                {{ self.render_admin_link('admin_apikey', 'key', 'API keys') }}
+                            {% if app.request.attributes.get('_route') starts with 'admin_' %}
+                                {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
+                                    {{ self.render_admin_link('admin_user_', 'user', 'Users') }}
+                                {% endif %}
+                                {% if is_granted('ROLE_SCOPE_R_GROUP') %}
+                                    {{ self.render_admin_link('admin_group_', 'group', 'Groups') }}
+                                {% endif %}
+                                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                    <li class="dropdown">
+                                        <a href="{{ url('admin_dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">{{ icon('ellipsis-v fa-fw') }} More <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            {{ self.render_admin_link('admin_oauth_client_', 'cube', 'OAuth Apps') }}
+                                            {{ self.render_admin_link('admin_apikey_', 'key', 'API keys') }}
+                                        </ul>
+                                    </li>
+                                {% endif %}
                             {% endif %}
                         </ul>
                     {% block navigation %}
                         <ul class="nav navbar-nav navbar-right">
                             {% if app.user %}
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user') }} {{ app.user.displayName }} <span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user fa-fw') }} {{ app.user.displayName }} <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         {{ self.render_link('user_profile', 'user', 'Profile') }}
                                         <li class="divider" role="presentation"></li>
