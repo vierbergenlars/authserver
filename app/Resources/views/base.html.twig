@@ -69,6 +69,37 @@
         </div>
         {% block body %}
         {% endblock %}
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <span class="text-muted">Authserver</span>
+                    </div>
+                    <div class="col-xs-4 pull-right text-right text-muted">
+                        {% spaceless %}
+                            <span title="Env: {{ app.environment }}">
+                                {% if app.environment == 'dev' %}
+                                    {{ icon('bomb fa-fw') }}
+                                {% elseif app.environment == 'prod' %}
+                                    {{ icon('bolt fa-fw') }}
+                                {% endif %}
+                            </span>
+                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                <a href="{{ url('home', {'_switch_user':'_exit'}) }}" class="text-muted">{{ icon('stethoscope fa-fw')}}</a>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ url('admin_dashboard') }}" class="text-muted">{{ icon('magic fa-fw') }}</a>
+                            {% elseif is_granted('ROLE_USER') %}
+                                {{ icon('smile-o fa-fw') }}
+                            {% else %}
+                                {{ icon('globe fa-fw') }}
+                            {% endif %}
+                            <a href="http://vbgn.be" class="text-muted">{{ icon('code fa-fw') }}</a>
+                        {% endspaceless %}
+                    </div>
+                </div>
+            </div>
+        </footer>
         {% block javascript %}
             <script src="{{ asset('js/jquery.js') }}"></script>
             <script src="{{ asset('js/bootstrap.js') }}"></script>
