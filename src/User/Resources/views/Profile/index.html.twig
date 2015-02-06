@@ -55,9 +55,9 @@
                             <dt>Password</dt>
                             <dd>
                                 {% if data.passwordEnabled == 1 %}
-                                    ****** <a href="{{ url('user_change_password') }}">Edit</a>
+                                    ****** <a class="btn btn-sm btn-link" href="{{ url('user_change_password') }}">{{ icon('pencil') }} Edit</a>
                                 {% else %}
-                                    <span class="text-muted">(None)</span> <a href="{{ url('user_change_password') }}">Configure password</a>
+                                    <span class="text-muted">(None)</span> <a class="btn btn-sm btn-link" href="{{ url('user_change_password') }}">{{ icon('key') }} Configure password</a>
                                 {% endif %}
                             </dd>
                         {% endif %}
