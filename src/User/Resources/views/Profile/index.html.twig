@@ -49,7 +49,12 @@
                                 })) }}
                                 <br>
                             {% endfor %}
-                            {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
+                            <div id="add_email_address_text" class="collapse in">
+                                <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_email_address_form, #add_email_address_text">{{ icon('plus') }} Add email address</button>
+                            </div>
+                            <div id="add_email_address_form" class="collapse">
+                                {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
+                            </div>
                         </dd>
                         {% if data.passwordEnabled %}
                             <dt>Password</dt>
