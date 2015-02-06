@@ -71,13 +71,13 @@ class ProfileController extends Controller
                         ->getQuery()
                         ->execute();
                 $this->getDoctrine()->getManager()->commit();
-                $this->get('braincrafted_bootstrap.flash')->success('Authorized application has been removed');
+                $this->getFlash()->success('Authorized application has been removed');
 
                 return $this->redirectToProfile();
             }
         }
 
-        $this->get('braincrafted_bootstrap.flash')->error('Error removing authorized application');
+        $this->getFlash()->error('Error removing authorized application');
 
         return $this->redirectToProfile();
     }
@@ -93,7 +93,6 @@ class ProfileController extends Controller
 
     public function putEmailAddressesAction(EmailAddress $addr, Request $request)
     {
-        $flash = $this->get('braincrafted_bootstrap.flash');
         if($addr->getUser() !== $this->getUser())
             throw $this->createNotFoundException();
         $mailer = $this->get('app.mailer.user.verify_email');
@@ -108,10 +107,11 @@ class ProfileController extends Controller
                     if(!$addr->isVerified()) {
                         $addr->setVerified(false);
                         if($mailer->sendMessage($addr->getEmail(), $addr)) {
-                            $flash->success('A new confirmation email has been sent');
+                            $this->getFlash()->success('A new confirmation email has been sent');
                         } else {
-                            $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
+                            $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
                         }
+                        
                     }
                     break;
                 case 'setPrimary':
@@ -124,30 +124,30 @@ class ProfileController extends Controller
                             });
 
                         $addr->setPrimary(true);
-                        $flash->success('Primary email address updated');
+                        $this->getFlash()->success('Primary email address updated');
                     } else {
-                        $flash->error('Please verify this email address before setting it as primary email address');
+                        $this->getFlash()->error('Please verify this email address before setting it as primary email address');
                     }
                     break;
                 case 'remove':
                     if(!$addr->isPrimary()) {
-                        $flash->success('Email address removed');
                         $this->getDoctrine()
                                 ->getManagerForClass('AppBundle:EmailAddress')
                                 ->remove($addr);
+                        $this->getFlash()->success('Email address removed');
                     } else {
-                        $flash->error('Your primary email address cannot be removed. You must first set another verified email address as your primary email address.');
+                        $this->getFlash()->error('Your primary email address cannot be removed. You must first set another verified email address as your primary email address.');
                     }
                     break;
                 default:
                     // Should never happen
-                    $flash->error('Internal error: Unknown button pressed');
+                    $this->getFlash()->error('Internal error: Unknown button pressed');
             }
             $this->getDoctrine()
                     ->getManagerForClass('AppBundle:EmailAddress')
                     ->flush();
         } else {
-            $flash->error('Error modifying email address');
+            $this->getFlash()->error('Error modifying email address');
         }
 
         return $this->redirectToProfile();
@@ -155,8 +155,6 @@ class ProfileController extends Controller
 
     public function postEmailAddressesAction(Request $request)
     {
-        $flash = $this->get('braincrafted_bootstrap.flash');
-
         $form  = $this->createForm(new EmailAddressType());
 
         $em = $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress');
@@ -172,16 +170,16 @@ class ProfileController extends Controller
             $em->flush($addr);
 
             if($mailer->sendMessage($addr->getEmail(), $addr)) {
-                $flash->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
+                $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
             } else {
-                $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
+                $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
             }
         } else {
             $errString = 'Problems with email address '.$form->get('email')->getData().'.';
             foreach($form->getErrors(true) as $e) {
                 $errString.="\n".$e->getMessage();
             }
-            $flash->error($errString);
+            $this->getFlash()->error($errString);
         }
 
         return $this->redirectToProfile();
@@ -196,8 +194,7 @@ class ProfileController extends Controller
         switch($user->getPasswordEnabled()) {
             default:
             case 0:
-                $this->get('braincrafted_bootstrap.flash')
-                    ->error('Password authentication is disabled for your account');
+                $this->getFlash()->error('Password authentication is disabled for your account');
                 return $this->redirectToProfile();
                 break;
             case 1:
@@ -218,8 +215,7 @@ class ProfileController extends Controller
             );
             $user->setPasswordEnabled(1);
             $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
-            $this->get('braincrafted_bootstrap.flash')
-                    ->success('Password has been changed successfully');
+            $this->getFlash()->success('Password has been changed successfully');
 
             return $this->redirectToProfile();
         }
@@ -230,5 +226,14 @@ class ProfileController extends Controller
     private function redirectToProfile()
     {
         return $this->redirect($this->generateUrl('user_profile'));
+    }
+    
+    /**
+     * 
+     * @return FlashMessage
+     */
+    private function getFlash()
+    {
+        return $this->get('braincrafted_bootstrap.flash');
     }
 }
