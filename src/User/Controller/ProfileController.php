@@ -2,15 +2,16 @@
 
 namespace User\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Request;
-use User\Form\DeleteAuthorizedAppType;
+use App\Entity\EmailAddress;
 use App\Entity\User;
+use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use User\Form\AddPasswordType;
 use User\Form\ChangePasswordType;
+use User\Form\DeleteAuthorizedAppType;
 use User\Form\EditEmailAddressType;
-use App\Entity\EmailAddress;
 use User\Form\EmailAddressType;
 
 class ProfileController extends Controller
@@ -87,32 +88,21 @@ class ProfileController extends Controller
      */
     public function editEmailAddressesAction(EmailAddress $addr)
     {
-        return array('form'=>$this->createForm(new EditEmailAddressType(), array('id'=>$addr->getId()))->createView(), 'data'=>$addr);
+        return array('form'=>$this->createForm(new EditEmailAddressType())->createView(), 'data'=>$addr);
     }
 
-    public function putEmailAddressesAction(Request $request)
+    public function putEmailAddressesAction(EmailAddress $addr, Request $request)
     {
         $flash = $this->get('braincrafted_bootstrap.flash');
+        if($addr->getUser() !== $this->getUser())
+            throw $this->createNotFoundException();
         $mailer = $this->get('app.mailer.user.verify_email');
-
 
         $form  = $this->createForm(new EditEmailAddressType());
 
         $form->handleRequest($request);
 
-        $em = $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress');
-
         if($form->isValid()) {
-            $id = $form->get('id')->getData();
-            $addresses = $this->getUser()->getEmailAddresses();
-            $addr = $addresses->filter(function(EmailAddress $e) use($id) {
-                return $e->getId() == $id;
-            })->first();
-
-            if(!$addr) {
-                throw $this->createNotFoundException();
-            }
-
             switch($form->getClickedButton()->getName()) {
                 case 'sendConfirmation':
                     if(!$addr->isVerified()) {
@@ -126,10 +116,12 @@ class ProfileController extends Controller
                     break;
                 case 'setPrimary':
                     if($addr->isVerified()) {
-                        $addresses->map(function(EmailAddress $e) {
-                            if($e->isPrimary())
-                                $e->setPrimary(false);
-                        });
+                        $this->getUser()
+                            ->getEmailAddresses()
+                            ->map(function(EmailAddress $e) {
+                                if($e->isPrimary())
+                                    $e->setPrimary(false);
+                            });
 
                         $addr->setPrimary(true);
                         $flash->success('Primary email address updated');
@@ -139,8 +131,10 @@ class ProfileController extends Controller
                     break;
                 case 'remove':
                     if(!$addr->isPrimary()) {
-                        $em->remove($addr);
                         $flash->success('Email address removed');
+                        $this->getDoctrine()
+                                ->getManagerForClass('AppBundle:EmailAddress')
+                                ->remove($addr);
                     } else {
                         $flash->error('Your primary email address cannot be removed. You must first set another verified email address as your primary email address.');
                     }
@@ -149,7 +143,9 @@ class ProfileController extends Controller
                     // Should never happen
                     $flash->error('Internal error: Unknown button pressed');
             }
-            $em->flush($addresses->toArray());
+            $this->getDoctrine()
+                    ->getManagerForClass('AppBundle:EmailAddress')
+                    ->flush();
         } else {
             $flash->error('Error modifying email address');
         }

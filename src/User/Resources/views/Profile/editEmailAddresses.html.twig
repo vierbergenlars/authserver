@@ -1,5 +1,4 @@
-{{ form_start(form, { action: url('user_put_email_addresses'), style: 'inline' , attr: { 'style': 'display: inline' } }) }}
-    {{ form_row(form.id) }}
+{{ form_start(form, { action: url('user_put_email_addresses', { addr: data.id }), style: 'inline' , attr: { 'style': 'display: inline' } }) }}
     {% if data.verified %}<span style="display: none">{% else %}<span>{% endif %}
         {{ form_row(form.sendConfirmation) }}
     </span>

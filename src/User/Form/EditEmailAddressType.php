@@ -17,7 +17,6 @@ class EditEmailAddressType extends AbstractType
     {
         $builder
             ->setMethod('PUT')
-            ->add('id', 'hidden')
             ->add('setPrimary', 'submit', array(
                 'label'=>'Set as primary address',
                 'attr' => array(
