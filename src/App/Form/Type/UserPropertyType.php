@@ -28,11 +28,6 @@ class UserPropertyType extends AbstractType
         ));
     }
 
-
-    public function getParent() {
-        return 'form';
-    }
-    
     public function getName() {
         return 'user_property';
     }    

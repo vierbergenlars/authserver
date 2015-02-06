@@ -19,9 +19,14 @@ class UserPropertyListener implements \Symfony\Component\EventDispatcher\EventSu
     public function preSetData(\Symfony\Component\Form\FormEvent $ev) {
         $property = $ev->getData()->getProperty();
         /* @var $property \App\Entity\Property */
-        $ev->getForm()->add('data', $this->forceEditable||$property->isUserEditable()?'text':'bs_static', array(
+        $options = array(
             'label' => $property->getName(),
             'required' => $property->isRequired(),
-        ));
+            'empty_data' => null,
+        );
+        if($property->isRequired()) {
+            $options['constraints'] = new \Symfony\Component\Validator\Constraints\NotNull;
+        }
+        $ev->getForm()->add('data', $this->forceEditable||$property->isUserEditable()?'text':'bs_static', $options);
     }
 }
