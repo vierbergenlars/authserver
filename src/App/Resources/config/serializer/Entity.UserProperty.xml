@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\UserProperty" xml-root-name="user-property" xmlns:h="https://github.com/willdurand/Hateoas">
+        
+        <h:relation rel="user">
+            <h:href route="admin_user_get">
+                <h:parameter name="id" value="expr(object.getUser().getId())" />
+            </h:href>
+            <h:exclusion groups="object" />
+        </h:relation>
+        <h:relation rel="property">
+            <h:href route="admin_userproperty_get">
+                <h:parameter name="id" value="expr(object.getProperty().getId())" />
+            </h:href>
+            <h:exclusion groups="object" />
+        </h:relation>
+    </class>
+</serializer>

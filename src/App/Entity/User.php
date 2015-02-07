@@ -409,6 +409,14 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->userProperties;
     }
     
+    public function getUserPropertiesMap() {
+        $map = array();
+        foreach($this->userProperties as $property) {
+            $map[$property->getProperty()->getName()] = $property->getData();
+        }
+        return $map;
+    }
+    
     /**
      * Hack to get the user properties out of the persist loop when this entity
      * itself is persisted.
