@@ -25,6 +25,13 @@ class Property
      * @ORM\Column(name="name", type="string", length=25, unique=true)
      */
     private $name;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="display_name", type="string", length=255)
+     */
+    private $displayName;
 
     /**
      * @var boolean
@@ -39,6 +46,13 @@ class Property
      * @ORM\Column(name="required", type="boolean")
      */
     private $required;
+    
+    /**
+     * @var string 
+     * 
+     * @ORM\Column(name="validation_regex", type="text")
+     */
+    private $validationRegex = '/^.*$/';
     
     /**
      * @var UserProperty[]
@@ -123,6 +137,38 @@ class Property
     {
         $this->required = $required;
 
+        return $this;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     * @return Property
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string 
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    public function getValidationRegex() {
+        return $this->validationRegex;
+    }
+
+    public function setValidationRegex($validationRegex) {
+        $this->validationRegex = $validationRegex;
         return $this;
     }
 }

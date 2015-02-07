@@ -52,7 +52,7 @@
                             {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
                         </dd>
                         {% for prop in data.userProperties %}
-                            <dt>{{ prop.property.name }}</dt>
+                            <dt>{{ prop.property.displayName }}</dt>
                                 {{ render(controller('UserBundle:Profile:editProperty', {
                                     property: prop
                                 })) }}

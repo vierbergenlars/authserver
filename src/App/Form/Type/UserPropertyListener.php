@@ -2,7 +2,14 @@
 
 namespace App\Form\Type;
 
-class UserPropertyListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+use App\Entity\Property;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Regex;
+
+class UserPropertyListener implements EventSubscriberInterface
 {
     private $forceEditable = false;
     
@@ -12,21 +19,22 @@ class UserPropertyListener implements \Symfony\Component\EventDispatcher\EventSu
 
     public static function getSubscribedEvents() {
         return array(
-            \Symfony\Component\Form\FormEvents::PRE_SET_DATA => 'preSetData',
+            FormEvents::PRE_SET_DATA => 'preSetData',
         );
     }
     
-    public function preSetData(\Symfony\Component\Form\FormEvent $ev) {
+    public function preSetData(FormEvent $ev) {
         $property = $ev->getData()->getProperty();
-        /* @var $property \App\Entity\Property */
+        /* @var $property Property */
         $options = array(
-            'label' => $property->getName(),
+            'label' => $property->getDisplayName(),
             'required' => $property->isRequired(),
             'empty_data' => null,
         );
         if($property->isRequired()) {
-            $options['constraints'] = new \Symfony\Component\Validator\Constraints\NotNull;
+            $options['constraints'][] = new NotNull;
         }
+        $options['constraints'][] = new Regex($property->getValidationRegex());
         $ev->getForm()->add('data', $this->forceEditable||$property->isUserEditable()?'text':'bs_static', $options);
     }
 }

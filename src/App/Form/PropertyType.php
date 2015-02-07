@@ -15,7 +15,8 @@ class PropertyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', $options['data']->getId()?'bs_static': 'text')
+            ->add('displayName')
             ->add('userEditable', null, array(
                 'required' => false,
                 'attr' => array(
@@ -30,6 +31,7 @@ class PropertyType extends AbstractType
                 ),
 
             ))
+            ->add('validationRegex')
             ->add('submit', 'submit')
         ;
     }
