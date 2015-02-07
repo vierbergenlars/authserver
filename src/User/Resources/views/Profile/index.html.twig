@@ -52,7 +52,12 @@
                             {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
                         </dd>
                         {% for prop in data.userProperties %}
-                            <dt>{{ prop.property.displayName }}</dt>
+                            <dt>
+                                {{ prop.property.displayName }}
+                                {% if prop.property.required %}
+                                    <abbr title="Required" class="text-danger">*</abbr>
+                                {% endif %}
+                            </dt>
                                 {{ render(controller('UserBundle:Profile:editProperty', {
                                     property: prop
                                 })) }}
