@@ -50,6 +50,8 @@ class UserPropertiesValidEventListener implements EventSubscriberInterface {
     public function onKernelRequest(GetResponseEvent $event) {
         if(!$event->isMasterRequest())
             return;
+        if(!$event->getRequest()->isMethodSafe())
+            return;
         if(!($token = $this->tokenStorage->getToken()))
             return;
         if(!($user = $token->getUser()))
@@ -61,22 +63,21 @@ class UserPropertiesValidEventListener implements EventSubscriberInterface {
         if(!array_filter(
             $token->getRoles(),
             function(\Symfony\Component\Security\Core\Role\RoleInterface $role) {
-                return $role instanceof \Symfony\Component\Security\Core\Role\SwitchUserRole;
+                return $role instanceof \Symfony\Component\Security\Core\Role\SwitchUserRole || $role->getRole() === 'ROLE_SUPER_ADMIN';
             }
         )) {
             switch($event->getRequest()->attributes->get('_route')) {
                 case 'user_profile':
-                case 'user_put_property':
                     break;
                 default:
                     $response = RedirectResponse::create($this->urlGenerator->generate('user_profile'));
                     $event->setResponse($response);
             }
         } else {
-            $this->flash->info('Automatic redirect to user profile suppressed, because you are impersonating this user.');
+            $this->flash->info('Automatic redirect to user profile suppressed, because you are a super admin.');
         }
         $this->flash->alert(sprintf(
-                'Your profile is missing required information. Please fill in "%s".',
+                'Your profile is missing required information. Please fill in "%s" before continuing.',
                 implode('", "', array_map(function(\App\Entity\Property $prop) {
                     return $prop->getName();
                 }, $requiredEmptyProperties))
