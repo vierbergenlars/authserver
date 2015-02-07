@@ -6,7 +6,7 @@ use App\Entity\Property;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class UserPropertyListener implements EventSubscriberInterface
@@ -28,11 +28,11 @@ class UserPropertyListener implements EventSubscriberInterface
         /* @var $property Property */
         $options = array(
             'label' => $property->getDisplayName(),
-            'required' => $property->isRequired(),
+            'required' => $property->isRequired()&&!$this->forceEditable,
             'empty_data' => null,
         );
-        if($property->isRequired()) {
-            $options['constraints'][] = new NotNull;
+        if($property->isRequired()&&!$this->forceEditable) {
+            $options['constraints'][] = new NotBlank;
         }
         $options['constraints'][] = new Regex($property->getValidationRegex());
         $ev->getForm()->add('data', $this->forceEditable||$property->isUserEditable()?'text':'bs_static', $options);
