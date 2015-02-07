@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\Property" xml-root-name="property" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="name" groups="list,object" xml-attribute="true" />
+        <property name="required" groups="list,object" xml-attribute="true" />
+        <property name="userEditable" groups="list,object" xml-attribute="true" />
+        <property name="validationRegex" groups="object" xml-attribute="true" />
+        <h:relation rel="self">
+            <h:href route="admin_userproperty_get">
+                <h:parameter name="id" value="expr(object.getId())" />
+            </h:href>
+            <h:exclusion groups="list,object" />
+        </h:relation>
+    </class>
+</serializer>

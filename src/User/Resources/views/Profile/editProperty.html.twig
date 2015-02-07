@@ -1,0 +1,28 @@
+<dd id="edit_user_property_text_{{ data.property.id }}" class="collapse in">
+    {% if data.data %}
+        {{ data.data }}
+    {% else %}
+        <span class="text-muted">(Empty)</span>
+    {% endif %}
+    {% if data.property.userEditable %}
+        <button class="btn btn-sm btn-link js--edit-user-property"
+                data-toggle="collapse"
+                data-target="#edit_user_property_form_{{ data.property.id }}, #edit_user_property_text_{{ data.property.id }}"
+                >{{ icon('pencil') }} Edit</button>
+    {% endif %}
+</dd>
+<dd id="edit_user_property_form_{{ data.property.id }}" class="collapse">
+    {{ form_start(form, {
+        action: url('user_put_property', {property: data.property.id }),
+        style: 'inline',
+    }) }}
+
+    {{ form_row(form.data) }}
+    {{ form_row(form.submit) }}
+    {{ form_row(form.close, {
+            attr: {
+                'data-target':'#edit_user_property_form_'~data.property.id~', #edit_user_property_text_'~data .property.id
+            }
+    }) }}
+    {{ form_end(form) }}
+</dd>

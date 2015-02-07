@@ -107,18 +107,58 @@ class UserRepository extends EntityRepository
             $this->getEntityManager()->persist($email);
         }
     }
+
+    public function newInstance() {
+        $user = parent::newInstance();
+        /* @var $user \App\Entity\User */
+        $emailAddress = new EmailAddress;
+        $emailAddress->setPrimary(true);
+        $user->addEmailAddress($emailAddress);
+        $userProperties = $user->getUserProperties();
+        /* @var $userProperties \Doctrine\Common\Collections\Collection */
+        foreach($this->getEntityManager()->getRepository('AppBundle:Property')->findAll() as $property) {
+            $userProperties->add(new UserProperty($user, $property));
+        }
+        return $user;
+    }
+    
+    private function postProcess(User $object) {
+        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        foreach($object->getUserProperties() as $prop) {
+            $this->getEntityManager()->persist($prop);
+        }
+        $this->getEntityManager()->flush($object->getUserProperties()->toArray());
+    }
+
     public function create($object) {
         $generator = new \Doctrine\ORM\Id\UuidGenerator();
         $uuid = $generator->generate($this->getEntityManager(), $object);
         $object->setGuid($uuid);
+        $this->getEntityManager()->beginTransaction();
         $this->updateEmails($object);
         parent::create($object);
-        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        $this->postProcess($object);
+        $this->getEntityManager()->commit();
     }
 
     public function update($object) {
+        $this->getEntityManager()->beginTransaction();
         $this->updateEmails($object);
         parent::update($object);
-        $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
+        $this->postProcess($object);
+        $this->getEntityManager()->commit();
+    }
+    
+    public function getAllEmptyRequiredProperties(User $user) {
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('p')
+                ->from('AppBundle:UserProperty', 'up')
+                ->join('AppBundle:Property', 'p', 'WITH', 'p.required = true AND up.property = p')
+                ->where('up.data IS NULL')
+                ->andWhere('up.user = :user')
+                ->getQuery()
+                ->setParameter('user', $user)
+                ->execute();
     }
 }

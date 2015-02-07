@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="app.admin.user_property.resource_manager" class="App\Doctrine\EntityRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>App\Entity\Property</argument>
+        </service>
+        <service id="app.admin.user_property.form" class="App\Form\PropertyType" />
+        <service id="app.admin.user_property.controller" class="Admin\Controller\UserPropertyController">
+            <argument type="service" id="app.admin.user_property.resource_manager" />
+            <argument type="service" id="app.admin.user_property.form" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="knp_paginator" />
+            <argument>admin_userproperty</argument>
+        </service>
+    </services>
+</container>

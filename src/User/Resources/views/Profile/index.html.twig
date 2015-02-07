@@ -56,6 +56,19 @@
                                 {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
                             </div>
                         </dd>
+                        {% for prop in data.userProperties %}
+                            <dt>
+                                {{ prop.property.displayName }}
+                                {% if prop.property.required %}
+                                    <abbr title="Required" class="text-danger">*</abbr>
+                                {% endif %}
+                            </dt>
+                                {{ render(controller('UserBundle:Profile:editProperty', {
+                                    property: prop
+                                })) }}
+
+                        {% endfor %}
+
                         {% if data.passwordEnabled %}
                             <dt>Password</dt>
                             <dd>
@@ -113,4 +126,13 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script>
+        $('.js--edit-user-property').on('click', function() {
+            var $target = $($(this).attr('data-target')).children('form').find('.form-control[type=text]');
+            setTimeout(function() {$target.focus();},1);
+        });
+    </script>
 {% endblock %}

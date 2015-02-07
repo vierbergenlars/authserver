@@ -47,6 +47,10 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
             $form->remove('enabled');
             $form->remove('passwordEnabled');
         }
+        if($this->authorizationChecker->hasRole('ROLE_API')) {
+            // Remove user properties fields when logged in with API key
+            $form->remove('userProperties');
+        }
         if($data instanceof \App\Entity\User) {
             /* @var $data \App\Entity\User */
             if($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {

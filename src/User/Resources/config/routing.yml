@@ -25,6 +25,13 @@ user_post_email_addresses:
         _controller: UserBundle:Profile:postEmailAddresses
     requirements:
         _method: POST
+        
+user_put_property:
+    path: property/{property}
+    defaults:
+        _controller: UserBundle:Profile:putProperty
+    requirements:
+        _method: PUT
 
 user_kill_session:
     path: kill-session
