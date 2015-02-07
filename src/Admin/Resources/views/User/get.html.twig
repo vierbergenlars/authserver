@@ -52,7 +52,7 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groups %}
-                    <a href="{{ url('admin_group_get', { id: g.id }) }}">{{ icon('group') }} {{ g.displayName }}</a><br>
+                    <a href="{{ url('admin_group_get', { id: g.id }) }}">{{ icon('group') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
