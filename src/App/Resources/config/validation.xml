@@ -34,6 +34,9 @@
                 </option>
             </constraint>
         </property>
+        <property name="userProperties">
+            <constraint name="Valid" />
+        </property>
         <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">username</constraint>
     </class>
     <class name="App\Entity\EmailAddress">
@@ -42,6 +45,31 @@
             <constraint name="Email" />
         </property>
         <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>        
+    </class>
+    <class name="App\Entity\Property">
+        <property name="name">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">25</option>
+            </constraint>
+            <constraint name="Regex">
+                <option name="pattern">/^[a-z_]+$/</option>
+            </constraint>
+        </property>
+        <property name="displayName">
+            <constraint name="NotBlank" />
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">255</option>
+            </constraint>
+        </property>
+        <property name="validationRegex">
+            <constraint name="NotBlank" />
+            <constraint name="Admin\Validator\Constraints\ValidRegex" />
+        </property>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">name</constraint>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">displayName</constraint>
     </class>
     <class name="App\Entity\Group">
         <property name="name">
