@@ -148,4 +148,17 @@ class UserRepository extends EntityRepository
         $this->postProcess($object);
         $this->getEntityManager()->commit();
     }
+    
+    public function getAllEmptyRequiredProperties(User $user) {
+        return $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('p')
+                ->from('AppBundle:UserProperty', 'up')
+                ->join('AppBundle:Property', 'p', 'WITH', 'p.required = true AND up.property = p')
+                ->where('up.data IS NULL')
+                ->andWhere('up.user = :user')
+                ->getQuery()
+                ->setParameter('user', $user)
+                ->execute();
+    }
 }
