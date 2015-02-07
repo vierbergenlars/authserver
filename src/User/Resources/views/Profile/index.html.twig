@@ -117,3 +117,12 @@
     </div>
 </div>
 {% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script>
+        $('.js--edit-user-property').on('click', function() {
+            var $target = $($(this).attr('data-target')).children('form').find('.form-control[type=text]');
+            setTimeout(function() {$target.focus();},1);
+        });
+    </script>
+{% endblock %}

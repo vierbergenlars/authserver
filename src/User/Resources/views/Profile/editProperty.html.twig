@@ -5,7 +5,7 @@
         <span class="text-muted">(Empty)</span>
     {% endif %}
     {% if data.property.userEditable %}
-        <button class="btn btn-sm btn-link"
+        <button class="btn btn-sm btn-link js--edit-user-property"
                 data-toggle="collapse"
                 data-target="#edit_user_property_form_{{ data.property.id }}, #edit_user_property_text_{{ data.property.id }}"
                 >{{ icon('pencil') }} Edit</button>
