@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use App\Doctrine\EntityRepository;
+use vierbergenlars\Bundle\RadRestBundle\Doctrine\QueryBuilderPageDescription;
 
 class PropertyRepository extends EntityRepository
 {
-    protected $fieldSearchWhitelist = array();
     public function create($object) {
         $this->getEntityManager()->beginTransaction();
         parent::create($object);
@@ -23,5 +23,11 @@ class PropertyRepository extends EntityRepository
         }
         $this->getEntityManager()->flush($userProperties);
         $this->getEntityManager()->commit();
+    }
+    
+    public function search($terms)
+    {
+        $name = str_replace('*', '%', $terms);
+        return new QueryBuilderPageDescription($this->createQueryBuilder('e')->where('e.name LIKE :name')->setParameter('name', '%'.$name.'%'));
     }
 }
