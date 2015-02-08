@@ -73,5 +73,35 @@ class UserController extends DefaultController
         }
         return false;
     }
+    
+    protected function getBatchActions() {
+        $actions = parent::getBatchActions();
+        if($this->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
+            $actions['Account enabled']['PATCH_enabled_true'] = 'Enable';
+            $actions['Account enabled']['PATCH_enabled_false'] = 'Disable';
+            $actions['Password authentication']['PATCH_passwordEnabled_0'] = 'Disable';
+            $actions['Password authentication']['PATCH_passwordEnabled_1'] = 'Enable';
+            $actions['Password authentication']['PATCH_passwordEnabled_2'] = 'Let user set initial password';
+        }
+        return $actions;
+    }
 
+    protected function handleBatch($action, $subjects) {
+        switch($action) {
+            case 'PATCH_enabled_false':
+            case 'PATCH_enabled_true':
+                foreach($subjects as $id => $exec) {
+                    if($exec) {
+                        $user = $this->getResourceManager()->find($id);
+                        if($user->getRole() !== 'ROLE_SUPER_ADMIN') {
+                            $user->setEnabled($action === 'PATCH_enabled_true');
+                            $this->getResourceManager()->update($user);
+                        }
+                    }
+                }
+                break;
+            default:
+                parent::handleBatch($action, $subjects);
+        }
+    }
 }

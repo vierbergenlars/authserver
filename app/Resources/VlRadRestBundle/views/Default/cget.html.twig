@@ -3,12 +3,14 @@
     <div class="panel-heading">
         <h3 class="panel-title">List</h3>
     </div>
+    {{ form_start(batch_form, { action: url(controller.route('batch'), { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         {% if data|length > 0 %}
           <table class="table">
             <thead>
               {% set keys = data[0]|radrest_object_keys %}
               <tr>
+                <th>Batch</th>
                 {% for name in keys %}
                   <th>{{ name|humanize }}</th>
                 {% endfor %}
@@ -18,6 +20,7 @@
             <tbody>
               {% for obj in data %}
                 <tr>
+                  <td><input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox"></td>
                   {% for key in keys %}
                     <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
                   {% endfor %}
@@ -31,8 +34,13 @@
         {% endif %}
     </div>
     <div class="panel-body text-center">
+        <div class="pull-left js--batch-form collapse">
+            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
+            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
+        </div>
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
+    {{ form_end(batch_form) }}
 {% endblock %}
 
 {% block navigation %}
@@ -79,4 +87,9 @@
                 </div>
             </form>
         </div>
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
 {% endblock %}

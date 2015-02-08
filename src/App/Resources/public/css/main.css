@@ -48,3 +48,17 @@ footer .container {
     /* See https://github.com/twbs/bootstrap/issues/9939 */
     display: flex;
 }
+
+/* Make space between table and bottom of the panel smaller */
+.table-responsive > .table {
+    margin-bottom: 0;
+}
+
+.table-responsive + .panel-body {
+    padding-top: 0;
+}
+
+.panel-body > .pagination {
+    margin: 0;
+}
+

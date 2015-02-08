@@ -42,4 +42,14 @@ class GroupController extends DefaultController
         }
     }
 
+    protected function getBatchActions() {
+        $actions = parent::getBatchActions();
+        $actions['Exportable']['PATCH_exportable_true'] = 'Enable';
+        $actions['Exportable']['PATCH_exportable_false'] = 'Disable';
+        $actions['Member types']['PATCH_noUsers_false'] = 'Allow users';
+        $actions['Member types']['PATCH_noUsers_true'] = 'Deny users';
+        $actions['Member types']['PATCH_noGroups_false'] = 'Allow groups';
+        $actions['Member types']['PATCH_noGroups_true'] = 'Deny groups';
+        return $actions;
+    }
 }

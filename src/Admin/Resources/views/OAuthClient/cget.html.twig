@@ -3,6 +3,7 @@
     <div class="panel-heading">
         <h3 class="panel-title">OAuth Applications</h3>
     </div>
+    {{ form_start(batch_form, { action: url(controller.route('batch'), { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -15,10 +16,13 @@
                 {% for obj in data %}
                     <tr>
                         <td>
-                            {{ obj.name }}
-                            {% if obj.preApproved %}
-                                <span title="Pre approved">{{ label_success('PA') }}</span>
-                            {% endif %}
+                            <label>
+                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">                                
+                                {{ obj.name }}
+                                {% if obj.preApproved %}
+                                    <span title="Pre approved">{{ label_success('PA') }}</span>
+                                {% endif %}
+                            </label>
                         </td>
                         <td>
                             {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
@@ -29,6 +33,11 @@
         </table>
     </div>
     <div class="panel-body text-center">
+        <div class="pull-left js--batch-form collapse">
+            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
+            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
+        </div>
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
+    {{ form_end(batch_form) }}
 {% endblock %}

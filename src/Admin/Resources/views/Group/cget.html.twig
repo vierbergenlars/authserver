@@ -3,6 +3,7 @@
     <div class="panel-heading">
         <h3 class="panel-title">Groups</h3>
     </div>
+    {{ form_start(batch_form, { action: url(controller.route('batch'), { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -16,7 +17,12 @@
             <tbody>
                 {% for obj in data %}
                     <tr>
-                        <td>{{ obj.displayName }}</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">
+                                {{ obj.displayName }}
+                            </label>
+                        </td>
                         <td>{{ obj.name }}</td>
                         <td>
                             {% include 'AdminBundle:Group:flags.html.twig' with {obj: obj} only %}
@@ -30,8 +36,13 @@
         </table>
     </div>
     <div class="panel-body text-center">
+        <div class="pull-left js--batch-form collapse">
+            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
+            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
+        </div>
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
+    {{ form_end(batch_form) }}
 {% endblock %}
 {% block navigation_search_examples_dropdown %}
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
