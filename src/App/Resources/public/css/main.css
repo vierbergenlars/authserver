@@ -44,3 +44,7 @@ footer .container {
     height: 0;
     padding: 0;
 }
+.btn-group {
+    /* See https://github.com/twbs/bootstrap/issues/9939 */
+    display: flex;
+}

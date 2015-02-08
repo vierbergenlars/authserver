@@ -1,3 +1,4 @@
+{% spaceless %}
 <div class="btn-group btn-group-sm">
     {% if controller.may('get', obj) %}
         <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
@@ -9,3 +10,4 @@
         <a class="btn btn-danger" href="{{ url(controller.route('remove'), {id: obj.id}) }}" title="Delete">{{ icon('trash-o') }} <span class="sr-only">Delete</span></a>
     {% endif %}
 </div>
+{% endspaceless %}
