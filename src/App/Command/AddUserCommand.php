@@ -27,7 +27,10 @@ class AddUserCommand extends Command
 
         $user = $repo->newInstance();
         $user->setUsername($input->getArgument('username'));
+        $user->setDisplayname($input->getArgument('username'));
+        $user->setPasswordEnabled(1);
         $user->setEnabled(true);
+        $user->getEmailAddresses()->first()->setEmail($input->getArgument('email'));
 
         $encoderFactory = $this->getService('security.encoder_factory');
         $encoder = $encoderFactory->getEncoder(get_class($user));
@@ -38,13 +41,6 @@ class AddUserCommand extends Command
         }
 
         $repo->create($user);
-
-        $email = new EmailAddress();
-        $email->setEmail($input->getArgument('email'));
-        $email->setPrimary(true);
-        $user->addEmailAddress($email);
-
-        $repo->update($user);
         $output->writeln(sprintf('User %s created', $input->getArgument('username')));
     }
 
@@ -52,4 +48,4 @@ class AddUserCommand extends Command
     {
         return $this->getApplication()->getKernel()->getContainer()->get($id);
     }
-    }
+}

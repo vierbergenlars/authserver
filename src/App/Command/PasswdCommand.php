@@ -40,6 +40,7 @@ class PasswdCommand extends Command
             $encoderFactory = $this->getService('security.encoder_factory');
             $encoder = $encoderFactory->getEncoder(get_class($user));
             $user->setPassword($encoder->encodePassword($password, $user->getSalt()));
+            $user->setPasswordEnabled(1);
         }
 
         $repo->update($user);
