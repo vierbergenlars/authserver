@@ -124,16 +124,6 @@ class DefaultController extends ControllerServiceController
     
     /**
      * @AView
-     * @ApiDoc(resource=true)
-     * @Get
-     */
-    public function getAction($id)
-    {
-        return parent::getAction($id);
-    }
-
-    /**
-     * @AView
      * @NoRoute
      */
     public function dashboardAction()
