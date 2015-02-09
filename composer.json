@@ -19,7 +19,7 @@
         "sensio/framework-extra-bundle": "~2.3",
         "sensio/generator-bundle": "~2.3",
         "jms/serializer-bundle": "~0.13.0",
-        "friendsofsymfony/rest-bundle": "dev-forward-requirements-defaults as 1.5.1-dev",
+        "friendsofsymfony/rest-bundle": "~1.4",
         "friendsofsymfony/http-cache-bundle": "~1.0",
         "willdurand/hateoas-bundle": "~0.4",
         "hautelook/templated-uri-bundle": "~2.0",
@@ -35,12 +35,6 @@
         "vierbergenlars/rad-rest-bundle": "dev-develop",
         "ircmaxell/password-compat": "~1.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/studentenraad/FOSRestBundle"
-        }
-    ],
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0d80dcfd7455d7c3bcf8cdd58203fc69",
+    "hash": "10729c51a04b8d5bffa1be8c33c8fc77",
     "packages": [
         {
             "name": "braincrafted/bootstrap-bundle",
@@ -1263,24 +1263,24 @@
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "dev-forward-requirements-defaults",
+            "version": "1.5.0",
             "target-dir": "FOS/RestBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/studentenraad/FOSRestBundle.git",
-                "reference": "b4611bb9af2d86dc8536696a88901a5c095b0134"
+                "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
+                "reference": "a9377f6a05fb516423d6adf9079c6e5fb41e4799"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/studentenraad/FOSRestBundle/zipball/b4611bb9af2d86dc8536696a88901a5c095b0134",
-                "reference": "b4611bb9af2d86dc8536696a88901a5c095b0134",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/a9377f6a05fb516423d6adf9079c6e5fb41e4799",
+                "reference": "a9377f6a05fb516423d6adf9079c6e5fb41e4799",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "~1.0",
                 "php": ">=5.3.9",
                 "psr/log": "~1.0",
-                "symfony/framework-bundle": "~2.3",
+                "symfony/framework-bundle": "~2.2",
                 "willdurand/jsonp-callback-validator": "~1.0",
                 "willdurand/negotiation": "~1.2"
             },
@@ -1290,12 +1290,12 @@
             },
             "require-dev": {
                 "jms/serializer-bundle": "~0.12",
-                "sensio/framework-extra-bundle": "~3.0",
-                "symfony/form": "~2.3",
-                "symfony/security": "~2.3",
-                "symfony/serializer": "~2.3",
-                "symfony/validator": "~2.3",
-                "symfony/yaml": "~2.3"
+                "sensio/framework-extra-bundle": "~2.2",
+                "symfony/form": "~2.2",
+                "symfony/security": "~2.2",
+                "symfony/serializer": "~2.2",
+                "symfony/validator": "~2.2",
+                "symfony/yaml": "~2.2"
             },
             "suggest": {
                 "jms/serializer-bundle": "Add support for advanced serialization capabilities, recommended, requires ~0.12",
@@ -1306,7 +1306,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -1314,6 +1314,7 @@
                     "FOS\\RestBundle": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1323,12 +1324,12 @@
                     "email": "smith@pooteeweet.org"
                 },
                 {
-                    "name": "Konstantin Kudryashov",
-                    "email": "ever.zet@gmail.com"
-                },
-                {
                     "name": "FriendsOfSymfony Community",
                     "homepage": "https://github.com/friendsofsymfony/FOSRestBundle/contributors"
+                },
+                {
+                    "name": "Konstantin Kudryashov",
+                    "email": "ever.zet@gmail.com"
                 }
             ],
             "description": "This Bundle provides various tools to rapidly develop RESTful API's with Symfony2",
@@ -1336,10 +1337,7 @@
             "keywords": [
                 "rest"
             ],
-            "support": {
-                "source": "https://github.com/studentenraad/FOSRestBundle/tree/forward-requirements-defaults"
-            },
-            "time": "2015-02-08 15:26:52"
+            "time": "2015-01-27 09:39:58"
         },
         {
             "name": "guzzle/common",
@@ -3611,17 +3609,9 @@
             "time": "2014-08-25 07:57:51"
         }
     ],
-    "aliases": [
-        {
-            "alias": "1.5.1-dev",
-            "alias_normalized": "1.5.1.0-dev",
-            "version": "dev-forward-requirements-defaults",
-            "package": "friendsofsymfony/rest-bundle"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/rest-bundle": 20,
         "doctrine/migrations": 20,
         "vierbergenlars/rad-rest-bundle": 20
     },
