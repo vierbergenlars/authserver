@@ -79,7 +79,7 @@ class UserPropertiesValidEventListener implements EventSubscriberInterface {
         $this->flash->alert(sprintf(
                 'Your profile is missing required information. Please fill in "%s" before continuing.',
                 implode('", "', array_map(function(\App\Entity\Property $prop) {
-                    return $prop->getName();
+                    return $prop->getDisplayName();
                 }, $requiredEmptyProperties))
         ));
     }
