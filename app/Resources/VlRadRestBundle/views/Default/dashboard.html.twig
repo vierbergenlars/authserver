@@ -13,3 +13,10 @@
         <a class="list-group-item" href="{{ url(controller.route('get'), { id: obj.id }) }}">{{ obj.name }}</a>
     {% endfor %}
 </div>
+<div class="panel-body">
+    <div class="btn-group">
+        <a href="{{ url(controller.route('cget')) }}" class="btn btn-primary hidden-xs">{{ icon('list-alt') }} Full list</a>
+        <a href="{{ url(controller.route('new')) }}" class="btn btn-default">{{ icon('plus') }} Create new</a>
+    </div>
+</div>
+
