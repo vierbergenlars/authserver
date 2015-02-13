@@ -20,7 +20,7 @@ admin_group:
     name_prefix: admin_group_
     prefix: groups
     requirements:
-        id: "%?[a-z0-9_]+"
+        id: "(?!(new|batch)$)%?[a-z0-9_]+"
 
 admin_oauth_client:
     resource: app.admin.oauth.client.controller
