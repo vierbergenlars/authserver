@@ -57,13 +57,13 @@
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
+            {% for property in data.userProperties %}
+                <dt><abbr title="{{ property.property.name }}">{{ property.property.displayName }}</abbr></dt>
+                <dd>{% if property.data %}{{ property.data }}{% else %}<span class="text-muted">(Empty)</span>{% endif %}</dd>
+            {% endfor %}
             <dt>Exported groups</dt><dd>
                 {{ data._getAllGroupNames()|keys|json_encode }}
             </dd>
-            {% for property in data.userProperties %}
-                <dt>{% if is_granted('ROLE_SUPER_ADMIN') %}<a href="{{ url('admin_userproperty_edit', {id: property.property.id }) }}">{{ icon('pencil') }}</a> {% endif %}<abbr title="{{ property.property.name }}">{{ property.property.displayName }}</abbr></dt>
-                <dd>{% if property.data %}{{ property.data }}{% else %}<span class="text-muted">(Empty)</span>{% endif %}</dd>
-            {% endfor %}
         </dl>
     </div>
 {% endblock %}
