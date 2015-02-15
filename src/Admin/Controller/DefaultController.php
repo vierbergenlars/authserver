@@ -104,12 +104,12 @@ class DefaultController extends ControllerServiceController
                 }
             }
         } else if(substr($action, 0, 6) === 'PATCH_') {
-            list($patch, $property, $value) = explode('_', $action);
+            list($_, $property, $value) = explode('_', $action);
             foreach($subjects as $id => $checked) {
                 if($checked) {
                     $group = $this->getResourceManager()->find($id);
                     $method = 'set'.ucfirst($property);
-                    $group->$method($value === 'false'?false:$value);
+                    $group->$method(json_decode($value));
                     $this->getResourceManager()->update($group);
                 }
             }
