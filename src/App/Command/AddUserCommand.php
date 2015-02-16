@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\User;
-use App\Entity\EmailAddress;
 
 class AddUserCommand extends Command
 {
@@ -36,7 +35,7 @@ class AddUserCommand extends Command
         $encoder = $encoderFactory->getEncoder(get_class($user));
         $user->setPassword($encoder->encodePassword($input->getArgument('password'), $user->getSalt()));
 
-        if($input->getOption('super-admin')) {
+        if ($input->getOption('super-admin')) {
             $user->setRole('ROLE_SUPER_ADMIN');
         }
 

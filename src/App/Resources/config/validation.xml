@@ -54,7 +54,7 @@
             <constraint name="NotBlank" />
             <constraint name="Email" />
         </property>
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>        
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">email</constraint>
     </class>
     <class name="App\Entity\Property">
         <property name="name">

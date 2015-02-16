@@ -46,13 +46,13 @@ class ProfileController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $appId = $form->get('id')->getData();
             $client = $this->getDoctrine()
                 ->getRepository('AppBundle:OAuth\Client')
                 ->find($appId);
 
-            if($client && ($user = $this->getUser()) && $user instanceof User) {
+            if ($client && ($user = $this->getUser()) && $user instanceof User) {
                 $user->removeAuthorizedApplication($client);
                 $this->getDoctrine()->getManager()->beginTransaction();
                 $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
@@ -103,24 +103,24 @@ class ProfileController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
-            switch($form->getClickedButton()->getName()) {
+        if ($form->isValid()) {
+            switch ($form->getClickedButton()->getName()) {
                 case 'sendConfirmation':
-                    if(!$addr->isVerified()) {
+                    if (!$addr->isVerified()) {
                         $addr->setVerified(false);
-                        if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                        if ($mailer->sendMessage($addr->getEmail(), $addr)) {
                             $this->getFlash()->success('A new confirmation email has been sent');
                         } else {
                             $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
                         }
-                        
+
                     }
                     break;
                 case 'setPrimary':
-                    if($addr->isVerified()) {
+                    if ($addr->isVerified()) {
                         $this->getUser()
                             ->getEmailAddresses()
-                            ->map(function(EmailAddress $e) {
+                            ->map(function (EmailAddress $e) {
                                 if($e->isPrimary())
                                     $e->setPrimary(false);
                             });
@@ -132,7 +132,7 @@ class ProfileController extends Controller
                     }
                     break;
                 case 'remove':
-                    if(!$addr->isPrimary()) {
+                    if (!$addr->isPrimary()) {
                         $this->getDoctrine()
                                 ->getManagerForClass('AppBundle:EmailAddress')
                                 ->remove($addr);
@@ -164,21 +164,21 @@ class ProfileController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $addr = $form->getData();
             $addr->setVerified(false);
             $addr->setUser($this->getUser());
             $em->persist($addr);
             $em->flush($addr);
 
-            if($mailer->sendMessage($addr->getEmail(), $addr)) {
+            if ($mailer->sendMessage($addr->getEmail(), $addr)) {
                 $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
             } else {
                 $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
             }
         } else {
             $errString = 'Problems with email address '.$form->get('email')->getData().'.';
-            foreach($form->getErrors(true) as $e) {
+            foreach ($form->getErrors(true) as $e) {
                 $errString.="\n".$e->getMessage();
             }
             $this->getFlash()->error($errString);
@@ -186,19 +186,21 @@ class ProfileController extends Controller
 
         return $this->redirectToProfile();
     }
-    
+
     /**
      * @Template
      */
-    public function editPropertyAction(UserProperty $property) {
+    public function editPropertyAction(UserProperty $property)
+    {
         return array(
             'form' => $this->createForm(new \User\Form\EditUserPropertyType(), $property)
                         ->createView(),
             'data' => $property
         );
     }
-    
-    public function putPropertyAction(Property $property, Request $request) {
+
+    public function putPropertyAction(Property $property, Request $request)
+    {
         if(!$property->isUserEditable())
             throw $this->createNotFoundException();
 
@@ -213,17 +215,18 @@ class ProfileController extends Controller
         $form = $this->createForm(new \User\Form\EditUserPropertyType(), $userProperty);
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $em->persist($userProperty);
             $em->flush($userProperty);
             $this->getFlash()->success('Information updated successfully.');
         } else {
-            if($property->isRequired() && !$userProperty->getData()) {
+            if ($property->isRequired() && !$userProperty->getData()) {
                 $this->getFlash()->error('This field should not be left blank. Please try again.');
             } else {
                 $this->getFlash()->error('Updating information failed.');
             }
         }
+
         return $this->redirectToProfile();
     }
 
@@ -233,10 +236,11 @@ class ProfileController extends Controller
     public function changePasswordAction(Request $request)
     {
         $user = $this->getUser();
-        switch($user->getPasswordEnabled()) {
+        switch ($user->getPasswordEnabled()) {
             default:
             case 0:
                 $this->getFlash()->error('Password authentication is disabled for your account');
+
                 return $this->redirectToProfile();
                 break;
             case 1:
@@ -249,7 +253,7 @@ class ProfileController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $user->setPassword(
                 $this->get('security.encoder_factory')
                     ->getEncoder('App\Entity\User')
@@ -269,9 +273,9 @@ class ProfileController extends Controller
     {
         return $this->redirect($this->generateUrl('user_profile'));
     }
-    
+
     /**
-     * 
+     *
      * @return FlashMessage
      */
     private function getFlash()

@@ -10,14 +10,16 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class UserPropertyType extends AbstractType
 {
     private $forceEditable = false;
-    
-    public function __construct($forceEditable) {
+
+    public function __construct($forceEditable)
+    {
         $this->forceEditable = $forceEditable;
     }
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder->addEventSubscriber(new UserPropertyListener($this->forceEditable));
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -28,8 +30,8 @@ class UserPropertyType extends AbstractType
         ));
     }
 
-    public function getName() {
+    public function getName()
+    {
         return 'user_property';
-    }    
+    }
 }
-

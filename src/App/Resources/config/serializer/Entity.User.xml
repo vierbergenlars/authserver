@@ -10,7 +10,7 @@
         <virtual-property method="getEmail" serialized-name="email" groups="admin_user_object_scope_email" xml-attribute="true" />
         <property name="role" groups="admin_user_object" xml-attribute="true" />
         <property name="enabled" serialized-name="enabled" groups="admin_user_object" xml-attribute="true" />
-        <virtual-property method="isAccountNonLocked" serialized-name="non-locked" groups="admin_user_object" xml-attribute="true" /> 
+        <virtual-property method="isAccountNonLocked" serialized-name="non-locked" groups="admin_user_object" xml-attribute="true" />
         <property name="groups" groups="admin_user_object">
             <xml-list entry-name="group" />
         </property>

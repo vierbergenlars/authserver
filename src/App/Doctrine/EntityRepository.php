@@ -12,17 +12,18 @@ class EntityRepository extends BaseRepository
     public function newInstance()
     {
         $n = $this->getClassName();
+
         return new $n();
     }
 
     public function search($terms)
     {
-        if(is_string($terms)) {
+        if (is_string($terms)) {
             $parser = new SearchGrammar();
             $blocks = $parser->parse($terms);
-        } else if(is_array($terms)) {
+        } elseif (is_array($terms)) {
             $blocks = array();
-            foreach($terms as $name=>$value) {
+            foreach ($terms as $name=>$value) {
                 $blocks[] = array(
                     'name' => $name,
                     'value' => $value,
@@ -33,12 +34,12 @@ class EntityRepository extends BaseRepository
         $queryBuilder = $this->createQueryBuilder('u');
         $and = $queryBuilder->expr()->andX();
 
-        foreach($blocks as $i=>$block) {
-            if(!in_array($block['name'], $this->fieldSearchWhitelist)) {
+        foreach ($blocks as $i=>$block) {
+            if (!in_array($block['name'], $this->fieldSearchWhitelist)) {
                 $this->handleUnknownSearchField($block);
             }
 
-            if(strpos($block['value'], '*') !== false) {
+            if (strpos($block['value'], '*') !== false) {
                 $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
                 $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
             } else {
@@ -47,9 +48,10 @@ class EntityRepository extends BaseRepository
             }
         }
 
-        if($and->count()) {
+        if ($and->count()) {
             $queryBuilder->where($and);
         }
+
         return new QueryBuilderPageDescription($queryBuilder);
     }
 

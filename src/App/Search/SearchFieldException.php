@@ -6,7 +6,8 @@ class SearchFieldException extends SearchException
 {
     private $fieldname;
     private $whitelist;
-    public function __construct($fieldname, $whitelist) {
+    public function __construct($fieldname, $whitelist)
+    {
         parent::__construct(sprintf('Bad field name "%s"; allowed: %s', $fieldname, json_encode($whitelist)));
         $this->fieldname = $fieldname;
         $this->whitelist = $whitelist;

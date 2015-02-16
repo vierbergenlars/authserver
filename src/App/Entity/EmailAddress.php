@@ -82,7 +82,7 @@ class EmailAddress implements \Serializable
     /**
      * Set email
      *
-     * @param string $email
+     * @param  string       $email
      * @return EmailAddress
      */
     public function setEmail($email)
@@ -106,13 +106,13 @@ class EmailAddress implements \Serializable
     /**
      * Set verified
      *
-     * @param boolean $verified
+     * @param  boolean      $verified
      * @return EmailAddress
      */
     public function setVerified($verified)
     {
         $this->verified = $verified;
-        if($verified) {
+        if ($verified) {
             $this->verificationCode = null;
         } else {
             $this->verificationCode = Random::generateToken();
@@ -144,7 +144,7 @@ class EmailAddress implements \Serializable
     /**
      * Set user
      *
-     * @param \App\Entity\User $user
+     * @param  \App\Entity\User $user
      * @return EmailAddress
      */
     public function setUser(\App\Entity\User $user)
@@ -167,7 +167,7 @@ class EmailAddress implements \Serializable
     /**
      * Set verificationCode
      *
-     * @param string $verificationCode
+     * @param  string       $verificationCode
      * @return EmailAddress
      */
     public function setVerificationCode($verificationCode)
@@ -180,7 +180,7 @@ class EmailAddress implements \Serializable
     /**
      * Set primary
      *
-     * @param boolean $primary
+     * @param  boolean      $primary
      * @return EmailAddress
      */
     public function setPrimary($primary)

@@ -31,7 +31,7 @@ class AdminExtension extends Extension
             ->in($servicesDirectory)
             ->files();
 
-        foreach($configFiles as $configFile) {
+        foreach ($configFiles as $configFile) {
             $loader->load($configFile->getRelativePathName());
         }
     }

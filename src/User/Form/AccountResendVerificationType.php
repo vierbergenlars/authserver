@@ -4,8 +4,6 @@ namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AccountResendVerificationType extends AbstractType
 {

@@ -26,17 +26,17 @@ class PasswdCommand extends Command
         $repo = $this->getService('app.admin.user.repo');
 
         $user = $repo->findOneBy(array('username'=>$input->getArgument('username')));
-        if(!$user) {
+        if (!$user) {
             throw new \RuntimeException('User not found');
         }
 
-        if($input->getOption('lock')) {
+        if ($input->getOption('lock')) {
             $user->setEnabled(false);
-        } else if($input->getOption('unlock')) {
+        } elseif ($input->getOption('unlock')) {
             $user->setEnabled(true);
         }
 
-        if($password = $input->getArgument('password')) {
+        if ($password = $input->getArgument('password')) {
             $encoderFactory = $this->getService('security.encoder_factory');
             $encoder = $encoderFactory->getEncoder(get_class($user));
             $user->setPassword($encoder->encodePassword($password, $user->getSalt()));

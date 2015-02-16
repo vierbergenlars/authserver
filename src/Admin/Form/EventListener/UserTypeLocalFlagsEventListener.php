@@ -27,33 +27,33 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
     {
         $form = $event->getForm();
         $data = $event->getData();
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ADMIN')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ADMIN')) {
             $form->remove('role');
         }
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_CRED')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_CRED')) {
             $form->remove('password');
         }
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_EMAIL')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_EMAIL')) {
             $form->remove('emailAddresses');
         }
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
             $form->remove('groups');
         }
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_USERNAME')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_USERNAME')) {
             $form->remove('username');
             $form->remove('displayName');
         }
-        if(!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
+        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
             $form->remove('enabled');
             $form->remove('passwordEnabled');
         }
-        if($this->authorizationChecker->hasRole('ROLE_API')) {
+        if ($this->authorizationChecker->hasRole('ROLE_API')) {
             // Remove user properties fields when logged in with API key
             $form->remove('userProperties');
         }
-        if($data instanceof \App\Entity\User) {
+        if ($data instanceof \App\Entity\User) {
             /* @var $data \App\Entity\User */
-            if($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
+            if ($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
                 $form->remove('enabled');
             }
         }

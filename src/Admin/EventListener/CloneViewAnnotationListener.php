@@ -13,7 +13,7 @@ class CloneViewAnnotationListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $config = $request->attributes->get('_view');
-        if($config) {
+        if ($config) {
             $request->attributes->set('_view', clone $config);
         }
     }

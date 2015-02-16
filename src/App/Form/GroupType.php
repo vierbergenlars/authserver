@@ -11,7 +11,7 @@ class GroupType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -23,7 +23,7 @@ class GroupType extends AbstractType
             ->add('displayName')
             ->add('groups', null, array(
                 'label'=>'Member of',
-                'query_builder'=>function(EntityRepository $repo)use($id) {
+                'query_builder'=>function (EntityRepository $repo) use ($id) {
                     return $repo->createQueryBuilder('g')
                         ->leftJoin('g.memberGroups', 'm')
                         ->where('g.noGroups = false OR m.id = :id')

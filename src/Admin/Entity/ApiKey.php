@@ -61,7 +61,7 @@ class ApiKey
     /**
      * Set scopes
      *
-     * @param array $scopes
+     * @param  array  $scopes
      * @return ApiKey
      */
     public function setScopes($scopes)
@@ -94,7 +94,7 @@ class ApiKey
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return ApiKey
      */
     public function setName($name)

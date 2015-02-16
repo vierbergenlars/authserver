@@ -20,10 +20,10 @@ class UsernameType extends AbstractType
      *
      * @param \Doctrine\ORM\EntityRepository $repo
      */
-    public function __construct(EntityRepository $repo) {
+    public function __construct(EntityRepository $repo)
+    {
         $this->repo = $repo;
     }
-
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

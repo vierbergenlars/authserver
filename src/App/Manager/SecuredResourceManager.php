@@ -8,7 +8,7 @@ class SecuredResourceManager extends BaseSRM
 {
     public function search($terms)
     {
-        if(!$this->getAuthorizationChecker()->mayList()) {
+        if (!$this->getAuthorizationChecker()->mayList()) {
             throw new AccessDeniedException();
         }
 

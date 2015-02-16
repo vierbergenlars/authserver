@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Config\Definition\BooleanNode;
 
 /**
  * Group
@@ -28,7 +27,7 @@ class Group
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
-    
+
     /**
      * @var string
      *
@@ -42,7 +41,6 @@ class Group
      * @ORM\ManyToMany(targetEntity="User", mappedBy="groups", fetch="EXTRA_LAZY")
      */
     private $members;
-
 
     /**
      * The groups that are member of this group
@@ -115,7 +113,7 @@ class Group
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return Group
      */
     public function setName($name)
@@ -134,11 +132,11 @@ class Group
     {
         return $this->name;
     }
-    
+
     /**
      * Set displayName
      *
-     * @param string $name
+     * @param  string $name
      * @return Group
      */
     public function setDisplayName($name)
@@ -158,11 +156,10 @@ class Group
         return $this->displayName;
     }
 
-
     /**
      * Add members
      *
-     * @param \App\Entity\User $members
+     * @param  \App\Entity\User $members
      * @return Group
      */
     public function addMember(\App\Entity\User $members)
@@ -198,7 +195,7 @@ class Group
      * DO NOT USE
      * @internal
      *
-     * @param \App\Entity\Group $memberGroups
+     * @param  \App\Entity\Group $memberGroups
      * @return Group
      */
     public function addMemberGroup(\App\Entity\Group $memberGroups)
@@ -234,7 +231,7 @@ class Group
     /**
      * Add groups
      *
-     * @param \App\Entity\Group $groups
+     * @param  \App\Entity\Group $groups
      * @return Group
      */
     public function addGroup(\App\Entity\Group $groups)
@@ -277,20 +274,20 @@ class Group
     public function _getAllGroupNames()
     {
         $groups = array();
-        if($this->isExportable()) {
+        if ($this->isExportable()) {
             $groups[$this->getName()] = true;
         }
-        foreach($this->groups as $group) {
+        foreach ($this->groups as $group) {
             $groups = array_merge($groups, $group->_getAllGroupNames());
         }
+
         return $groups;
     }
-
 
     /**
      * Set exportable
      *
-     * @param boolean $exportable
+     * @param  boolean $exportable
      * @return Group
      */
     public function setExportable($exportable)
@@ -323,7 +320,7 @@ class Group
     /**
      * Set noUsers
      *
-     * @param boolean $noUsers
+     * @param  boolean $noUsers
      * @return Group
      */
     public function setNoUsers($noUsers)
@@ -346,7 +343,7 @@ class Group
     /**
      * Set noGroups
      *
-     * @param boolean $noGroups
+     * @param  boolean $noGroups
      * @return Group
      */
     public function setNoGroups($noGroups)

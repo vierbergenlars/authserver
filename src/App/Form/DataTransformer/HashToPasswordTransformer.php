@@ -25,6 +25,7 @@ class HashToPasswordTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if(!$value)
+
             return null;
 
         return $this->encoderFactory->getEncoder('App\Entity\User')

@@ -3,7 +3,6 @@
 namespace Admin\Controller\Traits\Routes;
 
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\AbstractBaseTrait;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -22,11 +21,11 @@ trait LinkUnlinkTrait
     public function linkAction(Request $request, $id)
     {
         $subject = $this->_LinkUnlinkTrait__preCheck($request, $id);
-        foreach($request->attributes->get('links') as $type => $links) {
-            if(is_string($links)) {
+        foreach ($request->attributes->get('links') as $type => $links) {
+            if (is_string($links)) {
                 throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
             }
-            foreach($links as $link) {
+            foreach ($links as $link) {
                 $this->handleLink($type, $subject, $link);
             }
         }
@@ -40,11 +39,11 @@ trait LinkUnlinkTrait
     public function unlinkAction(Request $request, $id)
     {
         $subject = $this->_LinkUnlinkTrait__preCheck($request, $id);
-        foreach($request->attributes->get('links') as $type => $links) {
-            if(is_string($links)) {
+        foreach ($request->attributes->get('links') as $type => $links) {
+            if (is_string($links)) {
                 throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
             }
-            foreach($links as $link) {
+            foreach ($links as $link) {
                 $this->handleUnlink($type, $subject, $link);
             }
         }
@@ -54,7 +53,7 @@ trait LinkUnlinkTrait
 
     private function _LinkUnlinkTrait__preCheck(Request $request, $id)
     {
-        if(!$request->attributes->has('links')) {
+        if (!$request->attributes->has('links')) {
             throw new BadRequestHttpException('Missing Link header');
         }
 

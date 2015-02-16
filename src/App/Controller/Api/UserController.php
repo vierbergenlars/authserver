@@ -5,7 +5,6 @@ namespace App\Controller\Api;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 
 class UserController extends Controller
 {
@@ -15,9 +14,10 @@ class UserController extends Controller
      */
     public function getAction()
     {
-        if(!($user = $this->getUser())) {
+        if (!($user = $this->getUser())) {
             throw new AccessDeniedException();
         }
+
         return array(
             'user_id' => $user->getMigrateId(),
             'guid' => $user->getId(),

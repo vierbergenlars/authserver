@@ -27,13 +27,13 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        if(($client = $event->getClient())&&$client instanceof Client) {
-            if($client->isPreApproved()) {
+        if (($client = $event->getClient())&&$client instanceof Client) {
+            if ($client->isPreApproved()) {
                 $event->setAuthorizedClient(true);
             }
         }
-        if(($user = $event->getUser())&&$user instanceof User) {
-            if($user->getAuthorizedApplications()->contains($client)) {
+        if (($user = $event->getUser())&&$user instanceof User) {
+            if ($user->getAuthorizedApplications()->contains($client)) {
                 $event->setAuthorizedClient(true);
             }
         }
@@ -41,7 +41,7 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 
     public function onPostAuthorizationProcess(OAuthEvent $event)
     {
-        if($event->isAuthorizedClient()) {
+        if ($event->isAuthorizedClient()) {
             if(($client = $event->getClient())&&$client instanceof Client&&
                 ($user = $event->getUser())&&$user instanceof User) {
                 $user->addAuthorizedApplication($client);

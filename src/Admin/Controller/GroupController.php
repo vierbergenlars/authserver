@@ -12,13 +12,13 @@ class GroupController extends DefaultController
 
     protected function handleLink($type, $parent, $link)
     {
-        switch($type) {
+        switch ($type) {
             case 'group':
                 $group = $link->getData();
-                if(!$group instanceof Group) {
+                if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }
-                if(!$parent->getGroups()->contains($group)) {
+                if (!$parent->getGroups()->contains($group)) {
                     $parent->addGroup($group);
                 }
                 break;
@@ -29,10 +29,10 @@ class GroupController extends DefaultController
 
     protected function handleUnlink($type, $parent, $link)
     {
-        switch($type) {
+        switch ($type) {
             case 'group':
                 $group = $link->getData();
-                if(!$group instanceof Group) {
+                if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }
                 $parent->removeGroup($group);
@@ -42,7 +42,8 @@ class GroupController extends DefaultController
         }
     }
 
-    protected function getBatchActions() {
+    protected function getBatchActions()
+    {
         $actions = parent::getBatchActions();
         $actions['Exportable']['PATCH_exportable_true'] = 'Enable';
         $actions['Exportable']['PATCH_exportable_false'] = 'Disable';
@@ -50,6 +51,7 @@ class GroupController extends DefaultController
         $actions['Member types']['PATCH_noUsers_true'] = 'Deny users';
         $actions['Member types']['PATCH_noGroups_false'] = 'Allow groups';
         $actions['Member types']['PATCH_noGroups_true'] = 'Deny groups';
+
         return $actions;
     }
 }

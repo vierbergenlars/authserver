@@ -12,8 +12,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class UserPropertiesValidEventListener implements EventSubscriberInterface {
-
+class UserPropertiesValidEventListener implements EventSubscriberInterface
+{
     /**
      * @var TokenStorageInterface
      */
@@ -28,45 +28,54 @@ class UserPropertiesValidEventListener implements EventSubscriberInterface {
      * @var UrlGeneratorInterface
      */
     private $urlGenerator;
-    
+
     /**
      * @var FlashMessage
      */
     private $flash;
 
-    function __construct(TokenStorageInterface $tokenStorage, UserRepository $repo, UrlGeneratorInterface $urlGenerator, FlashMessage $flash) {
+    public function __construct(TokenStorageInterface $tokenStorage, UserRepository $repo, UrlGeneratorInterface $urlGenerator, FlashMessage $flash)
+    {
         $this->tokenStorage = $tokenStorage;
         $this->repo = $repo;
         $this->urlGenerator = $urlGenerator;
         $this->flash = $flash;
     }
 
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents()
+    {
         return array(
             KernelEvents::REQUEST => 'onKernelRequest',
         );
     }
 
-    public function onKernelRequest(GetResponseEvent $event) {
+    public function onKernelRequest(GetResponseEvent $event)
+    {
         if(!$event->isMasterRequest())
+
             return;
         if(!$event->getRequest()->isMethodSafe())
+
             return;
         if(!($token = $this->tokenStorage->getToken()))
+
             return;
         if(!($user = $token->getUser()))
+
             return;
         if(!($user instanceof User))
+
             return;
         if(count($requiredEmptyProperties = $this->repo->getAllEmptyRequiredProperties($user)) == 0)
+
             return;
         if(!array_filter(
             $token->getRoles(),
-            function(\Symfony\Component\Security\Core\Role\RoleInterface $role) {
+            function (\Symfony\Component\Security\Core\Role\RoleInterface $role) {
                 return $role instanceof \Symfony\Component\Security\Core\Role\SwitchUserRole || $role->getRole() === 'ROLE_SUPER_ADMIN';
             }
         )) {
-            switch($event->getRequest()->attributes->get('_route')) {
+            switch ($event->getRequest()->attributes->get('_route')) {
                 case 'user_profile':
                     break;
                 default:
@@ -78,7 +87,7 @@ class UserPropertiesValidEventListener implements EventSubscriberInterface {
         }
         $this->flash->alert(sprintf(
                 'Your profile is missing required information. Please fill in "%s" before continuing.',
-                implode('", "', array_map(function(\App\Entity\Property $prop) {
+                implode('", "', array_map(function (\App\Entity\Property $prop) {
                     return $prop->getDisplayName();
                 }, $requiredEmptyProperties))
         ));

@@ -11,21 +11,21 @@ user_app_auth_delete:
         _controller: UserBundle:Profile:deleteAuthorizedApp
     requirements:
         _method: DELETE
-        
+
 user_put_email_addresses:
     path: mailaddr/{addr}
     defaults:
         _controller: UserBundle:Profile:putEmailAddresses
     requirements:
         _method: PUT
-        
+
 user_post_email_addresses:
     path: mailaddr
     defaults:
         _controller: UserBundle:Profile:postEmailAddresses
     requirements:
         _method: POST
-        
+
 user_put_property:
     path: property/{property}
     defaults:

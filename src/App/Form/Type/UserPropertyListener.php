@@ -12,18 +12,21 @@ use Symfony\Component\Validator\Constraints\Regex;
 class UserPropertyListener implements EventSubscriberInterface
 {
     private $forceEditable = false;
-    
-    public function __construct($forceEditable) {
+
+    public function __construct($forceEditable)
+    {
         $this->forceEditable = $forceEditable;
     }
 
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents()
+    {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
         );
     }
-    
-    public function preSetData(FormEvent $ev) {
+
+    public function preSetData(FormEvent $ev)
+    {
         $property = $ev->getData()->getProperty();
         /* @var $property Property */
         $options = array(
@@ -31,7 +34,7 @@ class UserPropertyListener implements EventSubscriberInterface
             'required' => $property->isRequired()&&!$this->forceEditable,
             'empty_data' => null,
         );
-        if($property->isRequired()&&!$this->forceEditable) {
+        if ($property->isRequired()&&!$this->forceEditable) {
             $options['constraints'][] = new NotBlank;
         }
         $options['constraints'][] = new Regex($property->getValidationRegex());

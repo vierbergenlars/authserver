@@ -19,7 +19,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="guid")
      */
@@ -29,7 +29,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=25, unique=true)
      */
     private $username;
-    
+
     /**
      * @ORM\Column(name="display_name", type="string", length=255)
      */
@@ -39,7 +39,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $password;
-    
+
     /**
      * @ORM\Column(name="password_enabled", type="integer")
      */
@@ -82,14 +82,14 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\JoinTable(name="user_oauthclient")
      */
     private $authorizedApplications;
-    
+
     /**
      * @var UserProperty[]
-     * 
+     *
      * @ORM\OneToMany(targetEntity="UserProperty", mappedBy="user", cascade={"ALL"})
      */
     private $userProperties;
-    
+
     /**
      * Temporary storage for user properties persist hack
      * @see __rescueUserProperties__()
@@ -186,6 +186,7 @@ class User implements AdvancedUserInterface, \Serializable
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
@@ -198,7 +199,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->guid;
     }
-    
+
     public function getMigrateId()
     {
         return $this->id;
@@ -207,7 +208,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Set username
      *
-     * @param string $username
+     * @param  string $username
      * @return User
      */
     public function setUsername($username)
@@ -216,35 +217,37 @@ class User implements AdvancedUserInterface, \Serializable
 
         return $this;
     }
-    
+
     /**
-     * 
+     *
      * @return string
      */
-    public function getDisplayName() {
+    public function getDisplayName()
+    {
         return $this->displayName;
     }
 
     /**
-     * 
-     * @param string $displayName
+     *
+     * @param  string $displayName
      * @return User
      */
-    public function setDisplayName($displayName) {
+    public function setDisplayName($displayName)
+    {
         $this->displayName = $displayName;
+
         return $this;
     }
 
-    
     /**
      * Set password
      *
-     * @param string $password
+     * @param  string $password
      * @return User
      */
     public function setPassword($password)
     {
-        if($password) {
+        if ($password) {
             $this->password = $password;
         }
 
@@ -265,7 +268,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Add groups
      *
-     * @param \App\Entity\Group $groups
+     * @param  \App\Entity\Group $groups
      * @return User
      */
     public function addGroup(\App\Entity\Group $groups)
@@ -298,16 +301,17 @@ class User implements AdvancedUserInterface, \Serializable
     public function _getAllGroupNames()
     {
         $groups = array();
-        foreach($this->groups as $group) {
+        foreach ($this->groups as $group) {
             $groups = array_merge($groups, $group->_getAllGroupNames());
         }
+
         return $groups;
     }
 
     /**
      * Add authorizedApplications
      *
-     * @param \App\Entity\OAuth\Client $authorizedApplications
+     * @param  \App\Entity\OAuth\Client $authorizedApplications
      * @return User
      */
     public function addAuthorizedApplication(\App\Entity\OAuth\Client $authorizedApplications)
@@ -340,7 +344,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Add emailAddresses
      *
-     * @param \App\Entity\EmailAddress $emailAddresses
+     * @param  \App\Entity\EmailAddress $emailAddresses
      * @return User
      */
     public function addEmailAddress(\App\Entity\EmailAddress $emailAddresses)
@@ -377,46 +381,57 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getPrimaryEmailAddress()
     {
-        if($this->primaryEmailAddress && !$this->getEmailAddresses()) {
+        if ($this->primaryEmailAddress && !$this->getEmailAddresses()) {
             return $this->primaryEmailAddress;
         }
-        foreach($this->getEmailAddresses()->toArray() as $email) {
+        foreach ($this->getEmailAddresses()->toArray() as $email) {
             if($email->isPrimary())
+
                 return $this->primaryEmailAddress = $email;
         }
+
         return $this->getEmailAddresses()->get(0)->setPrimary(true);
     }
-    
-    public function getGuid() {
+
+    public function getGuid()
+    {
         return $this->guid;
     }
 
-    public function setGuid($guid) {
+    public function setGuid($guid)
+    {
         $this->guid = $guid;
+
         return $this;
     }
 
-    public function getPasswordEnabled() {
+    public function getPasswordEnabled()
+    {
         return $this->passwordEnabled;
     }
 
-    public function setPasswordEnabled($passwordEnabled) {
+    public function setPasswordEnabled($passwordEnabled)
+    {
         $this->passwordEnabled = $passwordEnabled;
+
         return $this;
     }
-    
-    public function getUserProperties() {
+
+    public function getUserProperties()
+    {
         return $this->userProperties;
     }
-    
-    public function getUserPropertiesMap() {
+
+    public function getUserPropertiesMap()
+    {
         $map = array();
-        foreach($this->userProperties as $property) {
+        foreach ($this->userProperties as $property) {
             $map[$property->getProperty()->getName()] = $property->getData();
         }
+
         return $map;
     }
-    
+
     /**
      * Hack to get the user properties out of the persist loop when this entity
      * itself is persisted.
@@ -428,21 +443,23 @@ class User implements AdvancedUserInterface, \Serializable
      * The result of this is an unsatisfiable condition, since only persisted entities can
      * be flushed to the database. That is why the user properties collection gets copied
      * to a temporary variable before persisting, en gets restored after persisting.
-     * 
+     *
      * @internal
      * @ORM\PrePersist
      */
-    public function __rescueUserProperties__() {
+    public function __rescueUserProperties__()
+    {
         $this->__userProperties__ = $this->userProperties;
         $this->userProperties = null;
     }
-    
+
     /**
      * @see __rescueUserProperties__()
      * @internal
      * @ORM\PostPersist
      */
-    public function __restoreUserProperties__() {
+    public function __restoreUserProperties__()
+    {
         $this->userProperties = $this->__userProperties__;
     }
 }

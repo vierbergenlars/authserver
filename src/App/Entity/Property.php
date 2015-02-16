@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="PropertyRepository")
  */
 class Property
-{    
+{
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -25,10 +25,10 @@ class Property
      * @ORM\Column(name="name", type="string", length=25, unique=true)
      */
     private $name;
-    
+
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="display_name", type="string", length=255)
      */
     private $displayName;
@@ -39,28 +39,28 @@ class Property
      * @ORM\Column(name="user_editable", type="boolean")
      */
     private $userEditable;
-    
+
     /**
-     * @var boolean 
-     * 
+     * @var boolean
+     *
      * @ORM\Column(name="required", type="boolean")
      */
     private $required;
-    
+
     /**
-     * @var string 
-     * 
+     * @var string
+     *
      * @ORM\Column(name="validation_regex", type="text")
      */
     private $validationRegex = '/^.*$/';
-    
+
     /**
      * @var UserProperty[]
-     * 
+     *
      * @ORM\OneToMany(targetEntity="UserProperty", mappedBy="property", cascade={"REMOVE"})
      */
     private $userProperties;
-        
+
     /**
      * Get id
      *
@@ -74,7 +74,7 @@ class Property
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -84,7 +84,7 @@ class Property
     /**
      * Get userEditable
      *
-     * @return boolean 
+     * @return boolean
      */
     public function isUserEditable()
     {
@@ -94,7 +94,7 @@ class Property
     /**
      * Get required
      *
-     * @return boolean 
+     * @return boolean
      */
     public function isRequired()
     {
@@ -104,7 +104,7 @@ class Property
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string       $name
      * @return UserProperty
      */
     public function setName($name)
@@ -117,7 +117,7 @@ class Property
     /**
      * Set userEditable
      *
-     * @param boolean $userEditable
+     * @param  boolean      $userEditable
      * @return UserProperty
      */
     public function setUserEditable($userEditable)
@@ -130,7 +130,7 @@ class Property
     /**
      * Set required
      *
-     * @param boolean $required
+     * @param  boolean      $required
      * @return UserProperty
      */
     public function setRequired($required)
@@ -143,7 +143,7 @@ class Property
     /**
      * Set displayName
      *
-     * @param string $displayName
+     * @param  string   $displayName
      * @return Property
      */
     public function setDisplayName($displayName)
@@ -156,19 +156,22 @@ class Property
     /**
      * Get displayName
      *
-     * @return string 
+     * @return string
      */
     public function getDisplayName()
     {
         return $this->displayName;
     }
 
-    public function getValidationRegex() {
+    public function getValidationRegex()
+    {
         return $this->validationRegex;
     }
 
-    public function setValidationRegex($validationRegex) {
+    public function setValidationRegex($validationRegex)
+    {
         $this->validationRegex = $validationRegex;
+
         return $this;
     }
 }

@@ -17,7 +17,7 @@ class UserType extends AbstractType
     }
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -54,7 +54,7 @@ class UserType extends AbstractType
             ))
             ->add('groups', null, array(
                 'property'=>'name',
-                'query_builder'=>function(EntityRepository $repo) use($id) {
+                'query_builder'=>function (EntityRepository $repo) use ($id) {
                     return $repo->createQueryBuilder('g')
                         ->leftJoin('g.members', 'm')
                         ->where('g.noUsers = false OR m.id = :id')

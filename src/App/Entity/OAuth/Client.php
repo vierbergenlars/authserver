@@ -26,8 +26,9 @@ class Client extends BaseClient
      * @ORM\Column(type="boolean")
      */
     private $preApproved;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         parent::__construct();
         $this->allowedGrantTypes[] = \OAuth2\OAuth2::GRANT_TYPE_REFRESH_TOKEN;
     }
@@ -40,6 +41,7 @@ class Client extends BaseClient
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

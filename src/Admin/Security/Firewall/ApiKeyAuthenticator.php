@@ -22,7 +22,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
 
     public function createToken(Request $request, $providerKey)
     {
-        if(strpos($request->getUser(), '-apikey-') !== 0||!$request->getPassword()) {
+        if (strpos($request->getUser(), '-apikey-') !== 0||!$request->getPassword()) {
             throw new BadCredentialsException('No API key found');
         }
 
@@ -44,7 +44,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             );
         }
 
-        if($key->getSecret() !== $apiKey[1]) {
+        if ($key->getSecret() !== $apiKey[1]) {
             throw new AuthenticationException(
                 sprintf('Bad secret for API Key "%s"', $apiKey[0])
             );
@@ -52,7 +52,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
 
         $scopes = $key->getScopes();
         $roles = array('ROLE_API');
-        foreach($scopes as $scope) {
+        foreach ($scopes as $scope) {
             $roles[] = 'ROLE_SCOPE_'.strtoupper($scope);
         }
 

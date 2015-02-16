@@ -15,16 +15,16 @@ class UserController extends DefaultController
 
     protected function handleLink($type, $user, $link)
     {
-        switch($type) {
+        switch ($type) {
             case 'group':
-                if(!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+                if (!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
                     throw new AccessDeniedException();
                 }
                 $group = $link->getData();
-                if(!$group instanceof Group) {
+                if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }
-                if(!$user->getGroups()->contains($group)) {
+                if (!$user->getGroups()->contains($group)) {
                     $user->addGroup($group);
                 }
                 break;
@@ -35,14 +35,14 @@ class UserController extends DefaultController
 
     protected function handleUnlink($type, $user, $link)
     {
-        switch($type) {
+        switch ($type) {
             case 'group':
-                if(!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+                if (!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
                     throw new AccessDeniedException();
                 }
 
                 $group = $link->getData();
-                if(!$group instanceof Group) {
+                if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }
                 $user->removeGroup($group);
@@ -55,45 +55,52 @@ class UserController extends DefaultController
     public function getSerializationGroups($action)
     {
         $groups = parent::getSerializationGroups($action);
-        if($action == 'get') {
-            if($this->hasRole('ROLE_SCOPE_R_PROFILE_EMAIL')) {
+        if ($action == 'get') {
+            if ($this->hasRole('ROLE_SCOPE_R_PROFILE_EMAIL')) {
                 $groups[] = 'admin_user_object_scope_email';
             }
         }
+
         return $groups;
     }
-    
-    private function hasRole($role) {
-        if(($rm = $this->getResourceManager()) instanceof SecuredResourceManager) {
+
+    private function hasRole($role)
+    {
+        if (($rm = $this->getResourceManager()) instanceof SecuredResourceManager) {
             /* @var $rm SecuredResourceManager */
-            if(($ac = $rm->getAuthorizationChecker()) instanceof DefaultAuthorizationChecker) {
+            if (($ac = $rm->getAuthorizationChecker()) instanceof DefaultAuthorizationChecker) {
                 /* @var $ac DefaultAuthorizationChecker */
+
                 return $ac->hasRole($role);
             }
         }
+
         return false;
     }
-    
-    protected function getBatchActions() {
+
+    protected function getBatchActions()
+    {
         $actions = parent::getBatchActions();
-        if($this->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
+        if ($this->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
             $actions['Account enabled']['PATCH_enabled_true'] = 'Enable';
             $actions['Account enabled']['PATCH_enabled_false'] = 'Disable';
             $actions['Password authentication']['PATCH_passwordEnabled_0'] = 'Disable';
             $actions['Password authentication']['PATCH_passwordEnabled_1'] = 'Enable';
             $actions['Password authentication']['PATCH_passwordEnabled_2'] = 'Let user set initial password';
         }
+
         return $actions;
     }
 
-    protected function handleBatch($action, $subjects) {
-        switch($action) {
+    protected function handleBatch($action, $subjects)
+    {
+        switch ($action) {
             case 'PATCH_enabled_false':
             case 'PATCH_enabled_true':
-                foreach($subjects as $id => $exec) {
-                    if($exec) {
+                foreach ($subjects as $id => $exec) {
+                    if ($exec) {
                         $user = $this->getResourceManager()->find($id);
-                        if($user->getRole() !== 'ROLE_SUPER_ADMIN') {
+                        if ($user->getRole() !== 'ROLE_SUPER_ADMIN') {
                             $user->setEnabled($action === 'PATCH_enabled_true');
                             $this->getResourceManager()->update($user);
                         }
