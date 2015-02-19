@@ -2,6 +2,7 @@
 
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $loader = require_once __DIR__.'/../app/autoload.php';
 
@@ -13,13 +14,22 @@ $loader = new ApcClassLoader('sf2', $loader);
 $loader->register(true);
 */
 
-require_once __DIR__.'/../app/AppKernel.php';
-//require_once __DIR__.'/../app/AppCache.php';
-
-$kernel = new AppKernel('prod', false);
-//$kernel = new AppCache($kernel);
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
+
+if (file_exists(__DIR__ . '/../maintenance')) {
+    Response::create()
+            ->setContent(file_get_contents(__DIR__ . '/../maintenance'))
+            ->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
+            ->prepare($request)
+            ->send();
+} else {
+    require_once __DIR__ . '/../app/AppKernel.php';
+    //require_once __DIR__.'/../app/AppCache.php';
+
+    $kernel   = new AppKernel('prod', false);
+    //$kernel = new AppCache($kernel);
+    $response = $kernel->handle($request);
+    $response->send();
+    $kernel->terminate($request, $response);
+}
