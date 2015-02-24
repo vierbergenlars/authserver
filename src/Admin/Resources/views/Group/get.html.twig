@@ -14,8 +14,8 @@
                 {% include 'AdminBundle:Group:flags.html.twig' with {obj: data} only %}
             </dd>
             <dt>Member of</dt><dd>
-                {% for g in data.groups %}
-                    <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+                {% for g in data.groupsRecursive %}
+                    <a href="{{ url(controller.route('get'), {id: g.id}) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group fa-fw') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
@@ -38,9 +38,6 @@
                     {% endfor %}
                 </dd>
             {% endif %}
-            <dt>Exported groups</dt><dd>
-                {{ data._getAllGroupNames()|keys|json_encode }}
-            </dd>
             {% if data.noGroups and data.memberGroups|length > 0 %}
                 <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
                 <dd><span class="text-warning">Group marked as {{ label('G') }}, but {{ badge(data.memberGroups|length) }} groups are member of this group.</span></dd>

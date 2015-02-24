@@ -298,13 +298,12 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->groups;
     }
 
-    public function _getAllGroupNames()
+    public function getGroupsRecursive()
     {
         $groups = array();
         foreach ($this->groups as $group) {
-            $groups = array_merge($groups, $group->_getAllGroupNames());
+            $group->getGroupsRecursive($groups);
         }
-
         return $groups;
     }
 

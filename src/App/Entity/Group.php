@@ -271,16 +271,14 @@ class Group
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function _getAllGroupNames()
+    public function getGroupsRecursive(&$groups = array())
     {
-        $groups = array();
-        if ($this->isExportable()) {
-            $groups[$this->getName()] = true;
-        }
+        if (isset($groups[$this->getName()]))
+            return;
+        $groups[$this->getName()] = $this;
         foreach ($this->groups as $group) {
-            $groups = array_merge($groups, $group->_getAllGroupNames());
+            $group->getGroupsRecursive($groups);
         }
-
         return $groups;
     }
 
