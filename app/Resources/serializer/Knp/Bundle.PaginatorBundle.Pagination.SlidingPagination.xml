@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination" xmlns:h="https://github.com/willdurand/Hateoas">
+        <h:relation rel="prev">
+            <h:href uri="expr(service('router').generate(object.getRoute(), object.getQuery({media_type: null, page: object.getCurrentPageNumber() - 1})))" />
+            <h:exclusion groups="list" exclude-if="expr(object.getCurrentPageNumber() &lt;= 1)" />
+        </h:relation>
+        <h:relation rel="next">
+            <h:href uri="expr(service('router').generate(object.getRoute(), object.getQuery({media_type: null, page: object.getCurrentPageNumber() + 1})))" />
+            <h:exclusion groups="list" exclude-if="expr(object.getCurrentPageNumber()*object.getItemNumberPerPage() &gt;= object.getTotalItemCount())" />
+        </h:relation>
+    </class>
+</serializer>
