@@ -6,17 +6,5 @@
         </property>
         <property name="totalCount" groups="list" xml-attribute="true" serialized-name="total" />
         <property name="currentPageNumber" groups="list" xml-attribute="true" serialized-name="page" />
-        <h:relation rel="prev">
-            <h:href route="expr(object.getRoute())">
-                <h:parameter name="page" value="expr(object.getCurrentPageNumber()-1)" />
-            </h:href>
-           <h:exclusion groups="list" exclude-if="expr(object.getCurrentPageNumber() &lt;= 1)" />
-        </h:relation>
-        <h:relation rel="next">
-            <h:href route="expr(object.getRoute())">
-                <h:parameter name="page" value="expr(object.getCurrentPageNumber()+1)" />
-            </h:href>
-            <h:exclusion groups="list" exclude-if="expr(object.getCurrentPageNumber()*object.getItemNumberPerPage() &gt;= object.getTotalItemCount())" />
-        </h:relation>
     </class>
 </serializer>
