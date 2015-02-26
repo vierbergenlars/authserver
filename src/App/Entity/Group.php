@@ -282,6 +282,17 @@ class Group
         return $groups;
     }
 
+    public function getMemberGroupsRecursive(&$groups = array())
+    {
+        if (!isset($groups[$this->getName()])) {
+            $groups[$this->getName()] = $this;
+            foreach ($this->memberGroups as $group) {
+                $group->getMemberGroupsRecursive($groups);
+            }
+        }
+        return array_values($groups);
+    }
+
     /**
      * Set exportable
      *

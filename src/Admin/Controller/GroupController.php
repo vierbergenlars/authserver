@@ -4,11 +4,13 @@ namespace Admin\Controller;
 
 use Admin\Controller\Traits\Routes\LinkUnlinkTrait;
 use App\Entity\Group;
+use App\Entity\GroupRepository;
 use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View as AView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use vierbergenlars\Bundle\RadRestBundle\View\View;
-use FOS\RestBundle\Controller\Annotations\View as AView;
 
 class GroupController extends DefaultController
 {
@@ -67,7 +69,14 @@ class GroupController extends DefaultController
     {
         $group = $this->getAction($id)->getData();
         /* @var $group Group */
-        $view  = View::create($this->getPaginator()->paginate($group->getMembers(), $request->query->get('page', 1)));
+        $repo  = $this->getResourceManager();
+
+        if (!$repo instanceof GroupRepository) {
+            throw new HttpException(503);
+        }
+        /* @var $repo GroupRepository */
+        $members = $repo->getMembersQuery($group, $request->query->has('all'));
+        $view    = View::create($this->getPaginator()->paginate($members, $request->query->get('page', 1)));
         $view->setExtraData(array(
             'group' => $group,
         ));
