@@ -14,7 +14,7 @@
                 {% include 'AdminBundle:Group:flags.html.twig' with {obj: data} only %}
             </dd>
             <dt>Member of</dt><dd>
-                {% for g in data.groupsRecursive %}
+                {% for g in data.groupsRecursive if g != data %}
                     <a href="{{ url(controller.route('get'), {id: g.id}) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group fa-fw') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
