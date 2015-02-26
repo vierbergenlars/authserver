@@ -6,9 +6,6 @@
         <property name="groups" serialized-name="parents" groups="admin_group_object" max-depth="1">
             <xml-list entry-name="group" />
         </property>
-        <property name="members" groups="admin_group_object">
-            <xml-list entry-name="user" />
-        </property>
         <property name="memberGroups" serialized-name="members" groups="admin_group_object" max-depth="1">
             <xml-list entry-name="group" />
         </property>
@@ -17,6 +14,12 @@
                 <h:parameter name="id" value="expr(object.getId())" />
             </h:href>
             <h:exclusion groups="list,object" />
+        </h:relation>
+        <h:relation rel="members">
+            <h:href route="admin_group_get_members">
+                <h:parameter name="id" value="expr(object.getId())" />
+            </h:href>
+            <h:exclusion groups="admin_group_object" />
         </h:relation>
     </class>
 </serializer>

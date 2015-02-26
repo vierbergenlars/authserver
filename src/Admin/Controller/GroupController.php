@@ -3,8 +3,14 @@
 namespace Admin\Controller;
 
 use Admin\Controller\Traits\Routes\LinkUnlinkTrait;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Entity\Group;
+use App\Entity\GroupRepository;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\View as AView;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use vierbergenlars\Bundle\RadRestBundle\View\View;
 
 class GroupController extends DefaultController
 {
@@ -53,5 +59,42 @@ class GroupController extends DefaultController
         $actions['Member types']['PATCH_noGroups_true'] = 'Deny groups';
 
         return $actions;
+    }
+
+    /**
+     * @Get(path="/{id}/members")
+     * @AView
+     */
+    public function getMembersAction(Request $request, $id)
+    {
+        $group = $this->getAction($id)->getData();
+        /* @var $group Group */
+        $repo  = $this->getResourceManager();
+
+        if (!$repo instanceof GroupRepository) {
+            throw new HttpException(503);
+        }
+        /* @var $repo GroupRepository */
+        $members = $repo->getMembersQuery($group, $request->query->has('all'));
+        $view    = View::create($this->getPaginator()->paginate($members, $request->query->get('page', 1)));
+        $view->setExtraData(array(
+            'group' => $group,
+        ));
+        $view->getSerializationContext()->setGroups($this->getSerializationGroups('get_members'));
+
+        return $this->handleView($view);
+    }
+
+    public function getSerializationGroups($action)
+    {
+        switch($action) {
+            case 'get_members':
+                return array(
+                    'admin_group_list_members',
+                    'list',
+                );
+            default:
+                return parent::getSerializationGroups($action);
+        }
     }
 }

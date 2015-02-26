@@ -7,6 +7,20 @@ use App\Search\SearchValueException;
 
 class GroupRepository extends EntityRepository
 {
+
+    public function getMembersQuery(Group $group, $recursive)
+    {
+        return $this->getEntityManager()
+                        ->createQueryBuilder()
+                        ->select('u')
+                        ->from('AppBundle:User', 'u')
+                        ->innerJoin('u.groups', 'g')
+                        ->where('g IN(:groups)')
+                        ->getQuery()
+                        ->setParameter('groups', $recursive ? $group->getMemberGroupsRecursive()
+                                            : $group);
+    }
+
     public function find($id)
     {
         if (is_array($id)||is_int($id)||is_numeric($id)) {
