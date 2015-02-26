@@ -20,24 +20,19 @@
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
-            {% if data.members|length > 0 %}
-                <dt>Members</dt><dd>
-                    {% if data.members|length < 20 %}
-                        {% for u in data.members %}
-                            <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
-                        {% endfor %}
-                    {% else %}
-                        {{ badge(data.members|length) }}
-                    {% endif %}
-                </dd>
-            {% endif %}
-            {% if data.memberGroups|length > 0 %}
-                <dt>Members</dt><dd>
-                    {% for g in data.memberGroups %}
-                        <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+            <dt>Members</dt><dd>
+                {% if data.members|length < 20 %}
+                    {% for u in data.members %}
+                        <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
                     {% endfor %}
-                </dd>
-            {% endif %}
+                {% else %}
+                <a href="{{ url(controller.route('get_members'), { id: data.id }) }}">{{ icon('list fa-fw') }} Show {{ data.members|length }} members</a><br>
+                {% endif %}
+                {% for g in data.memberGroups %}
+                    <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+                {% endfor %}
+                <a href="{{ url(controller.route('get_members'), { id: data.id, all: 1 }) }}">{{ icon('list fa-fw') }} Show indirect members</a><br>
+            </dd>
             {% if data.noGroups and data.memberGroups|length > 0 %}
                 <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
                 <dd><span class="text-warning">Group marked as {{ label('G') }}, but {{ badge(data.memberGroups|length) }} groups are member of this group.</span></dd>
