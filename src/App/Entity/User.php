@@ -304,7 +304,7 @@ class User implements AdvancedUserInterface, \Serializable
         foreach ($this->groups as $group) {
             $group->getGroupsRecursive($groups);
         }
-        return $groups;
+        return array_values($groups);
     }
 
     /**

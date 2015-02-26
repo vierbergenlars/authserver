@@ -273,13 +273,13 @@ class Group
 
     public function getGroupsRecursive(&$groups = array())
     {
-        if (isset($groups[$this->getName()]))
-            return;
-        $groups[$this->getName()] = $this;
-        foreach ($this->groups as $group) {
-            $group->getGroupsRecursive($groups);
+        if (!isset($groups[$this->getName()])) {
+            $groups[$this->getName()] = $this;
+            foreach ($this->groups as $group) {
+                $group->getGroupsRecursive($groups);
+            }
         }
-        return $groups;
+        return array_values($groups);
     }
 
     /**
