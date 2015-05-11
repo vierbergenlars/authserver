@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+parameters:
+    mailer_transport:  smtp
+    mailer_host:       smtp.zoho.com
+    mailer_user:       noreply@vbgn.be
+    mailer_password:   fwkt7gd44a
+    mailer_encryption: ssl
+    mailer_sender:     noreply@vbgn.be
+
+    locale: en
+    secret: {{ random.stdout }}
