@@ -12,7 +12,7 @@ admin_user:
     name_prefix: admin_user_
     prefix: users
     requirements:
-        id: "[0-9]+|([0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12})"
+        id: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
 
 admin_group:
     resource: app.admin.group.controller
