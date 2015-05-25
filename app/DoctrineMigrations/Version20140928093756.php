@@ -13,7 +13,7 @@ class Version20140928093756 extends AbstractMigration
     public function up(Schema $schema)
     {
         $apiKey = $schema->createTable('ApiKey');
-        $apiKey->addColumn('id', 'integer');
+        $apiKey->addColumn('id', 'integer')->setAutoincrement(true);
         $apiKey->addColumn('scopes', 'simple_array');
         $apiKey->addColumn('secret', 'string');
         $apiKey->addColumn('name', 'string');

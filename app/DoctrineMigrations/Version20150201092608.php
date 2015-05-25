@@ -13,7 +13,7 @@ class Version20150201092608 extends AbstractMigration
     public function up(Schema $schema)
     {
         $propertiesTable = $schema->createTable('properties');
-        $propertiesTable->addColumn('id', 'integer');
+        $propertiesTable->addColumn('id', 'integer')->setAutoincrement(true);
         $propertiesTable->addColumn('name', 'string')->setLength(25);
         $propertiesTable->addColumn('user_editable', 'boolean');
         $propertiesTable->addColumn('required', 'boolean');
