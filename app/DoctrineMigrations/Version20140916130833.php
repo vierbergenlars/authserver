@@ -22,7 +22,8 @@ class Version20140916130833 extends AbstractMigration
     public function postUp(Schema $schema)
     {
         $this->connection->beginTransaction();
-        $this->connection->query('UPDATE Client SET name = random_id, preApproved = 0');
+        $false = $this->connection->getDatabasePlatform()->convertBooleans(false);
+        $this->connection->query('UPDATE Client SET name = random_id, preApproved = '.$false);
         $this->connection->commit();
     }
 

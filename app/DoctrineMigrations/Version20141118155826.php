@@ -13,7 +13,7 @@ class Version20141118155826 extends AbstractMigration
     public function up(Schema $schema)
     {
         $emailAddress = $schema->createTable('EmailAddress');
-        $emailAddress->addColumn('id', 'integer');
+        $emailAddress->addColumn('id', 'integer')->setAutoincrement(true);
         $emailAddress->addColumn('email', 'string');
         $emailAddress->addColumn('verified', 'boolean');
         $emailAddress->addColumn('verificationCode', 'string')->setNotNull(false);

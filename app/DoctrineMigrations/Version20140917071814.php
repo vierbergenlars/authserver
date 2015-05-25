@@ -14,7 +14,7 @@ class Version20140917071814 extends AbstractMigration
     {
         $user = $schema->getTable('auth_users');
         $group = $schema->createTable('auth_group');
-        $group->addColumn('id', 'integer');
+        $group->addColumn('id', 'integer')->setAutoincrement(true);
         $group->addColumn('name', 'string');
         $group->addColumn('exportable', 'boolean');
         $group->setPrimaryKey(array('id'));

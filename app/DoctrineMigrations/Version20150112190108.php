@@ -12,7 +12,7 @@ class Version20150112190108 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $result = $this->connection->query("SELECT id FROM auth_users WHERE guid IS NULL OR guid = id");
+        $result = $this->connection->query("SELECT id FROM auth_users WHERE guid IS NULL");
         
         $guidQuery = 'SELECT '.$this->platform->getGuidExpression();
         while(($id = $result->fetchColumn()) !== false) {
