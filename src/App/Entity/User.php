@@ -197,7 +197,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getId()
     {
-        return $this->guid;
+        return strtoupper($this->guid);
     }
 
     public function getMigrateId()
@@ -394,7 +394,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function getGuid()
     {
-        return $this->guid;
+        return strtoupper($this->guid);
     }
 
     public function setGuid($guid)
