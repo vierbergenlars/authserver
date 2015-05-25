@@ -12,7 +12,8 @@ class Version20140922150041 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->addSql('UPDATE auth_group SET no_users=0, no_groups=0');
+        $false = $this->connection->getDatabasePlatform()->convertBooleans(false);
+        $this->addSql('UPDATE auth_group SET no_users='.$false.', no_groups='.$false);
     }
 
     public function down(Schema $schema)
