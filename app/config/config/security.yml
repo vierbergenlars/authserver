@@ -60,7 +60,8 @@ security:
             switch_user: true
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login_check, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/pub, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/oauth/v2/auth, role: ROLE_USER }
