@@ -389,7 +389,9 @@ class User implements AdvancedUserInterface, \Serializable
                 return $this->primaryEmailAddress = $email;
         }
 
-        return $this->getEmailAddresses()->get(0)->setPrimary(true);
+        if($mail = $this->getEmailAddresses()->get(0))
+            $mail->setPrimary(true);
+        return $mail;
     }
 
     public function getGuid()
