@@ -55,6 +55,7 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
             /* @var $data \App\Entity\User */
             if ($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
                 $form->remove('enabled');
+                $form->remove('passwordEnabled');
             }
         }
     }
