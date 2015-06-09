@@ -15,3 +15,5 @@ stof_doctrine_extensions:
     orm:
         default:
             loggable: true
+    class:
+        loggable: App\Doctrine\ExtendedLogListener
