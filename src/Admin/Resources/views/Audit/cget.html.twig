@@ -1,7 +1,7 @@
 {% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
-        <h3 class="panel-title">List</h3>
+        <h3 class="panel-title">{{ icon('heartbeat') }} Audit log</h3>
     </div>
     <div class="table-responsive">
         {% if data|length > 0 %}
@@ -22,7 +22,10 @@
                     <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
                   {% endfor %}
                   <td>
-                    {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
+                    <div class="btn-group btn-group-sm">
+                      <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+                      <a class="btn btn-default" href="{{ url(controller.route('target'), {id: obj.id}) }}" title="Go to target">{{ icon('link') }} <span class="sr-only">Go to target</span></a>
+                    </div>
                   </td>
                 </tr>
               {% endfor %}
