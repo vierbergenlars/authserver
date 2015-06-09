@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="app.admin.audit.repo" class="Gedmo\Loggable\Entity\Repository\LogEntryRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+            <argument>Gedmo\Loggable\Entity\LogEntry</argument>
+        </service>
+        <service id="app.admin.audit.resource_manager" class="Admin\Entity\LogEntryRepositoryWrapper">
+            <argument type="service" id="app.admin.audit.repo" />
+        </service>
+        <service id="app.admin.audit.controller" class="Admin\Controller\AuditController">
+            <argument type="service" id="app.admin.audit.resource_manager" />
+            <argument type="service" id="knp_paginator" />
+        </service>
+    </services>
+</container>

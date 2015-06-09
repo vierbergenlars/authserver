@@ -38,6 +38,14 @@ admin_apikey:
     requirements:
         id: "[0-9]+"
 
+admin_audit:
+    resource: app.admin.audit.controller
+    type: rest
+    name_prefix: admin_audit_
+    prefix: auditlog
+    requirements:
+        id: "[0-9]+"
+
 admin_dashboard:
     path: dashboard
     defaults:

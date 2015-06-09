@@ -23,13 +23,6 @@ twig:
     strict_variables: %kernel.debug%
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
-# Doctrine Configuration
-doctrine:
-    dbal: ~
-    orm:
-        auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%

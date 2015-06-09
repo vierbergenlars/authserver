@@ -1,0 +1,36 @@
+{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">List</h3>
+    </div>
+    <div class="table-responsive">
+        {% if data|length > 0 %}
+          <table class="table">
+            <thead>
+              {% set keys = ['objectClass', 'objectId', 'action', 'username', 'loggedAt'] %}
+              <tr>
+                {% for name in keys %}
+                  <th>{{ name|humanize }}</th>
+                {% endfor %}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in data %}
+                <tr>
+                  {% for key in keys %}
+                    <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
+                  {% endfor %}
+                  <td>
+                    {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+    </div>
+    <div class="panel-body text-center">
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+{% endblock %}

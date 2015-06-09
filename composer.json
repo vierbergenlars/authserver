@@ -33,7 +33,8 @@
         "friendsofsymfony/oauth-server-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "vierbergenlars/rad-rest-bundle": "dev-develop",
-        "ircmaxell/password-compat": "~1.0"
+        "ircmaxell/password-compat": "~1.0",
+        "stof/doctrine-extensions-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

@@ -6,3 +6,4 @@ imports:
     - { resource: config/rest_api.yml }
     - { resource: config/oauth_server.yml }
     - { resource: config/serializer.yml }
+    - { resource: config/doctrine.yml }
