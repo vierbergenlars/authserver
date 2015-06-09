@@ -4,12 +4,14 @@ namespace Admin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\OAuthServerBundle\Util\Random;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * ApiKey
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="ApiKeyRepository")
+ * @Gedmo\Loggable
  */
 class ApiKey
 {
@@ -26,6 +28,7 @@ class ApiKey
      * @var array
      *
      * @ORM\Column(name="scopes", type="simple_array")
+     * @Gedmo\Versioned
      */
     private $scopes = array();
 
@@ -40,6 +43,7 @@ class ApiKey
      * @var string
      *
      * @ORM\Column(name="name", type="string")
+     * @Gedmo\Versioned
      */
     private $name;
 

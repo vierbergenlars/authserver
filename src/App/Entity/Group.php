@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Group
  *
  * @ORM\Table(name="auth_group")
  * @ORM\Entity(repositoryClass="GroupRepository")
+ * @Gedmo\Loggable
  */
 class Group
 {
@@ -25,6 +27,7 @@ class Group
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Gedmo\Versioned
      */
     private $name;
 
@@ -32,6 +35,7 @@ class Group
      * @var string
      *
      * @ORM\Column(name="display_name", type="string", length=255, unique=true)
+     * @Gedmo\Versioned
      */
     private $displayName;
 
@@ -67,6 +71,7 @@ class Group
      * @var boolean
      *
      * @ORM\Column(name="exportable", type="boolean")
+     * @Gedmo\Versioned
      */
     private $exportable = true;
 
@@ -77,6 +82,7 @@ class Group
      * @var boolean
      *
      * @ORM\Column(name="no_users", type="boolean")
+     * @Gedmo\Versioned
      */
     private $noUsers = false;
 
@@ -87,6 +93,7 @@ class Group
      * @var boolean
      *
      * @ORM\Column(name="no_groups", type="boolean")
+     * @Gedmo\Versioned
      */
     private $noGroups = false;
 
