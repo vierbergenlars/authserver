@@ -2,13 +2,17 @@
 
 namespace Admin\Controller;
 
+use App\Entity\UserProperty;
+use Doctrine\Common\Persistence\ObjectManager;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View as AView;
+use Gedmo\Loggable\Entity\LogEntry;
 use Knp\Component\Pager\Paginator;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use vierbergenlars\Bundle\RadRestBundle\Controller\RadRestControllerInterface;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\DefaultsTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Pagination\KnpPaginationTrait;
@@ -31,11 +35,13 @@ class AuditController implements RadRestControllerInterface
 
     private $resourceManager;
     private $paginator;
+    private $om;
 
-    public function __construct(ResourceManagerInterface $resourceManager,Paginator $paginator)
+    public function __construct(ResourceManagerInterface $resourceManager,Paginator $paginator, ObjectManager $om)
     {
         $this->resourceManager = $resourceManager;
         $this->paginator = $paginator;
+        $this->om = $om;
     }
 
     /**
@@ -46,6 +52,45 @@ class AuditController implements RadRestControllerInterface
     public function cgetAction(Request $request)
     {
         return $this->_LT_cgetAction($request);
+    }
+
+    /**
+     * @AView
+     * @Get
+     */
+    public function targetAction($id)
+    {
+        $logEntry = $this->getAction($id)->getData();
+
+        /* @var $logEntry LogEntry */
+        $class = $logEntry->getObjectClass();
+        $repo = $this->om->getRepository($class);
+        $object = $repo->find(array('id' => $logEntry->getObjectId()));
+        if(!$object)
+            throw new NotFoundHttpException;
+
+        if($object instanceof UserProperty) {
+            $object = $object->getUser();
+            $class  = 'App\Entity\User';
+        }
+
+        $parts = explode('\\',$class);
+
+        $part1 = array_shift($parts);
+        switch($part1) {
+            case 'App':
+            case 'Admin':
+                break;
+            default:
+                throw new NotFoundHttpException;
+        }
+        if(array_shift($parts) !== 'Entity')
+            throw new NotFoundHttpException;
+
+        $route = 'admin_'.strtolower(implode('_', $parts)).'_get';
+
+        return View::createRouteRedirect($route, array('id'=>$object->getId()));
+
     }
 
     public function getResourceManager()

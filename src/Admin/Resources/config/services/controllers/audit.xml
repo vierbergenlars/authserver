@@ -10,6 +10,7 @@
         <service id="app.admin.audit.controller" class="Admin\Controller\AuditController">
             <argument type="service" id="app.admin.audit.resource_manager" />
             <argument type="service" id="knp_paginator" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
     </services>
 </container>
