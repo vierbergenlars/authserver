@@ -39,6 +39,7 @@
             <constraint name="Choice">
                 <option name="choices">
                     <value>ROLE_USER</value>
+                    <value>ROLE_AUDIT</value>
                     <value>ROLE_ADMIN</value>
                     <value>ROLE_SUPER_ADMIN</value>
                 </option>

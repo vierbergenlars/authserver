@@ -21,7 +21,8 @@
                             <label>
                                 <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">
                                 {{ obj.username }}
-                                {% if 'ROLE_SUPER_ADMIN' == obj.role %}
+                                {% if 'ROLE_USER' == obj.role %}
+                                {% elseif 'ROLE_SUPER_ADMIN' == obj.role %}
                                     {{ label_danger('Super admin') }}
                                 {% elseif 'ROLE_ADMIN' == obj.role %}
                                     {{ label_danger('Admin') }}
