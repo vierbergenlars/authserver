@@ -29,14 +29,16 @@ class ExtendedLogListener extends  LoggableListener
         }
 
         $logEntryData = $logEntry->getData();
-        $logEntryData[$fieldName] =  array(
-            '+' => array_map(function(Group $obj) {
+        if(count($insertDiff) > 0) {
+            $logEntryData[$fieldName]['+'] = array_map(function(Group $obj) {
                 return $obj->getMigrateId();
-            },$insertDiff),
-            '-' => array_map(function(Group $obj) {
+            },$insertDiff);
+        }
+        if(count($deleteDiff) > 0) {
+            $logEntryData[$fieldName]['-'] = array_map(function(Group $obj) {
                 return $obj->getMigrateId();
-            },$deleteDiff),
-        );
+            },$deleteDiff);
+        }
         $logEntry->setData($logEntryData);
     }
 
