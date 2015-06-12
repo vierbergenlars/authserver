@@ -1,6 +1,7 @@
 - hosts: all
   tasks:
-    - apt_repository: repo="deb http://ftp.us.debian.org/debian wheezy-backports main" state=present
+    - name: Add wheezy-backports apt repository
+      apt_repository: repo="deb http://ftp.us.debian.org/debian wheezy-backports main" state=present
     - name: Install packages
       apt: name={{ item }} state=present update_cache=yes
       with_items:
@@ -8,42 +9,93 @@
         - libapache2-mod-php5
         - php5
         - php5-sqlite
+        - php5-curl
         - git
         - nodejs-legacy
         - curl
-    - shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
-    - apache2_module: name=php5 state=present
+    - name: Install npm
+      shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
+    - name: Enable php5 apache module
+      apache2_module: name=php5 state=present
       notify: reload httpd
-    - shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
-    - lineinfile: regexp='DocumentRoot' line='DocumentRoot /var/www/web' dest=/etc/apache2/sites-available/default state=present
+    - name: Install composer
+      shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
+    - name: Set document root to web/
+      lineinfile: regexp='DocumentRoot' line='DocumentRoot /var/www/web' dest=/etc/apache2/sites-available/default state=present
       notify: reload httpd
-    - replace: regexp='AllowOverride None' replace='AllowOverride All' dest=/etc/apache2/sites-available/default
-    - command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
+    - name: Allow all .htaccess rules
+      replace: regexp='AllowOverride None' replace='AllowOverride All' dest=/etc/apache2/sites-available/default
       notify: reload httpd
-    - command: cp -r /vagrant/{{ item }} /var/www/{{ item }}
-      with_items:
-        - app
-        - web
-        - composer.json
-        - composer.lock
-        - package.json
-    - shell: base64 < /dev/urandom | head -1
-      register: random
-    - template: src=parameters.yml.j2 dest=/var/www/app/config/parameters.yml
-    - composer: working_dir=/var/www no_scripts=yes
-    - npm: path=/var/www
-    - command: php app/console {{ item }} -n chdir=/var/www
-      with_items:
-        - cache:clear
-        - assets:install
-        - assetic:dump
-        - doctrine:migrations:migrate
-    - file: path=/var/www/{{ item }} owner=www-data mode=u+rw,o=r recurse=yes state=directory
+    - name: Enable mod_rewrite
+      command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
+      notify: reload httpd
+    - name: Create directory structure
+      file: path=/var/www/{{ item }} recurse=yes state=directory
       with_items:
         - app/cache
         - app/logs
-    - command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
-    - service: name=apache2 state=started 
+        - web
+    - name: Copy static files
+      command: cp -r /vagrant/{{ item }} /var/www/{{ item|dirname }}
+      with_items:
+        - app/config
+        - app/DoctrineMigrations
+        - app/Resources
+        - app/AppKernel.php
+        - app/AppCache.php
+        - app/console
+        - app/autoload.php
+        - web/.htaccess
+        - web/app_dev.php
+        - composer.json
+        - composer.lock
+        - package.json
+    - name: Generate random secret
+      shell: base64 < /dev/urandom | head -1
+      register: random
+    - name: Create app/config/parameters.yml
+      template: src=parameters.yml.j2 dest=/var/www/app/config/parameters.yml
+    - name: composer install
+      composer: working_dir=/var/www no_scripts=yes
+    - name: npm install
+      npm: path=/var/www
+    - name: Clear cache, install assets and migrate database
+      command: php app/console {{ item }} -n chdir=/var/www
+      with_items:
+        - cache:clear
+        - assets:install
+        - braincrafted:bootstrap:install
+        - assetic:dump
+        - doctrine:migrations:migrate
+    - name: Create admin user 'admin'
+      command: php app/console app:adduser --super-admin admin admin admin@vbgn.be -n chdir=/var/www
+      register: adduser
+      changed_when: adduser.rc == 0
+      failed_when: False
+    - name: Set password of admin user to 'admin'
+      command: php app/console app:passwd admin admin -n chdir=/var/www
+      when: adduser.rc != 0
+    - name: Make cache & logs writeable by webserver
+      file: path=/var/www/{{ item }} owner=www-data mode=u+rw,o=r recurse=yes state=directory
+      with_items:
+        - app
+        - app/cache
+        - app/logs
+    - name: Configure apache to use development environment
+      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
+    - name: Remove restrictions on web/app_dev.php
+      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
+    - name: "
+    Some helpful information.\n
+    Webserver running at http://192.168.80.2/\n
+    Username: admin\n
+    Password: admin\n
+    \n
+    Run 'vagrant provision' when you update files outside src/\n
+    \n
+    "
+      service: name=apache2 state=started
+
   handlers:
    - name: reload httpd
      service: name=apache2 state=reloaded
