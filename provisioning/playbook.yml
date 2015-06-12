@@ -36,7 +36,7 @@
         - app/logs
         - web
     - name: Copy static files
-      command: cp -r /vagrant/{{ item }} /var/www/{{ item }}
+      command: cp -r /vagrant/{{ item }} /var/www/{{ item|dirname }}
       with_items:
         - app/config
         - app/DoctrineMigrations
@@ -78,6 +78,7 @@
     - name: Make cache & logs writeable by webserver
       file: path=/var/www/{{ item }} owner=www-data mode=u+rw,o=r recurse=yes state=directory
       with_items:
+        - app
         - app/cache
         - app/logs
     - name: Configure apache to use development environment
