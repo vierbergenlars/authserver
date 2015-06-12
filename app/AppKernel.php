@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new vierbergenlars\Bundle\RadRestBundle\VlRadRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new App\AppBundle(),

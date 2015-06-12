@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -10,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="auth_users")
  * @ORM\Entity(repositoryClass="UserRepository")
  * @ORM\HasLifecycleCallbacks
+ * @Gedmo\Loggable
  */
 class User implements AdvancedUserInterface, \Serializable
 {
@@ -27,21 +29,25 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
+     * @Gedmo\Versioned
      */
     private $username;
 
     /**
      * @ORM\Column(name="display_name", type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $displayName;
 
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
+     * @Gedmo\Versioned
      */
     private $password;
 
     /**
      * @ORM\Column(name="password_enabled", type="integer")
+     * @Gedmo\Versioned
      */
     private $passwordEnabled;
 
@@ -59,11 +65,13 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @ORM\Column(name="roles", type="string")
+     * @Gedmo\Versioned
      */
     private $role;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @Gedmo\Versioned
      */
     private $enabled;
 

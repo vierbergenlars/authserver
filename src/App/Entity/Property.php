@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Property
  *
  * @ORM\Table(name="properties")
  * @ORM\Entity(repositoryClass="PropertyRepository")
+ * @Gedmo\Loggable
  */
 class Property
 {
@@ -23,6 +25,7 @@ class Property
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=25, unique=true)
+     * @Gedmo\Versioned
      */
     private $name;
 
@@ -30,6 +33,7 @@ class Property
      * @var string
      *
      * @ORM\Column(name="display_name", type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $displayName;
 
@@ -37,6 +41,7 @@ class Property
      * @var boolean
      *
      * @ORM\Column(name="user_editable", type="boolean")
+     * @Gedmo\Versioned
      */
     private $userEditable;
 
@@ -44,6 +49,7 @@ class Property
      * @var boolean
      *
      * @ORM\Column(name="required", type="boolean")
+     * @Gedmo\Versioned
      */
     private $required;
 
@@ -51,6 +57,7 @@ class Property
      * @var string
      *
      * @ORM\Column(name="validation_regex", type="text")
+     * @Gedmo\Versioned
      */
     private $validationRegex = '/^.*$/';
 

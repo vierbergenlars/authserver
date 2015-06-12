@@ -10,7 +10,10 @@
                 <dt>{{ key|humanize }}</dt>
                 {% if attribute(data, key)|radrest_object_stringify == '(Array)' %}
                     <dd>
-                        {% for elem in attribute(data, key) %}
+                        {% for k,elem in attribute(data, key) %}
+                            {% if k is not same as(loop.index0) %}
+                                <b>{{ k }}:</b>
+                            {% endif %}
                             {{ elem|radrest_object_stringify }}<br>
                         {% else %}
                             <span class="text-muted">None</span>

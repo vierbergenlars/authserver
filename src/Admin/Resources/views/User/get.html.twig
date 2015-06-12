@@ -42,12 +42,14 @@
                 {% endif %}
             </dd>
             <dt>Local flags</dt><dd>
-                {% if 'ROLE_SUPER_ADMIN' == data.role %}
+                {% if 'ROLE_USER' == data.role %}
+                    <span class="text-muted">(None)</span>
+                {% elseif 'ROLE_SUPER_ADMIN' == data.role %}
                     {{ label_danger('Super admin') }}
                 {% elseif 'ROLE_ADMIN' == data.role %}
                     {{ label_danger('Admin') }}
                 {% else %}
-                    <span class="text-muted">(None)</span>
+                    {{ data.role }}
                 {% endif %}
             </dd>
             <dt>Member of</dt><dd>

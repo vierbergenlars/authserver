@@ -4,9 +4,11 @@ namespace App\Entity\OAuth;
 
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="ClientRepository")
+ * @Gedmo\Loggable
  */
 class Client extends BaseClient
 {
@@ -19,13 +21,20 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="string", unique=true)
+     * @Gedmo\Versioned
      */
     private $name;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Gedmo\Versioned
      */
     private $preApproved;
+
+    /**
+     * @Gedmo\Versioned
+     */
+    protected $redirectUris = array();
 
     public function __construct()
     {

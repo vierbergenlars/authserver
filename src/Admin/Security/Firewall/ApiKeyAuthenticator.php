@@ -36,7 +36,12 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         $apiKey = $token->getCredentials();
-        $key = $this->apiProvider->find($apiKey[0]);
+        if(strpos($apiKey[0], ';') !== false) {
+            list($apiKeyId,) = explode(';', $apiKey[0]);
+        } else {
+            $apiKeyId = $apiKey[0];
+        }
+        $key = $this->apiProvider->find($apiKeyId);
 
         if (!$key) {
             throw new AuthenticationException(
@@ -57,7 +62,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         }
 
         return new PreAuthenticatedToken(
-            '-apikey-'.$key->getId(),
+            '-apikey-'.$apiKey[0],
             $apiKey,
             $providerKey,
             $roles

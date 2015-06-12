@@ -46,6 +46,9 @@ class UserRepository extends EntityRepository
                 $queryBuilder->leftJoin('AppBundle:EmailAddress', 'e', 'WITH', 'e.user = u');
                 $and->add($queryBuilder->expr()->like('e.email', '?'.$i));
                 $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));
+            } elseif($block['name'] === 'role' && $block['value'] === 'ROLE_USER') {
+                $and->add($queryBuilder->expr()->in('u.role', '?'.$i));
+                $queryBuilder->setParameter($i, array($block['value'], 'ROLE_AUDIT'));
             } elseif (strpos($block['value'], '*') !== false) {
                 $and->add($queryBuilder->expr()->like('u.'.$block['name'], '?'.$i));
                 $queryBuilder->setParameter($i, str_replace('*', '%', $block['value']));

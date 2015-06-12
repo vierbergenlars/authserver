@@ -1,0 +1,39 @@
+{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ icon('heartbeat') }} Audit log</h3>
+    </div>
+    <div class="table-responsive">
+        {% if data|length > 0 %}
+          <table class="table">
+            <thead>
+              {% set keys = ['objectClass', 'objectId', 'action', 'username', 'loggedAt'] %}
+              <tr>
+                {% for name in keys %}
+                  <th>{{ name|humanize }}</th>
+                {% endfor %}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in data %}
+                <tr>
+                  {% for key in keys %}
+                    <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
+                  {% endfor %}
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+                      <a class="btn btn-default" href="{{ url(controller.route('target'), {id: obj.id}) }}" title="Go to target">{{ icon('link') }} <span class="sr-only">Go to target</span></a>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+    </div>
+    <div class="panel-body text-center">
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+{% endblock %}

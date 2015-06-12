@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\OAuthServerBundle\Util\Random;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
+ * @Gedmo\Loggable
  */
 class EmailAddress implements \Serializable
 {
@@ -19,27 +21,32 @@ class EmailAddress implements \Serializable
 
     /**
      * @ORM\Column(type="string", unique=true)
+     * @Gedmo\Versioned
      */
     private $email;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Gedmo\Versioned
      */
     private $verified = false;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Gedmo\Versioned
      */
     private $verificationCode;
 
     /**
      * @ORM\Column(name="primary_mail", type="boolean")
+     * @Gedmo\Versioned
      */
     private $primary = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="emailAddresses")
      * @ORM\JoinColumn(nullable=false)
+     * @Gedmo\Versioned
      * @var User
      */
     private $user;
