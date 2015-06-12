@@ -23,17 +23,39 @@
                 <tr>
                     <td>{{ name }}</td>
                     {% if value is iterable %}
-                        <td>
-                            {% for k,v in value if v|length > 0 %}
-                                <b>{{ k }}:</b>
-                                    {% if v is iterable %}
-                                        {{ v|join }}
-                                    {% else %}
-                                        {{ v|radrest_object_stringify }}
-                                    {% endif %}
+                        {% if value.id is defined %}
+                            <td><a href="{{ url(controller.route('target'), {id:id,property:name}) }}">{{ value.id|radrest_object_stringify }}</a></td>
+                        {% elseif value['+'] is defined or value['-'] is defined %}
+                            <td>
+                                {% if value['+'] is defined %}
+                                    <b>Added:</b>
+                                    {% for v in value['+'] %}
+                                        <a href="{{ url(controller.route('target'), {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
+                                        {% if not loop.last %}, {% endif %}
+                                    {% endfor %}
                                     <br>
-                            {% endfor %}
-                        </td>
+                                {% endif %}
+                                {% if value['-'] is defined %}
+                                    <b>Removed:</b>
+                                    {% for v in value['-'] %}
+                                        <a href="{{ url(controller.route('target'), {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
+                                        {% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td>
+                                {% for k,v in value if v|length > 0 %}
+                                    <b>{{ k }}:</b>
+                                        {% if v is iterable %}
+                                            {{ v|join(',') }}
+                                        {% else %}
+                                            {{ v|radrest_object_stringify }}
+                                        {% endif %}
+                                        <br>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                     {% else %}
                         <td>{{ value|radrest_object_stringify }}</td>
                     {% endif %}

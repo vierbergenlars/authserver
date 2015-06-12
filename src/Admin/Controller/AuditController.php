@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use App\Entity\EmailAddress;
 use App\Entity\UserProperty;
 use Doctrine\Common\Persistence\ObjectManager;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -56,22 +57,53 @@ class AuditController implements RadRestControllerInterface
 
     /**
      * @AView
-     * @Get
+     * @Get(path="/{id}/target/{property}/{propertyId}", defaults={"property"=null, "propertyId"=null})
      */
-    public function targetAction($id)
+    public function targetAction($id, $property = null, $propertyId = null)
     {
         $logEntry = $this->getAction($id)->getData();
 
         /* @var $logEntry LogEntry */
         $class = $logEntry->getObjectClass();
+        $id = $logEntry->getObjectId();
+
+        if($property !== null) {
+            switch($class) {
+                case 'App\Entity\User':
+                case 'App\Entity\Group':
+                    if($property === 'groups') {
+                        if($propertyId !== null) {
+                            $class='App\Entity\Group';
+                            $id = $propertyId;
+                            break;
+                        }
+                    }
+                    throw new NotFoundHttpException;
+                    break;
+                case 'App\Entity\UserProperty':
+                    if($property !== 'user' && $property !== 'property')
+                        throw new NotFoundHttpException;
+                    $data = $logEntry->getData();
+                    $class = 'App\Entity\\'.ucfirst($property);
+                    $id = $data[$property]['id'];
+                    break;
+                default:
+                    throw new NotFoundHttpException;
+            }
+        }
+
         $repo = $this->om->getRepository($class);
-        $object = $repo->find(array('id' => $logEntry->getObjectId()));
+        $object = $repo->find(array('id' => $id));
         if(!$object)
             throw new NotFoundHttpException;
+
 
         if($object instanceof UserProperty) {
             $object = $object->getUser();
             $class  = 'App\Entity\User';
+        } elseif($object instanceof EmailAddress) {
+            $object = $object->getUser();
+            $class = 'App\Entity\User';
         }
 
         $parts = explode('\\',$class);
@@ -86,6 +118,9 @@ class AuditController implements RadRestControllerInterface
         }
         if(array_shift($parts) !== 'Entity')
             throw new NotFoundHttpException;
+
+        if($parts == array('Property'))
+            $parts[0] = 'UserProperty';
 
         $route = 'admin_'.strtolower(implode('_', $parts)).'_get';
 
