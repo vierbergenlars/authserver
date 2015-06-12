@@ -10,7 +10,7 @@
             <dt>Action</dt><dd>{{ data.action }}</dd>
             <dt>Version</dt><dd>{{ data.version }}</dd>
             <dt>Timestamp</dt><dd>{{ data.loggedAt|date }}</dd>
-            <dt>Editor</dt><dd>{{ data.username }}</dd>
+            <dt>Editor</dt><dd>{% if data.username == null %}<span class="text-muted">(Anonymous)</span>{% else %}{{ data.username }}{% endif %}</dd>
         </dl>
     </div>
     <div class="table-responsive">
@@ -22,7 +22,9 @@
             {% for name,value in data.data %}
                 <tr>
                     <td>{{ name }}</td>
-                    {% if value is iterable %}
+                    {% if name in ['password', 'verificationCode'] and value != null %}
+                        <td><span class="text-muted">(Secret)</span></td>
+                    {% elseif value is iterable %}
                         {% if value.id is defined %}
                             <td><a href="{{ url(controller.route('target'), {id:id,property:name}) }}">{{ value.id|radrest_object_stringify }}</a></td>
                         {% elseif value['+'] is defined or value['-'] is defined %}

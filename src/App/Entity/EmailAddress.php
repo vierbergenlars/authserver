@@ -33,6 +33,7 @@ class EmailAddress implements \Serializable
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Gedmo\Versioned
      */
     private $verificationCode;
 
