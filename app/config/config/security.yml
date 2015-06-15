@@ -47,6 +47,7 @@ security:
 
         api:
             pattern:    ^/api
+            http_basic: ~
             fos_oauth:  true
             stateless:  true
 
