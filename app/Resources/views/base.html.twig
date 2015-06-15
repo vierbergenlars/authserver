@@ -29,28 +29,24 @@
                         {% endmacro %}
                         {% import _self as self %}
                         <ul class="nav navbar-nav navbar-left">
-                            {% if app.request.attributes.get('_route') starts with 'admin_' %}
-                                {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
-                                    {{ self.render_admin_link('admin_user_', 'user', 'Users') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_SCOPE_R_GROUP') %}
-                                    {{ self.render_admin_link('admin_group_', 'group', 'Groups') }}
-                                {% endif %}
+                            {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
+                                {{ self.render_admin_link('admin_user_', 'user', 'Users') }}
+                            {% endif %}
+                            {% if is_granted('ROLE_SCOPE_R_GROUP') %}
+                                {{ self.render_admin_link('admin_group_', 'group', 'Groups') }}
                             {% endif %}
                             {% if is_granted('ROLE_AUDIT') %}
                                 {{  self.render_admin_link('admin_audit_', 'heartbeat', 'Audit Log') }}
                             {% endif %}
-                            {% if app.request.attributes.get('_route') starts with 'admin_' %}
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                    <li class="dropdown">
-                                        <a href="{{ url('admin_dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">{{ icon('ellipsis-v fa-fw') }} More <span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            {{ self.render_admin_link('admin_userproperty_', 'list', 'User Properties') }}
-                                            {{ self.render_admin_link('admin_oauth_client_', 'cube', 'OAuth Apps') }}
-                                            {{ self.render_admin_link('admin_apikey_', 'key', 'API keys') }}
-                                        </ul>
-                                    </li>
-                                {% endif %}
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                <li class="dropdown">
+                                    <a href="{{ url('admin_dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">{{ icon('ellipsis-v fa-fw') }} More <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {{ self.render_admin_link('admin_userproperty_', 'list', 'User Properties') }}
+                                        {{ self.render_admin_link('admin_oauth_client_', 'cube', 'OAuth Apps') }}
+                                        {{ self.render_admin_link('admin_apikey_', 'key', 'API keys') }}
+                                    </ul>
+                                </li>
                             {% endif %}
                         </ul>
                     {% block navigation %}
@@ -100,7 +96,7 @@
                                 <a href="{{ url('home', {'_switch_user':'_exit'}) }}" class="text-muted">{{ icon('stethoscope fa-fw')}}</a>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ url('admin_dashboard') }}" class="text-muted">{{ icon('magic fa-fw') }}</a>
+                                {{ icon('magic fa-fw') }}
                             {% elseif is_granted('ROLE_USER') %}
                                 {{ icon('smile-o fa-fw') }}
                             {% else %}
