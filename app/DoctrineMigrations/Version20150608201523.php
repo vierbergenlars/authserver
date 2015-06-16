@@ -8,14 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150608195437 extends AbstractMigration
+class Version20150608201523 extends AbstractMigration
 {
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-        $schema->getTable('user_properties')->addColumn('id', 'integer')->setNotnull(false);
+        $schema->getTable('user_properties')
+            ->getColumn('id')->setAutoincrement(true);
     }
 
     /**
@@ -23,8 +24,7 @@ class Version20150608195437 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $schema->getTable('user_properties')->dropColumn('id');
-        // this down() migration is auto-generated, please modify it to your needs
-
+        $schema->getTable('user_properties')
+            ->getColumn('id')->setAutoincrement(false);
     }
 }
