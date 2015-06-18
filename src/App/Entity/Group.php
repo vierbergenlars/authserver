@@ -76,6 +76,15 @@ class Group
     private $exportable = true;
 
     /**
+     * Marks the groups as joinable/leavable by normal users
+     * @var boolean
+     *
+     * @ORM\Column(name="user_joinable", type="boolean")
+     * @Gedmo\Versioned
+     */
+    private $userJoinable = false;
+
+    /**
      * Marks the group as not containing any users
      *
      * This is an advisory flag only, adding users will not be blocked
@@ -378,4 +387,23 @@ class Group
     {
         return $this->noGroups;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isUserJoinable()
+    {
+        return $this->userJoinable;
+    }
+
+    /**
+     * @param boolean $userJoinable
+     */
+    public function setUserJoinable($userJoinable)
+    {
+        $this->userJoinable = $userJoinable;
+        return $this;
+    }
+
+
 }
