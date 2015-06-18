@@ -3,6 +3,7 @@
 namespace User\Controller;
 
 use App\Entity\EmailAddress;
+use App\Entity\Group;
 use App\Entity\OAuth\UserAuthorization;
 use App\Entity\Property;
 use App\Entity\User;
@@ -11,9 +12,11 @@ use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use User\Form\AddGroupType;
 use User\Form\AddPasswordType;
 use User\Form\ChangePasswordType;
 use User\Form\DeleteAuthorizedAppType;
+use User\Form\DeleteGroupType;
 use User\Form\EditEmailAddressType;
 use User\Form\EmailAddressType;
 
@@ -28,6 +31,7 @@ class ProfileController extends Controller
             'data'=>$this->getUser(),
             'form' => array(
                 'add_email' => $this->createForm(new EmailAddressType())->createView(),
+                'add_group' => $this->createForm(new AddGroupType($this->getUser()))->createView(),
             ),
         );
     }
@@ -276,6 +280,74 @@ class ProfileController extends Controller
 
         return $form;
     }
+
+    public function postGroupAction(Request $request)
+    {
+        $form = $this->createForm(new AddGroupType($this->getUser()));
+
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $group = $form->get('group')->getData();
+            /* @var $group Group */
+            if(!$group->isUserJoinable())
+                throw $this->createAccessDeniedException('This group is not user-editable');
+            $user = $this->getUser();
+            /* @var $user User */
+            if($user->getGroups()->contains($group)) {
+                $this->getFlash()->alert('You are already a member of '.$group->getDisplayName().'.');
+                return $this->redirectToProfile();
+            }
+            $user->addGroup($group);
+            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->getFlash()->success('You joined the group '.$group->getDisplayName().'.');
+        } else {
+            $errString = 'Problems while adding group.';
+            foreach ($form->getErrors(true) as $e) {
+                $errString.="\n".$e->getMessage();
+            }
+            $this->getFlash()->error($errString);
+        }
+
+        return $this->redirectToProfile();
+    }
+
+    /**
+     * @Template
+     * Internal action, not exposed in a route
+     */
+    public function removeGroupAction($groupId)
+    {
+        return $this->createForm(new DeleteGroupType(), array('id'=>$groupId));
+    }
+
+    public function deleteGroupAction(Request $request)
+    {
+        $form = $this->createForm(new DeleteGroupType());
+
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $groupId = $form->get('id')->getData();
+            $group = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
+            /* @var $group Group */
+            if($group === null)
+                throw $this->createNotFoundException('This group does not exist.');
+            if(!$group->isUserJoinable())
+                throw $this->createAccessDeniedException('This group is not user-editable.');
+
+            $user = $this->getUser();
+            /* @var $user User */
+            $user->removeGroup($group);
+            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->getFlash()->success('You left the group '.$group->getDisplayName().'.');
+        } else {
+            $this->getFlash()->error('Cannot leave this group.');
+        }
+
+        return $this->redirectToProfile();
+    }
+
 
     private function redirectToProfile()
     {

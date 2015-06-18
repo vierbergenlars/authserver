@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block head %}
     <style>
-        .panel-authorized-apps form, .panel-authorized-apps form div {
+        .panel-authorized-apps form, .panel-authorized-apps form div, .list-groups form, .list-groups form > div{
             display: inline;
         }
         .panel-authorized-apps form {
@@ -20,7 +20,7 @@
             width: 100%;
         }
 
-        .panel-authorized-apps .list-group-item .btn {
+        .panel-authorized-apps .list-group-item .btn, .list-groups .btn {
             margin-left: 10px;
         }
     </style>
@@ -78,12 +78,24 @@
 
                         {% endfor %}
 
-                        <dt>Groups</dt><dd>
+                        <dt>Groups</dt><dd class="list-groups">
                             {% for group in data.groups %}
-                                {{ icon('group') }} {{ group.displayName }}<br>
+                                {{ icon('group') }} {{ group.displayName }}
+                                {% if group.userJoinable %}
+                                    {{- render(controller('UserBundle:Profile:removeGroup', {
+                                        groupId: group.id
+                                    })) -}}
+                                {% endif %}
+                                <br>
                             {% else %}
                                 <span class="text-muted">(None)</span>
                             {% endfor %}
+                            <div id="add_group_text" class="collapse in">
+                                <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_group_form, #add_group_text">{{ icon('plus') }} Join group</button>
+                            </div>
+                            <div id="add_group_form" class="collapse">
+                                {{ form(form.add_group, { action: url('user_post_group'), style: 'inline' }) }}
+                            </div>
                         </dd>
                         {% if data.role != 'ROLE_USER' %}
                             <dt>Permissions</dt><dd>
