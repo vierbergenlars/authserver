@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e # Quit the script on error
 php app/console app:maintenance --env=prod
+git stash
+git pull origin master
+git stash pop
 composer install --no-dev --no-plugins --no-scripts --optimize-autoloader
 npm install
 php app/console cache:clear --env=prod
