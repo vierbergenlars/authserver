@@ -57,6 +57,10 @@ class GroupController extends DefaultController
         $actions['Member types']['PATCH_noUsers_true'] = 'Deny users';
         $actions['Member types']['PATCH_noGroups_false'] = 'Allow groups';
         $actions['Member types']['PATCH_noGroups_true'] = 'Deny groups';
+        $actions['User leave/join']['PATCH_userJoinable_true'] = 'Make user joinable';
+        $actions['User leave/join']['PATCH_userJoinable_false'] = 'Make not user joinable';
+        $actions['User leave/join']['PATCH_userLeaveable_true'] = 'Make user leaveable';
+        $actions['User leave/join']['PATCH_userLeaveable_false'] = 'Make not user leaveable';
 
         return $actions;
     }
