@@ -291,7 +291,7 @@ class ProfileController extends Controller
             $group = $form->get('group')->getData();
             /* @var $group Group */
             if(!$group->isUserJoinable())
-                throw $this->createAccessDeniedException('This group is not user-editable');
+                throw $this->createAccessDeniedException('This group is not user-joinable');
             $user = $this->getUser();
             /* @var $user User */
             if($user->getGroups()->contains($group)) {
@@ -333,8 +333,8 @@ class ProfileController extends Controller
             /* @var $group Group */
             if($group === null)
                 throw $this->createNotFoundException('This group does not exist.');
-            if(!$group->isUserJoinable())
-                throw $this->createAccessDeniedException('This group is not user-editable.');
+            if(!$group->isUserLeaveable())
+                throw $this->createAccessDeniedException('This group is not user-leaveable.');
 
             $user = $this->getUser();
             /* @var $user User */

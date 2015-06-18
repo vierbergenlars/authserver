@@ -117,6 +117,9 @@
         <property name="userJoinable">
             <constraint name="NotNull" />
         </property>
+        <property name="userLeaveable">
+            <constraint name="NotNull" />
+        </property>
         <property name="noUsers">
             <constraint name="NotNull" />
         </property>

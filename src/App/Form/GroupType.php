@@ -49,6 +49,13 @@ class GroupType extends AbstractType
                     'align_with_widget' => true,
                 ),
             ))
+            ->add('userLeaveable', 'checkbox', array(
+                'required' => false,
+                'attr' => array(
+                    'align_with_widget' => true,
+                ),
+            ))
+
             ->add('noGroups', 'checkbox', array(
                 'required' => false,
                 'label'=>'No groups can be member of this group',
