@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e # Quit the script on error
 php app/console app:maintenance --env=prod
-git pull origin master
+git pull origin master --rebase
 composer install --no-dev --no-plugins --no-scripts --optimize-autoloader
 npm install
 php app/console cache:clear --env=prod
