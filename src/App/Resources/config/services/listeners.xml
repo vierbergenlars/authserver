@@ -7,11 +7,7 @@
         </service>
         <service id="app.user_properties_listener" class="App\EventListener\UserPropertiesValidEventListener">
             <argument type="service" id="security.token_storage" />
-            <argument type="service">
-                <service class="App\Entity\UserRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
-                    <argument>App\Entity\User</argument>
-                </service>
-            </argument>
+            <argument type="service" id="app.admin.user.repo" />
             <argument type="service" id="router" />
             <argument type="service" id="braincrafted_bootstrap.flash" />
             <tag name="kernel.event_subscriber" />
