@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FOS\OAuthServerBundle\Util\Random;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -50,6 +51,12 @@ class User implements AdvancedUserInterface, \Serializable
      * @Gedmo\Versioned
      */
     private $passwordEnabled;
+
+    /**
+     * @ORM\Column(name="password_reset_token", type="string", nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $passwordResetToken;
 
     /**
      * @var EmailAddress[]
@@ -422,6 +429,28 @@ class User implements AdvancedUserInterface, \Serializable
     public function setPasswordEnabled($passwordEnabled)
     {
         $this->passwordEnabled = $passwordEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPasswordResetToken()
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function generatePasswordResetToken()
+    {
+        $this->passwordResetToken = Random::generateToken();
+
+        return $this;
+    }
+
+    public function clearPasswordResetToken()
+    {
+        $this->passwordResetToken = null;
 
         return $this;
     }
