@@ -37,10 +37,18 @@
                     Enabled
                 {% elseif data.passwordEnabled == 2 %}
                     Allow user to set initial password
-                {% else %}
+                {% elseif data.passwordEnabled == 0 %}
                     Disabled
+                {% else %}
+                    <span class="text-danger">Invalid value: {{ data.passwordEnabled }}</span>
                 {% endif %}
             </dd>
+            {% if data.passwordEnabled != 2 %}
+                <dt>Password</dt><dd>
+                    {% if data.passwordEnabled == 1 %}******{% endif %}
+                    <a class="btn btn-sm btn-link" href="{{ url('user_password_forgot', { user: data.username }) }}">Reset</a>
+                </dd>
+            {% endif %}
             <dt>Local flags</dt><dd>
                 {% if 'ROLE_USER' == data.role %}
                     <span class="text-muted">(None)</span>
