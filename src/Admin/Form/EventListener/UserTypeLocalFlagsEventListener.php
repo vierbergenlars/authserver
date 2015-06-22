@@ -41,7 +41,6 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
         }
         if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_USERNAME')) {
             $form->remove('username');
-            $form->remove('displayName');
         }
         if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
             $form->remove('enabled');
