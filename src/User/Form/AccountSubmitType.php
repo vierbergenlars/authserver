@@ -5,7 +5,7 @@ namespace User\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class AccountResendVerificationType extends AbstractType
+class AccountSubmitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
