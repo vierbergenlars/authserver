@@ -20,7 +20,7 @@ class DeleteAuthorizedAppType extends AbstractType
             ->add('submit', 'submit', array(
                 'label'=>'Delete',
                 'attr' => array(
-                    'class' => 'btn-danger btn-sm pull-right',
+                    'class' => 'btn-danger btn-sm',
                 )
             ))
         ;

@@ -1,8 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block head %}
     <style>
-        .panel-authorized-apps form {
+        .panel-authorized-apps form, .panel-authorized-apps form div {
             display: inline;
+        }
+        .panel-authorized-apps form {
+            float: right;
         }
 
         .panel-authorized-apps .list-group-item {
@@ -19,10 +22,6 @@
 
         .panel-authorized-apps .list-group-item .btn {
             margin-left: 10px;
-        }
-
-        #usr_auth_app_delete {
-            display: inline;
         }
     </style>
 {% endblock %}
