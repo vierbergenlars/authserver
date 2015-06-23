@@ -7,3 +7,13 @@ user_email_resend:
     pattern: email/verify
     defaults:
         _controller: UserBundle:PublicEmail:resendVerification
+
+user_password_reset:
+    pattern: forgot/reset/{username}/{verificationCode}
+    defaults:
+        _controller: UserBundle:ResetPassword:resetPassword
+
+user_password_forgot:
+    pattern: forgot
+    defaults:
+        _controller: UserBundle:ResetPassword:forgotPassword

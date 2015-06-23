@@ -4,7 +4,7 @@ namespace User\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use User\Form\AccountResendVerificationType;
+use User\Form\AccountSubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class PublicEmailController extends Controller
@@ -39,7 +39,7 @@ class PublicEmailController extends Controller
      */
     public function resendVerificationAction(Request $request)
     {
-        $form  = $this->createForm(new AccountResendVerificationType(), array('user'=>$request->query->get('user', '')));
+        $form  = $this->createForm(new AccountSubmitType(), array('user'=>$request->query->get('user', '')));
         $flash = $this->get('braincrafted_bootstrap.flash');
         $mailer = $this->get('app.mailer.user.verify_email');
 

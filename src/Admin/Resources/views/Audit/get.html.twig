@@ -22,7 +22,7 @@
             {% for name,value in data.data %}
                 <tr>
                     <td>{{ name }}</td>
-                    {% if name in ['password', 'verificationCode'] and value != null %}
+                    {% if name in ['password', 'verificationCode', 'passwordResetToken'] and value != null %}
                         <td><span class="text-muted">(Secret)</span></td>
                     {% elseif value is iterable %}
                         {% if value.id is defined %}

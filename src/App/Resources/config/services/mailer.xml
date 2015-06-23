@@ -10,5 +10,9 @@
             <argument type="service" id="app.mailer" />
             <argument>AppBundle:Mail:verify_email.mail.twig</argument>
         </service>
+        <service id="app.mailer.user.reset_password" class="App\Mail\PrimedTwigMailer">
+            <argument type="service" id="app.mailer" />
+            <argument>AppBundle:Mail:reset_password.mail.twig</argument>
+        </service>
     </services>
 </container>
