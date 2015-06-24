@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
     <class name="App\Entity\Group" xml-root-name="group" xmlns:h="https://github.com/willdurand/Hateoas">
-        <property name="name" groups="list,object" xml-attribute="true" />
-        <property name="displayName" groups="list,object" xml-attribute="true" />
+        <property name="name" groups="list,object,oauth_api" xml-attribute="true" />
+        <property name="displayName" groups="list,object,oauth_api" xml-attribute="true" />
         <property name="groups" serialized-name="parents" groups="admin_group_object" max-depth="1">
             <xml-list entry-name="group" />
         </property>
