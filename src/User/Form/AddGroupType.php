@@ -29,10 +29,13 @@ class AddGroupType extends AbstractType
             ->add('group', 'entity', array(
                 'property'=>'displayName',
                 'class' => 'App\Entity\Group',
-                'query_builder'=>function (EntityRepository $repo) {
-                    return $repo->createQueryBuilder('g')
+                'query_builder'=>function (EntityRepository $repo) use($user) {
+                    $qb = $repo->createQueryBuilder('g')
                                 ->where('g.noUsers = false AND g.userJoinable = true');
-
+                    if($user->getGroups()->count() == 0)
+                        return $qb;
+                    return $qb->andWhere('g NOT IN(:groups)')
+                                ->setParameter('groups', $user->getGroups());
                 },
                 'required'=>true,
                 'multiple'=>false,
