@@ -106,13 +106,13 @@
                     <h2 class="panel-title">Authorized apps</h2>
                 </div>
                 <div class="list-group">
-                    {% for app in data.authorizedApplications %}
+                    {% for auth in data.authorizedApplications %}
                         <div class="list-group-item">
                             <span class="app-name">
                                 {{ render(controller('UserBundle:Profile:removeAuthorizedApp', {
-                                    appId: app.id
+                                    appId: auth.client.id
                                 })) -}}
-                                {{- app.name }}
+                                {{- auth.client.name }}
                             </span>
                         </div>
                     {% else %}

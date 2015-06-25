@@ -32,6 +32,12 @@ class Client extends BaseClient
     private $preApproved;
 
     /**
+     * @ORM\Column(type="simple_array")
+     * @Gedmo\Versioned
+     */
+    private $preApprovedScopes = array();
+
+    /**
      * @Gedmo\Versioned
      */
     protected $redirectUris = array();
@@ -62,6 +68,18 @@ class Client extends BaseClient
     public function setPreApproved($preApproved)
     {
         $this->preApproved = $preApproved;
+
+        return $this;
+    }
+
+    public function getPreApprovedScopes()
+    {
+        return $this->preApprovedScopes;
+    }
+
+    public function setPreApprovedScopes(array $preApprovedScopes)
+    {
+        $this->preApprovedScopes = $preApprovedScopes;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace User\Controller;
 
 use App\Entity\EmailAddress;
+use App\Entity\OAuth\UserAuthorization;
 use App\Entity\Property;
 use App\Entity\User;
 use App\Entity\UserProperty;
@@ -43,24 +44,27 @@ class ProfileController extends Controller
     public function deleteAuthorizedAppAction(Request $request)
     {
         $form = $this->createForm(new DeleteAuthorizedAppType());
+        $user = $this->getUser();
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $appId = $form->get('id')->getData();
-            $client = $this->getDoctrine()
-                ->getRepository('AppBundle:OAuth\Client')
-                ->find($appId);
+            $userAuthorization = $this->getDoctrine()
+                ->getRepository('AppBundle:OAuth\UserAuthorization')
+                ->findOneBy(array(
+                    'client' => $appId,
+                    'user' => $user,
+                ));
+            /* @var $userAuthorization UserAuthorization */
 
-            if ($client && ($user = $this->getUser()) && $user instanceof User) {
-                $user->removeAuthorizedApplication($client);
+            if ($userAuthorization) {
                 $this->getDoctrine()->getManager()->beginTransaction();
-                $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
                 $this->getDoctrine()->getRepository('AppBundle:OAuth\\RefreshToken')
                         ->createQueryBuilder('t')
                         ->delete()
                         ->where('t.client = :client AND t.user = :user')
-                        ->setParameter('client', $client)
+                        ->setParameter('client', $userAuthorization->getClient())
                         ->setParameter('user', $user)
                         ->getQuery()
                         ->execute();
@@ -68,10 +72,14 @@ class ProfileController extends Controller
                         ->createQueryBuilder('t')
                         ->delete()
                         ->where('t.client = :client AND t.user = :user')
-                        ->setParameter('client', $client)
+                        ->setParameter('client', $userAuthorization->getClient())
                         ->setParameter('user', $user)
                         ->getQuery()
                         ->execute();
+                $em = $this->getDoctrine()->getManagerForClass('AppBundle:OAuth\UserAuthorization');
+                $em->remove($userAuthorization);
+                $em->flush($userAuthorization);
+
                 $this->getDoctrine()->getManager()->commit();
                 $this->getFlash()->success('Authorized application has been removed');
 

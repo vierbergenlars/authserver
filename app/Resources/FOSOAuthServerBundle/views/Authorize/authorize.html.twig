@@ -12,7 +12,19 @@
                         This application will have access to:
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item">Eh, nothing... :)</li>
+                        {% set scopes = form.scope.vars.value|split(' ') %}
+                        {% if form.scope.vars.value == '' or scopes|length == 0 %}
+                            <li class="list-group-item list-group-item-success">{{ icon('check fa-fw') }} Nothing</li>
+                        {% endif %}
+                        {% if 'profile:realname' in scopes %}
+                            <li class="list-group-item list-group-item-warning">{{ icon('fw') }} Your name</li>
+                        {% endif %}
+                        {% if 'profile:username' in scopes %}
+                            <li class="list-group-item">{{ icon('fw') }} Your username</li>
+                        {% endif %}
+                        {% if 'profile:groups' in scopes %}
+                            <li class="list-group-item">{{ icon('fw') }} The groups you are member of</li>
+                        {% endif %}
                     </ul>
                     <div class="panel-footer text-center">
                         <form action="{{ path('fos_oauth_server_authorize') }}" method="POST" class="fos_oauth_server_authorize" {{ form_enctype(form) }}>
