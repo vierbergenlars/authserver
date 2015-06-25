@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Group;
+use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,8 @@ class UserController extends Controller
      */
     public function getAction()
     {
-        if (!($user = $this->getUser())) {
-            throw new AccessDeniedException();
-        }
-
+        $user = $this->getUser();
+        /* @var $user User */
         $exportableGroups = array_filter($user->getGroupsRecursive(), function(Group $group) {
             return $group->isExportable();
         });
@@ -30,9 +29,9 @@ class UserController extends Controller
         return array(
             'user_id' => $user->getMigrateId(),
             'guid' => $user->getId(),
-            'username' => $user->getUsername(),
-            'name' => $user->getDisplayName(),
-            'groups'   => $groups,
+            'username' => $this->isGranted('ROLE_PROFILE:USERNAME')?$user->getUsername():null,
+            'name' => $this->isGranted('ROLE_PROFILE:REALNAME')?$user->getDisplayName():null,
+            'groups'   => $this->isGranted('ROLE_PROFILE:GROUPS')?$groups:array(),
         );
     }
 

@@ -6,3 +6,5 @@ fos_oauth_server:
     auth_code_class: App\Entity\OAuth\AuthCode
     service:
         user_provider: app.user_provider
+        options:
+            supported_scopes: 'profile:username profile:realname profile:groups'
