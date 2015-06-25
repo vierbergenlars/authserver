@@ -15,7 +15,7 @@ class PropertyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', $options['data']->getId()?'bs_static': 'text')
+            ->add('name', (isset($options['data'])&&$options['data']->getId())?'bs_static': 'text')
             ->add('displayName')
             ->add('userEditable', null, array(
                 'required' => false,

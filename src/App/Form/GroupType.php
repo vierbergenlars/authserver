@@ -9,13 +9,16 @@ use Doctrine\ORM\EntityRepository;
 
 class GroupType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $id = $options['data']->getId()?:0;
+        if(isset($options['data']))
+            $id = $options['data']->getId()?:0;
+        else
+            $id = 0;
         $builder
             // Disable editing of the name after the initial submission
             // If the id is set, the form is used for an edit operation

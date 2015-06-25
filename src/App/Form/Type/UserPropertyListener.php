@@ -27,6 +27,8 @@ class UserPropertyListener implements EventSubscriberInterface
 
     public function preSetData(FormEvent $ev)
     {
+        if(!$ev->getData())
+            return;
         $property = $ev->getData()->getProperty();
         /* @var $property Property */
         $options = array(
