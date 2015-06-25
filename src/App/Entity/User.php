@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\OAuth\UserAuthorization;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\OAuthServerBundle\Util\Random;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -91,10 +92,9 @@ class User implements AdvancedUserInterface, \Serializable
     private $groups;
 
     /**
-     * @var App\Entity\OAuth\Client[]
+     * @var UserAuthorization[]
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\OAuth\Client", fetch="EXTRA_LAZY")
-     * @ORM\JoinTable(name="user_oauthclient")
+     * @ORM\OneToMany(targetEntity="App\Entity\OAuth\UserAuthorization", mappedBy="user", fetch="EXTRA_LAZY")
      */
     private $authorizedApplications;
 
@@ -325,10 +325,10 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Add authorizedApplications
      *
-     * @param  \App\Entity\OAuth\Client $authorizedApplications
+     * @param  UserAuthorization $authorizedApplications
      * @return User
      */
-    public function addAuthorizedApplication(\App\Entity\OAuth\Client $authorizedApplications)
+    public function addAuthorizedApplication(UserAuthorization $authorizedApplications)
     {
         $this->authorizedApplications[] = $authorizedApplications;
 
@@ -338,9 +338,9 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Remove authorizedApplications
      *
-     * @param \App\Entity\OAuth\Client $authorizedApplications
+     * @param UserAuthorization $authorizedApplications
      */
-    public function removeAuthorizedApplication(\App\Entity\OAuth\Client $authorizedApplications)
+    public function removeAuthorizedApplication(UserAuthorization $authorizedApplications)
     {
         $this->authorizedApplications->removeElement($authorizedApplications);
     }

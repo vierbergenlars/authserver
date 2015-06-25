@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "550ed4c8c428ccfc3d5e2f5d6b867ad2",
+    "hash": "979dddcf8a5e27e46d1e5e97d84c3e94",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1231,23 +1231,23 @@
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
-            "version": "1.4.2",
+            "version": "dev-master",
             "target-dir": "FOS/OAuthServerBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
-                "reference": "9e15c229eff547443d686445d629e9356ab0672e"
+                "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle.git",
+                "reference": "4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/9e15c229eff547443d686445d629e9356ab0672e",
-                "reference": "9e15c229eff547443d686445d629e9356ab0672e",
+                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9",
+                "reference": "4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9",
                 "shasum": ""
             },
             "require": {
                 "friendsofsymfony/oauth2-php": "~1.1.0",
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.1",
+                "symfony/framework-bundle": "~2.2",
                 "symfony/security-bundle": "~2.1"
             },
             "require-dev": {
@@ -1256,7 +1256,7 @@
                 "doctrine/orm": ">=2.2,<2.5-dev",
                 "symfony/class-loader": "~2.1",
                 "symfony/yaml": "~2.1",
-                "willdurand/propel-typehintable-behavior": "1.0.*"
+                "willdurand/propel-typehintable-behavior": "~1.0,>1.0.4"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "*",
@@ -1275,7 +1275,6 @@
                     "FOS\\OAuthServerBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1296,7 +1295,10 @@
                 "oauth2",
                 "server"
             ],
-            "time": "2014-10-31 13:44:14"
+            "support": {
+                "source": "https://github.com/vierbergenlars/FOSOAuthServerBundle/tree/master"
+            },
+            "time": "2015-06-25 21:41:03"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -3739,10 +3741,18 @@
             "time": "2015-03-29 09:50:53"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.4.2",
+            "alias_normalized": "1.4.2.0",
+            "version": "9999999-dev",
+            "package": "friendsofsymfony/oauth-server-bundle"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "doctrine/migrations": 20,
+        "friendsofsymfony/oauth-server-bundle": 20,
         "vierbergenlars/rad-rest-bundle": 20,
         "stof/doctrine-extensions-bundle": 20
     },
