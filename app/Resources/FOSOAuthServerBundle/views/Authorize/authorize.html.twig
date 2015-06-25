@@ -13,7 +13,7 @@
                     </div>
                     <ul class="list-group">
                         {% set scopes = form.scope.vars.value|split(' ') %}
-                        {% if scopes|length == 0 %}
+                        {% if form.scope.vars.value == '' or scopes|length == 0 %}
                             <li class="list-group-item list-group-item-success">{{ icon('check fa-fw') }} Nothing</li>
                         {% endif %}
                         {% if 'profile:realname' in scopes %}
