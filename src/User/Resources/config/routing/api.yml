@@ -1,0 +1,9 @@
+api_user_get:
+    pattern: user
+    defaults:
+        _controller: User\Controller\Api\UserController::getAction
+
+api_group:
+    name_prefix: api_
+    resource: User\Controller\Api\GroupController
+    type: rest

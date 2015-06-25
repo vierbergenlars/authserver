@@ -29,14 +29,14 @@ admin_dashboard_redirect:
         route: admin_dashboard
 
 api:
-    resource: "@AppBundle/Resources/config/routing/api.yml"
+    resource: "@UserBundle/Resources/config/routing/api.yml"
     prefix: /api
     type: rest
     
 user:
-    resource: "@UserBundle/Resources/config/routing.yml"
+    resource: "@UserBundle/Resources/config/routing/user.yml"
     prefix: /usr
     
 user_public:
-    resource: "@UserBundle/Resources/config/routing_public.yml"
+    resource: "@UserBundle/Resources/config/routing/public.yml"
     prefix: /pub

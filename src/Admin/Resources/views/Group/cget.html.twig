@@ -58,6 +58,10 @@
         <li><a href="{{ url(controller.route('cget'), {q:'is:nogroups'}) }}" data-property="nogroups" data-remove-property="groups" class="js-search-example">{{ icon('circle-o') }} "No groups" group</a></li>
         <li><a href="{{ url(controller.route('cget'), {q:'is:groups'}) }}" data-property="groups" data-remove-property="nogroups" class="js-search-example">{{ icon('circle-o') }} "Groups" group</a></li>
         <li class="divider" role="presentation"></li>
+        <li><a href="{{ url(controller.route('cget'), {q:'is:userjoin'}) }}" data-property="userjoin" data-remove-property="nouserjoin" class="js-search-example">{{ icon('circle-o') }} User joinable</a></li>
+        <li><a href="{{ url(controller.route('cget'), {q:'is:nouserjoin'}) }}" data-property="nouserjoin" data-remove-property="userjoin" class="js-search-example">{{ icon('circle-o') }} Not user joinable</a></li>
+        <li><a href="{{ url(controller.route('cget'), {q:'is:userleave'}) }}" data-property="userleave" data-remove-property="nouserleave" class="js-search-example">{{ icon('circle-o') }} User leaveable</a></li>
+        <li><a href="{{ url(controller.route('cget'), {q:'is:nouserleave'}) }}" data-property="nouserleave" data-remove-property="userleave" class="js-search-example">{{ icon('circle-o') }} Not user leaveable</a></li>
         <li>
             <span class="input-group menu-input">
                 <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
@@ -86,6 +90,11 @@
     <span data-property="users" data-remove-property="nousers" class="js-search-example list-group-item">{{ icon('circle-o') }} "Users" group</span>
     <span data-property="nogroups" data-remove-property="groups" class="js-search-example list-group-item">{{ icon('circle-o') }} "No groups" group</span>
     <span data-property="groups" data-remove-property="nogroups" class="js-search-example list-group-item">{{ icon('circle-o') }} "Groups" group</span>
+    <span class="divider list-group-item" role="presentation"></span>
+    <span data-property="userjoin" data-remove-property="nouserjoin" class="js-search-example list-group-item">{{ icon('circle-o') }} User joinable</span>
+    <span data-property="nouserjoin" data-remove-property="userjoin" class="js-search-example list-group-item">{{ icon('circle-o') }} Not user joinable</span>
+    <span data-property="userleave" data-remove-property="nouserleave" class="js-search-example list-group-item">{{ icon('circle-o') }} User leaveable</span>
+    <span data-property="nouserleave" data-remove-property="userleave" class="js-search-example list-group-item">{{ icon('circle-o') }} Not user leaveable</span>
     <span class="divider list-group-item" role="presentation"></span>
     <span class="list-group-item">
         <span class="input-group menu-input">

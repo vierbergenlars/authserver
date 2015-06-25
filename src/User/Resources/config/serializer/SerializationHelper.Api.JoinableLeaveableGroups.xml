@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="User\SerializationHelper\Api\JoinableLeaveableGroups">
+        <property name="joinable" groups="oauth_api" />
+        <property name="leaveable" groups="oauth_api" />
+    </class>
+</serializer>

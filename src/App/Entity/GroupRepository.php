@@ -68,6 +68,22 @@ class GroupRepository extends EntityRepository
                         $block['name'] = 'noUsers';
                         $block['value'] = '0';
                         break;
+                    case 'userjoin':
+                        $block['name'] = 'userJoinable';
+                        $block['value'] = '1';
+                        break;
+                    case 'nouserjoin':
+                        $block['name'] = 'userJoinable';
+                        $block['value'] = '0';
+                        break;
+                    case 'userleave':
+                        $block['name'] = 'userLeaveable';
+                        $block['value'] = '1';
+                        break;
+                    case 'nouserleave':
+                        $block['name'] = 'userLeaveable';
+                        $block['value'] = '0';
+                        break;
                     default:
                         throw new SearchValueException($block['name'], $block['value'], array('exportable', 'not exportable', 'nogroups', 'groups', 'nousers', 'users'));
                 }

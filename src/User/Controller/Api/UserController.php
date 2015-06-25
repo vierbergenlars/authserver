@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace User\Controller\Api;
 
 use App\Entity\Group;
 use App\Entity\User;

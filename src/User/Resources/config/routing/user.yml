@@ -33,6 +33,20 @@ user_put_property:
     requirements:
         _method: PUT
 
+user_post_group:
+    path: group
+    defaults:
+        _controller: UserBundle:Profile:postGroup
+    requirements:
+        _method: POST
+
+user_delete_group:
+    path: group
+    defaults:
+        _controller: UserBundle:Profile:deleteGroup
+    requirements:
+        _method: DELETE
+
 user_kill_session:
     path: kill-session
     defaults:

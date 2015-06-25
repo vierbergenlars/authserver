@@ -13,3 +13,13 @@
 {% else %}
     <span title="Groups allowed">{{ label_success('G') }}</span>
 {% endif %}
+{% if obj.userJoinable %}
+    <span title="User joinable">{{ label_success('J') }}</span>
+{% else %}
+    <span title="Not user joinable">{{ label('J') }}</span>
+{% endif %}
+{% if obj.userLeaveable %}
+    <span title="User leaveable">{{ label_success('L') }}</span>
+{% else %}
+    <span title="Not user leaveable">{{ label('L') }}</span>
+{% endif %}
