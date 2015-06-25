@@ -16,6 +16,9 @@
                         {% if form.scope.vars.value == '' or scopes|length == 0 %}
                             <li class="list-group-item list-group-item-success">{{ icon('check fa-fw') }} Nothing</li>
                         {% endif %}
+                        {% if 'group:join' in scopes or 'group:leave' in scopes %}
+                            <li class="list-group-item list-group-item-danger">{{ icon('exclamation-triangle fa-fw') }} Change the groups you are member of</li>
+                        {% endif %}
                         {% if 'profile:realname' in scopes %}
                             <li class="list-group-item list-group-item-warning">{{ icon('fw') }} Your name</li>
                         {% endif %}

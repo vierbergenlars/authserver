@@ -26,6 +26,8 @@ class GroupController extends Controller implements ClassResourceInterface
      */
     public function cgetAction()
     {
+        if(!$this->isGranted('ROLE_GROUP:JOIN')&&!$this->isGranted('ROLE_GROUP:LEAVE'))
+            throw $this->createAccessDeniedException();
         $user = $this->getUser();
         /* @var $user User */
         $leaveable = $user->getGroups()->filter(function(Group $g) {
@@ -53,6 +55,7 @@ class GroupController extends Controller implements ClassResourceInterface
      */
     public function joinAction(Group $group)
     {
+        $this->denyAccessUnlessGranted('ROLE_GROUP:JOIN');
         if($group->getNoUsers()||!$group->isUserJoinable())
             throw $this->createAccessDeniedException('This group does not accept users, or is not user joinable');
         $user = $this->getUser();
@@ -70,6 +73,7 @@ class GroupController extends Controller implements ClassResourceInterface
      */
     public function leaveAction(Group $group)
     {
+        $this->denyAccessUnlessGranted('ROLE_GROUP:LEAVE');
         if($group->getNoUsers()||!$group->isUserLeaveable())
             throw $this->createAccessDeniedException('This group is not user leaveable');
         $user = $this->getUser();
