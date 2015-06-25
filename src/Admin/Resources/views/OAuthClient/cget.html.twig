@@ -9,6 +9,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Scopes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -23,6 +24,9 @@
                                     <span title="Pre approved">{{ label_success('PA') }}</span>
                                 {% endif %}
                             </label>
+                        </td>
+                        <td>
+                            {{ obj.preApprovedScopes|join(' ') }}
                         </td>
                         <td>
                             {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}

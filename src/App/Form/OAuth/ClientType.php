@@ -27,6 +27,15 @@ class ClientType extends AbstractType
                     'align_with_widget' => true,
                 ),
             ))
+            ->add('preApprovedScopes', 'choice', array(
+                'choices' => array(
+                    'profile:username' => 'profile:username',
+                    'profile:realname' => 'profile:realname',
+                    'profile:groups'   => 'profile:groups',
+                ),
+                'multiple' => true,
+                'expanded' => true,
+            ))
             ->add('submit', 'submit')
         ;
     }
