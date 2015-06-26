@@ -30,17 +30,15 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $scopes = explode(' ', $event->getScopes()?:'');
+        $scopes = $event->getScopes()?explode(' ', $event->getScopes()):array();
         if (($client = $event->getClient())&&$client instanceof Client) {
-            if ($client->isPreApproved()&&count(array_diff($scopes, $client->getPreApprovedScopes())) == 0) {
+            if ($client->isPreApproved()&&$this->matchesScope($scopes, $client->getPreApprovedScopes())) {
                 $event->setAuthorizedClient(true);
             }
         }
         if (($user = $event->getUser())&&$user instanceof User) {
             $authorization = $this->getAuthorization($client, $user);
-            if($authorization&&
-                /* Checks if no extra scopes where requested since the authorization */
-                count(array_diff($scopes, $authorization->getScopes())) == 0) {
+            if($authorization&&$this->matchesScope($scopes, $authorization->getScopes())) {
                 $event->setAuthorizedClient(true);
             }
         }
@@ -59,6 +57,11 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
                 $this->em->flush($authorization);
             }
         }
+    }
+
+    private function matchesScope($scopes, $restrictions)
+    {
+        return count(array_diff($scopes, $restrictions)) == 0;
     }
 
     /**

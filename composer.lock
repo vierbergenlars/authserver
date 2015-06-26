@@ -1236,12 +1236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle.git",
-                "reference": "4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9"
+                "reference": "2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9",
-                "reference": "4dbe04e6f66d9c92898d2e3eb61f8645124dd7e9",
+                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c",
+                "reference": "2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c",
                 "shasum": ""
             },
             "require": {
@@ -1298,7 +1298,7 @@
             "support": {
                 "source": "https://github.com/vierbergenlars/FOSOAuthServerBundle/tree/master"
             },
-            "time": "2015-06-25 21:41:03"
+            "time": "2015-06-26 08:05:10"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -3704,7 +3704,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scato/phpeg/zipball/daf80f277414d0cf6f7b204c6e257ebe156dec1d",
+                "url": "https://api.github.com/repos/scato/phpeg/zipball/21b0946381315d34cf8daa1547b6b23ef85f701b",
                 "reference": "daf80f277414d0cf6f7b204c6e257ebe156dec1d",
                 "shasum": ""
             },
