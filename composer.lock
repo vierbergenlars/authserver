@@ -1236,12 +1236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle.git",
-                "reference": "2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c"
+                "reference": "467eccf7414289cf05532c3c722521268c4126dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c",
-                "reference": "2ac98cd9a0797ffd6bb4eb6bc37fc0c5322b116c",
+                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/467eccf7414289cf05532c3c722521268c4126dc",
+                "reference": "467eccf7414289cf05532c3c722521268c4126dc",
                 "shasum": ""
             },
             "require": {
@@ -1298,7 +1298,7 @@
             "support": {
                 "source": "https://github.com/vierbergenlars/FOSOAuthServerBundle/tree/master"
             },
-            "time": "2015-06-26 08:05:10"
+            "time": "2015-06-26 09:38:53"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
