@@ -32,7 +32,7 @@ class Client extends BaseClient
     private $preApproved;
 
     /**
-     * @ORM\Column(type="simple_array")
+     * @ORM\Column(type="simple_array", nullable=true)
      * @Gedmo\Versioned
      */
     private $preApprovedScopes = array();
