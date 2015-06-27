@@ -56,7 +56,6 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login_check
-            http_basic: ~
             simple_preauth:
                 authenticator: app.admin.security.apikey_authenticator
             logout:
