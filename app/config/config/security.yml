@@ -1,4 +1,6 @@
 security:
+    access_decision_manager:
+        strategy: unanimous
     encoders:
         App\Entity\User: bcrypt
 
@@ -73,8 +75,10 @@ security:
         - { path: ^/admin/oauth, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/users/properties, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/groups, methods: GET, role: ROLE_SCOPE_R_GROUP }
+        - { path: ^/admin/groups, methods: [LINK, UNLINK], roles: [ROLE_SCOPE_W_GROUP, ROLE_API] }
         - { path: ^/admin/groups, role: ROLE_SCOPE_W_GROUP }
         - { path: ^/admin/users, methods: GET, role: ROLE_SCOPE_R_PROFILE }
+        - { path: ^/admin/users, methods: [LINK, UNLINK], roles: [ROLE_SCOPE_W_PROFILE, ROLE_API] }
         - { path: ^/admin/users, role: ROLE_SCOPE_W_PROFILE }
         - { path: ^/admin/auditlog, role: ROLE_AUDIT }
         - { path: ^/admin, role: ROLE_ADMIN }
