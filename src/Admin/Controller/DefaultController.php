@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use vierbergenlars\Bundle\RadRestBundle\Controller\ControllerServiceController;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\DefaultsTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Pagination\KnpPaginationTrait;
@@ -31,6 +32,13 @@ class DefaultController extends ControllerServiceController
     }
 
     use DefaultsTrait;
+
+    /**
+     * @NoRoute
+     */
+    public function patchAction(Request $request, $id)
+    {
+    }
 
     /**
      *

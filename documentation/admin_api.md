@@ -283,29 +283,6 @@ or new data. However, some fields are restricted to stricter scopes.
 Usage of this route is for human usage with the form on `/admin/users/{guid}/edit`, and not for usage by automated processes.
 Use the `PATCH` routes below for more granular access without the need to submit all data of the user.
 
-### `PATCH /admin/users/{guid}`
-
-Accepts the same fields as `POST /admin/users`, additional scope restrictions are applied as follows:
-
-| Field                                  | Required scope |
-| -------------------------------------- | -------------- |
-| `app_user[username]`                   | `Profile::write::username` |
-| `app_user[displayName]`                | `Profile::write`           |
-| `app_user[password]`                   | `Profile::write::password` |
-| `app_user[passwordEnabled]`            | `Profile::write::password` (and `Profile::write::lock::admins` to change super admins) |
-| `app_user[emailAddresses][*][email]`   | `Profile::write::email`    |
-| `app_user[emailAddresses][*][verified]`| `Profile::write::email`    |
-| `app_user[emailAddresses][*][primary]` | `Profile::write::email`    |
-| `app_user[enabled]`                    | `Profile::write::lock` (and `Profile::write::lock::admins` to change super admins) |
-| `app_user[role]`                       | `Profile::write::admin`    |
-
-Fields that are not present in the request body are not changed.
-
-> As such, users cannot be disabled by this method, only enabled.
-> The presence of `app_user[enabled]` will enable a user account,
-> regardless of its value. The absence of this field will keep the old value.
-> This renders disabling active user accounts impossible.
-
 
 ### `DELETE /admin/users/{guid}`
 
