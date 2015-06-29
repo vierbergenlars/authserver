@@ -4,30 +4,24 @@ namespace User\Controller\Api;
 
 use App\Entity\Group;
 use App\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Tests\LazyArrayCollection;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use JMS\Serializer\SerializationContext;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use User\SerializationHelper\Api\JoinableLeaveableGroups;
-use FOS\RestBundle\Controller\Annotations\Get;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Controller\Annotations\Patch;
+use User\SerializationHelper\Api\JoinableLeaveableGroups;
 
-class GroupController extends Controller implements ClassResourceInterface
+class GroupController extends BaseController implements ClassResourceInterface
 {
     /**
      * @View
      */
     public function cgetAction()
     {
-        if(!$this->isGranted('ROLE_GROUP:JOIN')&&!$this->isGranted('ROLE_GROUP:LEAVE'))
-            throw $this->createAccessDeniedException();
+        if(!$this->isGrantedScope('group:join')&&!$this->isGrantedScope('group:leave'))
+            throw $this->createAccessDeniedException('OAuth scope group:join or group:leave is required to access this resource.');
         $user = $this->getUser();
         /* @var $user User */
         $leaveable = $user->getGroups()->filter(function(Group $g) {
@@ -55,7 +49,7 @@ class GroupController extends Controller implements ClassResourceInterface
      */
     public function joinAction(Group $group)
     {
-        $this->denyAccessUnlessGranted('ROLE_GROUP:JOIN');
+        $this->denyAccessUnlessGrantedScope('group:join');
         if($group->getNoUsers()||!$group->isUserJoinable())
             throw $this->createAccessDeniedException('This group does not accept users, or is not user joinable');
         $user = $this->getUser();
@@ -73,7 +67,7 @@ class GroupController extends Controller implements ClassResourceInterface
      */
     public function leaveAction(Group $group)
     {
-        $this->denyAccessUnlessGranted('ROLE_GROUP:LEAVE');
+        $this->denyAccessUnlessGrantedScope('group:leave');
         if($group->getNoUsers()||!$group->isUserLeaveable())
             throw $this->createAccessDeniedException('This group is not user leaveable');
         $user = $this->getUser();

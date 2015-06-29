@@ -5,15 +5,11 @@ namespace User\Controller\Api;
 use App\Entity\Group;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * @View
-     * @throws AccessDeniedException
      */
     public function getAction()
     {
@@ -27,19 +23,10 @@ class UserController extends Controller
         }, $exportableGroups);
 
         return array(
-            'user_id' => $user->getMigrateId(),
-            'guid' => $user->getId(),
-            'username' => $this->isGranted('ROLE_PROFILE:USERNAME')?$user->getUsername():null,
-            'name' => $this->isGranted('ROLE_PROFILE:REALNAME')?$user->getDisplayName():null,
-            'groups'   => $this->isGranted('ROLE_PROFILE:GROUPS')?$groups:array(),
+            'guid' => $user->getGuid(),
+            'username' => $this->isGrantedScope('profile:username')?$user->getUsername():null,
+            'name' => $this->isGrantedScope('profile:realname')?$user->getDisplayName():null,
+            'groups' => $this->isGrantedScope('profile:groups')?$groups:array(),
         );
     }
-
-    public function mailAction(Request $request)
-    {
-        if (!($user = $this->getUser())) {
-            throw new AccessDeniedException();
-        }
-    }
-
 }
