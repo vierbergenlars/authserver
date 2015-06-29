@@ -274,15 +274,28 @@ A more detailed overview of a user.
         "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB"}}
     }
 
-### `PUT /admin/users/{guid}`
+### `PATCH /admin/users/{guid}/*`
 
-Change all attributes of a user at once.
-It takes the same fields as `POST /admin/users`, all fields that are present must be filled either with the current data,
-or new data. However, some fields are restricted to stricter scopes.
+| URL                                       | Required scope             | Description       |
+| ----------------------------------------- | -------------------------- | ----------------- |
+| `/admin/users/{guid}/username`            | `Profile::write::username` | Sets the username of the user to the contents of the request body. |
+| `/admin/users/{guid}/displayname`         | `Profile::write`           | Sets the real name of the user to the contents of the request body. |
+| `/admin/users/{guid}/role`                | `Profile::write::admin`    | Sets the role of the user to the contents of the request body. (Valid values: `ROLE_USER`, `ROLE_AUDIT`, `ROLE_ADMIN`, `ROLE_SUPER_ADMIN`) |
+| `/admin/users/{guid}/password`            | `Profile::write::password` | Sets the password of the user to the contents of the request body. |
+| `/admin/users/{guid}/password/enable`     | `Profile::write::password` | Enables password authentication for the user. |
+| `/admin/users/{guid}/password/disable`    | `Profile::write::password` | Disables password authentication for the user. |
+| `/admin/users/{guid}/password/settable`   | `Profile::write::password` | Allows the user to set an initial password. |
+| `/admin/users/{guid}/disable`             | `Profile::write::lock`     | Disables the user |
+| `/admin/users/{guid}/enable`              | `Profile::write::lock`     | Enables the user |
 
-Usage of this route is for human usage with the form on `/admin/users/{guid}/edit`, and not for usage by automated processes.
-Use the `PATCH` routes below for more granular access without the need to submit all data of the user.
+Validation errors that occur on these URLs are handled the same way as errors that occur on complete forms.
 
+### `PATCH /admin/users/{guid}/property/{property}`
+
+Sets a property of the user to the contents of the request body.
+
+If the property with that name does not exist, a 404 error is returned.
+If the data submitted for the property does not match the validation regex, a 400 error is returned.
 
 ### `DELETE /admin/users/{guid}`
 
