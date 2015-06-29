@@ -7,6 +7,7 @@ use App\Search\SearchException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
 use FOS\RestBundle\Controller\Annotations\View as AView;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\Paginator;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -19,14 +20,12 @@ use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\DefaultsTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Pagination\KnpPaginationTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Routes\ListTrait;
 use vierbergenlars\Bundle\RadRestBundle\Manager\ResourceManagerInterface;
+use vierbergenlars\Bundle\RadRestBundle\Pagination\PageDescriptionInterface;
 use vierbergenlars\Bundle\RadRestBundle\Twig\ControllerVariables;
 use vierbergenlars\Bundle\RadRestBundle\View\View;
 
 class DefaultController extends ControllerServiceController
 {
-    use ListTrait {
-        ListTrait::cgetAction as private _LT_cgetAction;
-    }
     use KnpPaginationTrait {
         KnpPaginationTrait::getPagination insteadof DefaultsTrait;
     }
@@ -61,16 +60,21 @@ class DefaultController extends ControllerServiceController
         if ($request->query->has('q')) {
             try {
                 $data = $this->getResourceManager()->search($request->query->get('q'));
-                $view = View::create($this->getPagination($data, $request->query->get('page', 1)));
-                $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
-
-                return $this->handleView($view);
             } catch (SearchException $ex) {
                 throw new BadRequestHttpException($ex->getMessage(), $ex);
             }
         } else {
-            return $this->_LT_cgetAction($request);
+            $data = $this->getResourceManager()->getPageDescription();
         }
+        $pagination = $this->getPagination(
+            $data,
+            $request->query->get('page', 1),
+            min($request->query->get('per_page', 10), 1000));
+        $view = View::create($pagination);
+        $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
+
+        return $this->handleView($view);
+
     }
 
     /**
@@ -155,6 +159,11 @@ class DefaultController extends ControllerServiceController
     protected function getPaginator()
     {
         return $this->paginator;
+    }
+
+    protected function getPagination(PageDescriptionInterface $pageDescription, $page, $size = 10)
+    {
+        return $this->getPaginator()->paginate($pageDescription, $page, $size);
     }
 
     protected function handleView(View $view)
