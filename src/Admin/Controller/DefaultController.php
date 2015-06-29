@@ -69,7 +69,7 @@ class DefaultController extends ControllerServiceController
         $pagination = $this->getPagination(
             $data,
             $request->query->get('page', 1),
-            min($request->query->get('per_page', 10), 1000));
+            $request->query->get('per_page', 10));
         $view = View::create($pagination);
         $view->getSerializationContext()->setGroups($this->getSerializationGroups('cget'));
 
@@ -163,6 +163,14 @@ class DefaultController extends ControllerServiceController
 
     protected function getPagination(PageDescriptionInterface $pageDescription, $page, $size = 10)
     {
+        $page = (int)$page;
+        $size = (int)$size;
+        if($page <= 0)
+            throw new BadRequestHttpException('The page parameter should be a positive number.');
+        if($size <= 0)
+            throw new BadRequestHttpException('The per_page parameter should be a positive number.');
+        if($size > 1000)
+            throw new BadRequestHttpException('The per_page parameter should not exceed 1000.');
         return $this->getPaginator()->paginate($pageDescription, $page, $size);
     }
 
