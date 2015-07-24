@@ -51,6 +51,7 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
         if ($this->authorizationChecker->hasRole('ROLE_API')) {
             // Remove user properties fields when logged in with API key
             $form->remove('userProperties');
+            $form->remove('groups');
         }
         if ($data instanceof \App\Entity\User) {
             /* @var $data \App\Entity\User */
