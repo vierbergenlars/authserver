@@ -18,7 +18,7 @@
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$/</option>
-                <option name="message">Username can not be a valid GUID.</option>
+                <option name="message">Username can not be a GUID.</option>
                 <option name="match">false</option>
             </constraint>
         </property>
@@ -26,6 +26,16 @@
             <constraint name="NotBlank" />
             <constraint name="Length">
                 <option name="max">255</option>
+            </constraint>
+        </property>
+        <property name="passwordEnabled">
+            <constraint name="NotBlank" />
+            <constraint name="Choice">
+                <option name="choices">
+                    <value>0</value>
+                    <value>1</value>
+                    <value>2</value>
+                </option>
             </constraint>
         </property>
         <property name="emailAddresses">
