@@ -438,30 +438,25 @@ The resource object is described at `GET /admin/users`
         "_links":{"self":{"href":"\/admin\/users\/5FC0F82D-1E70-45E7-B620-781456E6CE10"}}
     }
 
-### `PUT /admin/groups/{name}`
+### `PATCH /admin/groups/{name}/displayname`
 
-Change all attributes of a group at once.
-It takes the same fields as `POST /admin/groups`, all fields that are present must be filled either with the current data,
-or new data.
+Changes the display name of the group.
 
-Usage of this route is for human usage with the form on `/admin/groups/{guid}/edit`, and not for usage by automated processes.
-Use the `PATCH` routes below for more granular access without the need to submit all data of the group.
+The full request body is taken as the display name. Validation errors are handled in the same way as with forms.
 
-### `PATCH /admin/groups/{name}`
+### `PATCH /admin/groups/{name}/flags`
 
-Accepts the same fields as `POST /admin/groups`.
+Change the behavioral flags of the group.
 
-Fields that are not present in the request body are not changed.
+| Field           | Description |
+| --------------- | ----------- |
+| `exportable`    | Marks the group as exported. (visible as a group to OAuth applications) |
+| `userJoinable`  | Marks the group as joinable by a user himself. (through the profile and via the OAuth API) |
+| `userLeaveable` | Marks the group as leaveable by a user himself. (through the profile and via the OAuth API) |
+| `noUsers`       | Marks the group as not able to have direct user members. |
+| `noGroups`      | Marks the group as not containing any groups as member. |
 
-
-As such, following fields can only be enabled and cannot be disabled:
-
-* `app_group[exportable]`
-* `app_group[userJoinable]`
-* `app_group[userLeaveable]`
-* `app_group[noGroups]`
-* `app_group[noUsers]`
-
+The flags can be toggled on and off by setting them to `1` and `0` respectively.
 
 ### `DELETE /admin/groups/{name}`
 
