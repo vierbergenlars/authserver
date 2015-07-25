@@ -21,7 +21,10 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $id = $options['data']->getId()?:0;
+        if(isset($options['data']))
+            $id = $options['data']->getMigrateId()?:0;
+        else
+            $id = 0;
 
         $builder
             ->add('username', 'text', array(
