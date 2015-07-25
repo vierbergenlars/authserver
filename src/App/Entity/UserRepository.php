@@ -85,11 +85,11 @@ class UserRepository extends EntityRepository
                         $block['value'] = 'ROLE_USER';
                         break;
                     case 'enabled':
-                        $block['name']  = 'isActive';
+                        $block['name']  = 'enabled';
                         $block['value'] = true;
                         break;
                     case 'disabled':
-                        $block['name']  = 'isActive';
+                        $block['name']  = 'enabled';
                         $block['value'] = false;
                         break;
                     default:
