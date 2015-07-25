@@ -14,6 +14,14 @@ admin_user:
     requirements:
         id: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
 
+admin_user_email:
+    resource: Admin\Controller\UserEmailController
+    type: rest
+    name_prefix: admin_user_email_
+    requirements:
+        user: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
+        email: "[0-9]+"
+
 admin_group:
     resource: app.admin.group.controller
     type: rest

@@ -259,7 +259,8 @@ A more detailed overview of a user.
             {
                 "addr":"15057@vbgn.be",
                 "verified":false,
-                "primary":true
+                "primary":true,
+                "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB\/emails\/58"}}
             }
         ],
         "role":"ROLE_USER",
@@ -323,6 +324,83 @@ A `Link` header with the absolute URL to the group must be provided, together wi
 ### `UNLINK /admin/users/{guid}`
 
 Removes the user from a group, follows the same semantics as `LINK`, but has the inverse effect.
+
+### `GET /admin/users/{guid}/emails`
+
+Lists all email addresses of a user.
+
+This resource is paginated.
+
+#### Resource object
+
+The email object returned by a listing query contains following fields:
+
+ * `addr`
+ * `verified`
+ * `primary`
+ * `_links.self.href`
+ 
+    {
+        "addr": "a15929@vbgn.be",
+        "verified": false,
+        "primary": false,
+        "_links":{"self":{"href":"\/admin\/users\/FACCB60B-E852-461C-9DE8-E7BB6CA9BB6B\/emails\/35"}}
+    }
+
+### `POST /admin/users/{guid}/emails`
+
+Adds a new, not yet verified, email address to the user.
+
+The full request body is taken as an email address, eventual errors are returned in the same way as it would be a submitted form.
+
+### `GET /admin/users/{guid}/emails/{email}`
+
+A more detailed overview of an email address.
+
+| Field        | Description |
+| ------------ | ----------- |
+| `addr`       | The email address. |
+| `verified`   | True if the email address has been verified by the user. |
+| `primary`    | True if the email address is the primary email address of the user. There is only one primary email address per user. |
+| `user`       | The user the email address belongs to. |
+| `_links.self.href` | The canonical link to this email address. |
+
+    {
+        "addr":"15057@vbgn.be",
+        "verified":false,
+        "primary":true,
+        "user":{
+            "guid":"A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB",
+            "username":"a159d29s",
+            "display_name":"abc",
+            "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB"}}
+        },
+        "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB\/emails\/58"}}
+    }
+
+### `PATCH /admin/users/{guid}/emails/{email}/verify`
+
+Marks an email address as verified.
+
+This action is irreversible.
+
+### `POST /admin/users/{guid}/emails/{email}/verify`
+
+Sends a verification email to the email address.
+
+### `PATCH /admin/users/{guid}/emails/{email}/primary`
+
+Marks an email address as the primary email address for the user.
+
+The email address that was marked as primary before is no longer marked as primary.
+
+This action can only be executed on a verified email address.
+
+### `DELETE /admin/users/{guid}/emails/{email}`
+
+Removes an email address from a user.
+
+This action cannot be executed on the primary email address of a user.
 
 ### `GET /admin/groups`
 

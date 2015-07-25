@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
-    <class name="App\Entity\EmailAddress">
-        <property name="email" groups="admin_user_object_scope_email" xml-attribute="true" serialized-name="addr"/>
-        <property name="verified" groups="admin_user_object_scope_email" xml-attribute="true" />
-        <property name="primary" groups="admin_user_object_scope_email" xml-attribute="true" />
+    <class name="App\Entity\EmailAddress" xml-root-name="emailaddress" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="email" groups="admin_user_object_scope_email,admin_user_email_list,admin_user_email_object" xml-attribute="true" serialized-name="addr"/>
+        <property name="verified" groups="admin_user_object_scope_email,admin_user_email_list,admin_user_email_object" xml-attribute="true" />
+        <property name="primary" groups="admin_user_object_scope_email,admin_user_email_list,admin_user_email_object" xml-attribute="true" />
+        <property name="user" groups="admin_user_email_object" />
+        <h:relation rel="self">
+            <h:href route="admin_user_email_get_user_email">
+                <h:parameter name="user" value="expr(object.getUser().getId())" />
+                <h:parameter name="email" value="expr(object.getId())" />
+            </h:href>
+            <h:exclusion groups="list,object" />
+        </h:relation>
     </class>
 </serializer>
