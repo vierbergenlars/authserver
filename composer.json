@@ -16,7 +16,7 @@
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.3",
         "sensio/distribution-bundle": "~2.3",
-        "sensio/framework-extra-bundle": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "jms/serializer-bundle": "~0.13.0",
         "friendsofsymfony/rest-bundle": "~1.4,>=1.5.1",

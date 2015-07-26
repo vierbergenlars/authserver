@@ -259,7 +259,8 @@ A more detailed overview of a user.
             {
                 "addr":"15057@vbgn.be",
                 "verified":false,
-                "primary":true
+                "primary":true,
+                "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB\/emails\/58"}}
             }
         ],
         "role":"ROLE_USER",
@@ -274,38 +275,28 @@ A more detailed overview of a user.
         "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB"}}
     }
 
-### `PUT /admin/users/{guid}`
+### `PATCH /admin/users/{guid}/*`
 
-Change all attributes of a user at once.
-It takes the same fields as `POST /admin/users`, all fields that are present must be filled either with the current data,
-or new data. However, some fields are restricted to stricter scopes.
+| URL                                       | Required scope             | Description       |
+| ----------------------------------------- | -------------------------- | ----------------- |
+| `/admin/users/{guid}/username`            | `Profile::write::username` | Sets the username of the user to the contents of the request body. |
+| `/admin/users/{guid}/displayname`         | `Profile::write`           | Sets the real name of the user to the contents of the request body. |
+| `/admin/users/{guid}/role`                | `Profile::write::admin`    | Sets the role of the user to the contents of the request body. (Valid values: `ROLE_USER`, `ROLE_AUDIT`, `ROLE_ADMIN`, `ROLE_SUPER_ADMIN`) |
+| `/admin/users/{guid}/password`            | `Profile::write::password` | Sets the password of the user to the contents of the request body. |
+| `/admin/users/{guid}/password/enable`     | `Profile::write::password` | Enables password authentication for the user. |
+| `/admin/users/{guid}/password/disable`    | `Profile::write::password` | Disables password authentication for the user. |
+| `/admin/users/{guid}/password/settable`   | `Profile::write::password` | Allows the user to set an initial password. |
+| `/admin/users/{guid}/disable`             | `Profile::write::lock`     | Disables the user |
+| `/admin/users/{guid}/enable`              | `Profile::write::lock`     | Enables the user |
 
-Usage of this route is for human usage with the form on `/admin/users/{guid}/edit`, and not for usage by automated processes.
-Use the `PATCH` routes below for more granular access without the need to submit all data of the user.
+Validation errors that occur on these URLs are handled the same way as errors that occur on complete forms.
 
-### `PATCH /admin/users/{guid}`
+### `PATCH /admin/users/{guid}/property/{property}`
 
-Accepts the same fields as `POST /admin/users`, additional scope restrictions are applied as follows:
+Sets a property of the user to the contents of the request body.
 
-| Field                                  | Required scope |
-| -------------------------------------- | -------------- |
-| `app_user[username]`                   | `Profile::write::username` |
-| `app_user[displayName]`                | `Profile::write`           |
-| `app_user[password]`                   | `Profile::write::password` |
-| `app_user[passwordEnabled]`            | `Profile::write::password` (and `Profile::write::lock::admins` to change super admins) |
-| `app_user[emailAddresses][*][email]`   | `Profile::write::email`    |
-| `app_user[emailAddresses][*][verified]`| `Profile::write::email`    |
-| `app_user[emailAddresses][*][primary]` | `Profile::write::email`    |
-| `app_user[enabled]`                    | `Profile::write::lock` (and `Profile::write::lock::admins` to change super admins) |
-| `app_user[role]`                       | `Profile::write::admin`    |
-
-Fields that are not present in the request body are not changed.
-
-> As such, users cannot be disabled by this method, only enabled.
-> The presence of `app_user[enabled]` will enable a user account,
-> regardless of its value. The absence of this field will keep the old value.
-> This renders disabling active user accounts impossible.
-
+If the property with that name does not exist, a 404 error is returned.
+If the data submitted for the property does not match the validation regex, a 400 error is returned.
 
 ### `DELETE /admin/users/{guid}`
 
@@ -333,6 +324,83 @@ A `Link` header with the absolute URL to the group must be provided, together wi
 ### `UNLINK /admin/users/{guid}`
 
 Removes the user from a group, follows the same semantics as `LINK`, but has the inverse effect.
+
+### `GET /admin/users/{guid}/emails`
+
+Lists all email addresses of a user.
+
+This resource is paginated.
+
+#### Resource object
+
+The email object returned by a listing query contains following fields:
+
+ * `addr`
+ * `verified`
+ * `primary`
+ * `_links.self.href`
+ 
+    {
+        "addr": "a15929@vbgn.be",
+        "verified": false,
+        "primary": false,
+        "_links":{"self":{"href":"\/admin\/users\/FACCB60B-E852-461C-9DE8-E7BB6CA9BB6B\/emails\/35"}}
+    }
+
+### `POST /admin/users/{guid}/emails`
+
+Adds a new, not yet verified, email address to the user.
+
+The full request body is taken as an email address, eventual errors are returned in the same way as it would be a submitted form.
+
+### `GET /admin/users/{guid}/emails/{email}`
+
+A more detailed overview of an email address.
+
+| Field        | Description |
+| ------------ | ----------- |
+| `addr`       | The email address. |
+| `verified`   | True if the email address has been verified by the user. |
+| `primary`    | True if the email address is the primary email address of the user. There is only one primary email address per user. |
+| `user`       | The user the email address belongs to. |
+| `_links.self.href` | The canonical link to this email address. |
+
+    {
+        "addr":"15057@vbgn.be",
+        "verified":false,
+        "primary":true,
+        "user":{
+            "guid":"A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB",
+            "username":"a159d29s",
+            "display_name":"abc",
+            "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB"}}
+        },
+        "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB\/emails\/58"}}
+    }
+
+### `PATCH /admin/users/{guid}/emails/{email}/verify`
+
+Marks an email address as verified.
+
+This action is irreversible.
+
+### `POST /admin/users/{guid}/emails/{email}/verify`
+
+Sends a verification email to the email address.
+
+### `PATCH /admin/users/{guid}/emails/{email}/primary`
+
+Marks an email address as the primary email address for the user.
+
+The email address that was marked as primary before is no longer marked as primary.
+
+This action can only be executed on a verified email address.
+
+### `DELETE /admin/users/{guid}/emails/{email}`
+
+Removes an email address from a user.
+
+This action cannot be executed on the primary email address of a user.
 
 ### `GET /admin/groups`
 
@@ -448,30 +516,25 @@ The resource object is described at `GET /admin/users`
         "_links":{"self":{"href":"\/admin\/users\/5FC0F82D-1E70-45E7-B620-781456E6CE10"}}
     }
 
-### `PUT /admin/groups/{name}`
+### `PATCH /admin/groups/{name}/displayname`
 
-Change all attributes of a group at once.
-It takes the same fields as `POST /admin/groups`, all fields that are present must be filled either with the current data,
-or new data.
+Changes the display name of the group.
 
-Usage of this route is for human usage with the form on `/admin/groups/{guid}/edit`, and not for usage by automated processes.
-Use the `PATCH` routes below for more granular access without the need to submit all data of the group.
+The full request body is taken as the display name. Validation errors are handled in the same way as with forms.
 
-### `PATCH /admin/groups/{name}`
+### `PATCH /admin/groups/{name}/flags`
 
-Accepts the same fields as `POST /admin/groups`.
+Change the behavioral flags of the group.
 
-Fields that are not present in the request body are not changed.
+| Field           | Description |
+| --------------- | ----------- |
+| `exportable`    | Marks the group as exported. (visible as a group to OAuth applications) |
+| `userJoinable`  | Marks the group as joinable by a user himself. (through the profile and via the OAuth API) |
+| `userLeaveable` | Marks the group as leaveable by a user himself. (through the profile and via the OAuth API) |
+| `noUsers`       | Marks the group as not able to have direct user members. |
+| `noGroups`      | Marks the group as not containing any groups as member. |
 
-
-As such, following fields can only be enabled and cannot be disabled:
-
-* `app_group[exportable]`
-* `app_group[userJoinable]`
-* `app_group[userLeaveable]`
-* `app_group[noGroups]`
-* `app_group[noUsers]`
-
+The flags can be toggled on and off by setting them to `1` and `0` respectively.
 
 ### `DELETE /admin/groups/{name}`
 

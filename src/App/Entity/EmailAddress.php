@@ -7,7 +7,7 @@ use FOS\OAuthServerBundle\Util\Random;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EmailAddressRepository")
  * @Gedmo\Loggable
  */
 class EmailAddress implements \Serializable

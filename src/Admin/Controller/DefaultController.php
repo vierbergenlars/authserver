@@ -12,9 +12,12 @@ use Knp\Component\Pager\Paginator;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\Post;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use vierbergenlars\Bundle\RadRestBundle\Controller\ControllerServiceController;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\DefaultsTrait;
 use vierbergenlars\Bundle\RadRestBundle\Controller\Traits\Pagination\KnpPaginationTrait;
@@ -30,7 +33,31 @@ class DefaultController extends ControllerServiceController
         KnpPaginationTrait::getPagination insteadof DefaultsTrait;
     }
 
-    use DefaultsTrait;
+    use DefaultsTrait {
+        DefaultsTrait::processForm as private _DT_processForm;
+    }
+
+    /**
+     * @NoRoute
+     */
+    public function patchAction(Request $request, $id)
+    {
+    }
+
+    protected function processForm(FormInterface $form, Request $request)
+    {
+        if($form->getConfig()->getMethod() === 'DELETE' && !$form->has('_token')) {
+            // Allow an API client to execute a DELETE without adding a request body
+            if ($form->getData() !== null) {
+                $request->request->add(array(
+                    $form->getConfig()->getName() => array('submit' => null)
+                ));
+            } else {
+                throw new NotFoundHttpException;
+            }
+        }
+        return $this->_DT_processForm($form, $request);
+    }
 
     /**
      *
