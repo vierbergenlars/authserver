@@ -2,6 +2,7 @@ api_user_get:
     pattern: user
     defaults:
         _controller: User\Controller\Api\UserController::getAction
+        _format: ~
 
 api_group:
     name_prefix: api_
