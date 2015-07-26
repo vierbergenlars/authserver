@@ -12,9 +12,6 @@ framework:
         cache: apc
 
 doctrine:
-    dbal:
-        driver: pdo_sqlite
-        path: %kernel.root_dir%/database.sqlite
     orm:
         metadata_cache_driver: apc
         result_cache_driver: apc
