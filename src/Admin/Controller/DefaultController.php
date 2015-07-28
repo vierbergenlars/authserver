@@ -46,7 +46,7 @@ class DefaultController extends ControllerServiceController
 
     protected function processForm(FormInterface $form, Request $request)
     {
-        if($form->getConfig()->getMethod() === 'DELETE' && !$form->has('_token')) {
+        if($form->getConfig()->getMethod() === 'DELETE' && !$request->request->has($form->getConfig()->getName())) {
             // Allow an API client to execute a DELETE without adding a request body
             if ($form->getData() !== null) {
                 $request->request->add(array(
