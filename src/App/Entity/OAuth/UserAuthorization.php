@@ -45,16 +45,6 @@ class UserAuthorization
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set scopes
      *
      * @param array $scopes
