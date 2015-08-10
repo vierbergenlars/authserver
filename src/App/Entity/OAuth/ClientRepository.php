@@ -28,6 +28,12 @@ class ClientRepository extends EntityRepository
             ->setParameter('client', $object)
             ->getQuery()
             ->execute();
+        $this->getEntityManager()->createQueryBuilder()
+            ->delete('AppBundle:OAuth\UserAuthorization', 'ua')
+            ->where('ua.client = :client')
+            ->setParameter('client', $object)
+            ->getQuery()
+            ->execute();
         parent::delete($object);
         $this->getEntityManager()->commit();
     }
