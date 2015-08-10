@@ -1,11 +1,11 @@
 # {{ ansible_managed }}
 parameters:
-    database_driver:   pdo_sqlite
-    database_host:     ~
+    database_driver:   pdo_mysql
+    database_host:     localhost
     database_port:     ~
-    database_name:     ~
-    database_user:     ~
-    database_password: ~
+    database_name:     authserver
+    database_user:     authserver
+    database_password: authserver
     database_path:     %kernel.root_dir%/database.sqlite
 
     mailer_transport:  smtp

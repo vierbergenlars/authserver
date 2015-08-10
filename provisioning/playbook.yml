@@ -13,6 +13,16 @@
         - git
         - nodejs-legacy
         - curl
+        - python-mysqldb
+        - mysql-server
+        - phpmyadmin
+    - name: Reconfigure PHPMyAdmin for apache
+      shell: "DEBIAN_FRONTEND=noninteractive DEBCONF_DB_OVERRIDE=Pipe dpkg-reconfigure phpmyadmin <<EOF\n
+Name: phpmyadmin/reconfigure-webserver\n
+Template: phpmyadmin/reconfigure-webserver\n
+Value: apache2\n
+Owners: phpmyadmin\n
+EOF"
     - name: Install npm
       shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
     - name: Enable php5 apache module
@@ -50,6 +60,12 @@
         - composer.json
         - composer.lock
         - package.json
+    - name: Start mysql
+      service: name=mysql state=started
+    - name: Create mysql user
+      mysql_user: name=authserver password=authserver priv=*.*:ALL state=present
+    - name: Create mysql database
+      mysql_db: name=authserver state=present
     - name: Generate random secret
       shell: base64 < /dev/urandom | head -1
       register: random
