@@ -25,7 +25,7 @@ fos_rest:
     access_denied_listener:
         json: true
         xml: true
-    body_listener: true
+    body_listener: false
 
 bazinga_rest_extra:
     link_request_listener: true
