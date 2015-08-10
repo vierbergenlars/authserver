@@ -113,7 +113,9 @@ class UserEmailController extends Controller implements ClassResourceInterface
             throw $this->createNotFoundException();
         if($email->isVerified())
             throw new ConflictHttpException('This email address has already been verified.');
+        $email->setVerified(false);
 
+        $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress')->flush($email);
         $mailer = $this->get('app.mailer.user.verify_email');
         /* @var $mailer PrimedTwigMailer */
         if(!$mailer->sendMessage($email->getEmail(), $email))
