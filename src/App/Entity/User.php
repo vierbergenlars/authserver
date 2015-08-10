@@ -62,7 +62,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var EmailAddress[]
      *
-     * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"ALL"}, orphanRemoval=true)
      */
     private $emailAddresses;
 
