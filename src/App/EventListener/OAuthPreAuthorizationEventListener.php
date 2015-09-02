@@ -9,6 +9,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use App\Entity\OAuth\Client;
 use App\Entity\User;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use vierbergenlars\Bundle\RadRestBundle\Manager\ResourceManagerInterface;
 
 class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
@@ -35,11 +37,13 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
             if ($client->isPreApproved()&&$this->matchesScope($scopes, $client->getPreApprovedScopes())) {
                 $event->setAuthorizedClient(true);
             }
-        }
-        if (($user = $event->getUser())&&$user instanceof User) {
-            $authorization = $this->getAuthorization($client, $user);
-            if($authorization&&$this->matchesScope($scopes, $authorization->getScopes())) {
-                $event->setAuthorizedClient(true);
+            if (($user = $event->getUser())&&$user instanceof User) {
+                $authorization = $this->getAuthorization($client, $user);
+                if($authorization&&$this->matchesScope($scopes, $authorization->getScopes())) {
+                    $event->setAuthorizedClient(true);
+                }
+                if(!$this->matchesGroupRestriction($client, $user))
+                    $event->setAuthorizedClient(false);
             }
         }
     }
@@ -49,14 +53,23 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
         if ($event->isAuthorizedClient()) {
             if(($client = $event->getClient())&&$client instanceof Client&&
                 ($user = $event->getUser())&&$user instanceof User) {
-                $authorization = $this->getAuthorization($client, $user);
-                if($authorization === null)
-                    $authorization = new UserAuthorization($client, $user);
-                $authorization->setScopes(explode(' ', $event->getScopes()));
-                $this->em->persist($authorization);
-                $this->em->flush($authorization);
+                if(!$this->matchesGroupRestriction($client, $user)) {
+                    throw new UnauthorizedHttpException('User is not member of the required group to use this client.');
+                } else {
+                    $authorization = $this->getAuthorization($client, $user);
+                    if ($authorization === null)
+                        $authorization = new UserAuthorization($client, $user);
+                    $authorization->setScopes(explode(' ', $event->getScopes()));
+                    $this->em->persist($authorization);
+                    $this->em->flush($authorization);
+                }
             }
         }
+    }
+
+    private function matchesGroupRestriction(Client $client, User $user)
+    {
+        return $client->getGroupRestriction() === null || in_array($client->getGroupRestriction(), $user->getGroupsRecursive(), true);
     }
 
     private function matchesScope($scopes, $restrictions)
