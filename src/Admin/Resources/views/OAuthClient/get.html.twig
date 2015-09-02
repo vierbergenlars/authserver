@@ -27,6 +27,12 @@
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
+            {% if data.groupRestriction %}
+                <dt>Group restriction</dt><dd>
+                    {% set g = data.groupRestriction %}
+                    <a href="{{ url('admin_group_get', {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+                </dd>
+            {% endif %}
         </dl>
     </div>
 {% endblock %}

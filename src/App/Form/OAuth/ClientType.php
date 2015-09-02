@@ -2,6 +2,7 @@
 
 namespace App\Form\OAuth;
 
+use App\Entity\GroupRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -37,6 +38,14 @@ class ClientType extends AbstractType
                 ),
                 'multiple' => true,
                 'expanded' => true,
+            ))
+            ->add('groupRestriction', 'entity', array(
+                'class' => 'AppBundle:Group',
+                'query_builder' => function(GroupRepository $repository) {
+                    return $repository->createQueryBuilder('g')->where('g.exportable = true');
+                },
+                'property' => 'name',
+                'required' => false,
             ))
             ->add('submit', 'submit')
         ;

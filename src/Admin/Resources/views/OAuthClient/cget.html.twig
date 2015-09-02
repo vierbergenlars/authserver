@@ -23,6 +23,9 @@
                                 {% if obj.preApproved %}
                                     <span title="Pre approved">{{ label_success('PA') }}</span>
                                 {% endif %}
+                                {% if obj.groupRestriction %}
+                                    <span title="Group restriction active">{{ label('GR') }}</span>
+                                {% endif %}
                             </label>
                         </td>
                         <td>
