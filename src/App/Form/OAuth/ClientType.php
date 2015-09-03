@@ -15,6 +15,13 @@ class ClientType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $scopes = array(
+            'profile:username' => 'profile:username',
+            'profile:realname' => 'profile:realname',
+            'profile:groups'   => 'profile:groups',
+            'group:join'       => 'group:join',
+            'group:leave'      => 'group:leave',
+        );
         $builder
             ->add('name')
             ->add('redirectUris', 'bootstrap_collection', array(
@@ -29,13 +36,7 @@ class ClientType extends AbstractType
                 ),
             ))
             ->add('preApprovedScopes', 'choice', array(
-                'choices' => array(
-                    'profile:username' => 'profile:username',
-                    'profile:realname' => 'profile:realname',
-                    'profile:groups'   => 'profile:groups',
-                    'group:join'       => 'group:join',
-                    'group:leave'      => 'group:leave',
-                ),
+                'choices' => $scopes,
                 'multiple' => true,
                 'expanded' => true,
             ))
@@ -46,6 +47,11 @@ class ClientType extends AbstractType
                 },
                 'property' => 'name',
                 'required' => false,
+            ))
+            ->add('maxScopes', 'choice', array(
+                'choices' => $scopes,
+                'multiple' => true,
+                'expanded' => true,
             ))
             ->add('submit', 'submit')
         ;

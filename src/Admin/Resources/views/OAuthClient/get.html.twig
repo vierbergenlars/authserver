@@ -19,7 +19,10 @@
                 {% endif %}
                 <span class="text-muted" id="oauth_app_client_secret_guard">******</span>
             </dd>
-            <dt>Scopes</dt><dd>{{ data.preApprovedScopes|join(' ') }}</dd>
+            {% if data.preApprovedScopes|length > 0 %}
+                <dt>Pre approved scopes</dt><dd>{{ data.preApprovedScopes|join(' ') }}</dd>
+            {% endif %}
+            <dt>Maximum scopes</dt><dd>{{ data.maxScopes|join(' ') }}</dd>
             <dt>Redirect uris</dt><dd>
                 {% for url in data.redirectUris %}
                     {{ url }}<br>

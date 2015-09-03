@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Scopes</th>
+                    <th>Maximum scopes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -29,7 +29,7 @@
                             </label>
                         </td>
                         <td>
-                            {{ obj.preApprovedScopes|join(' ') }}
+                            {{ obj.maxScopes|join(' ') }}
                         </td>
                         <td>
                             {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
