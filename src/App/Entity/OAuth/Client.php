@@ -46,6 +46,12 @@ class Client extends BaseClient
     private $preApprovedScopes = array();
 
     /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $maxScopes = array();
+
+    /**
      * @Gedmo\Versioned
      */
     protected $redirectUris = array();
@@ -89,6 +95,24 @@ class Client extends BaseClient
     {
         $this->preApprovedScopes = $preApprovedScopes;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMaxScopes()
+    {
+        return $this->maxScopes;
+    }
+
+    /**
+     * @param mixed $maxScopes
+     * @return Client
+     */
+    public function setMaxScopes($maxScopes)
+    {
+        $this->maxScopes = $maxScopes;
         return $this;
     }
 

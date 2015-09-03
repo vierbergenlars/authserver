@@ -45,6 +45,8 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
                 if(!$this->matchesGroupRestriction($client, $user))
                     $event->setAuthorizedClient(false);
             }
+            if(!$this->matchesScope($scopes, $client->getMaxScopes()))
+                throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
         }
     }
 
