@@ -50,7 +50,9 @@ class PublicEmailController extends Controller
         if ($form->isValid()) {
             $user = $form->get('user')->getData();
             $addr = $user->getPrimaryEmailAddress();
-            if (!$addr->isVerified()) {
+            if(!$addr) {
+                $flash->error('This account does not have an email address associated.');
+            } else if (!$addr->isVerified()) {
                 $addr->setVerified(false);
 
                 if ($mailer->sendMessage($addr->getEmail(), $addr)) {

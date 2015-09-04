@@ -37,9 +37,13 @@
                         <td>{{ obj.displayName }}</td>
                         <td>
                             {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
-                                {{ obj.primaryEmailAddress.email }}
-                                {% if not obj.primaryEmailAddress.verified %}
-                                    <span class="text-muted">(Not verified)</span>
+                                {% if obj.primaryEmailAddress %}
+                                    {{ obj.primaryEmailAddress.email }}
+                                    {% if not obj.primaryEmailAddress.verified %}
+                                        <span class="text-muted">(Not verified)</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">(None)</span>
                                 {% endif %}
                             {% else %}
                                 <span class="text-muted">(Hidden)</span>

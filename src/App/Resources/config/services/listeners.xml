@@ -12,5 +12,12 @@
             <argument type="service" id="braincrafted_bootstrap.flash" />
             <tag name="kernel.event_subscriber" />
         </service>
+        <service class="App\EventListener\HasEmailAddressListener">
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="app.admin.user.repo" />
+            <argument type="service" id="router" />
+            <argument type="service" id="braincrafted_bootstrap.flash" />
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 </container>

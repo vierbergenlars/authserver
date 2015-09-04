@@ -39,9 +39,6 @@
             </constraint>
         </property>
         <property name="emailAddresses">
-            <constraint name="Count">
-                <option name="min">1</option>
-            </constraint>
             <constraint name="Valid" />
         </property>
         <property name="role">
@@ -151,8 +148,8 @@
                 <option name="min">1</option>
             </constraint>
             <constraint name="All">
-                <constraint name="NotBlank"></constraint>
-                <constraint name="Url"></constraint>
+                <constraint name="NotBlank" />
+                <constraint name="Url" />
             </constraint>
         </property>
     </class>

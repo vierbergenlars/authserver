@@ -222,7 +222,7 @@ Creates a new user.
 | `app_user[displayName]`                | Yes      | The real name of the user. Will be used to address the user. |
 | `app_user[password]`                   | No       | The password to set for the user. Not required, because the user can reset their password afterwards. |
 | `app_user[passwordEnabled]`            | Yes      | Values: 0 (password authentication disabled), 1 (password authentication enabled) or 2 (Allow user to set an initial password). |
-| `app_user[emailAddresses][0][email]`   | Yes      | The first email address for the user. Multiple addresses can be added by changing the index `[0]` to a higher number. |
+| `app_user[emailAddresses][0][email]`   | No       | The first email address for the user. Multiple addresses can be added by changing the index `[0]` to a higher number. |
 | `app_user[emailAddresses][0][verified]`| No       | If present, the corresponding email address is marked as already verified. |
 | `app_user[emailAddresses][0][primary]` | No       | If present, the corresponding email address is marked as the primary address for the user. |
 | `app_user[enabled]`                    | No       | If present, the user is enabled immediately. |
@@ -234,7 +234,7 @@ A more detailed overview of a user.
 
 | Field          | Required scope         | Description |
 | -------------- | ---------------------- | ----------- |
-| `email`        | `Profile::read::email` | The primary email address of the user. (may not be verified) |
+| `email`        | `Profile::read::email` | The primary email address of the user. (may not be verified, may not be present) |
 | `non-locked`   | `Profile::read`        | If the user account is not locked due to lack of verified primary email address. |
 | `properties`   | `Profile::read`        | Extra properties that are attached to the user. Empty properties are omitted and if all properties are empty, the key is omitted too. |
 | `guid`         | `Profile::read`        | The globally-unique identifier of a user. Is guaranteed unique within one installation, and should be unique across different installations. This value does not change after user creation. |
