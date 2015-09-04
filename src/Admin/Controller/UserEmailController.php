@@ -143,7 +143,8 @@ class UserEmailController extends Controller implements ClassResourceInterface
             throw $this->createNotFoundException();
         if(!$email->isVerified())
             throw new BadRequestHttpException('The email address must be verified before it can be set as the primary email address.');
-        $user->getPrimaryEmailAddress()->setPrimary(false);
+        if($user->getPrimaryEmailAddress())
+            $user->getPrimaryEmailAddress()->setPrimary(false);
         $email->setPrimary(true);
         $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress')->flush();
     }

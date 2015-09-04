@@ -180,6 +180,8 @@ class ProfileController extends Controller
             $addr = $form->getData();
             $addr->setVerified(false);
             $addr->setUser($this->getUser());
+            if(!$this->getUser()->getPrimaryEmailAddress())
+                $addr->setPrimary(true);
             $em->persist($addr);
             $em->flush($addr);
 

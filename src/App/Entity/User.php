@@ -185,7 +185,11 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        return $this->getPrimaryEmailAddress()->isVerified()||$this->role === 'ROLE_SUPER_ADMIN';
+        if($this->role === 'ROLE_SUPER_ADMIN')
+            return true;
+        if(!$this->getPrimaryEmailAddress())
+            return true;
+        return $this->getPrimaryEmailAddress()->isVerified();
     }
 
     public function isCredentialsNonExpired()
@@ -277,7 +281,10 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getEmail()
     {
-        return $this->getPrimaryEmailAddress()->getEmail();
+        $primary = $this->getPrimaryEmailAddress();
+        if($primary)
+            return $primary->getEmail();
+        return null;
     }
 
     /**
@@ -391,16 +398,15 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * Get primaryEmailAddress
      *
-     * @return \App\Entity\EmailAddress
+     * @return \App\Entity\EmailAddress|null
      */
     public function getPrimaryEmailAddress()
     {
         if ($this->primaryEmailAddress && !$this->getEmailAddresses()) {
             return $this->primaryEmailAddress;
         }
-        foreach ($this->getEmailAddresses()->toArray() as $email) {
+        foreach ($this->getEmailAddresses() as $email) {
             if($email->isPrimary())
-
                 return $this->primaryEmailAddress = $email;
         }
 
