@@ -1,0 +1,22 @@
+<div class="panel-body">
+    <form action="{{ url('admin_oauth_client_gets') }}">
+        <div class="input-group">
+            <input type="search" name="q" placeholder="Search" class="form-control">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search</span></button>
+            </span>
+        </div>
+    </form>
+</div>
+<div class="list-group hidden-xs">
+    {% for obj in data %}
+        <a class="list-group-item" href="{{ url('admin_oauth_client_get', { id: obj.id }) }}">{{ obj.name }}</a>
+    {% endfor %}
+</div>
+<div class="panel-body">
+    <div class="btn-group">
+        <a href="{{ url('admin_oauth_client_gets') }}" class="btn btn-primary hidden-xs">{{ icon('list-alt') }} Full list</a>
+        <a href="{{ url('admin_oauth_client_new') }}" class="btn btn-default">{{ icon('plus') }} Create new</a>
+    </div>
+</div>
+

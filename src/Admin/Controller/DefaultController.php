@@ -204,7 +204,6 @@ class DefaultController extends ControllerServiceController
     protected function handleView(View $view)
     {
         $view->setExtraData(array(
-            'controller' => new ControllerVariables($this),
             'batch_form' => $this->getFormFactory()->create(new BatchType($this->getBatchActions()))->createView(),
         ));
         $view->getSerializationContext()->enableMaxDepthChecks();

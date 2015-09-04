@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% extends 'AdminBundle:Audit:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">{{ icon('heartbeat') }} Audit log</h3>
@@ -23,8 +23,8 @@
                   {% endfor %}
                   <td>
                     <div class="btn-group btn-group-sm">
-                      <a class="btn btn-info" href="{{ url(controller.route('get'), {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
-                      <a class="btn btn-default" href="{{ url(controller.route('target'), {id: obj.id}) }}" title="Go to target">{{ icon('link') }} <span class="sr-only">Go to target</span></a>
+                      <a class="btn btn-info" href="{{ url('admin_audit_get', {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+                      <a class="btn btn-default" href="{{ url('admin_audit_target', {id: obj.id}) }}" title="Go to target">{{ icon('link') }} <span class="sr-only">Go to target</span></a>
                     </div>
                   </td>
                 </tr>

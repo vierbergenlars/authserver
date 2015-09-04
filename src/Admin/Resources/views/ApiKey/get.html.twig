@@ -1,0 +1,15 @@
+{% extends 'AdminBundle:ApiKey:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">API key</h3>
+    </div>
+
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Name</dt><dd>{{ data.name }}</dd>
+            <dt>Username</dt><dd>-apikey-{{ data.id }}</dd>
+            <dt>Password</dt><dd>{{ data.secret }}</dd>
+            <dt>Scopes</dt><dd>{% for scope in data.scopes %}{{ scope }}<br>{% endfor %}</dd>
+        </dl>
+    </div>
+{% endblock %}

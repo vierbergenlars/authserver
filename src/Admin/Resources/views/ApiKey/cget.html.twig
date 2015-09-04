@@ -1,15 +1,15 @@
-{% extends 'AdminBundle:OAuthClient:skeleton.html.twig' %}
+{% extends 'AdminBundle:ApiKey:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
-        <h3 class="panel-title">OAuth Applications</h3>
+        <h3 class="panel-title">API Keys</h3>
     </div>
-    {{ form_start(batch_form, { action: url('admin_oauth_client_batch', { _params: app.request.query.all }), style: 'inline' }) }}
+    {{ form_start(batch_form, { action: url('admin_apikey_batch', { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Maximum scopes</th>
+                    <th>Scopes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -20,19 +20,11 @@
                             <label>
                                 <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">
                                 {{ obj.name }}
-                                {% if obj.preApproved %}
-                                    <span title="Pre approved">{{ label_success('PA') }}</span>
-                                {% endif %}
-                                {% if obj.groupRestriction %}
-                                    <span title="Group restriction active">{{ label('GR') }}</span>
-                                {% endif %}
                             </label>
                         </td>
+                        <td>{{ obj.scopes|join(' ') }}</td>
                         <td>
-                            {{ obj.maxScopes|join(' ') }}
-                        </td>
-                        <td>
-                            {% include 'AdminBundle:OAuthClient:cget_links.html.twig' with {obj: obj } only %}
+                            {% include 'AdminBundle:ApiKey:cget_links.html.twig' with {obj: obj} only %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -48,7 +40,8 @@
     </div>
     {{ form_end(batch_form) }}
 {% endblock %}
+
 {% block javascript %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
+{{ parent() }}
+<script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
 {% endblock %}

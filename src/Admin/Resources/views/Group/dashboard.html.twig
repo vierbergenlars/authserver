@@ -1,5 +1,5 @@
 <div class="panel-body">
-    <form action="{{ url(controller.route('cget')) }}">
+    <form action="{{ url('admin_group_gets') }}">
         <div class="input-group">
             <input type="search" name="q" placeholder="Search" class="form-control">
             <span class="input-group-btn">
@@ -10,13 +10,13 @@
 </div>
 <div class="list-group hidden-xs">
     {% for obj in data %}
-        <a class="list-group-item" href="{{ url(controller.route('get'), { id: obj.id }) }}">{{ obj.name }}</a>
+        <a class="list-group-item" href="{{ url('admin_group_get', { group: obj.name }) }}">{{ obj.name }}</a>
     {% endfor %}
 </div>
 <div class="panel-body">
     <div class="btn-group">
-        <a href="{{ url(controller.route('cget')) }}" class="btn btn-primary hidden-xs">{{ icon('list-alt') }} Full list</a>
-        <a href="{{ url(controller.route('new')) }}" class="btn btn-default">{{ icon('plus') }} Create new</a>
+        <a href="{{ url('admin_group_gets') }}" class="btn btn-primary hidden-xs">{{ icon('list-alt') }} Full list</a>
+        <a href="{{ url('admin_group_new') }}" class="btn btn-default">{{ icon('plus') }} Create new</a>
     </div>
 </div>
 

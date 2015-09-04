@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:get.html.twig' %}
+{% extends 'AdminBundle:Group:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">{{ icon('group') }} {{ data.displayName }}</h3>
@@ -15,7 +15,7 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groupsRecursive if g != data %}
-                    <a href="{{ url(controller.route('get'), {id: g.id}) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group fa-fw') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
+                    <a href="{{ url('admin_group_get', {id: g.id}) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group fa-fw') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
@@ -26,12 +26,12 @@
                         <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
                     {% endfor %}
                 {% else %}
-                <a href="{{ url(controller.route('get_members'), { id: data.id }) }}">{{ icon('list fa-fw') }} Show {{ data.members|length }} members</a><br>
+                <a href="{{ url('admin_group_get_members', { id: data.id }) }}">{{ icon('list fa-fw') }} Show {{ data.members|length }} members</a><br>
                 {% endif %}
                 {% for g in data.memberGroups %}
-                    <a href="{{ url(controller.route('get'), {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+                    <a href="{{ url('admin_group_get', {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
                 {% endfor %}
-                <a href="{{ url(controller.route('get_members'), { id: data.id, all: 1 }) }}">{{ icon('list fa-fw') }} Show indirect members</a><br>
+                <a href="{{ url('admin_group_get_members', { id: data.id, all: 1 }) }}">{{ icon('list fa-fw') }} Show indirect members</a><br>
             </dd>
             {% if data.noGroups and data.memberGroups|length > 0 %}
                 <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>

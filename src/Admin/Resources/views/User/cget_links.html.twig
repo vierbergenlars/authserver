@@ -1,0 +1,7 @@
+{% spaceless %}
+<div class="btn-group btn-group-sm">
+    <a class="btn btn-info" href="{{ url('admin_user_get', {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+    <a class="btn btn-default" href="{{ url('admin_user_edit', {id: obj.id}) }}" title="Edit">{{ icon('edit') }} <span class="sr-only">Edit</span></a>
+    <a class="btn btn-danger" href="{{ url('admin_user_remove', {id: obj.id}) }}" title="Delete">{{ icon('trash-o') }} <span class="sr-only">Delete</span></a>
+</div>
+{% endspaceless %}

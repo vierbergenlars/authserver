@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% extends 'AdminBundle:Audit:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">View</h3>
@@ -6,7 +6,7 @@
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Target Object</dt><dd><a href="{{ url(controller.route('target'), {id: id}) }}">{{ data.objectClass }}@{{ data.objectId }}</a></dd>
+            <dt>Target Object</dt><dd><a href="{{ url('admin_audit_target', {id: id}) }}">{{ data.objectClass }}@{{ data.objectId }}</a></dd>
             <dt>Action</dt><dd>{{ data.action }}</dd>
             <dt>Version</dt><dd>{{ data.version }}</dd>
             <dt>Timestamp</dt><dd>{{ data.loggedAt|date }}</dd>
@@ -26,13 +26,13 @@
                         <td><span class="text-muted">(Secret)</span></td>
                     {% elseif value is iterable %}
                         {% if value.id is defined %}
-                            <td><a href="{{ url(controller.route('target'), {id:id,property:name}) }}">{{ value.id|radrest_object_stringify }}</a></td>
+                            <td><a href="{{ url('admin_audit_target', {id:id,property:name}) }}">{{ value.id|radrest_object_stringify }}</a></td>
                         {% elseif value['+'] is defined or value['-'] is defined %}
                             <td>
                                 {% if value['+'] is defined %}
                                     <b>Added:</b>
                                     {% for v in value['+'] %}
-                                        <a href="{{ url(controller.route('target'), {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
+                                        <a href="{{ url('admin_audit_target', {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
                                         {% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                     <br>
@@ -40,7 +40,7 @@
                                 {% if value['-'] is defined %}
                                     <b>Removed:</b>
                                     {% for v in value['-'] %}
-                                        <a href="{{ url(controller.route('target'), {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
+                                        <a href="{{ url('admin_audit_target', {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
                                         {% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 {% endif %}

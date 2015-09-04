@@ -1,11 +1,11 @@
-{% extends 'VlRadRestBundle:Default:skeleton.html.twig' %}
+{% extends 'AdminBundle:OAuthClient:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">Edit</h3>
     </div>
     <div class="panel-body">
         {% if form is defined %}
-            {{ form(form, {action: path(controller.route('put'), {id: id}), style: 'horizontal'}) }}
+            {{ form(form, {action: path('admin_oauth_client_put', {id: id}), style: 'horizontal'}) }}
         {% endif %}
     </div>
 {% endblock %}

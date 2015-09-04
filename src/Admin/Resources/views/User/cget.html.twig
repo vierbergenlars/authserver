@@ -1,9 +1,9 @@
-{% extends 'VlRadRestBundle:Default:cget.html.twig' %}
+{% extends 'AdminBundle:User:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">Users</h3>
     </div>
-    {{ form_start(batch_form, { action: url(controller.route('batch'), { _params: app.request.query.all }), style: 'inline' }) }}
+    {{ form_start(batch_form, { action: url('admin_user_batch', { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -50,7 +50,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
+                            {% include 'AdminBundle:User:cget_links.html.twig' with {obj: obj} only %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -72,12 +72,12 @@
         <span class="sr-only">Toggle help</span>
     </button>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ url(controller.route('cget'), {q:'is:user'}) }}" data-property="user" data-remove-property="admin,superadmin" class="js-search-example">{{ icon('circle-o') }} Users</a></li>
-        <li><a href="{{ url(controller.route('cget'), {q:'is:admin'}) }}" data-property="admin" data-remove-property="user,superadmin" class="js-search-example">{{ icon('circle-o') }} Admins</a></li>
-        <li><a href="{{ url(controller.route('cget'), {q:'is:superadmin'}) }}" data-property="superadmin" data-remove-property="user,admin" class="js-search-example">{{ icon('circle-o') }} Super admins</a></li>
+        <li><a href="{{ url('admin_user_gets', {q:'is:user'}) }}" data-property="user" data-remove-property="admin,superadmin" class="js-search-example">{{ icon('circle-o') }} Users</a></li>
+        <li><a href="{{ url('admin_user_gets', {q:'is:admin'}) }}" data-property="admin" data-remove-property="user,superadmin" class="js-search-example">{{ icon('circle-o') }} Admins</a></li>
+        <li><a href="{{ url('admin_user_gets', {q:'is:superadmin'}) }}" data-property="superadmin" data-remove-property="user,admin" class="js-search-example">{{ icon('circle-o') }} Super admins</a></li>
         <li class="divider" role="presentation"></li>
-        <li><a href="{{ url(controller.route('cget'), {q:'is:enabled'}) }}" data-property="enabled" data-remove-property="disabled" class="js-search-example">{{ icon('circle-o') }} Enabled</a></li>
-        <li><a href="{{ url(controller.route('cget'), {q:'is:disabled'}) }}" data-property="disabled" data-remove-property="enabled" class="js-search-example">{{ icon('circle-o') }} Disabled</a></li>
+        <li><a href="{{ url('admin_user_gets', {q:'is:enabled'}) }}" data-property="enabled" data-remove-property="disabled" class="js-search-example">{{ icon('circle-o') }} Enabled</a></li>
+        <li><a href="{{ url('admin_user_gets', {q:'is:disabled'}) }}" data-property="disabled" data-remove-property="enabled" class="js-search-example">{{ icon('circle-o') }} Disabled</a></li>
         <li class="divider" role="presentation"></li>
         <li>
             <span class="input-group menu-input">
@@ -143,6 +143,7 @@
 {% endblock %}
 {% block javascript %}
 {{ parent() }}
+<script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
 <script src="{{ asset('bundles/app/js/searchgrammar.js') }}"></script>
 <script src="{{ asset('bundles/app/js/search-examples.js')}}"></script>
 {% endblock %}

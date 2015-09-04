@@ -1,0 +1,11 @@
+{% extends 'AdminBundle:OAuthClient:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Create</h3>
+    </div>
+    <div class="panel-body">
+        {% if form is defined %}
+            {{ form(form, {action: path('admin_oauth_client_post'), style: 'horizontal'}) }}
+        {% endif %}
+    </div>
+{% endblock %}

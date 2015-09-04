@@ -35,22 +35,12 @@
                             {% endmacro %}
                             {% import _self as self %}
                             {% if id is defined %}
-                                {% if controller.may('get', data) %}
-                                    {{ self.render_link(controller.route('get'), {id:id},'eye', 'View') }}
-                                {% endif %}
-                                {% if controller.may('edit', data) %}
-                                    {{ self.render_link(controller.route('edit'), {id:id}, 'pencil', 'Edit') }}
-                                {% endif %}
-                                {% if controller.may('remove', data) %}
-                                    {{ self.render_link(controller.route('remove'), {id:id}, 'trash', 'Delete') }}
-                                {% endif %}
+                                {{ self.render_link('admin_user_get', {id:id},'eye', 'View') }}
+                                {{ self.render_link('admin_user_edit', {id:id}, 'pencil', 'Edit') }}
+                                {{ self.render_link('admin_user_remove', {id:id}, 'trash', 'Delete') }}
                             {% endif %}
-                            {% if controller.may('cget') %}
-                                {{ self.render_link(controller.route('cget'), {}, 'list', 'List') }}
-                            {% endif %}
-                            {% if controller.may('new') %}
-                                {{ self.render_link(controller.route('new'), {}, 'plus', 'Create') }}
-                            {% endif %}
+                            {{ self.render_link('admin_user_gets', {}, 'list', 'List') }}
+                            {{ self.render_link('admin_user_new', {}, 'plus', 'Create') }}
                         </div>
                     {% endblock %}
                 </div>
