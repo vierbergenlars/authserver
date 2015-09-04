@@ -69,7 +69,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var EmailAddress
      */
-    private $primaryEmailAddress;
+    private $_primaryEmailAddress_;
 
     /**
      * @ORM\Column(name="roles", type="string")
@@ -281,6 +281,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getEmail()
     {
+        @trigger_error(__METHOD__.' is deprecated.', E_USER_DEPRECATED);
         $primary = $this->getPrimaryEmailAddress();
         if($primary)
             return $primary->getEmail();
@@ -402,12 +403,12 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getPrimaryEmailAddress()
     {
-        if ($this->primaryEmailAddress && !$this->getEmailAddresses()) {
-            return $this->primaryEmailAddress;
+        if ($this->_primaryEmailAddress_ && !$this->getEmailAddresses()) {
+            return $this->_primaryEmailAddress_;
         }
         foreach ($this->getEmailAddresses() as $email) {
             if($email->isPrimary())
-                return $this->primaryEmailAddress = $email;
+                return $this->_primaryEmailAddress_ = $email;
         }
 
         if($mail = $this->getEmailAddresses()->get(0))

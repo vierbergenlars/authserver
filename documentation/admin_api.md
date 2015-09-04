@@ -234,19 +234,26 @@ A more detailed overview of a user.
 
 | Field          | Required scope         | Description |
 | -------------- | ---------------------- | ----------- |
-| `email`        | `Profile::read::email` | The primary email address of the user. (may not be verified, may not be present) |
+| `email`        | `Profile::read::email` | **DEPRECATED** The primary email address of the user. (may not be verified, may not be present) |
 | `non-locked`   | `Profile::read`        | If the user account is not locked due to lack of verified primary email address. |
 | `properties`   | `Profile::read`        | Extra properties that are attached to the user. Empty properties are omitted and if all properties are empty, the key is omitted too. |
 | `guid`         | `Profile::read`        | The globally-unique identifier of a user. Is guaranteed unique within one installation, and should be unique across different installations. This value does not change after user creation. |
 | `username`     | `Profile::read`        | The username of the user. Is guaranteed to be unique within one installation, but may be changed after user creation and may be reassigned to another user. |
 | `display_name` | `Profile::read`        | The real name of the user, which should be used to address the user. May not be unique within one installation and may be changed after user creation. |
 | `emails`       | `Profile::read::email` | An array of email addresses belonging to the user, with their verification and primary status. |
+| `primary-email`| `Profile::read::email` | The primary email address belonging to the user, along with its verification status. |
 | `role`         | `Profile::read`        | The access level of the user in Authserver: one of `ROLE_USER`, `ROLE_AUDIT`, `ROLE_ADMIN` or `ROLE_SUPERADMIN` (subject to change). |
 | `enabled`      | `Profile::read`        | If the user account is enabled. |
 | `groups`       | `Profile::read`        | An array of groups the user is directly member of, regardless of their exportable attribute. |
 | `_links.self.href` | `Profile::read`    | The canonical link to this user. |
 
     {
+        "primary-email":{
+             "addr":"15057@vbgn.be",
+             "verified":false,
+             "primary":true,
+             "_links":{"self":{"href":"\/admin\/users\/A0C9A429-D3D0-4070-B59F-6E3DDD40A9AB\/emails\/58"}}
+        },
         "email":"15057@vbgn.be",
         "non-locked":false,
         "properties":{
