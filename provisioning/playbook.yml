@@ -72,7 +72,7 @@ EOF"
     - name: Create app/config/parameters.yml
       template: src=parameters.yml.j2 dest=/var/www/app/config/parameters.yml
     - name: composer install
-      composer: working_dir=/var/www no_scripts=yes
+      composer: working_dir=/var/www no_dev=no
     - name: npm install
       npm: path=/var/www
     - name: Clear cache, install assets and migrate database
@@ -92,7 +92,7 @@ EOF"
       command: php app/console app:passwd admin admin -n chdir=/var/www
       when: adduser.rc != 0
     - name: Make cache & logs writeable by webserver
-      file: path=/var/www/{{ item }} owner=www-data mode=u+rw,o=r recurse=yes state=directory
+      file: path=/var/www/{{ item }} owner=www-data mode=0775 recurse=yes state=directory
       with_items:
         - app
         - app/cache
