@@ -61,8 +61,5 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web"
-    },
-    "require-dev": {
-        "scato/phpeg": "~1.0"
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e23be4fc2e1a5866e9df711331ca4afa",
+    "hash": "0c2a23314245d72bb18ef2ab8ade9343",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -116,7 +116,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jquery/zipball/b29a6cdaacadf0f1e136f36b8f492e0a061c1caf",
+                "url": "https://api.github.com/repos/components/jquery/zipball/e7c492908a9746439e20b19a671c5001e8832732",
                 "reference": "b29a6cdaacadf0f1e136f36b8f492e0a061c1caf",
                 "shasum": ""
             },
@@ -904,7 +904,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/43619782df4e9ae6be6b24557f0429471eeee848",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4e85ba638acf62e1afe735f94b0c51aa971f8773",
                 "reference": "a4f14d3a3d397104e557ec65d1a4e43bb86e4ddf",
                 "shasum": ""
             },
@@ -2780,7 +2780,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/2ff8473e33e224af87dc00d48a552a35a75115af",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/7b3144572617b0555f9a443317dbc2f9cf5b524e",
                 "reference": "2ff8473e33e224af87dc00d48a552a35a75115af",
                 "shasum": ""
             },
@@ -3699,54 +3699,7 @@
             "time": "2014-08-23 16:56:20"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "scato/phpeg",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/scato/phpeg.git",
-                "reference": "daf80f277414d0cf6f7b204c6e257ebe156dec1d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/scato/phpeg/zipball/21b0946381315d34cf8daa1547b6b23ef85f701b",
-                "reference": "daf80f277414d0cf6f7b204c6e257ebe156dec1d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "symfony/console": "~2.1"
-            },
-            "require-dev": {
-                "behat/behat": "2.4.*@stable",
-                "phpspec/phpspec": "~2.0",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "bin": [
-                "bin/phpeg"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "": "src"
-                },
-                "psr-4": {
-                    "PHPeg\\Example\\": "examples"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PEG Parser Generator",
-            "keywords": [
-                "parser",
-                "peg"
-            ],
-            "time": "2015-03-29 09:50:53"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [
         {
             "alias": "1.4.2",
