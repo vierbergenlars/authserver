@@ -13,7 +13,7 @@ trait LinkUnlinkTrait
     use AbstractBaseTrait;
 
     abstract protected function handleLink($type, $subject, $link);
-    abstract protected function handleUnlink($type, $link);
+    abstract protected function handleUnlink($type, $subject, $link);
 
     /**
      * @ApiDoc
@@ -22,10 +22,14 @@ trait LinkUnlinkTrait
     {
         $subject = $this->_LinkUnlinkTrait__preCheck($request, $id);
         foreach ($request->attributes->get('links') as $type => $links) {
-            if (is_string($links)) {
-                throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
+            if(!is_array($links)) {
+                throw new BadRequestHttpException('Missing rel on link');
             }
             foreach ($links as $link) {
+                if (is_string($link)) {
+                    throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
+                }
+
                 $this->handleLink($type, $subject, $link);
             }
         }
@@ -40,10 +44,13 @@ trait LinkUnlinkTrait
     {
         $subject = $this->_LinkUnlinkTrait__preCheck($request, $id);
         foreach ($request->attributes->get('links') as $type => $links) {
-            if (is_string($links)) {
-                throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
+            if(!is_array($links)) {
+                throw new BadRequestHttpException('Missing rel on link');
             }
             foreach ($links as $link) {
+                if (is_string($link)) {
+                    throw new NotFoundHttpException(sprintf('Subresource for "%s" not found', $links));
+                }
                 $this->handleUnlink($type, $subject, $link);
             }
         }
