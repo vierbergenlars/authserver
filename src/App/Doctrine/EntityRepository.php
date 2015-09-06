@@ -24,10 +24,19 @@ class EntityRepository extends BaseRepository
         } elseif (is_array($terms)) {
             $blocks = array();
             foreach ($terms as $name=>$value) {
-                $blocks[] = array(
-                    'name' => $name,
-                    'value' => $value,
-                );
+                if(is_array($value)) {
+                    foreach($value as $v) {
+                        $blocks[] = array(
+                            'name' => $name,
+                            'value' => $v,
+                        );
+                    }
+                } else {
+                    $blocks[] = array(
+                        'name' => $name,
+                        'value' => $value,
+                    );
+                }
             }
         }
 
