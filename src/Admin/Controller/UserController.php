@@ -126,7 +126,7 @@ class UserController extends DefaultController
                 if (!$this->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
                     throw new AccessDeniedException();
                 }
-                $group = $link->getData();
+                $group = $link;
                 if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }
@@ -147,7 +147,7 @@ class UserController extends DefaultController
                     throw new AccessDeniedException();
                 }
 
-                $group = $link->getData();
+                $group = $link;
                 if (!$group instanceof Group) {
                     throw new BadRequestHttpException('Subresource of wrong type (expected: group)');
                 }

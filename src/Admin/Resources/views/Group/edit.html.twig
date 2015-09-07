@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
         {% if form is defined %}
-            {{ form(form, {action: path('admin_group_put', {id: id}), style: 'horizontal'}) }}
+            {{ form(form, {action: path('admin_group_put', {group: group.name}), style: 'horizontal'}) }}
         {% endif %}
     </div>
 {% endblock %}

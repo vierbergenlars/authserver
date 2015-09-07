@@ -15,12 +15,12 @@ admin_user_email:
         email: "[0-9]+"
 
 admin_group:
-    resource: app.admin.group.controller
+    resource: Admin\Controller\GroupController
     type: rest
     name_prefix: admin_group_
     prefix: groups
     requirements:
-        id: "(?!(new|batch)$)%?[a-z0-9_]+"
+        group: "(?!(new|batch)$)%?[a-z0-9_]+"
 
 admin_oauth_client:
     resource: app.admin.oauth.client.controller

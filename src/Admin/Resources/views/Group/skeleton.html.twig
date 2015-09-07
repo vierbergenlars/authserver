@@ -34,10 +34,10 @@
                                 <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
                             {% endmacro %}
                             {% import _self as self %}
-                            {% if id is defined %}
-                                {{ self.render_link('admin_group_get', {id:id},'eye', 'View') }}
-                                {{ self.render_link('admin_group_edit', {id:id}, 'pencil', 'Edit') }}
-                                {{ self.render_link('admin_group_remove', {id:id}, 'trash', 'Delete') }}
+                            {% if group is defined %}
+                                {{ self.render_link('admin_group_get', {group: group.name},'eye', 'View') }}
+                                {{ self.render_link('admin_group_edit', {group: group.name}, 'pencil', 'Edit') }}
+                                {{ self.render_link('admin_group_remove', {group: group.name}, 'trash', 'Delete') }}
                             {% endif %}
                             {{ self.render_link('admin_group_gets', {}, 'list', 'List') }}
                             {{ self.render_link('admin_group_new', {}, 'plus', 'Create') }}

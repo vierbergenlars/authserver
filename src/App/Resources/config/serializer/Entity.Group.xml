@@ -11,13 +11,13 @@
         </property>
         <h:relation rel="self">
             <h:href route="admin_group_get">
-                <h:parameter name="id" value="expr(object.getId())" />
+                <h:parameter name="group" value="expr(object.getName())" />
             </h:href>
             <h:exclusion groups="list,object" />
         </h:relation>
         <h:relation rel="members">
             <h:href route="admin_group_get_members">
-                <h:parameter name="id" value="expr(object.getId())" />
+                <h:parameter name="group" value="expr(object.getName())" />
             </h:href>
             <h:exclusion groups="admin_group_object" />
         </h:relation>

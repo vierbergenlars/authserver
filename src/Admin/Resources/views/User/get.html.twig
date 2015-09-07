@@ -67,7 +67,7 @@
             </dd>
             <dt>Member of</dt><dd>
                 {% for g in data.groupsRecursive %}
-                    <a href="{{ url('admin_group_get', { id: g.id }) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
+                    <a href="{{ url('admin_group_get', { group: g.name }) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
                 {% else %}
                     <span class="text-muted">(None)</span>
                 {% endfor %}
