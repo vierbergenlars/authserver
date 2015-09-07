@@ -398,7 +398,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertEquals('/admin/groups/group_1/members', $data->_links->members->href);
 
         $this->client->request('GET', '/admin/groups/non_existing_group');
-        //TODO:$this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testGetMembers()
@@ -485,7 +485,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups/group_0');
-        //TODO: $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testLink()
@@ -531,7 +531,7 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        // TODO: $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
@@ -593,7 +593,7 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        // TODO: $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
