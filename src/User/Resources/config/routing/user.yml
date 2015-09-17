@@ -50,7 +50,7 @@ user_delete_group:
 user_kill_session:
     path: kill-session
     defaults:
-        _controller: FrameworkBundle:Redirect:redirect
+        _controller: UserBundle:User:killSession
         route: logout
 
 user_change_password:

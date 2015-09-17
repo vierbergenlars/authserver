@@ -15,6 +15,11 @@
                 {% if not data.accountNonLocked %}
                     {{ label('Locked') }}
                 {% endif %}
+                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and not is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <a href="{{ url('user_profile', {'_switch_user':data.username}) }}" class="btn btn-sm btn-link">
+                        {{ icon('user-secret') }} Impersonate user
+                    </a>
+                {% endif %}
             </dd>
             {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
                 <dt>Email<dt><dd>
