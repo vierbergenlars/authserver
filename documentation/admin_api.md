@@ -199,7 +199,7 @@ The user object returned by a listing query is limited to the following fields:
  * `display_name`: The real name of the user, which should be used to address the user. May not be unique
  within one installation and may be changed after user creation.
  * `_links.self.href`: Contains an URL that uniquely identifies the user and contains more information about it.
- 
+
 
     {
         "guid":"FACCB60B-E852-461C-9DE8-E7BB6CA9BB6B",
@@ -428,6 +428,7 @@ The group object returned by a listing query is limited to the following fields:
 but may be reassigned to another group after the group is deleted.
 * `display_name`: The user friendly name of the group. May not be unique within an installation, and may be changed after creation.
 
+
     {
         "name":"%sysops",
         "display_name":"Sysops",
@@ -581,11 +582,3 @@ Removes a parent from a group, follows the same semantics as `LINK`, but has the
     < Allow: GET, DELETE, PUT, LINK, UNLINK
     < Content-Length: 0
     < Content-Type: application/json
-    
-    
-    
-    
-    
-
-
-
