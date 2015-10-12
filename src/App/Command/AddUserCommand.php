@@ -22,9 +22,10 @@ class AddUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repo = $this->getService('app.admin.user.repo');
+        $em = $this->getService('doctrine.orm.entity_manager');
+        $repo = $em->getRepository('AppBundle:User');
 
-        $user = $repo->newInstance();
+        $user = new User();
         $user->setUsername($input->getArgument('username'));
         $user->setDisplayname($input->getArgument('username'));
         $user->setPasswordEnabled(1);
@@ -39,7 +40,8 @@ class AddUserCommand extends Command
             $user->setRole('ROLE_SUPER_ADMIN');
         }
 
-        $repo->create($user);
+        $em->persist($user);
+        $em->flush();
         $output->writeln(sprintf('User %s created', $input->getArgument('username')));
     }
 

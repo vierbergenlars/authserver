@@ -23,7 +23,8 @@ class PasswdCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repo = $this->getService('app.admin.user.repo');
+        $em = $this->getService('doctrine.orm.entity_manager');
+        $repo = $em->getRepository('AppBundle:User');
 
         $user = $repo->findOneBy(array('username'=>$input->getArgument('username')));
         if (!$user) {
@@ -43,7 +44,7 @@ class PasswdCommand extends Command
             $user->setPasswordEnabled(1);
         }
 
-        $repo->update($user);
+        $em->flush();
         $output->writeln(sprintf('User %s updated', $input->getArgument('username')));
     }
 
