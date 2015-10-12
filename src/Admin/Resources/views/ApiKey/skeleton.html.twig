@@ -34,10 +34,10 @@
                                 <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
                             {% endmacro %}
                             {% import _self as self %}
-                            {% if id is defined %}
-                                {{ self.render_link('admin_apikey_get', {id:id},'eye', 'View') }}
-                                {{ self.render_link('admin_apikey_edit', {id:id}, 'pencil', 'Edit') }}
-                                {{ self.render_link('admin_apikey_remove', {id:id}, 'trash', 'Delete') }}
+                            {% if apikey is defined %}
+                                {{ self.render_link('admin_apikey_get', {apikey:apikey.id},'eye', 'View') }}
+                                {{ self.render_link('admin_apikey_edit', {apikey:apikey.id}, 'pencil', 'Edit') }}
+                                {{ self.render_link('admin_apikey_remove', {apikey:apikey.id}, 'trash', 'Delete') }}
                             {% endif %}
                             {{ self.render_link('admin_apikey_gets', {}, 'list', 'List') }}
                             {{ self.render_link('admin_apikey_new', {}, 'plus', 'Create') }}

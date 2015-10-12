@@ -31,12 +31,12 @@ admin_oauth_client:
         id: "[0-9]+"
 
 admin_apikey:
-    resource: app.admin.apikey.controller
+    resource: Admin\Controller\ApiKeyController
     type: rest
     name_prefix: admin_apikey_
     prefix: apikeys
     requirements:
-        id: "[0-9]+"
+        apikey: "[0-9]+"
 
 admin_audit:
     resource: app.admin.audit.controller

@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
         {% if form is defined %}
-            {{ form(form, {action: path('admin_apikey_delete', {id: id})}) }}
+            {{ form(form, {action: path('admin_apikey_delete', {apikey: apikey.id})}) }}
         {% endif %}
     </div>
 {% endblock %}

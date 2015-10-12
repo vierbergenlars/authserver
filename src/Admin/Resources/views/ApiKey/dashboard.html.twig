@@ -11,7 +11,7 @@
 </div>
 <div class="list-group hidden-xs">
     {% for apikey in data %}
-        <a class="list-group-item" href="{{ url('admin_apikey_get', { id: apikey.id }) }}">{{ apikey.name }}</a>
+        <a class="list-group-item" href="{{ url('admin_apikey_get', { apikey: apikey.id }) }}">{{ apikey.name }}</a>
     {% endfor %}
 </div>
 <div class="panel-body">
