@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
-     <class name="Knp\Component\Pager\Pagination\AbstractPagination" xmlns:h="https://github.com/willdurand/Hateoas">
-        <property name="items" groups="list">
+     <class name="Knp\Component\Pager\Pagination\AbstractPagination" exclusion-policy="ALL">
+        <property name="items" groups="list" expose="true">
             <xml-list inline="true" />
         </property>
-        <property name="totalCount" groups="list" xml-attribute="true" serialized-name="total" />
-        <property name="currentPageNumber" groups="list" xml-attribute="true" serialized-name="page" />
+        <property name="totalCount" groups="list" xml-attribute="true" serialized-name="total" expose="true" />
+        <property name="currentPageNumber" groups="list" xml-attribute="true" serialized-name="page" expose="true" />
     </class>
 </serializer>

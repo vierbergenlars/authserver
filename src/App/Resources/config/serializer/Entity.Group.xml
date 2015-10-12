@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
-    <class name="App\Entity\Group" xml-root-name="group" xmlns:h="https://github.com/willdurand/Hateoas">
-        <property name="name" groups="list,object,oauth_api" xml-attribute="true" />
-        <property name="displayName" groups="list,object,oauth_api" xml-attribute="true" />
-        <property name="groups" serialized-name="parents" groups="admin_group_object" max-depth="2">
+    <class name="App\Entity\Group" xml-root-name="group" exclusion-policy="ALL" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="name" groups="list,object,oauth_api" xml-attribute="true" expose="true" />
+        <property name="displayName" groups="list,object,oauth_api" xml-attribute="true" expose="true" />
+        <property name="groups" serialized-name="parents" groups="admin_group_object" max-depth="2" expose="true">
             <xml-list entry-name="group" />
         </property>
-        <property name="memberGroups" serialized-name="members" groups="admin_group_object" max-depth="2">
+        <property name="memberGroups" serialized-name="members" groups="admin_group_object" max-depth="2" expose="true">
             <xml-list entry-name="group" />
         </property>
         <h:relation rel="self">
