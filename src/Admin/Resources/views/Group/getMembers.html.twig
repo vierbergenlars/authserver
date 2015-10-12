@@ -13,7 +13,7 @@
             <tbody>
                 {% for obj in data %}
                     <tr>
-                        <td><a href="{{ url('admin_user_get',{ id: obj.id }) }}"><abbr title="{{ obj.username }}">{{ obj.displayName }}</abbr></a></td>
+                        <td><a href="{{ url('admin_user_get',{ user: obj.guid }) }}"><abbr title="{{ obj.username }}">{{ obj.displayName }}</abbr></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

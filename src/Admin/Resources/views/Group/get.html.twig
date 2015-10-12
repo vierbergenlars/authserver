@@ -23,7 +23,7 @@
             <dt>Members</dt><dd>
                 {% if data.members|length < 20 %}
                     {% for u in data.members %}
-                        <a href="{{ url('admin_user_get', { id: u.id }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
+                        <a href="{{ url('admin_user_get', { user: u.guid }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
                     {% endfor %}
                 {% else %}
                 <a href="{{ url('admin_group_get_members', { group: data.name }) }}">{{ icon('list fa-fw') }} Show {{ data.members|length }} members</a><br>

@@ -5,6 +5,7 @@ namespace App\EventListener;
 use App\Entity\User;
 use App\Entity\UserRepository;
 use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -34,10 +35,10 @@ class HasEmailAddressListener implements EventSubscriberInterface
      */
     private $flash;
 
-    public function __construct(TokenStorageInterface $tokenStorage, UserRepository $repo, UrlGeneratorInterface $urlGenerator, FlashMessage $flash)
+    public function __construct(TokenStorageInterface $tokenStorage, EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, FlashMessage $flash)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->repo = $repo;
+        $this->repo = $entityManager->getRepository('AppBundle:User');
         $this->urlGenerator = $urlGenerator;
         $this->flash = $flash;
     }

@@ -43,6 +43,7 @@ class UserType extends AbstractType
             ))
             ->add('emailAddresses', 'bootstrap_collection', array(
                 'type' => new EmailAddressType(),
+                'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete'=>true
             ))

@@ -332,6 +332,7 @@ class UserControllerTest extends WebTestCase
         ));
 
         $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+
         $this->assertRegExp('#/admin/users/[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}#', $this->client->getResponse()->headers->get('Location'));
 
         $this->client->request('GET', $this->client->getResponse()->headers->get('Location'));

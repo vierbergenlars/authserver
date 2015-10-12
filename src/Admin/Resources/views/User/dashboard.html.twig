@@ -11,7 +11,7 @@
 </div>
 <div class="list-group hidden-xs">
     {% for user in data %}
-        <a class="list-group-item" href="{{ url('admin_user_get', { id: user.id }) }}">{{ user.username }}</a>
+        <a class="list-group-item" href="{{ url('admin_user_get', { user: user.guid }) }}">{{ user.username }}</a>
     {% endfor %}
 </div>
 <div class="panel-body">

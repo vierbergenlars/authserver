@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Table(name="auth_users")
  * @ORM\Entity(repositoryClass="UserRepository")
- * @ORM\HasLifecycleCallbacks
  * @Gedmo\Loggable
  */
 class User implements AdvancedUserInterface, \Serializable
@@ -62,7 +61,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var EmailAddress[]
      *
-     * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"ALL"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="EmailAddress", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $emailAddresses;
 
@@ -355,6 +354,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function addEmailAddress(\App\Entity\EmailAddress $emailAddresses)
     {
+        $emailAddresses->setUser($this);
         $this->emailAddresses[] = $emailAddresses;
 
         return $this;

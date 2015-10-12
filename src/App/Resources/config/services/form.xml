@@ -6,7 +6,11 @@
             <tag name="form.type" alias="app_password" />
         </service>
         <service id="app.form.type.username" class="App\Form\Type\UsernameType">
-            <argument type="service" id="app.admin.user.repo" />
+            <argument type="service" >
+                <service class="App\Entity\UserRepository" factory-service="doctrine.orm.entity_manager" factory-method="getRepository">
+                    <argument type="string">AppBundle:User</argument>
+                </service>
+            </argument>
             <tag name="form.type" alias="app_username" />
         </service>
     </services>

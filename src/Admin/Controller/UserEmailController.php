@@ -28,7 +28,7 @@ class UserEmailController extends Controller implements ClassResourceInterface
 {
     private function getResourceManager()
     {
-        return $this->get('app.admin.user.repo');
+        return $this->getDoctrine()->getRepository('AppBundle:User');
     }
 
     private function paginate(Request $request, $resource)
