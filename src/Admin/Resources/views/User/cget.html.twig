@@ -66,81 +66,120 @@
     </div>
     {{ form_end(batch_form) }}
 {% endblock %}
-{% block navigation_search_examples_dropdown %}
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle help</span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="{{ url('admin_user_gets', {q:'is:user'}) }}" data-property="user" data-remove-property="admin,superadmin" class="js-search-example">{{ icon('circle-o') }} Users</a></li>
-        <li><a href="{{ url('admin_user_gets', {q:'is:admin'}) }}" data-property="admin" data-remove-property="user,superadmin" class="js-search-example">{{ icon('circle-o') }} Admins</a></li>
-        <li><a href="{{ url('admin_user_gets', {q:'is:superadmin'}) }}" data-property="superadmin" data-remove-property="user,admin" class="js-search-example">{{ icon('circle-o') }} Super admins</a></li>
-        <li class="divider" role="presentation"></li>
-        <li><a href="{{ url('admin_user_gets', {q:'is:enabled'}) }}" data-property="enabled" data-remove-property="disabled" class="js-search-example">{{ icon('circle-o') }} Enabled</a></li>
-        <li><a href="{{ url('admin_user_gets', {q:'is:disabled'}) }}" data-property="disabled" data-remove-property="enabled" class="js-search-example">{{ icon('circle-o') }} Disabled</a></li>
-        <li class="divider" role="presentation"></li>
-        <li>
-            <span class="input-group menu-input">
-                <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
-                <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
-            </span>
-        </li>
-        <li>
-            <span class="input-group menu-input">
-                <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
-                <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
-            </span>
-        </li>
-        <li class="divider" role="presentation"></li>
-        <li>
-            <span class="input-group menu-input">
-                <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
-                <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
-            </span>
-        </li>
-        <li class="divider" role="presentation"></li>
-        <li>
-            <div class="menu-input">
-                <input type="submit" value="Search" class="btn btn-primary btn-block">
+
+{% block navigation %}
+    {{ parent() }}
+    <form class="navbar-form navbar-right visible-lg-block" role="search">
+        <div class="form-group">
+            <label for="navbar-search" class="sr-only">Search</label>
+            <div class="input-group">
+                <input type="search" class="form-control js-search-field" placeholder="Search" name="q" id="navbar-search" value="{% if app.request.query.get('q', '') is not iterable %}{{ app.request.query.get('q', '') }}{% endif %}">
+                <div class="input-group-btn">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search</span></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle help</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url('admin_user_gets', {q:'is:user'}) }}" data-property="user" data-remove-property="admin,superadmin" class="js-search-example">{{ icon('circle-o') }} Users</a></li>
+                            <li><a href="{{ url('admin_user_gets', {q:'is:admin'}) }}" data-property="admin" data-remove-property="user,superadmin" class="js-search-example">{{ icon('circle-o') }} Admins</a></li>
+                            <li><a href="{{ url('admin_user_gets', {q:'is:superadmin'}) }}" data-property="superadmin" data-remove-property="user,admin" class="js-search-example">{{ icon('circle-o') }} Super admins</a></li>
+                            <li class="divider" role="presentation"></li>
+                            <li><a href="{{ url('admin_user_gets', {q:'is:enabled'}) }}" data-property="enabled" data-remove-property="disabled" class="js-search-example">{{ icon('circle-o') }} Enabled</a></li>
+                            <li><a href="{{ url('admin_user_gets', {q:'is:disabled'}) }}" data-property="disabled" data-remove-property="enabled" class="js-search-example">{{ icon('circle-o') }} Disabled</a></li>
+                            <li class="divider" role="presentation"></li>
+                            <li>
+                                <span class="input-group menu-input">
+                                    <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
+                                    <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
+                                </span>
+                            </li>
+                            <li>
+                                <span class="input-group menu-input">
+                                    <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
+                                    <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
+                                </span>
+                            </li>
+                            <li class="divider" role="presentation"></li>
+                            <li>
+                                <span class="input-group menu-input">
+                                    <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
+                                    <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
+                                </span>
+                            </li>
+                            <li class="divider" role="presentation"></li>
+                            <li>
+                                <div class="menu-input">
+                                    <input type="submit" value="Search" class="btn btn-primary btn-block">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </li>
-    </ul>
-{% endblock %}
-{% block mobile_search_examples %}
-    <span data-property="user" data-remove-property="admin,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Users</span>
-    <span data-property="admin" data-remove-property="user,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Admins</span>
-    <span data-property="superadmin" data-remove-property="user,admin" class="js-search-example list-group-item">{{ icon('circle-o') }} Super admins</span>
-    <span class="divider list-group-item" role="presentation"></span>
-    <span data-property="enabled" data-remove-property="disabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Enabled</span>
-    <span data-property="disabled" data-remove-property="enabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Disabled</span>
-    <span class="divider list-group-item" role="presentation"></span>
-    <span class="list-group-item">
-        <span class="input-group menu-input">
-            <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
-            <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
-        </span>
-    </span>
-    <span class="divider list-group-item" role="presentation"></span>
-    <span class="list-group-item">
-        <span class="input-group menu-input">
-            <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
-            <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
-        </span>
-    </span>
-    <span class="divider list-group-item" role="presentation"></span>
-    <span class="list-group-item">
-        <span class="input-group menu-input">
-            <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
-            <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
-        </span>
-    </span>
-    <span class="divider list-group-item" role="presentation"></span>
-    <span class="list-group-item">
-        <div class="menu-input">
-            <input type="submit" value="Search" class="btn btn-primary btn-block">
         </div>
-    </span>
+    </form>
 {% endblock %}
+
+{% block mobile_search %}
+    <div class="col-xs-12 col-sm-4 col-md-3 hidden-lg">
+        <form role="search">
+            <div class="panel panel-default panel-mobile-search">
+                <div class="panel-heading" data-toggle="collapse" data-target=".panel-mobile-search > .list-group">
+                    <h3 class="panel-title">Search</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="mobile-search" class="sr-only">Search</label>
+                        <div class="input-group">
+                            <input type="search" class="form-control js-search-field" placeholder="Search" name="q" id="mobile-search" value="{% if app.request.query.get('q', '') is not iterable %}{{ app.request.query.get('q', '') }}{% endif %}">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search</span></button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-group collapse">
+                    <li data-property="user" data-remove-property="admin,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Users</li>
+                    <li data-property="admin" data-remove-property="user,superadmin" class="js-search-example list-group-item">{{ icon('circle-o') }} Admins</li>
+                    <li data-property="superadmin" data-remove-property="user,admin" class="js-search-example list-group-item">{{ icon('circle-o') }} Super admins</li>
+                    <li class="divider list-group-item" role="presentation"></li>
+                    <li data-property="enabled" data-remove-property="disabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Enabled</li>
+                    <li data-property="disabled" data-remove-property="enabled" class="js-search-example list-group-item">{{ icon('circle-o') }} Disabled</li>
+                    <li class="divider list-group-item" role="presentation"></li>
+                    <li class="list-group-item">
+                        <span class="input-group menu-input">
+                            <label for="navigation_search_examples_username" class="input-group-addon">username:</label>
+                            <input id="navigation_search_examples_username" class="form-control js-search-example" data-prefix="username">
+                        </span>
+                    </li>
+                    <li class="divider list-group-item" role="presentation"></li>
+                    <li class="list-group-item">
+                        <span class="input-group menu-input">
+                            <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
+                            <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
+                        </span>
+                    </li>
+                    <li class="divider list-group-item" role="presentation"></li>
+                    <li class="list-group-item">
+                        <span class="input-group menu-input">
+                            <label for="navigation_search_examples_email" class="input-group-addon">email:</label>
+                            <input id="navigation_search_examples_email" class="form-control js-search-example" data-prefix="email">
+                        </span>
+                    </li>
+                    <li class="divider list-group-item" role="presentation"></li>
+                    <li class="list-group-item">
+                        <div class="menu-input">
+                            <input type="submit" value="Search" class="btn btn-primary btn-block">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
 {% block javascript %}
 {{ parent() }}
 <script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
