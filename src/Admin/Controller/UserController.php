@@ -10,6 +10,7 @@ use App\Form\UserType;
 use App\Search\SearchFieldException;
 use App\Search\SearchGrammar;
 use App\Search\SearchValueException;
+use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -24,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /**
  * @ParamConverter("user",options={"mapping":{"user":"guid"}})
  */
-class UserController extends BaseController
+class UserController extends CRUDController
 {
     /**
      * @ApiDoc
@@ -131,7 +132,7 @@ class UserController extends BaseController
      */
     public function batchAction(Request $request)
     {
-        $repository = $this->getEntityManager()->getRepository('AppBundle:User');
+        $repository = $this->getEntityRepository();
 
         // Do not allow to edit super admins in batch mode
         $form = $this->createBatchForm();
@@ -145,7 +146,7 @@ class UserController extends BaseController
             }
         }
 
-        $this->handleBatch($request, $repository);
+        $this->handleBatch($request);
 
         return $this->routeRedirectView('admin_user_gets');
     }
@@ -169,7 +170,7 @@ class UserController extends BaseController
      */
     public function editAction(User $user)
     {
-        return $this->createEditForm($this->createFormType(), $user);
+        return $this->createEditForm($user);
     }
 
     /**
@@ -177,7 +178,7 @@ class UserController extends BaseController
      */
     public function putAction(Request $request, User $user)
     {
-        $form = $this->createEditForm($this->createFormType(), $user);
+        $form = $this->createEditForm($user);
         $form->handleRequest($request);
 
         if(!$form->isValid())
@@ -193,7 +194,7 @@ class UserController extends BaseController
      */
     public function newAction()
     {
-        return $this->createCreateForm($this->createFormType(), $this->createEntity());
+        return $this->createCreateForm();
     }
 
     /**
@@ -201,7 +202,7 @@ class UserController extends BaseController
      */
     public function postAction(Request $request)
     {
-        $form = $this->createCreateForm($this->createFormType(), $this->createEntity());
+        $form = $this->createCreateForm();
         $form->handleRequest($request);
 
         if(!$form->isValid())
@@ -226,15 +227,9 @@ class UserController extends BaseController
      */
     public function deleteAction(Request $request, User $user)
     {
-        $form = $this->createDeleteForm();
-        $form->handleRequest($request);
-        if($this->isGranted('ROLE_API'))
-            $form->submit(null);
-        if(!$form->isValid())
-            return $form;
-        $this->getEntityManager()->remove($user);
-        $this->getEntityManager()->flush();
-
+        $ret = $this->handleDelete($request, $user);
+        if($ret)
+            return $ret;
         return $this->routeRedirectView('admin_user_gets', array(), Codes::HTTP_NO_CONTENT);
     }
 
@@ -289,35 +284,35 @@ class UserController extends BaseController
      * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_ADMIN')")
      */
-    public function roleAction(Request $request, User $id)
+    public function roleAction(Request $request, User $user)
     {
-        return $this->processOtherField($request, $id, 'role');
+        return $this->processOtherField($request, $user, 'role');
     }
 
     /**
      * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_USERNAME')")
      */
-    public function usernameAction(Request $request, User $id)
+    public function usernameAction(Request $request, User $user)
     {
-        return $this->processOtherField($request, $id, 'username');
+        return $this->processOtherField($request, $user, 'username');
     }
 
     /**
      * @ApiDoc
      */
-    public function displaynameAction(Request $request, User $id)
+    public function displaynameAction(Request $request, User $user)
     {
-        return $this->processOtherField($request, $id, 'displayName');
+        return $this->processOtherField($request, $user, 'displayName');
     }
 
     /**
      * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */
-    public function passwordAction(Request $request, User $id)
+    public function passwordAction(Request $request, User $user)
     {
-        return $this->processOtherField($request, $id, 'password');
+        return $this->processOtherField($request, $user, 'password');
     }
 
     /**
@@ -325,9 +320,9 @@ class UserController extends BaseController
      * @Patch("/{id}/password/disable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */
-    public function passwordDisableAction(User $id)
+    public function passwordDisableAction(User $user)
     {
-        $id->setPasswordEnabled(0);
+        $user->setPasswordEnabled(0);
         $this->getEntityManager()->flush();
     }
 
@@ -335,11 +330,11 @@ class UserController extends BaseController
      * @ApiDoc
      * @Patch("/{id}/password/enable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
-     * @param User $id
+     * @param User $user
      */
-    public function passwordEnableAction(User $id)
+    public function passwordEnableAction(User $user)
     {
-        $id->setPasswordEnabled(1);
+        $user->setPasswordEnabled(1);
         $this->getEntityManager()->flush();
     }
 
@@ -348,15 +343,15 @@ class UserController extends BaseController
      * @Patch("/{id}/password/settable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */
-    public function passwordInitialAction(User $id)
+    public function passwordInitialAction(User $user)
     {
-        $id->setPasswordEnabled(2);
+        $user->setPasswordEnabled(2);
         $this->getEntityManager()->flush();
     }
 
     private function processOtherField(Request $request, User $user, $field)
     {
-        $form = $this->createEditForm($this->createFormType(), $user);
+        $form = $this->createEditForm($user);
         $form->submit(array($field => $request->getContent()), false);
         if(!$form->isValid())
             return $form->get($field);
@@ -369,14 +364,21 @@ class UserController extends BaseController
     /**
      * @return UserType
      */
-    private function createFormType()
+    protected function getFormType()
     {
         return new UserType(new UserTypeLocalFlagsEventListener($this->get('security.authorization_checker')));
     }
 
-    private function createEntity()
+    protected function createNewEntity()
     {
         return new User();
     }
 
+    /**
+     * @return EntityRepository
+     */
+    protected function getEntityRepository()
+    {
+        return $this->getEntityManager()->getRepository('AppBundle:User');
+    }
 }

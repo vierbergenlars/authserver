@@ -8,11 +8,13 @@ use App\Form\GroupType;
 use App\Search\SearchFieldException;
 use App\Search\SearchGrammar;
 use App\Search\SearchValueException;
+use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 /**
  * @ParamConverter("group",options={"mapping":{"group":"name"}})
  */
-class GroupController extends BaseController
+class GroupController extends CRUDController
 {
     /**
      * @ApiDoc
@@ -64,7 +66,7 @@ class GroupController extends BaseController
      */
     public function displaynameAction(Request $request, Group $group)
     {
-        $form = $this->createEditForm(new GroupType(), $group);
+        $form = $this->createEditForm($group);
         $form->submit(array('displayName' => $request->getContent()), false);
         if(!$form->isValid())
             return $form->get('displayName');
@@ -124,7 +126,6 @@ class GroupController extends BaseController
                 }
             }
         } else {
-
             throw new BadRequestHttpException;
         }
 
@@ -203,7 +204,7 @@ class GroupController extends BaseController
      */
     public function batchAction(Request $request)
     {
-        $this->handleBatch($request, $this->getEntityManager()->getRepository('AppBundle:Group'));
+        $this->handleBatch($request);
 
         return $this->routeRedirectView('admin_group_gets');
     }
@@ -230,7 +231,7 @@ class GroupController extends BaseController
      */
     public function editAction(Group $group)
     {
-        return $this->createEditForm(new GroupType(), $group);
+        return $this->createEditForm($group);
     }
 
     /**
@@ -238,7 +239,7 @@ class GroupController extends BaseController
      */
     public function putAction(Request $request, Group $group)
     {
-        $form = $this->createEditForm(new GroupType(), $group);
+        $form = $this->createEditForm($group);
         $form->handleRequest($request);
 
         if(!$form->isValid())
@@ -254,7 +255,7 @@ class GroupController extends BaseController
      */
     public function newAction()
     {
-        return $this->createCreateForm(new GroupType(), new Group());
+        return $this->createCreateForm();
     }
 
     /**
@@ -262,7 +263,7 @@ class GroupController extends BaseController
      */
     public function postAction(Request $request)
     {
-        $form = $this->createCreateForm(new GroupType(), new Group());
+        $form = $this->createCreateForm();
         $form->handleRequest($request);
 
         if(!$form->isValid())
@@ -287,14 +288,9 @@ class GroupController extends BaseController
      */
     public function deleteAction(Request $request, Group $group)
     {
-        $form = $this->createDeleteForm();
-        $form->handleRequest($request);
-        if($this->isGranted('ROLE_API'))
-            $form->submit(null);
-        if(!$form->isValid())
-            return $form;
-        $this->getEntityManager()->remove($group);
-        $this->getEntityManager()->flush();
+        $ret = $this->handleDelete($request, $group);
+        if($ret)
+            return $ret;
 
         return $this->routeRedirectView('admin_group_gets', array(), Codes::HTTP_NO_CONTENT);
     }
@@ -322,5 +318,26 @@ class GroupController extends BaseController
             }
         ));
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    protected function getEntityRepository()
+    {
+        return $this->getEntityManager()->getRepository('AppBundle:Group');
+    }
+
+    /**
+     * @return AbstractType
+     */
+    protected function getFormType()
+    {
+        return new GroupType();
+    }
+
+    protected function createNewEntity()
+    {
+        return new Group();
     }
 }
