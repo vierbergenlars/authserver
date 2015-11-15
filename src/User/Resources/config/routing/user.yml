@@ -26,13 +26,6 @@ user_post_email_addresses:
     requirements:
         _method: POST
 
-user_put_property:
-    path: property/{property}
-    defaults:
-        _controller: UserBundle:Profile:putProperty
-    requirements:
-        _method: PUT
-
 user_post_group:
     path: group
     defaults:

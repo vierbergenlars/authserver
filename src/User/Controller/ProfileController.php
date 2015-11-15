@@ -204,49 +204,6 @@ class ProfileController extends Controller
     /**
      * @Template
      */
-    public function editPropertyAction(UserProperty $property)
-    {
-        return array(
-            'form' => $this->createForm(new \User\Form\EditUserPropertyType(), $property)
-                        ->createView(),
-            'data' => $property
-        );
-    }
-
-    public function putPropertyAction(Property $property, Request $request)
-    {
-        if(!$property->isUserEditable())
-            throw $this->createNotFoundException();
-
-        $em = $this->getDoctrine()
-                ->getManagerForClass('AppBundle:UserProperty');
-        $userProperty = $em->getRepository('AppBundle:UserProperty')
-                ->findOneBy(array(
-                    'user' => $this->getUser(),
-                    'property' => $property
-                ));
-
-        $form = $this->createForm(new \User\Form\EditUserPropertyType(), $userProperty);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em->persist($userProperty);
-            $em->flush($userProperty);
-            $this->getFlash()->success('Information updated successfully.');
-        } else {
-            if ($property->isRequired() && !$userProperty->getData()) {
-                $this->getFlash()->error('This field should not be left blank. Please try again.');
-            } else {
-                $this->getFlash()->error('Updating information failed.');
-            }
-        }
-
-        return $this->redirectToProfile();
-    }
-
-    /**
-     * @Template
-     */
     public function changePasswordAction(Request $request)
     {
         $user = $this->getUser();

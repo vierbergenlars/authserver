@@ -67,9 +67,6 @@ class UserType extends AbstractType
                 'required'=>false,
                 'expanded'=>true,
             ))
-            ->add('userProperties', 'bootstrap_collection', array(
-                'type' => new Type\UserPropertyType(true),
-            ))
             ->add('enabled', 'checkbox', array(
                 'required' => false,
                 'attr' => array(

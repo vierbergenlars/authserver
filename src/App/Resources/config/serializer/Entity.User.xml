@@ -14,9 +14,6 @@
         <property name="groups" groups="admin_user_object">
             <xml-list entry-name="group" />
         </property>
-        <virtual-property method="getUserPropertiesMap" groups="admin_user_object" serialized-name="properties">
-            <xml-map key-attribute-name="name" entry-name="property" />
-        </virtual-property>
         <h:relation rel="self">
             <h:href route="admin_user_get">
                 <h:parameter name="id" value="expr(object.getId())" />
