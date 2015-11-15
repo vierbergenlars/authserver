@@ -23,12 +23,12 @@ admin_group:
         group: "(?!(new|batch)$)%?[a-z0-9_]+"
 
 admin_oauth_client:
-    resource: app.admin.oauth.client.controller
+    resource: Admin\Controller\OAuthClientController
     type: rest
     name_prefix: admin_oauth_client_
     prefix: oauth/clients
     requirements:
-        id: "[0-9]+"
+        client: "[0-9]+"
 
 admin_apikey:
     resource: Admin\Controller\ApiKeyController

@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
         {% if form is defined %}
-            {{ form(form, {action: path('admin_oauth_client_delete', {id: id})}) }}
+            {{ form(form, {action: path('admin_oauth_client_delete', {client: client.id})}) }}
         {% endif %}
     </div>
 {% endblock %}

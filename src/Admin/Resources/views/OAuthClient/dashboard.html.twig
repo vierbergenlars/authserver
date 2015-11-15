@@ -10,7 +10,7 @@
 </div>
 <div class="list-group hidden-xs">
     {% for obj in data %}
-        <a class="list-group-item" href="{{ url('admin_oauth_client_get', { id: obj.id }) }}">{{ obj.name }}</a>
+        <a class="list-group-item" href="{{ url('admin_oauth_client_get', { client: obj.id }) }}">{{ obj.name }}</a>
     {% endfor %}
 </div>
 <div class="panel-body">

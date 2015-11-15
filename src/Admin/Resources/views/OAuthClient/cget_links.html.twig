@@ -1,7 +1,7 @@
 {% spaceless %}
 <div class="btn-group btn-group-sm">
-    <a class="btn btn-info" href="{{ url('admin_oauth_client_get', {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
-    <a class="btn btn-default" href="{{ url('admin_oauth_client_edit', {id: obj.id}) }}" title="Edit">{{ icon('edit') }} <span class="sr-only">Edit</span></a>
-    <a class="btn btn-danger" href="{{ url('admin_oauth_client_remove', {id: obj.id}) }}" title="Delete">{{ icon('trash-o') }} <span class="sr-only">Delete</span></a>
+    <a class="btn btn-info" href="{{ url('admin_oauth_client_get', {client: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+    <a class="btn btn-default" href="{{ url('admin_oauth_client_edit', {client: obj.id}) }}" title="Edit">{{ icon('edit') }} <span class="sr-only">Edit</span></a>
+    <a class="btn btn-danger" href="{{ url('admin_oauth_client_remove', {client: obj.id}) }}" title="Delete">{{ icon('trash-o') }} <span class="sr-only">Delete</span></a>
 </div>
 {% endspaceless %}
