@@ -72,10 +72,6 @@
                     <span class="text-muted">(None)</span>
                 {% endfor %}
             </dd>
-            {% for property in data.userProperties %}
-                <dt><abbr title="{{ property.property.name }}">{{ property.property.displayName }}</abbr></dt>
-                <dd>{% if property.data %}{{ property.data }}{% else %}<span class="text-muted">(Empty)</span>{% endif %}</dd>
-            {% endfor %}
         </dl>
     </div>
 {% endblock %}

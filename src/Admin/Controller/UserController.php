@@ -43,27 +43,6 @@ class UserController extends DefaultController
 
     /**
      * @ApiDoc
-     * @Patch("/{id}/property/{property}")
-     */
-    public function propertyAction(Request $request, User $id, $property)
-    {
-        $userProperty = $id->getUserProperties()->filter(function(UserProperty $up) use($property){
-            return $up->getProperty()->getName() === $property;
-        })->first();
-        /* @var $userProperty UserProperty */
-        if($userProperty === null)
-            throw new NotFoundHttpException;
-
-        $regex = $userProperty->getProperty()->getValidationRegex();
-        $value = $request->getContent();
-        if(!preg_match($regex, $value))
-            throw new BadRequestHttpException('The given value does not match '.$regex);
-        $userProperty->setData($value);
-        $this->getResourceManager()->update($id);
-    }
-
-    /**
-     * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_ADMIN')")
      */
     public function roleAction(Request $request, User $id)

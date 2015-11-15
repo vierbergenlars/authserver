@@ -1,11 +1,3 @@
-admin_user_property:
-    resource: app.admin.user_property.controller
-    type: rest
-    name_prefix: admin_userproperty_
-    prefix: users/properties
-    requirements:
-        id: "[0-9]+"
-
 admin_user:
     resource: app.admin.user.controller
     type: rest

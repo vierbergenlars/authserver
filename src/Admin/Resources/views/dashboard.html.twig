@@ -42,16 +42,6 @@
                 {{ render(controller('app.admin.apikey.controller:dashboardAction')) }}
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a href="{{ url('admin_userproperty_gets') }}">
-                        <h1 class="panel-title">{{ icon('list') }} User Properties</h1>
-                    </a>
-                </div>
-                {{ render(controller('app.admin.user_property.controller:dashboardAction')) }}
-            </div>
-        </div>
     </div>
 </div>
 {% endblock %}

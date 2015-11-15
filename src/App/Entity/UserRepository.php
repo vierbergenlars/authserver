@@ -128,11 +128,6 @@ class UserRepository extends EntityRepository
         $emailAddress = new EmailAddress;
         $emailAddress->setPrimary(true);
         $user->addEmailAddress($emailAddress);
-        $userProperties = $user->getUserProperties();
-        /* @var $userProperties \Doctrine\Common\Collections\Collection */
-        foreach ($this->getEntityManager()->getRepository('AppBundle:Property')->findAll() as $property) {
-            $userProperties->add(new UserProperty($user, $property));
-        }
 
         return $user;
     }
@@ -140,10 +135,6 @@ class UserRepository extends EntityRepository
     private function postProcess(User $object)
     {
         $this->getEntityManager()->flush($object->getEmailAddresses()->toArray());
-        foreach ($object->getUserProperties() as $prop) {
-            $this->getEntityManager()->persist($prop);
-        }
-        $this->getEntityManager()->flush($object->getUserProperties()->toArray());
     }
 
     public function create($object)
