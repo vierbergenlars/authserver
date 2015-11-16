@@ -11,23 +11,23 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-3">
-                <div class="panel panel-default">
-                    {% block radrest_sidebar %}
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Navigation</h3>
-                        </div>
-                        <div class="list-group">
-                            {% macro render_link(route, param, ico, name) %}
-                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
-                            {% endmacro %}
-                            {% import _self as self %}
-                            {% if id is defined %}
-                                {{ self.render_link('admin_audit_get', {id:id},'eye', 'View') }}
-                            {% endif %}
-                            {{ self.render_link('admin_audit_gets', {}, 'list', 'List') }}
-                        </div>
-                    {% endblock %}
-                </div>
+                {% block radrest_sidebar %}
+                    <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Navigation</h3>
+                            </div>
+                            <div class="list-group">
+                                {% macro render_link(route, param, ico, name) %}
+                                    <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
+                                {% endmacro %}
+                                {% import _self as self %}
+                                {% if id is defined %}
+                                    {{ self.render_link('admin_audit_get', {id:id},'eye', 'View') }}
+                                {% endif %}
+                                {{ self.render_link('admin_audit_gets', {}, 'list', 'List') }}
+                            </div>
+                    </div>
+                {% endblock %}
             </div>
         </div>
     </div>

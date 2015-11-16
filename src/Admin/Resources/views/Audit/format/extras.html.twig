@@ -1,0 +1,49 @@
+{% set details = details|default(false) %}
+{% if cls == 'App\\Entity\\User' %}
+    {% set entity = em.find(cls, id) %}
+    {% if entity %}
+        <a href="{{ url('admin_user_get', {user: entity.guid}) }}" title="{{ entity.displayName }}">{{ icon('user fa-fw') }} {{ entity.username }}</a>
+    {% else %}
+        <span class="text-muted">{{ icon('user fa-fw') }}</span>
+    {% endif %}
+{% elseif cls == 'App\\Entity\\Group' %}
+    {% set entity = em.find(cls, id) %}
+    {% if entity %}
+        <a href="{{ url('admin_group_get', {group: entity.name}) }}" title="{{ entity.displayName }}">{{ icon('group fa-fw') }} {{ entity.name }}</a>
+    {% else %}
+        <span class="text-muted">{{ icon('group fa-fw') }}</span>
+    {% endif %}
+{% elseif cls == 'App\\Entity\\EmailAddress' %}
+    {% set entity = em.find(cls, id) %}
+    {% if entity %}
+        {{ icon('envelope fa-fw') }}
+        {% if details %}
+            {{ entity.email }}<br>
+        {% endif %}
+        <a href="{{ url('admin_user_get', {user: entity.user.guid}) }}" title="{{ entity.user.displayName }}">{{ icon('user fa-fw') }} {{ entity.user.username }}</a>
+    {% else %}
+        <span class="text-muted">{{ icon('envelope fa-fw') }}</span>
+    {% endif %}
+{% elseif cls == 'App\\Entity\\OAuth\\Client' %}
+    {% if details %}
+        {% set entity = em.find(cls, id) %}
+        {% if entity %}
+            <a href="{{ url('admin_oauth_client_get', {client: entity.id}) }}">{{ icon('cube fa-fw') }} {{ entity.name }}</a>
+        {% else %}
+            <span class="text-muted">{{ icon('cube fa-fw') }}</span>
+        {% endif %}
+    {% else %}
+        <a href="{{ url('admin_oauth_client_get', {client: id}) }}">{{ icon('cube fa-fw') }}</a>
+    {% endif %}
+{% elseif cls == 'Admin\\Entity\\ApiKey' %}
+    {% if details %}
+        {% set entity = em.find(cls, id) %}
+        {% if entity %}
+            <a href="{{ url('admin_apikey_get', {apikey: entity.id}) }}">{{ icon('key fa-fw') }} {{ entity.name }}</a>
+        {% else %}
+            <span class="text-muted">{{ icon('key fa-fw') }}</span>
+        {% endif %}
+    {% else %}
+        <a href="{{ url('admin_apikey_get', {apikey: id}) }}">{{ icon('key fa-fw') }}</a>
+    {% endif %}
+{% endif %}

@@ -7,24 +7,35 @@
         {% if data|length > 0 %}
           <table class="table">
             <thead>
-              {% set keys = ['objectClass', 'objectId', 'action', 'username', 'loggedAt'] %}
               <tr>
-                {% for name in keys %}
-                  <th>{{ name|humanize }}</th>
-                {% endfor %}
-                <th>Actions</th>
+                  <th>Target</th>
+                  <th>Action</th>
+                  <th>Username</th>
+                  <th>Date</th>
+                  <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for obj in data %}
                 <tr>
-                  {% for key in keys %}
-                    <td>{{ attribute(obj, key)|radrest_object_stringify }}</td>
-                  {% endfor %}
+                    <td>
+                        {% include 'AdminBundle:Audit:format/target.html.twig' with {obj: obj} %}
+                        <span class="pull-right">&emsp;
+                        {% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:obj.objectClass,id:obj.objectId,em:entity_manager} only %}
+                        </span>
+                    </td>
+                    <td>
+                        {% include 'AdminBundle:Audit:format/action.html.twig' with {action: obj.action} %}
+                    </td>
+                    <td>
+                        {% include 'AdminBundle:Audit:format/username.html.twig' with {username: obj.username} %}
+                    </td>
+                    <td>
+                        {{ obj.loggedAt|date }}
+                    </td>
                   <td>
                     <div class="btn-group btn-group-sm">
-                      <a class="btn btn-info" href="{{ url('admin_audit_get', {id: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
-                      <a class="btn btn-default" href="{{ url('admin_audit_target', {id: obj.id}) }}" title="Go to target">{{ icon('link') }} <span class="sr-only">Go to target</span></a>
+                      <a class="btn btn-info" href="{{ url('admin_audit_get', {logEntry: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
                     </div>
                   </td>
                 </tr>
@@ -36,4 +47,25 @@
     <div class="panel-body text-center">
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
+{% endblock %}
+{% block radrest_sidebar %}
+    {{ parent() }}
+    {% if app.request.query.has('target') or app.request.query.has('username') or app.request.query.has('key') %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Remove search parameter</h3>
+            </div>
+            <div class="list-group">
+                {% macro display_filter(query, param, ico) %}
+                    {% if query.has(param) %}
+                        <a class="list-group-item" href="{{ url('admin_audit_gets', query.all()|merge({(param): null})) }}">{{ icon(ico~' fa-fw') }} {{ query.get(param) }}</a>
+                    {% endif %}
+                {% endmacro %}
+                {% import _self as self %}
+                {{ self.display_filter(app.request.query, 'target', 'bullseye') }}
+                {{ self.display_filter(app.request.query, 'username', 'user') }}
+                {{ self.display_filter(app.request.query, 'apikey', 'key') }}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

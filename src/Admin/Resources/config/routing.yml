@@ -39,7 +39,7 @@ admin_apikey:
         apikey: "[0-9]+"
 
 admin_audit:
-    resource: app.admin.audit.controller
+    resource: Admin\Controller\AuditController
     type: rest
     name_prefix: admin_audit_
     prefix: auditlog

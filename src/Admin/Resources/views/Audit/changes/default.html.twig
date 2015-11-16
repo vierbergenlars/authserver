@@ -1,0 +1,5 @@
+{% if value is not iterable %}
+    {{ value|yaml_encode }}
+{% else %}
+    <pre>{{ value|yaml_encode(1) }}</pre>
+{% endif %}

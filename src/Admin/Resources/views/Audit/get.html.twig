@@ -6,11 +6,16 @@
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Target Object</dt><dd><a href="{{ url('admin_audit_target', {id: id}) }}">{{ data.objectClass }}@{{ data.objectId }}</a></dd>
-            <dt>Action</dt><dd>{{ data.action }}</dd>
+            <dt>Target Object</dt><dd>
+                {% include 'AdminBundle:Audit:format/target.html.twig' with {obj: data} %}
+                <br>
+                {% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:data.objectClass,id:data.objectId,em:entity_manager,details:true} only%}</dd>
+            <dt>Action</dt><dd>
+                {% include 'AdminBundle:Audit:format/action.html.twig' with {action: data.action} %}
+            </dd>
             <dt>Version</dt><dd>{{ data.version }}</dd>
             <dt>Timestamp</dt><dd>{{ data.loggedAt|date }}</dd>
-            <dt>Editor</dt><dd>{% if data.username == null %}<span class="text-muted">(Anonymous)</span>{% else %}{{ data.username }}{% endif %}</dd>
+            <dt>Editor</dt><dd>{% include 'AdminBundle:Audit:format/username.html.twig' with {username: data.username} %}</dd>
         </dl>
     </div>
     <div class="table-responsive">
@@ -22,45 +27,13 @@
             {% for name,value in data.data %}
                 <tr>
                     <td>{{ name }}</td>
-                    {% if name in ['password', 'verificationCode', 'passwordResetToken'] and value != null %}
-                        <td><span class="text-muted">(Secret)</span></td>
-                    {% elseif value is iterable %}
-                        {% if value.id is defined %}
-                            <td><a href="{{ url('admin_audit_target', {id:id,property:name}) }}">{{ value.id|radrest_object_stringify }}</a></td>
-                        {% elseif value['+'] is defined or value['-'] is defined %}
-                            <td>
-                                {% if value['+'] is defined %}
-                                    <b>Added:</b>
-                                    {% for v in value['+'] %}
-                                        <a href="{{ url('admin_audit_target', {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
-                                        {% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                    <br>
-                                {% endif %}
-                                {% if value['-'] is defined %}
-                                    <b>Removed:</b>
-                                    {% for v in value['-'] %}
-                                        <a href="{{ url('admin_audit_target', {id:id,property:name,propertyId:v}) }}">{{ v }}</a>
-                                        {% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </td>
-                        {% else %}
-                            <td>
-                                {% for k,v in value if v|length > 0 %}
-                                    <b>{{ k }}:</b>
-                                        {% if v is iterable %}
-                                            {{ v|join(',') }}
-                                        {% else %}
-                                            {{ v|radrest_object_stringify }}
-                                        {% endif %}
-                                        <br>
-                                {% endfor %}
-                            </td>
-                        {% endif %}
-                    {% else %}
-                        <td>{{ value|radrest_object_stringify }}</td>
-                    {% endif %}
+                    <td>
+                        {% include [
+                            'AdminBundle:Audit:changes/'~data.objectClass|replace({'\\':'.'})~'/'~name~'.html.twig',
+                            'AdminBundle:Audit:changes/'~data.objectClass|replace({'\\':'.'})~'/default.html.twig',
+                            'AdminBundle:Audit:changes/default.html.twig'
+                        ] %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
