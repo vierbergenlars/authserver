@@ -19,6 +19,8 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -38,77 +40,46 @@ class UserController extends CRUDController
             ->createQueryBuilder('u')
             ->orderBy('u.id', 'DESC');
 
-        $query = $request->query->get('q', array());
-        if (is_string($query)) {
-            $parser = new SearchGrammar();
-            $blocks = $parser->parse($query);
-        } elseif (is_array($query)) {
-            $blocks = array();
-            foreach ($query as $name=>$value) {
-                if(is_array($value)) {
-                    foreach($value as $v) {
-                        $blocks[] = array(
-                            'name'=>$name,
-                            'value'=>$v,
-                        );
-                    }
-                } else {
-                    $blocks[] = array(
-                        'name' => $name,
-                        'value' => $value,
-                    );
+        $searchForm = $this->createSearchForm()->handleRequest($request);
+
+        if($searchForm->isValid()) {
+            if (!$searchForm->get('username')->isEmpty())
+                $queryBuilder->andWhere('u.username LIKE :username')
+                    ->setParameter('username', $searchForm->get('username')->getData());
+            if (!$searchForm->get('name')->isEmpty())
+                $queryBuilder->andWhere('u.displayName LIKE :displayName')
+                    ->setParameter('displayName', $searchForm->get('name')->getData());
+            if (!$searchForm->get('email')->isEmpty())
+                $queryBuilder->leftJoin('u.emails', 'e')
+                    ->andWhere('e.email LIKE :email')
+                    ->setParameter('email', $searchForm->get('email')->getData());
+            foreach (array_merge($searchForm->get('is')->getData(), $searchForm->get('is')->getExtraData()) as $value) {
+                switch ($value) {
+                    case 'admin':
+                        $queryBuilder->andWhere('u.role IN(\'ROLE_ADMIN\', \'ROLE_SUPER_ADMIN\')');
+                        break;
+                    case 'su':
+                    case 'superadmin':
+                    case 'super_admin':
+                        $queryBuilder->andWhere('u.role = \'ROLE_SUPER_ADMIN\'');
+                        break;
+                    case 'user':
+                        $queryBuilder->andWhere('u.role IN(\'ROLE_USER\',\'ROLE_AUDIT\')');
+                        break;
+                    case 'enabled':
+                        $queryBuilder->andWhere('u.enabled = true');
+                        break;
+                    case 'disabled':
+                        $queryBuilder->andWhere('u.enabled = false');
+                        break;
                 }
             }
-        } else {
-            throw new BadRequestHttpException;
         }
-
-        foreach($blocks as $block) {
-            $likeOrEq = (strpos($block['value'], '*') !== false?'LIKE':'=');
-            $queryValue = str_replace('*', '%',$block['value']);
-            switch($block['name']) {
-                case 'username':
-                    $queryBuilder->andWhere('u.username '.$likeOrEq.' :username')
-                        ->setParameter('username', $queryValue);
-                    break;
-                case 'name':
-                    $queryBuilder->andWhere('u.displayName '.$likeOrEq.' :displayname')
-                        ->setParameter('displayname', $queryValue);
-                    break;
-                case 'email':
-                    $queryBuilder->leftJoin('u.emails', 'e')
-                        ->andWhere('e.email '.$likeOrEq.' :email')
-                        ->setParameter('email', $queryValue);
-                    break;
-                case 'is':
-                    switch($block['value']) {
-                        case 'admin':
-                            $queryBuilder->andWhere('u.role IN(\'ROLE_ADMIN\', \'ROLE_SUPER_ADMIN\')');
-                            break;
-                        case 'su':
-                        case 'superadmin':
-                        case 'super_admin':
-                            $queryBuilder->andWhere('u.role = \'ROLE_SUPER_ADMIN\'');
-                            break;
-                        case 'user':
-                            $queryBuilder->andWhere('u.role IN(\'ROLE_USER\',\'ROLE_AUDIT\')');
-                            break;
-                        case 'enabled':
-                            $queryBuilder->andWhere('u.enabled = true');
-                            break;
-                        case 'disabled':
-                            $queryBuilder->andWhere('u.enabled = false');
-                            break;
-                        default:
-                            throw new SearchValueException($block['name'], $block['value'], array('admin', 'su', 'superadmin', 'super_admin', 'user', 'enabled', 'disabled'));
-                    }
-                    break;
-                default:
-                    throw new SearchFieldException($block['name'], array('username', 'email', 'is'));
-            }
-        }
-
-        return $this->view($this->paginate($queryBuilder, $request))->setTemplateData(array('batch_form'=>$this->createBatchForm()->createView()));
+        return $this->view($this->paginate($queryBuilder, $request))
+            ->setTemplateData(array(
+                'batch_form' => $this->createBatchForm()->createView(),
+                'search_form' => $searchForm->createView(),
+            ));
     }
 
     /**
@@ -381,5 +352,50 @@ class UserController extends CRUDController
     protected function getEntityRepository()
     {
         return $this->getEntityManager()->getRepository('AppBundle:User');
+    }
+
+    /**
+     * @return FormInterface
+     */
+    private function createSearchForm()
+    {
+        $ff = $this->get('form.factory');
+        /* @var $ff FormFactoryInterface */
+        $isForm = $ff->createNamedBuilder('is', 'form', null, array(
+            'allow_extra_fields' => true,
+            'label' => false,
+            'required' => false,
+        ))
+            ->add('admin', 'choice', array(
+                'choices' => array(
+                    'admin', 'superadmin', 'user'
+                ),
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('enabled', 'choice', array(
+                'choices' => array(
+                    'enabled', 'disabled'
+                ),
+                'expanded' => true,
+                'required' => false,
+            ));
+        return $ff->createNamedBuilder('q', 'form', null, array(
+            'csrf_protection' => false,
+            'allow_extra_fields' => true
+        ))
+            ->setMethod('GET')
+            ->add('username', 'text', array(
+                'required' => false,
+            ))
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
+            ->add('email', 'text', array(
+                'required' => false,
+            ))
+            ->add($isForm)
+            ->add('search', 'submit')
+            ->getForm();
     }
 }
