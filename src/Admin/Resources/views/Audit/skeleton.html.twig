@@ -21,8 +21,8 @@
                                     <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
                                 {% endmacro %}
                                 {% import _self as self %}
-                                {% if id is defined %}
-                                    {{ self.render_link('admin_audit_get', {id:id},'eye', 'View') }}
+                                {% if logEntry is defined %}
+                                    {{ self.render_link('admin_audit_get', {logEntry:logEntry.id},'eye', 'View') }}
                                 {% endif %}
                                 {{ self.render_link('admin_audit_gets', {}, 'list', 'List') }}
                             </div>
