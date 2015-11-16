@@ -30,17 +30,17 @@
                             <h3 class="panel-title">Navigation</h3>
                         </div>
                         <div class="list-group">
-                            {% macro render_link(route, param, ico, name) %}
-                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
+                            {% macro render_link(route, param, ico, name, enabled) %}
+                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}{% if not enabled %} disabled{% endif %}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
                             {% endmacro %}
                             {% import _self as self %}
                             {% if user is defined %}
-                                {{ self.render_link('admin_user_get', {user:user.guid},'eye', 'View') }}
-                                {{ self.render_link('admin_user_edit', {user:user.guid}, 'pencil', 'Edit') }}
-                                {{ self.render_link('admin_user_remove', {user:user.guid}, 'trash', 'Delete') }}
+                                {{ self.render_link('admin_user_get', {user:user.guid},'eye', 'View', is_granted('ROLE_SCOPE_R_PROFILE')) }}
+                                {{ self.render_link('admin_user_edit', {user:user.guid}, 'pencil', 'Edit', is_granted('ROLE_SCOPE_W_PROFILE')) }}
+                                {{ self.render_link('admin_user_remove', {user:user.guid}, 'trash', 'Delete', is_granted('ROLE_SCOPE_W_PROFILE')) }}
                             {% endif %}
-                            {{ self.render_link('admin_user_gets', {}, 'list', 'List') }}
-                            {{ self.render_link('admin_user_new', {}, 'plus', 'Create') }}
+                            {{ self.render_link('admin_user_gets', {}, 'list', 'List', is_granted('ROLE_SCOPE_R_PROFILE')) }}
+                            {{ self.render_link('admin_user_new', {}, 'plus', 'Create', is_granted('ROLE_SCOPE_W_PROFILE')) }}
                         </div>
                     {% endblock %}
                 </div>

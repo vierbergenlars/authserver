@@ -19,7 +19,7 @@
                     <tr>
                         <td>
                             <label>
-                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">
+                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if not is_granted('ROLE_SCOPE_W_PROFILE') %}disabled{% endif %}>
                                 {{ obj.username }}
                                 {% if 'ROLE_USER' == obj.role %}
                                 {% elseif 'ROLE_SUPER_ADMIN' == obj.role %}

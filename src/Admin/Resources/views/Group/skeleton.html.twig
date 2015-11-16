@@ -30,17 +30,17 @@
                             <h3 class="panel-title">Navigation</h3>
                         </div>
                         <div class="list-group">
-                            {% macro render_link(route, param, ico, name) %}
-                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
+                            {% macro render_link(route, param, ico, name, enabled) %}
+                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif %}{% if not enabled %} disabled{% endif %}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
                             {% endmacro %}
                             {% import _self as self %}
                             {% if group is defined %}
-                                {{ self.render_link('admin_group_get', {group: group.name},'eye', 'View') }}
-                                {{ self.render_link('admin_group_edit', {group: group.name}, 'pencil', 'Edit') }}
-                                {{ self.render_link('admin_group_remove', {group: group.name}, 'trash', 'Delete') }}
+                                {{ self.render_link('admin_group_get', {group: group.name},'eye', 'View', is_granted('ROLE_SCOPE_R_GROUP')) }}
+                                {{ self.render_link('admin_group_edit', {group: group.name}, 'pencil', 'Edit', is_granted('ROLE_SCOPE_W_GROUP')) }}
+                                {{ self.render_link('admin_group_remove', {group: group.name}, 'trash', 'Delete', is_granted('ROLE_SCOPE_W_GROUP')) }}
                             {% endif %}
-                            {{ self.render_link('admin_group_gets', {}, 'list', 'List') }}
-                            {{ self.render_link('admin_group_new', {}, 'plus', 'Create') }}
+                            {{ self.render_link('admin_group_gets', {}, 'list', 'List', is_granted('ROLE_SCOPE_R_GROUP')) }}
+                            {{ self.render_link('admin_group_new', {}, 'plus', 'Create', is_granted('ROLE_SCOPE_W_GROUP')) }}
                         </div>
                     {% endblock %}
                 </div>
