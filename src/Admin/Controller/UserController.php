@@ -5,7 +5,6 @@ namespace Admin\Controller;
 use Admin\Form\EventListener\UserTypeLocalFlagsEventListener;
 use App\Entity\Group;
 use App\Entity\User;
-use App\Entity\UserProperty;
 use App\Form\UserType;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Util\Codes;
