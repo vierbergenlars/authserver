@@ -1,7 +1,7 @@
 {
-    "license": "MIT",
+    "license": "AGPL",
     "type": "project",
-    "description": "The \"Symfony REST Edition\" distribution",
+    "description": "Authserver, an OAuth2-based single-signon authentication provider written in PHP",
     "autoload": {
         "psr-0": { "": "src/" }
     },
