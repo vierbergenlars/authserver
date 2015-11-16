@@ -24,8 +24,8 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-4 col-md-3">
-                <div class="panel panel-default">
-                    {% block radrest_sidebar %}
+                {% block radrest_sidebar %}
+                    <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Navigation</h3>
                         </div>
@@ -42,8 +42,8 @@
                             {{ self.render_link('admin_group_gets', {}, 'list', 'List', is_granted('ROLE_SCOPE_R_GROUP')) }}
                             {{ self.render_link('admin_group_new', {}, 'plus', 'Create', is_granted('ROLE_SCOPE_W_GROUP')) }}
                         </div>
-                    {% endblock %}
-                </div>
+                    </div>
+                {% endblock %}
             </div>
         </div>
     </div>

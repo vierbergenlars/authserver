@@ -16,6 +16,8 @@ use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -105,90 +107,37 @@ class GroupController extends CRUDController
             ->createQueryBuilder('g')
             ->orderBy('g.id', 'DESC');
 
-        $query = $request->query->get('q', array());
-        if (is_string($query)) {
-            $parser = new SearchGrammar();
-            $blocks = $parser->parse($query);
-        } elseif (is_array($query)) {
-            $blocks = array();
-            foreach ($query as $name=>$value) {
-                if(is_array($value)) {
-                    foreach($value as $v) {
-                        $blocks[] = array(
-                            'name'=>$name,
-                            'value'=>$v,
-                        );
-                    }
-                } else {
-                    $blocks[] = array(
-                        'name' => $name,
-                        'value' => $value,
-                    );
-                }
-            }
-        } else {
-            throw new BadRequestHttpException;
+        $searchForm = $this->createSearchForm()->handleRequest($request);
+
+        if($searchForm->isValid()) {
+            if(!$searchForm->get('name')->isEmpty())
+                $queryBuilder->andWhere('g.displayName LIKE :displayName')
+                    ->setParameter('displayName', $searchForm->get('name')->getData());
+            if(!$searchForm->get('techname')->isEmpty())
+                $queryBuilder->andWhere('g.name LIKE :name')
+                    ->setParameter('name', $searchForm->get('techname')->getData());
+            if($searchForm->get('exportable')->getData() !== null)
+                $queryBuilder->andWhere('g.exportable = :exportable')
+                    ->setParameter('exportable', !!$searchForm->get('exportable')->getData());
+            if($searchForm->get('groups')->getData() !== null)
+                $queryBuilder->andWhere('g.noGroups = :noGroups')
+                    ->setParameter('noGroups', !$searchForm->get('groups')->getData());
+            if($searchForm->get('users')->getData() !== null)
+                $queryBuilder->andWhere('g.noUsers = :noUsers')
+                    ->setParameter('noUsers', !$searchForm->get('users')->getData());
+            if($searchForm->get('userjoin')->getData() !== null)
+                $queryBuilder->andWhere('g.userJoinable = :userJoinable')
+                    ->setParameter('userJoinable', !!$searchForm->get('userjoin')->getData());
+            if($searchForm->get('userleave')->getData() !== null)
+                $queryBuilder->andWhere('g.userLeaveable = :userLeaveable')
+                    ->setParameter('userLeaveable', !!$searchForm->get('userleave')->getData());
         }
 
-        foreach($blocks as $block) {
-            switch ($block['name']) {
-                case 'name':
-                    if(strpos($block['value'], '*') !== false)
-                        $queryBuilder->andWhere('g.displayName LIKE :displayName');
-                    else
-                        $queryBuilder->andWhere('g.displayName = :displayName');
-                    $queryBuilder->setParameter('displayName', str_replace('*', '%',$block['value']));
-                    break;
-                case 'techname':
-                    if(strpos($block['value'], '*') !== false)
-                        $queryBuilder->andWhere('g.name LIKE :name');
-                    else
-                        $queryBuilder->andWhere('g.name = :name');
-                    $queryBuilder->setParameter('name', str_replace('*', '%', $block['value']));
-                    break;
-                case 'is':
-                    switch (strtolower($block['value'])) {
-                        case 'exportable':
-                            $queryBuilder->andWhere('g.exportable = true');
-                            break;
-                        case 'not exportable':
-                        case 'noexportable':
-                            $queryBuilder->andWhere('g.exportable = false');
-                            break;
-                        case 'nogroups':
-                            $queryBuilder->andWhere('g.noGroups = true');
-                            break;
-                        case 'groups':
-                            $queryBuilder->andWhere('g.noGroups = false');
-                            break;
-                        case 'nousers':
-                            $queryBuilder->andWhere('g.noUsers = true');
-                            break;
-                        case 'users':
-                            $queryBuilder->andWhere('g.noUsers = false');
-                            break;
-                        case 'userjoin':
-                            $queryBuilder->andWhere('g.userJoinable = true');
-                            break;
-                        case 'nouserjoin':
-                            $queryBuilder->andWhere('g.userJoinable = false');
-                            break;
-                        case 'userleave':
-                            $queryBuilder->andWhere('g.userLeaveable = true');
-                            break;
-                        case 'nouserleave':
-                            $queryBuilder->andWhere('g.userLeaveable = false');
-                            break;
-                        default:
-                            throw new SearchValueException($block['name'], $block['value'], array('exportable', 'not exportable', 'nogroups', 'groups', 'nousers', 'users'));
-                    }
-                    break;
-                default:
-                    throw new SearchFieldException($block['name'], array());
-            }
-        }
-
-        return $this->view($this->paginate($queryBuilder, $request))->setTemplateData(array('batch_form'=>$this->createBatchForm()->createView()));
+        return $this->view($this->paginate($queryBuilder, $request))
+            ->setTemplateData(array(
+                'batch_form'=>$this->createBatchForm()->createView(),
+                'search_form' => $searchForm->createView(),
+            ));
     }
 
     /**
@@ -340,5 +289,54 @@ class GroupController extends CRUDController
     protected function createNewEntity()
     {
         return new Group();
+    }
+
+    /**
+     * @return FormInterface
+     */
+    private function createSearchForm()
+    {
+        $ff = $this->get('form.factory');
+        /* @var $ff FormFactoryInterface */
+        return $ff->createNamedBuilder('q', 'form', null, array(
+            'csrf_protection' => false,
+            'allow_extra_fields' => true
+        ))
+            ->setMethod('GET')
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
+            ->add('techname', 'text', array(
+                'required' => false,
+            ))
+            ->add('exportable', 'choice', array(
+                'choices' => array(0=>'No', 1=>'Yes'),
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('groups', 'choice', array(
+                'choices' => array(0=>'No', 1=>'Yes'),
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('users', 'choice', array(
+                'choices' => array(0=>'No', 1=>'Yes'),
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('userjoin', 'choice', array(
+                'choices' => array(0=>'No', 1=>'Yes'),
+                'label' => 'User joinable',
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('userleave', 'choice', array(
+                'choices' => array(0=>'No', 1=>'Yes'),
+                'label' => 'User leaveable',
+                'expanded' => true,
+                'required' => false,
+            ))
+            ->add('search', 'submit')
+            ->getForm();
     }
 }

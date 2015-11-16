@@ -399,15 +399,15 @@ This resource is paginated and searchable.
 
 #### Search parameters
 
-| Parameter | Value(s)                        | Description |
-| --------- | ------------------------------- | ----------- |
-| `is`      | `exportable`, `noexportable`    | Shows only exportable or non exportable groups. |
-| `is`      | `nousers`, `users`              | Shows only groups that do not accept users to be a direct member of them, or only groups that do accept users. |
-| `is`      | `nogroups`, `groups`            | Shows only groups that do not accept groups to be a direct member of them, or only groups that do accept groups. |
-| `is`      | `userjoin`, `nouserjoin`        | Shows only groups that allow users to join the group by themselves, or only groups that do not accept users to join by themselves. |
-| `is`      | `userleave`, `nouserleave`      | Shows only groups that allow users to leave the group by themselves, or only groups that do not accept users to leave by themselves. |
-| `techname`| Anything                        | Shows users based on their internal, technical name (`name`). Wildcards (`*`) are allowed everywhere. |
-| `name`    | Anything                        | Shows users based on their friendly name (`display_name`). Wildcards are allowed everywhere. |
+| Parameter   | Value(s) | Description |
+| ----------- | -------- | ----------- |
+| `exportable`| `0`,`1`  | Shows only exportable or non exportable groups. |
+| `users`     | `0`,`1`  | Shows only groups that do not accept users to be a direct member of them, or only groups that do accept users. |
+| `groups`    | `0`,`1`  | Shows only groups that do not accept groups to be a direct member of them, or only groups that do accept groups. |
+| `userjoin`  | `0`,`1`  | Shows only groups that allow users to join the group by themselves, or only groups that do not accept users to join by themselves. |
+| `userleave` | `0`,`1`  | Shows only groups that allow users to leave the group by themselves, or only groups that do not accept users to leave by themselves. |
+| `techname`  | Anything | Shows users based on their internal, technical name (`name`). Wildcards (`%`) are allowed everywhere. |
+| `name`      | Anything | Shows users based on their friendly name (`display_name`). Wildcards are allowed everywhere. |
 
 #### Resource object
 
