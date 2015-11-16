@@ -45,119 +45,19 @@
     {{ form_end(batch_form) }}
 {% endblock %}
 
-{% block navigation %}
+{% block radrest_sidebar %}
     {{ parent() }}
-    <form class="navbar-form navbar-right visible-lg-block" role="search">
-        <div class="form-group">
-            <label for="navbar-search" class="sr-only">Search</label>
-            <div class="input-group">
-                <input type="search" class="form-control js-search-field" placeholder="Search" name="q" id="navbar-search" value="{% if app.request.query.get('q', '') is not iterable %}{{ app.request.query.get('q', '') }}{% endif %}">
-                <div class="input-group-btn">
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search</span></button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle help</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('admin_group_gets', {q:'is:exportable'}) }}" data-property="exportable" data-remove-property="not exportable,noexportable" class="js-search-example">{{ icon('circle-o') }} Exportable</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:noexportable'}) }}" data-property="not exportable" data-remove-property="exportable,noexportable" class="js-search-example">{{ icon('circle-o') }} Not exportable</a></li>
-                            <li class="divider" role="presentation"></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:nousers'}) }}" data-property="nousers" data-remove-property="users" class="js-search-example">{{ icon('circle-o') }} "No users" group</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:users'}) }}" data-property="users" data-remove-property="nousers" class="js-search-example">{{ icon('circle-o') }} "Users" group</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:nogroups'}) }}" data-property="nogroups" data-remove-property="groups" class="js-search-example">{{ icon('circle-o') }} "No groups" group</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:groups'}) }}" data-property="groups" data-remove-property="nogroups" class="js-search-example">{{ icon('circle-o') }} "Groups" group</a></li>
-                            <li class="divider" role="presentation"></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:userjoin'}) }}" data-property="userjoin" data-remove-property="nouserjoin" class="js-search-example">{{ icon('circle-o') }} User joinable</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:nouserjoin'}) }}" data-property="nouserjoin" data-remove-property="userjoin" class="js-search-example">{{ icon('circle-o') }} Not user joinable</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:userleave'}) }}" data-property="userleave" data-remove-property="nouserleave" class="js-search-example">{{ icon('circle-o') }} User leaveable</a></li>
-                            <li><a href="{{ url('admin_group_gets', {q:'is:nouserleave'}) }}" data-property="nouserleave" data-remove-property="userleave" class="js-search-example">{{ icon('circle-o') }} Not user leaveable</a></li>
-                            <li>
-                                <span class="input-group menu-input">
-                                    <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
-                                    <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
-                                </span>
-                            </li>
-                            <li>
-                                <span class="input-group menu-input">
-                                    <label for="navigation_search_examples_techname" class="input-group-addon">techname:</label>
-                                    <input id="navigation_search_examples_techname" class="form-control js-search-example" data-prefix="techname">
-                                </span>
-                            </li>
-                            <li class="divider" role="presentation"></li>
-                            <li>
-                                <div class="menu-input">
-                                    <input type="submit" value="Search" class="btn btn-primary btn-block">
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search</h3>
         </div>
-    </form>
-{% endblock %}
-
-{% block mobile_search %}
-    <div class="col-xs-12 col-sm-4 col-md-3 hidden-lg">
-        <form role="search">
-            <div class="panel panel-default panel-mobile-search">
-                <div class="panel-heading" data-toggle="collapse" data-target=".panel-mobile-search > .list-group">
-                    <h3 class="panel-title">Search</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label for="mobile-search" class="sr-only">Search</label>
-                        <div class="input-group">
-                            <input type="search" class="form-control js-search-field" placeholder="Search" name="q" id="mobile-search" value="{% if app.request.query.get('q', '') is not iterable %}{{ app.request.query.get('q', '') }}{% endif %}">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search</span></button>
-                                </span>
-                        </div>
-                    </div>
-                </div>
-                <ul class="list-group collapse">
-                    <li data-property="exportable" data-remove-property="not exportable,noexportable" class="js-search-example list-group-item">{{ icon('circle-o') }} Exportable</li>
-                    <li data-property="not exportable" data-remove-property="exportable,noexportable" class="js-search-example list-group-item">{{ icon('circle-o') }} Not exportable</li>
-                    <li class="divider list-group-item" role="presentation"></li>
-                    <li data-property="nousers" data-remove-property="users" class="js-search-example list-group-item">{{ icon('circle-o') }} "No users" group</li>
-                    <li data-property="users" data-remove-property="nousers" class="js-search-example list-group-item">{{ icon('circle-o') }} "Users" group</li>
-                    <li data-property="nogroups" data-remove-property="groups" class="js-search-example list-group-item">{{ icon('circle-o') }} "No groups" group</li>
-                    <li data-property="groups" data-remove-property="nogroups" class="js-search-example list-group-item">{{ icon('circle-o') }} "Groups" group</li>
-                    <li class="divider list-group-item" role="presentation"></li>
-                    <li data-property="userjoin" data-remove-property="nouserjoin" class="js-search-example list-group-item">{{ icon('circle-o') }} User joinable</li>
-                    <li data-property="nouserjoin" data-remove-property="userjoin" class="js-search-example list-group-item">{{ icon('circle-o') }} Not user joinable</li>
-                    <li data-property="userleave" data-remove-property="nouserleave" class="js-search-example list-group-item">{{ icon('circle-o') }} User leaveable</li>
-                    <li data-property="nouserleave" data-remove-property="userleave" class="js-search-example list-group-item">{{ icon('circle-o') }} Not user leaveable</li>
-                    <li class="divider list-group-item" role="presentation"></li>
-                    <li class="list-group-item">
-                        <span class="input-group menu-input">
-                            <label for="navigation_search_examples_name" class="input-group-addon">name:</label>
-                            <input id="navigation_search_examples_name" class="form-control js-search-example" data-prefix="name">
-                        </span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="input-group menu-input">
-                            <label for="navigation_search_examples_techname" class="input-group-addon">techname:</label>
-                            <input id="navigation_search_examples_techname" class="form-control js-search-example" data-prefix="techname">
-                        </span>
-                    </li>
-
-                    <li class="divider list-group-item" role="presentation"></li>
-                    <li class="list-group-item">
-                        <div class="menu-input">
-                            <input type="submit" value="Search" class="btn btn-primary btn-block">
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </form>
+        <div class="panel-body">
+            {{ form(search_form) }}
+        </div>
     </div>
 {% endblock %}
 
 {% block javascript %}
 {{ parent() }}
 <script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
-<script src="{{ asset('bundles/app/js/searchgrammar.js') }}"></script>
-<script src="{{ asset('bundles/app/js/search-examples.js')}}"></script>
 {% endblock %}

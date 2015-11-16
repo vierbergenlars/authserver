@@ -2,7 +2,7 @@
     <form action="{{ url('admin_user_gets') }}">
         <label for="dashboard_user_search" class="sr-only">Search for users</label>
         <div class="input-group">
-            <input id="dashboard_user_search" type="search" name="q" placeholder="Search for users" class="form-control">
+            <input id="dashboard_user_search" type="search" name="q[username]" placeholder="Search for users" class="form-control">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-default">{{ icon('search') }}<span class="sr-only">Search users</span></button>
             </span>

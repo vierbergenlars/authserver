@@ -176,13 +176,13 @@ class UserControllerTest extends WebTestCase
 
     public function testCgetSearch()
     {
-        $this->client->request('GET', '/admin/users?q%5Busername%5D=user_4%2A');
+        $this->client->request('GET', '/admin/users?q%5Busername%5D=user_4%25');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
         $this->assertEquals(11, $data->total);
-        $this->assertEquals('/admin/users?q%5Busername%5D=user_4%2A&page=2', $data->_links->next->href);
+        $this->assertEquals('/admin/users?q%5Busername%5D=user_4%25&page=2', $data->_links->next->href);
         $this->assertArrayNotHasKey('prev', (array)$data->_links);
         $this->assertEquals('user_49', $data->items[0]->username);
         $this->assertEquals('User 49', $data->items[0]->display_name);
@@ -201,49 +201,40 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals('/admin/users/00000000-0000-0000-0000-000000000004', $data->items[0]->_links->self->href);
 
 
-        $this->client->request('GET', '/admin/users?q%5Busername%5D=%');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $data = json_decode($this->client->getResponse()->getContent());
-        $this->assertCount(0, $data->items);
-        $this->assertEquals(1, $data->page);
-        $this->assertEquals(0, $data->total);
-        $this->assertArrayNotHasKey('_links', (array)$data);
-
-
-        $this->client->request('GET', '/admin/users?q%5Bname%5D=User+4%2A');
+        $this->client->request('GET', '/admin/users?q%5Bname%5D=User+4%25');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
         $this->assertEquals(11, $data->total);
-        $this->assertEquals('/admin/users?q%5Bname%5D=User+4%2A&page=2', $data->_links->next->href);
+        $this->assertEquals('/admin/users?q%5Bname%5D=User+4%25&page=2', $data->_links->next->href);
         $this->assertArrayNotHasKey('prev', (array)$data->_links);
         $this->assertEquals('user_49', $data->items[0]->username);
         $this->assertEquals('User 49', $data->items[0]->display_name);
         $this->assertEquals('/admin/users/00000000-0000-0000-0000-000000000049', $data->items[0]->_links->self->href);
 
 
-        $this->client->request('GET', '/admin/users?q%5Bis%5D=enabled');
+        $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=enabled');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(120, $data->total);
 
-        $this->client->request('GET', '/admin/users?q%5Bis%5D=disabled');
+        $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=disabled');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(120, $data->total);
 
-        $this->client->request('GET', '/admin/users?q%5Bis%5D=user');
+        $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=user');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0, $data->total);
 
-        $this->client->request('GET', '/admin/users?q%5Bis%5D=admin');
+        $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=admin');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(240, $data->total);
 
-        $this->client->request('GET', '/admin/users?q%5Bis%5D=superadmin');
+        $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=superadmin');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(30, $data->total);

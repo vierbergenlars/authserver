@@ -201,13 +201,13 @@ class GroupControllerTest extends WebTestCase
 
     public function testCgetSearch()
     {
-        $this->client->request('GET', '/admin/groups?q%5Btechname%5D=group_4%2A');
+        $this->client->request('GET', '/admin/groups?q%5Btechname%5D=group_4%25');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
         $this->assertEquals(11, $data->total);
-        $this->assertEquals('/admin/groups?q%5Btechname%5D=group_4%2A&page=2', $data->_links->next->href);
+        $this->assertEquals('/admin/groups?q%5Btechname%5D=group_4%25&page=2', $data->_links->next->href);
         $this->assertArrayNotHasKey('prev', (array)$data->_links);
         $this->assertEquals('group_49', $data->items[0]->name);
         $this->assertEquals('DisplayName 49', $data->items[0]->display_name);
@@ -226,87 +226,73 @@ class GroupControllerTest extends WebTestCase
         $this->assertEquals('/admin/groups/group_4', $data->items[0]->_links->self->href);
 
 
-        $this->client->request('GET', '/admin/groups?q%5Btechname%5D=%');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $data = json_decode($this->client->getResponse()->getContent());
-        $this->assertCount(0, $data->items);
-        $this->assertEquals(1, $data->page);
-        $this->assertEquals(0, $data->total);
-        $this->assertArrayNotHasKey('_links', (array)$data);
-
-
-        $this->client->request('GET', '/admin/groups?q%5Bname%5D=DisplayName+4%2A');
+        $this->client->request('GET', '/admin/groups?q%5Bname%5D=DisplayName+4%25');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
         $this->assertEquals(11, $data->total);
-        $this->assertEquals('/admin/groups?q%5Bname%5D=DisplayName+4%2A&page=2', $data->_links->next->href);
+        $this->assertEquals('/admin/groups?q%5Bname%5D=DisplayName+4%25&page=2', $data->_links->next->href);
         $this->assertArrayNotHasKey('prev', (array)$data->_links);
         $this->assertEquals('group_49', $data->items[0]->name);
         $this->assertEquals('DisplayName 49', $data->items[0]->display_name);
         $this->assertEquals('/admin/groups/group_49', $data->items[0]->_links->self->href);
 
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=exportable');
+        $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=1');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->exportable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=noexportable');
+        $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->exportable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=nogroups');
+        $this->client->request('GET', '/admin/groups?q%5Bgroups%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->noGroups, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=groups');
+        $this->client->request('GET', '/admin/groups?q%5Bgroups%5D=1');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->noGroups, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=nousers');
+        $this->client->request('GET', '/admin/groups?q%5Busers%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->noUsers, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=users');
+        $this->client->request('GET', '/admin/groups?q%5Busers%5D=1');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->noUsers, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=userjoin');
+        $this->client->request('GET', '/admin/groups?q%5Buserjoin%5D=1');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->userJoinable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=nouserjoin');
+        $this->client->request('GET', '/admin/groups?q%5Buserjoin%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->userJoinable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=userleave');
+        $this->client->request('GET', '/admin/groups?q%5Buserleave%5D=1');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->userLeaveable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D=nouserleave');
+        $this->client->request('GET', '/admin/groups?q%5Buserleave%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->userLeaveable, $data->total);
 
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D%5B%5D=exportable&q%5Bis%5D%5B%5D=nouserjoin');
+        $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=1&q%5Buserjoin%5D=0');
         $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(12, $data->total);
-
-        $this->client->request('GET', '/admin/groups?q%5Bis%5D%5B%5D=noexportable&q%5Bis%5D%5B%5D=exportable');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
-        $data = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals(0, $data->total);
     }
 
     public function testPost()
