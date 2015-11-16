@@ -23,7 +23,8 @@ class AuditController extends BaseController
      */
     public function cgetAction(Request $request)
     {
-        $queryBuilder = $this->getRepository()->createQueryBuilder('l')
+        $queryBuilder = $this->getRepository()
+            ->createQueryBuilder('l')
             ->orderBy('l.loggedAt', 'DESC');
 
         if($request->query->has('target')) {

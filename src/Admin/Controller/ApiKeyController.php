@@ -25,7 +25,9 @@ class ApiKeyController extends CRUDController
      * @Get(name="s")
      */
     public function cgetAction(Request $request) {
-        $queryBuilder = $this->getEntityRepository()->createQueryBuilder('a');
+        $queryBuilder = $this->getEntityRepository()
+            ->createQueryBuilder('a')
+            ->orderBy('a.id', 'DESC');
 
         return $this->view($this->paginate($queryBuilder, $request))->setTemplateData(array('batch_form'=>$this->createBatchForm()->createView()));
     }

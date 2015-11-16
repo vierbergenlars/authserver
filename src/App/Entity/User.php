@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="auth_users")
- * @ORM\Entity(repositoryClass="UserRepository")
+ * @ORM\Entity
  * @Gedmo\Loggable
  */
 class User implements AdvancedUserInterface, \Serializable

@@ -102,7 +102,8 @@ class GroupController extends CRUDController
     {
         $queryBuilder = $this->getEntityManager()
             ->getRepository('AppBundle:Group')
-            ->createQueryBuilder('g');
+            ->createQueryBuilder('g')
+            ->orderBy('g.id', 'DESC');
 
         $query = $request->query->get('q', array());
         if (is_string($query)) {

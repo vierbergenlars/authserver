@@ -25,7 +25,10 @@ class OAuthClientController extends CRUDController
      */
     public function cgetAction(Request $request)
     {
-        $queryBuilder = $this->getEntityRepository()->createQueryBuilder('c');
+        $queryBuilder = $this->getEntityRepository()
+            ->createQueryBuilder('c')
+            ->orderBy('c.id', 'DESC');
+
         if($request->query->has('q'))
             $queryBuilder->where('c.name LIKE :name')
                 ->setParameter('name', '%'.$request->query->get('q').'%');

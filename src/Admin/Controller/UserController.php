@@ -35,7 +35,8 @@ class UserController extends CRUDController
     public function cgetAction(Request $request) {
         $queryBuilder = $this->getEntityManager()
             ->getRepository('AppBundle:User')
-            ->createQueryBuilder('u');
+            ->createQueryBuilder('u')
+            ->orderBy('u.id', 'DESC');
 
         $query = $request->query->get('q', array());
         if (is_string($query)) {
