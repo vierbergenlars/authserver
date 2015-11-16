@@ -14,9 +14,6 @@ use FOS\RestBundle\Controller\Annotations\Patch;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @Security("has_role('ROLE_ADMIN')")
- */
 class OAuthClientController extends CRUDController
 {
     /**
