@@ -8,7 +8,7 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
         <service class="App\EventListener\CancelPasswordResetOnLoginListener">
-            <argument type="service" id="app.admin.user.repo" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="braincrafted_bootstrap.flash" />
             <tag name="kernel.event_subscriber" />
         </service>

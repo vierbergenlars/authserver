@@ -4,14 +4,12 @@ namespace App\EventListener;
 
 use App\Entity\OAuth\UserAuthorization;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use App\Entity\OAuth\Client;
 use App\Entity\User;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use vierbergenlars\Bundle\RadRestBundle\Manager\ResourceManagerInterface;
 
 class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 {

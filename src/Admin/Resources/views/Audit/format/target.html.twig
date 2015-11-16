@@ -1,0 +1,5 @@
+{% spaceless %}
+    <a href="{{ url('admin_audit_gets', app.request.query.all()|merge({page:null,target:obj.objectClass})) }}">{{ obj.objectClass }}</a>
+    <b>@</b>
+    <a href="{{ url('admin_audit_gets', app.request.query.all()|merge({page:null,target:obj.objectClass~"@"~obj.objectId})) }}">{{ obj.objectId }}</a>
+{% endspaceless %}

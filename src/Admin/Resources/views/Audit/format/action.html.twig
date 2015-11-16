@@ -1,0 +1,11 @@
+{% spaceless %}
+{% if action == 'create' %}
+    <span class="text-success">{{ icon('plus-square fa-fw') }}</span>
+{% elseif action == 'update' %}
+    <span class="text-warning">{{ icon('pencil-square fa-fw') }}</span>
+{% elseif action == 'remove' %}
+    <span class="text-danger">{{ icon('minus-square fa-fw') }}</span>
+{% else %}
+    {{ action }}
+{% endif %}
+{% endspaceless %}

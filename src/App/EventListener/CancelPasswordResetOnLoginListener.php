@@ -5,6 +5,7 @@ namespace App\EventListener;
 use App\Entity\User;
 use App\Entity\UserRepository;
 use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -23,9 +24,9 @@ class CancelPasswordResetOnLoginListener implements EventSubscriberInterface
      */
     private $flash;
 
-    public function __construct(UserRepository $userRepo, FlashMessage $flash)
+    public function __construct(EntityManagerInterface $em, FlashMessage $flash)
     {
-        $this->userRepo = $userRepo;
+        $this->userRepo = $em->getRepository('AppBundle:User');
         $this->flash = $flash;
     }
 

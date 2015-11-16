@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
-    <class name="App\Entity\User" xml-root-name="user" xmlns:h="https://github.com/willdurand/Hateoas">
-        <property name="username" groups="list,object" xml-attribute="true" />
-        <property name="displayName" groups="list,object" xml-attribute="true" />
-        <property name="guid" groups="list,object" xml-attribute="true" />
-        <property name="emailAddresses" groups="admin_user_object_scope_email" serialized-name="emails">
+    <class name="App\Entity\User" xml-root-name="user" exclusion-policy="ALL" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="username" groups="list,object" xml-attribute="true" expose="true" />
+        <property name="displayName" groups="list,object" xml-attribute="true" expose="true" />
+        <property name="guid" groups="list,object" xml-attribute="true" expose="true" />
+        <property name="emailAddresses" groups="admin_user_object_scope_email" serialized-name="emails" expose="true">
             <xml-list entry-name="email" />
         </property>
-        <virtual-property method="getEmail" serialized-name="email" groups="admin_user_object_scope_email" xml-attribute="true" />
-        <property name="role" groups="admin_user_object" xml-attribute="true" />
-        <property name="enabled" serialized-name="enabled" groups="admin_user_object" xml-attribute="true" />
-        <virtual-property method="isAccountNonLocked" serialized-name="non-locked" groups="admin_user_object" xml-attribute="true" />
-        <property name="groups" groups="admin_user_object">
+        <virtual-property method="getEmail" serialized-name="email" groups="admin_user_object_scope_email" xml-attribute="true" expose="true" />
+        <property name="role" groups="admin_user_object" xml-attribute="true" expose="true" />
+        <property name="enabled" serialized-name="enabled" groups="admin_user_object" xml-attribute="true" expose="true" />
+        <virtual-property method="isAccountNonLocked" serialized-name="non-locked" groups="admin_user_object" xml-attribute="true" expose="true" />
+        <property name="groups" groups="admin_user_object" expose="true">
             <xml-list entry-name="group" />
         </property>
         <h:relation rel="self">
             <h:href route="admin_user_get">
-                <h:parameter name="id" value="expr(object.getId())" />
+                <h:parameter name="user" value="expr(object.getGuid())" />
             </h:href>
             <h:exclusion groups="list,object" />
         </h:relation>

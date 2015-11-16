@@ -1,0 +1,21 @@
+{% if username %}
+    {% if ';' in username or username starts with '-' %}
+        {% set parts = username|split(';') %}
+        {% spaceless %}
+            <a href="{{ url('admin_audit_gets', app.request.query.all()|merge({page:null,apikey: parts[0]})) }}">
+                {{ icon('key fa-fw') }} {{ parts[0] }}</a>
+            {% if parts|length > 1 %}
+                {% set username = parts[1] %}
+                <br>
+            {% else %}
+                {% set username = null %}
+            {% endif %}
+        {% endspaceless %}
+    {% endif %}
+    {% if username %}
+        <a href="{{ url('admin_audit_gets', app.request.query.all()|merge({page:null,username: username})) }}">
+            {{ icon('user fa-fw') }} {{ username }}</a>
+    {% endif %}
+{% else %}
+    <span class="text-muted">(Anonymous)</span>
+{% endif %}

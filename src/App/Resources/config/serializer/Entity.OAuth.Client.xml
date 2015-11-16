@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
-    <class name="App\Entity\OAuth\Client" xml-root-name="client" xmlns:h="https://github.com/willdurand/Hateoas">
-        <property name="name" groups="list,object" xml-attribute="true" />
-        <property name="preApproved" groups="admin_oauth_client_object" xml-attribute="true" />
-        <virtual-property name="redirectUris" groups="admin_oauth_client_object" method="getRedirectUris">
+    <class name="App\Entity\OAuth\Client" xml-root-name="client" exclusion-policy="ALL" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="name" groups="list,object" xml-attribute="true" expose="true" />
+        <property name="preApproved" groups="admin_oauth_client_object" xml-attribute="true" expose="true" />
+        <virtual-property name="redirectUris" groups="admin_oauth_client_object" method="getRedirectUris" expose="true">
             <xml-list inline="true" entry-name="redirect-uri" />
         </virtual-property>
         <h:relation rel="self">

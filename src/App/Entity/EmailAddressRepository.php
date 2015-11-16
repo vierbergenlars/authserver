@@ -10,7 +10,6 @@ class EmailAddressRepository extends EntityRepository
     {
         return $this->createQueryBuilder('e')
             ->where('e.user = :user')
-            ->setParameter('user', $user)
-            ->getQuery();
+            ->setParameter('user', $user);
     }
 }

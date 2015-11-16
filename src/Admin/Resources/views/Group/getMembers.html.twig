@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:cget.html.twig' %}
+{% extends 'AdminBundle:Group:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">Members of {{ icon('group') }} {{ group.displayName }}</h3>
@@ -13,7 +13,7 @@
             <tbody>
                 {% for obj in data %}
                     <tr>
-                        <td><a href="{{ url('admin_user_get',{ id: obj.id }) }}"><abbr title="{{ obj.username }}">{{ obj.displayName }}</abbr></a></td>
+                        <td><a href="{{ url('admin_user_get',{ user: obj.guid }) }}"><abbr title="{{ obj.username }}">{{ obj.displayName }}</abbr></a></td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -2,16 +2,17 @@
 
 namespace Admin\Form\EventListener;
 
+use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
-use Admin\Security\DefaultAuthorizationChecker;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
 {
     private $authorizationChecker;
 
-    public function __construct(DefaultAuthorizationChecker $authorizationChecker)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
     }
@@ -27,34 +28,34 @@ class UserTypeLocalFlagsEventListener implements EventSubscriberInterface
     {
         $form = $event->getForm();
         $data = $event->getData();
-        if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ADMIN')) {
+        if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_ADMIN')) {
             $form->remove('role');
         }
         if($form->getConfig()->getMethod() !== 'POST') {
-            if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_CRED')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_CRED')) {
                 $form->remove('password');
                 $form->remove('passwordEnabled');
             }
-            if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_EMAIL')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_EMAIL')) {
                 $form->remove('emailAddresses');
             }
-            if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_GROUPS')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_GROUPS')) {
                 $form->remove('groups');
             }
-            if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_USERNAME')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_USERNAME')) {
                 $form->remove('username');
             }
-            if (!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED')) {
+            if (!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_ENABLED')) {
                 $form->remove('enabled');
             }
         }
-        if ($this->authorizationChecker->hasRole('ROLE_API')) {
+        if ($this->authorizationChecker->isGranted('ROLE_API')) {
             // Remove user properties fields when logged in with API key
             $form->remove('groups');
         }
-        if ($data instanceof \App\Entity\User) {
+        if ($data instanceof User) {
             /* @var $data \App\Entity\User */
-            if ($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->hasRole('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
+            if ($data->getRole() == 'ROLE_SUPER_ADMIN' &&!$this->authorizationChecker->isGranted('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')) {
                 $form->remove('enabled');
             }
         }

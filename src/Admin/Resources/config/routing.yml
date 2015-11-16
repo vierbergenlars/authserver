@@ -1,10 +1,10 @@
 admin_user:
-    resource: app.admin.user.controller
+    resource: Admin\Controller\UserController
     type: rest
     name_prefix: admin_user_
     prefix: users
     requirements:
-        id: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
+        user: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
 
 admin_user_email:
     resource: Admin\Controller\UserEmailController
@@ -15,31 +15,31 @@ admin_user_email:
         email: "[0-9]+"
 
 admin_group:
-    resource: app.admin.group.controller
+    resource: Admin\Controller\GroupController
     type: rest
     name_prefix: admin_group_
     prefix: groups
     requirements:
-        id: "(?!(new|batch)$)%?[a-z0-9_]+"
+        group: "(?!(new|batch)$)%?[a-z0-9_]+"
 
 admin_oauth_client:
-    resource: app.admin.oauth.client.controller
+    resource: Admin\Controller\OAuthClientController
     type: rest
     name_prefix: admin_oauth_client_
     prefix: oauth/clients
     requirements:
-        id: "[0-9]+"
+        client: "[0-9]+"
 
 admin_apikey:
-    resource: app.admin.apikey.controller
+    resource: Admin\Controller\ApiKeyController
     type: rest
     name_prefix: admin_apikey_
     prefix: apikeys
     requirements:
-        id: "[0-9]+"
+        apikey: "[0-9]+"
 
 admin_audit:
-    resource: app.admin.audit.controller
+    resource: Admin\Controller\AuditController
     type: rest
     name_prefix: admin_audit_
     prefix: auditlog

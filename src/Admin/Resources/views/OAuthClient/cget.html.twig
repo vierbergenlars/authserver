@@ -1,9 +1,9 @@
-{% extends 'VlRadRestBundle:Default:cget.html.twig' %}
+{% extends 'AdminBundle:OAuthClient:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">OAuth Applications</h3>
     </div>
-    {{ form_start(batch_form, { action: url(controller.route('batch'), { _params: app.request.query.all }), style: 'inline' }) }}
+    {{ form_start(batch_form, { action: url('admin_oauth_client_batch', { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -32,7 +32,7 @@
                             {{ obj.maxScopes|join(' ') }}
                         </td>
                         <td>
-                            {% include 'VlRadRestBundle:Default:cget_links.html.twig' with {obj: obj, controller: controller } only %}
+                            {% include 'AdminBundle:OAuthClient:cget_links.html.twig' with {obj: obj } only %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -47,4 +47,8 @@
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
     {{ form_end(batch_form) }}
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
 {% endblock %}

@@ -9,7 +9,7 @@
                         <h1 class="panel-title">{{ icon('user') }} Users</h1>
                     </a>
                 </div>
-                {{ render(controller('app.admin.user.controller:dashboardAction')) }}
+                {{ render(controller('AdminBundle:User:dashboard')) }}
             </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
@@ -19,7 +19,7 @@
                         <h1 class="panel-title">{{ icon('group') }} Groups</h1>
                     </a>
                 </div>
-                {{ render(controller('app.admin.group.controller:dashboardAction')) }}
+                {{ render(controller('AdminBundle:Group:dashboard')) }}
             </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
@@ -29,7 +29,7 @@
                         <h1 class="panel-title">{{ icon('cube') }} OAuth Applications</h1>
                     </a>
                 </div>
-                {{ render(controller('app.admin.oauth.client.controller:dashboardAction')) }}
+                {{ render(controller('AdminBundle:OAuthClient:dashboard')) }}
             </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
@@ -39,7 +39,7 @@
                         <h1 class="panel-title">{{ icon('key') }} API Keys</h1>
                     </a>
                 </div>
-                {{ render(controller('app.admin.apikey.controller:dashboardAction')) }}
+                {{ render(controller('AdminBundle:ApiKey:dashboard')) }}
             </div>
         </div>
     </div>

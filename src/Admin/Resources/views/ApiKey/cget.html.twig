@@ -1,0 +1,47 @@
+{% extends 'AdminBundle:ApiKey:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">API Keys</h3>
+    </div>
+    {{ form_start(batch_form, { action: url('admin_apikey_batch', { _params: app.request.query.all }), style: 'inline' }) }}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Scopes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in data %}
+                    <tr>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox">
+                                {{ obj.name }}
+                            </label>
+                        </td>
+                        <td>{{ obj.scopes|join(' ') }}</td>
+                        <td>
+                            {% include 'AdminBundle:ApiKey:cget_links.html.twig' with {obj: obj} only %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-body text-center">
+        <div class="pull-left js--batch-form collapse">
+            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
+            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
+        </div>
+        {{ knp_pagination_render(data, "", {"media_type": null}) }}
+    </div>
+    {{ form_end(batch_form) }}
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script src="{{ asset('bundles/admin/js/batch-checkbox.js') }}"></script>
+{% endblock %}

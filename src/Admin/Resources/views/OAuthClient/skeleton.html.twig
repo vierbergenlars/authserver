@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            {% block mobile_search %}
+            {% endblock %}
+            <div class="col-xs-12 col-sm-8 col-md-9 pull-right">
+                <div class="panel panel-
+                {%- spaceless %}
+                    {% set _route = app.request.attributes.get('_route') %}
+                    {% if _route ends with '_get' or _route ends with '_gets' %}
+                        info
+                    {% elseif _route ends with '_post' or _route ends with '_put' or _route ends with '_delete' %}
+                        warning
+                    {% elseif _route ends with '_remove' %}
+                        danger
+                    {% else %}
+                        primary
+                    {% endif %}
+                {% endspaceless -%}
+                ">
+                    {% block radrest_content %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="panel panel-default">
+                    {% block radrest_sidebar %}
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Navigation</h3>
+                        </div>
+                        <div class="list-group">
+                            {% macro render_link(route, param, ico, name) %}
+                                <a class="list-group-item {% if app.request.attributes.get('_route') == route %} active{% endif%}" href="{{ url(route, param) }}">{{ icon(ico~' fa-fw') }} {{ name }}</a>
+                            {% endmacro %}
+                            {% import _self as self %}
+                            {% if client is defined %}
+                                {{ self.render_link('admin_oauth_client_get', {client:client.id},'eye', 'View') }}
+                                {{ self.render_link('admin_oauth_client_edit', {client:client.id}, 'pencil', 'Edit') }}
+                                {{ self.render_link('admin_oauth_client_remove', {client:client.id}, 'trash', 'Delete') }}
+                            {% endif %}
+                            {{ self.render_link('admin_oauth_client_gets', {}, 'list', 'List') }}
+                            {{ self.render_link('admin_oauth_client_new', {}, 'plus', 'Create') }}
+                        </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

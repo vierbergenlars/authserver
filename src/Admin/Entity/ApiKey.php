@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * ApiKey
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="ApiKeyRepository")
+ * @ORM\Entity
  * @Gedmo\Loggable
  */
 class ApiKey

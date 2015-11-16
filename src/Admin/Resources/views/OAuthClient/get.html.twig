@@ -1,4 +1,4 @@
-{% extends 'VlRadRestBundle:Default:get.html.twig' %}
+{% extends 'AdminBundle:OAuthClient:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
         <h3 class="panel-title">OAuth Application</h3>
@@ -33,7 +33,7 @@
             {% if data.groupRestriction %}
                 <dt>Group restriction</dt><dd>
                     {% set g = data.groupRestriction %}
-                    <a href="{{ url('admin_group_get', {id: g.id}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+                    <a href="{{ url('admin_group_get', {group: g.name}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
                 </dd>
             {% endif %}
         </dl>
