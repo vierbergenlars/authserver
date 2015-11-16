@@ -46,7 +46,7 @@ class UserController extends CRUDController
                 $queryBuilder->andWhere('u.displayName LIKE :displayName')
                     ->setParameter('displayName', $searchForm->get('name')->getData());
             if (!$searchForm->get('email')->isEmpty())
-                $queryBuilder->leftJoin('u.emails', 'e')
+                $queryBuilder->leftJoin('u.emailAddresses', 'e')
                     ->andWhere('e.email LIKE :email')
                     ->setParameter('email', $searchForm->get('email')->getData());
             foreach (array_merge($searchForm->get('is')->getData(), $searchForm->get('is')->getExtraData()) as $value) {
