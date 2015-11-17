@@ -33,6 +33,7 @@
                         {% if e.primary %}
                             {{ label_primary('Primary') }}
                         {% endif %}
+                        <a href="{{ url('admin_audit_gets', {target: 'App\\Entity\\EmailAddress@'~e.id}) }}">{{ icon('history') }}</a>
                         <br>
                     {% endfor %}
                 </dd>
