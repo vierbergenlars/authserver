@@ -28,6 +28,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
+use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -133,6 +134,35 @@ class ApiKeyController extends CRUDController
         return $this->routeRedirectView('admin_apikey_gets', array(), Codes::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @NoRoute
+     * @View
+     */
+    public function rotateFormAction(ApiKey $apikey)
+    {
+        return $this->getRotateForm($apikey);
+    }
+
+    /**
+     * @Post
+     * @View
+     */
+    public function rotateAction(Request $request, ApiKey $apikey)
+    {
+        $form = $this->getRotateForm($apikey);
+
+        $form->handleRequest($request);
+
+        if(!$form->isValid()) {
+            $this->addFlash('danger', 'API key secret could not be regenerated.');
+        } else {
+            $apikey->regenerateSecret();
+            $this->getEntityManager()->flush();
+        }
+
+        return $this->routeRedirectView('admin_apikey_get', array('apikey' => $apikey->getId()), Codes::HTTP_NO_CONTENT);
+    }
+
     protected function getFormType()
     {
         return new ApiKeyType();
@@ -146,5 +176,19 @@ class ApiKeyController extends CRUDController
     protected function getEntityRepository()
     {
         return $this->getEntityManager()->getRepository('AdminBundle:ApiKey');
+    }
+
+    private function getRotateForm(ApiKey $apiKey)
+    {
+        return $this->createFormBuilder()
+            ->setMethod('POST')
+            ->setAction($this->generateUrl('admin_apikey_rotate', array('apikey'=>$apiKey->getId())))
+            ->add('rotate', 'submit', array(
+                'label' => 'Regenerate key',
+                'attr' => array(
+                    'class' => 'btn-danger btn-xs'
+                )
+            ))
+            ->getForm();
     }
 }

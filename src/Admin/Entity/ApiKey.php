@@ -66,7 +66,7 @@ class ApiKey
 
     public function __construct()
     {
-        $this->secret = Random::generateToken();
+        $this->regenerateSecret();
     }
 
     /**
@@ -110,6 +110,14 @@ class ApiKey
     public function getSecret()
     {
         return $this->secret;
+    }
+
+    /**
+     * Regenerate secret
+     */
+    public function regenerateSecret()
+    {
+        $this->secret = Random::generateToken();
     }
 
     /**

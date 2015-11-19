@@ -14,10 +14,8 @@
             </dd>
             <dt>Client ID</dt><dd>{{ data.id }}_{{ data.randomId }}</dd>
             <dt>Client Secret</dt><dd>
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                    <span class="hidden" id="oauth_app_client_secret">{{ data.secret }}</span>
-                {% endif %}
-                <span class="text-muted" id="oauth_app_client_secret_guard">******</span>
+                {{ data.secret }}
+                {{ render(controller('AdminBundle:OAuthClient:rotateForm', {client: data.id})) }}
             </dd>
             {% if data.preApprovedScopes|length > 0 %}
                 <dt>Pre approved scopes</dt><dd>{{ data.preApprovedScopes|join(' ') }}</dd>
@@ -38,12 +36,4 @@
             {% endif %}
         </dl>
     </div>
-{% endblock %}
-{% block javascript %}
-    {{ parent() }}
-    <script>
-        $('#oauth_app_client_secret_guard, #oauth_app_client_secret').on('click', function() {
-            $('#oauth_app_client_secret_guard, #oauth_app_client_secret').toggleClass('hidden');
-        });
-    </script>
 {% endblock %}
