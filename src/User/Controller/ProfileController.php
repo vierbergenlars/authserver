@@ -97,7 +97,7 @@ class ProfileController extends Controller
                         ->execute();
                 $em = $this->getDoctrine()->getManagerForClass('AppBundle:OAuth\UserAuthorization');
                 $em->remove($userAuthorization);
-                $em->flush($userAuthorization);
+                $em->flush();
 
                 $this->getDoctrine()->getManager()->commit();
                 $this->getFlash()->success('Authorized application has been removed');
@@ -198,7 +198,7 @@ class ProfileController extends Controller
             if(!$this->getUser()->getPrimaryEmailAddress())
                 $addr->setPrimary(true);
             $em->persist($addr);
-            $em->flush($addr);
+            $em->flush();
 
             if ($mailer->sendMessage($addr->getEmail(), $addr)) {
                 $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
@@ -246,7 +246,7 @@ class ProfileController extends Controller
                     ->encodePassword($form->get('password')->getData(), null)
             );
             $user->setPasswordEnabled(1);
-            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
             $this->getFlash()->success('Password has been changed successfully');
 
             return $this->redirectToProfile();
@@ -273,7 +273,7 @@ class ProfileController extends Controller
                 return $this->redirectToProfile();
             }
             $user->addGroup($group);
-            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
             $this->getFlash()->success('You joined the group '.$group->getDisplayName().'.');
         } else {
             $errString = 'Problems while adding group.';
@@ -313,7 +313,7 @@ class ProfileController extends Controller
             $user = $this->getUser();
             /* @var $user User */
             $user->removeGroup($group);
-            $this->getDoctrine()->getRepository('AppBundle:User')->update($user);
+            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
             $this->getFlash()->success('You left the group '.$group->getDisplayName().'.');
         } else {
             $this->getFlash()->error('Cannot leave this group.');

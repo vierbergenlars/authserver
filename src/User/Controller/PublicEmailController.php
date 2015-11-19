@@ -19,6 +19,7 @@
 
 namespace User\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use User\Form\AccountSubmitType;
@@ -39,7 +40,7 @@ class PublicEmailController extends Controller
 
             if (!$addr->isVerified()&&$addr->getVerificationCode() == $verificationCode) {
                 $addr->setVerified(true);
-                $em->flush($addr);
+                $em->flush();
             }
             if ($addr->isVerified() && !$this->getUser()) {
                 $flash->success('Your email address has been verified, and your account has been activated. You can now log in.');
@@ -66,6 +67,7 @@ class PublicEmailController extends Controller
 
         if ($form->isValid()) {
             $user = $form->get('user')->getData();
+            /* @var $user User */
             $addr = $user->getPrimaryEmailAddress();
             if(!$addr) {
                 $flash->error('This account does not have an email address associated.');
@@ -73,7 +75,7 @@ class PublicEmailController extends Controller
                 $addr->setVerified(false);
 
                 if ($mailer->sendMessage($addr->getEmail(), $addr)) {
-                    $em->flush($addr);
+                    $em->flush();
                     $flash->success('A new confirmation email has been sent');
                 } else {
                     $flash->error('We are having some troubles sending you a verification mail. Please try again later.');
