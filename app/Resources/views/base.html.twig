@@ -93,7 +93,7 @@
                                     {{ icon('bolt fa-fw') }}
                                 {% endif %}
                             </span>
-                            {% if app.security.token %}
+                            {% if app.user %}
                                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                                     <a href="{{ url('home', {'_switch_user':'_exit'}) }}" class="text-muted">{{ icon('stethoscope fa-fw')}}</a>
                                 {% endif %}

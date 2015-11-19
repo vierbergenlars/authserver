@@ -21,7 +21,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 
 class GroupType extends AbstractType
@@ -33,7 +33,7 @@ class GroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if(isset($options['data']))
-            $id = $options['data']->getMigrateId()?:0;
+            $id = $options['data']->getId()?:0;
         else
             $id = 0;
         $builder
@@ -50,7 +50,7 @@ class GroupType extends AbstractType
                         ->andWhere('g.id != :id')
                         ->setParameter('id', $id);
                 },
-                'property'=>'name',
+                'choice_label'=>'name',
                 'required'=>false,
                 'expanded' => true,
             ))
@@ -92,9 +92,9 @@ class GroupType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\Group'
