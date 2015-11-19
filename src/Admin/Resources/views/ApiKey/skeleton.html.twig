@@ -38,6 +38,7 @@
                                 {{ self.render_link('admin_apikey_get', {apikey:apikey.id},'eye', 'View') }}
                                 {{ self.render_link('admin_apikey_edit', {apikey:apikey.id}, 'pencil', 'Edit') }}
                                 {{ self.render_link('admin_apikey_remove', {apikey:apikey.id}, 'trash', 'Delete') }}
+                                {{ self.render_link('admin_audit_gets', {target:'Admin\\Entity\\ApiKey@'~apikey.id}, 'history', 'History', is_granted('ROLE_AUDIT')) }}
                             {% endif %}
                             {{ self.render_link('admin_apikey_gets', {}, 'list', 'List') }}
                             {{ self.render_link('admin_apikey_new', {}, 'plus', 'Create') }}

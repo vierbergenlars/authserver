@@ -217,11 +217,12 @@ class User implements AdvancedUserInterface, \Serializable
      */
     public function getId()
     {
-        return strtoupper($this->guid);
+        return $this->id;
     }
 
     public function getMigrateId()
     {
+        @trigger_error(__METHOD__.'() is deprecated. Use '.__CLASS__.'::getId().', E_USER_DEPRECATED);
         return $this->id;
     }
 

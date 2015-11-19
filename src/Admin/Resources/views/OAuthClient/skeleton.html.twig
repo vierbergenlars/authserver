@@ -38,6 +38,7 @@
                                 {{ self.render_link('admin_oauth_client_get', {client:client.id},'eye', 'View') }}
                                 {{ self.render_link('admin_oauth_client_edit', {client:client.id}, 'pencil', 'Edit') }}
                                 {{ self.render_link('admin_oauth_client_remove', {client:client.id}, 'trash', 'Delete') }}
+                                {{ self.render_link('admin_audit_gets', {target:'App\\Entity\\OAuth\\Client@'~client.id}, 'history', 'History', is_granted('ROLE_AUDIT')) }}
                             {% endif %}
                             {{ self.render_link('admin_oauth_client_gets', {}, 'list', 'List') }}
                             {{ self.render_link('admin_oauth_client_new', {}, 'plus', 'Create') }}

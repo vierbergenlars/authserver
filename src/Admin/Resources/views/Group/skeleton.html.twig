@@ -38,6 +38,7 @@
                                 {{ self.render_link('admin_group_get', {group: group.name},'eye', 'View', is_granted('ROLE_SCOPE_R_GROUP')) }}
                                 {{ self.render_link('admin_group_edit', {group: group.name}, 'pencil', 'Edit', is_granted('ROLE_SCOPE_W_GROUP')) }}
                                 {{ self.render_link('admin_group_remove', {group: group.name}, 'trash', 'Delete', is_granted('ROLE_SCOPE_W_GROUP')) }}
+                                {{ self.render_link('admin_audit_gets', {target:'App\\Entity\\Group@'~group.id}, 'history', 'History', is_granted('ROLE_AUDIT')) }}
                             {% endif %}
                             {{ self.render_link('admin_group_gets', {}, 'list', 'List', is_granted('ROLE_SCOPE_R_GROUP')) }}
                             {{ self.render_link('admin_group_new', {}, 'plus', 'Create', is_granted('ROLE_SCOPE_W_GROUP')) }}

@@ -38,6 +38,7 @@
                                 {{ self.render_link('admin_user_get', {user:user.guid},'eye', 'View', is_granted('ROLE_SCOPE_R_PROFILE')) }}
                                 {{ self.render_link('admin_user_edit', {user:user.guid}, 'pencil', 'Edit', is_granted('ROLE_SCOPE_W_PROFILE')) }}
                                 {{ self.render_link('admin_user_remove', {user:user.guid}, 'trash', 'Delete', is_granted('ROLE_SCOPE_W_PROFILE')) }}
+                                {{ self.render_link('admin_audit_gets', {target:'App\\Entity\\User@'~user.id}, 'history', 'History', is_granted('ROLE_AUDIT')) }}
                             {% endif %}
                             {{ self.render_link('admin_user_gets', {}, 'list', 'List', is_granted('ROLE_SCOPE_R_PROFILE')) }}
                             {{ self.render_link('admin_user_new', {}, 'plus', 'Create', is_granted('ROLE_SCOPE_W_PROFILE')) }}
