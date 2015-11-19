@@ -32,9 +32,9 @@ use Symfony\Component\Security\Http\SecurityEvents;
 class CancelPasswordResetOnLoginListener implements EventSubscriberInterface
 {
     /**
-     * @var UserRepository
+     * @var EntityManagerInterface
      */
-    private $userRepo;
+    private $em;
 
     /**
      * @var FlashMessage
@@ -43,7 +43,7 @@ class CancelPasswordResetOnLoginListener implements EventSubscriberInterface
 
     public function __construct(EntityManagerInterface $em, FlashMessage $flash)
     {
-        $this->userRepo = $em->getRepository('AppBundle:User');
+        $this->em = $em;
         $this->flash = $flash;
     }
 
@@ -58,10 +58,10 @@ class CancelPasswordResetOnLoginListener implements EventSubscriberInterface
     {
         $user = $loginEvent->getAuthenticationToken()->getUser();
         /* @var $user User */
-        if($user->getPasswordResetToken() !== null) {
+        if($user instanceof User && $user->getPasswordResetToken() !== null) {
             $this->flash->info('Since you appear to have logged in successfully, we canceled your pending password reset request.');
             $user->clearPasswordResetToken();
-            $this->userRepo->update($user);
+            $this->em->flush();
         }
     }
 }
