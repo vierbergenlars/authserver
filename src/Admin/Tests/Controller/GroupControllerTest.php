@@ -50,7 +50,7 @@ class GroupControllerTest extends WebTestCase
     public static function setUpBeforeClass()
     {
         static::bootKernel();
-        unlink(self::$kernel->getRootDir().'/test_db.sqlite');
+        @unlink(self::$kernel->getRootDir().'/test_db.sqlite');
         $cliApp = new Application(static::$kernel);
         $cliApp->setAutoExit(false);
         if($cliApp->run(new StringInput('doctrine:migrations:migrate --no-interaction'), new NullOutput()))
