@@ -8,7 +8,7 @@
         </virtual-property>
         <h:relation rel="self">
             <h:href route="admin_oauth_client_get">
-                <h:parameter name="id" value="expr(object.getId())" />
+                <h:parameter name="client" value="expr(object.getId())" />
             </h:href>
             <h:exclusion groups="list,object" />
         </h:relation>
