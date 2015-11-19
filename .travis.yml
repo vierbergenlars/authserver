@@ -13,8 +13,8 @@ matrix:
         - php: hhvm
 
 before_script:
-  - "composer install --prefer-source"
   - "cp app/config/parameters.yml{.dist,}"
+  - "composer install --prefer-source"
 
 after_failure: "cat /home/travis/build/gimler/symfony-rest-edition/app/logs/test.log"
 
