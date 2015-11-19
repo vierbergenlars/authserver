@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="App\Entity\Property\PropertyData" xml-root-name="property" exclusion-policy="ALL" xmlns:h="https://github.com/willdurand/Hateoas">
+        <property name="name" groups="api_list" xml-attribute="true" expose="true" />
+        <h:relation rel="self">
+            <h:href route="api_get_property">
+                <h:parameter name="ns" value="expr(object.getNamespace().getName())" />
+                <h:parameter name="property" value="expr(object.getName())" />
+            </h:href>
+            <h:exclusion groups="api_list,api_object" />
+        </h:relation>
+    </class>
+</serializer>

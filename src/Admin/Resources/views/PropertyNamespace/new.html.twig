@@ -1,0 +1,11 @@
+{% extends 'AdminBundle:PropertyNamespace:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Create</h3>
+    </div>
+    <div class="panel-body">
+        {% if form is defined %}
+            {{ form(form, {action: path('admin_property_namespace_post'), style: 'horizontal'}) }}
+        {% endif %}
+    </div>
+{% endblock %}

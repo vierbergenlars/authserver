@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BaseController extends Controller
 {
-    protected function isOAuth()
+    protected function getToken()
     {
         if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
@@ -34,7 +34,12 @@ class BaseController extends Controller
             return false;
         }
 
-        return $token instanceof OAuthToken;
+        return $token;
+    }
+
+    protected function isOAuth()
+    {
+        return $this->getToken() instanceof OAuthToken;
     }
 
     protected function isGrantedScope($scope)

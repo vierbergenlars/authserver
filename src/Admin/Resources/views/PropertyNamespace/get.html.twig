@@ -1,0 +1,40 @@
+{% extends 'AdminBundle:PropertyNamespace:skeleton.html.twig' %}
+{% block radrest_content %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Namespace</h3>
+    </div>
+
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Name</dt><dd>{{ data.name }}</dd>
+            <dt>Flags</dt><dd>
+                {% if data.publicReadable %}
+                    <span title="Public readable">{{ label_success('R') }}</span>
+                {% else %}
+                    <span title="Not public readable">{{ label('R') }}</span>
+                {% endif %}
+                {% if data.publicWriteable %}
+                    <span title="Public writeable">{{ label_success('W') }}</span>
+                {% else %}
+                    <span title="Not public writeable">{{ label('W') }}</span>
+                {% endif %}
+            </dd>
+            <dt>Readers</dt><dd>
+                {% for c in data.readers %}
+                    <a href="{{ url('admin_oauth_client_get', {client: c.id}) }}">{{ icon('cube') }} {{ c.name }}</a><br>
+                {% endfor %}
+            </dd>
+            <dt>Writers</dt><dd>
+                {% for c in data.writers %}
+                    <a href="{{ url('admin_oauth_client_get', {client: c.id}) }}">{{ icon('cube') }} {{ c.name }}</a><br>
+                {% endfor %}
+            </dd>
+
+            <dt>Used keys</dt><dd>
+                {% for p in properties %}
+                    <em>{{ p.name }}</em>: {{ p.c }}<br>
+                {% endfor %}
+            </dd>
+        </dl>
+    </div>
+{% endblock %}
