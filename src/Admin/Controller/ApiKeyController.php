@@ -23,7 +23,6 @@ use Admin\Entity\ApiKey;
 use Admin\Form\ApiKeyType;
 use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -35,7 +34,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ApiKeyController extends CRUDController
 {
     /**
-     * @ApiDoc
      * @View
      * @Get(name="s")
      */
@@ -48,7 +46,6 @@ class ApiKeyController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @View
      */
     public function getAction(ApiKey $apikey)
