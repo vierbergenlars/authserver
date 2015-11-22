@@ -76,6 +76,9 @@ class UserController extends CRUDController
                     case 'super_admin':
                         $queryBuilder->andWhere('u.role = \'ROLE_SUPER_ADMIN\'');
                         break;
+                    case 'audit':
+                        $queryBuilder->andWhere('u.role = \'ROLE_AUDIT\'');
+                        break;
                     case 'user':
                         $queryBuilder->andWhere('u.role IN(\'ROLE_USER\',\'ROLE_AUDIT\')');
                         break;
@@ -381,14 +384,18 @@ class UserController extends CRUDController
         ))
             ->add('admin', 'choice', array(
                 'choices' => array(
-                    'admin', 'superadmin', 'user'
+                    'admin' => 'Admins',
+                    'superadmin' => 'Super admins',
+                    'audit' => 'Audit',
+                    'user' => 'Users',
                 ),
                 'expanded' => true,
                 'required' => false,
             ))
             ->add('enabled', 'choice', array(
                 'choices' => array(
-                    'enabled', 'disabled'
+                    'enabled' => 'Yes',
+                    'disabled' => 'No',
                 ),
                 'expanded' => true,
                 'required' => false,
