@@ -27,7 +27,6 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Util\Codes;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -41,9 +40,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  */
 class GroupController extends CRUDController
 {
-    /**
-     * @ApiDoc
-     */
     public function flagsAction(Request $request, Group $group)
     {
         $form = $this->get('form.factory')
@@ -77,9 +73,6 @@ class GroupController extends CRUDController
         return null;
     }
 
-    /**
-     * @ApiDoc
-     */
     public function displaynameAction(Request $request, Group $group)
     {
         $form = $this->createEditForm($group);
@@ -93,7 +86,6 @@ class GroupController extends CRUDController
     /**
      * @Get(path="/{group}/members")
      * @View(serializerGroups={"admin_group_list_members","list"})
-     * @ApiDoc
      */
     public function getMembersAction(Request $request, Group $group)
     {
@@ -110,7 +102,6 @@ class GroupController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @View(serializerGroups={"admin_group_list", "list"})
      * @Get(name="s")
      */
@@ -155,7 +146,6 @@ class GroupController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @View(serializerGroups={"admin_group_object", "object"})
      */
     public function getAction(Group $group)

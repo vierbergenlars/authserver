@@ -21,7 +21,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -39,7 +39,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if(isset($options['data']))
-            $id = $options['data']->getMigrateId()?:0;
+            $id = $options['data']->getId()?:0;
         else
             $id = 0;
 
@@ -75,7 +75,7 @@ class UserType extends AbstractType
                 'expanded' => true,
             ))
             ->add('groups', null, array(
-                'property'=>'name',
+                'choice_label'=>'name',
                 'query_builder'=>function (EntityRepository $repo) use ($id) {
                     return $repo->createQueryBuilder('g')
                         ->leftJoin('g.members', 'm')
@@ -98,9 +98,9 @@ class UserType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\User'

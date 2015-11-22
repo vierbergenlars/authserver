@@ -20,7 +20,7 @@
 namespace Admin\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
+use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Choice;
 
@@ -30,7 +30,7 @@ class BatchType extends AbstractType
 
     public function __construct($actions)
     {
-        $this->choices = new SimpleChoiceList($actions);
+        $this->choices = $actions;
     }
 
     /**
@@ -47,8 +47,8 @@ class BatchType extends AbstractType
             ))
             ->add('action', 'choice', array(
                 'placeholder' => 'Select batch action',
-                'choice_list' => $this->choices,
-                'constraints' => new Choice(array('choices'=>$this->choices->getValues())),
+                'choices' => $this->choices,
+                'constraints' => new Choice(array('choices'=>$this->choices)),
             ))
             ->add('submit', 'submit')
         ;

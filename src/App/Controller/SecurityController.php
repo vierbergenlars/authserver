@@ -21,7 +21,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
 
 class SecurityController extends Controller
 {
@@ -31,11 +31,11 @@ class SecurityController extends Controller
 
         $error = null;
         // get the login error if there is one
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
         } else {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+            $error = $session->get(Security::AUTHENTICATION_ERROR);
+            $session->remove(Security::AUTHENTICATION_ERROR);
         }
 
         // Add the following lines
@@ -47,7 +47,7 @@ class SecurityController extends Controller
 
         return $this->render('AppBundle:Security:login.html.twig', array(
             // last username entered by the user
-            'last_username' => $session->get(SecurityContext::LAST_USERNAME),
+            'last_username' => $session->get(Security::LAST_USERNAME),
             'error'         => $error,
             'error_type'    => $error?get_class($error):null,
         ));

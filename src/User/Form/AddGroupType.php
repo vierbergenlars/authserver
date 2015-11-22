@@ -44,7 +44,7 @@ class AddGroupType extends AbstractType
         $user = $this->user;
         $builder
             ->add('group', 'entity', array(
-                'property'=>'displayName',
+                'choice_label'=>'displayName',
                 'class' => 'App\Entity\Group',
                 'query_builder'=>function (EntityRepository $repo) use($user) {
                     $qb = $repo->createQueryBuilder('g')
@@ -64,15 +64,6 @@ class AddGroupType extends AbstractType
                 )
             ))
         ;
-    }
-
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-        ));
     }
 
     /**

@@ -26,7 +26,6 @@ use App\Form\UserType;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -43,7 +42,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class UserController extends CRUDController
 {
     /**
-     * @ApiDoc
      * @View(serializerGroups={"admin_user_list", "list"})
      * @Get(name="s")
      */
@@ -99,7 +97,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @View
      */
     public function getAction(User $user)
@@ -247,7 +244,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @ParamConverter("u",options={"mapping":{"u":"guid"}})
      * @Security("(has_role('ROLE_SCOPE_W_PROFILE_ENABLED') and u.getRole() not in ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']) or has_role('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')")
      */
@@ -258,7 +254,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @ParamConverter("u",options={"mapping":{"u":"guid"}})
      * @Security("(has_role('ROLE_SCOPE_W_PROFILE_ENABLED') and u.getRole() not in ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']) or has_role('ROLE_SCOPE_W_PROFILE_ENABLED_ADMIN')")
      */
@@ -269,7 +264,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_ADMIN')")
      */
     public function roleAction(Request $request, User $user)
@@ -278,7 +272,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_USERNAME')")
      */
     public function usernameAction(Request $request, User $user)
@@ -286,16 +279,12 @@ class UserController extends CRUDController
         return $this->processOtherField($request, $user, 'username');
     }
 
-    /**
-     * @ApiDoc
-     */
     public function displaynameAction(Request $request, User $user)
     {
         return $this->processOtherField($request, $user, 'displayName');
     }
 
     /**
-     * @ApiDoc
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */
     public function passwordAction(Request $request, User $user)
@@ -304,7 +293,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @Patch("/{id}/password/disable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */
@@ -315,7 +303,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @Patch("/{id}/password/enable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      * @param User $user
@@ -327,7 +314,6 @@ class UserController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @Patch("/{id}/password/settable")
      * @Security("has_role('ROLE_SCOPE_W_PROFILE_CRED')")
      */

@@ -4,10 +4,6 @@ home:
         _controller: FrameworkBundle:Redirect:redirect
         route: user_profile
 
-NelmioApiDocBundle:
-    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix:   /admin/apidoc
-
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
 

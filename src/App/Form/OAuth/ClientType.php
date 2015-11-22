@@ -22,7 +22,7 @@ namespace App\Form\OAuth;
 use App\Entity\GroupRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ClientType extends AbstractType
 {
@@ -62,7 +62,7 @@ class ClientType extends AbstractType
                 'query_builder' => function(GroupRepository $repository) {
                     return $repository->createQueryBuilder('g')->where('g.exportable = true');
                 },
-                'property' => 'name',
+                'choice_label' => 'name',
                 'required' => false,
             ))
             ->add('maxScopes', 'choice', array(
@@ -75,9 +75,9 @@ class ClientType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\OAuth\Client'

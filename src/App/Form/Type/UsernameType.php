@@ -23,7 +23,7 @@ use Symfony\Component\Form\AbstractType;
 use App\Form\DataTransformer\UserToUsernameTransformer;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UsernameType extends AbstractType
 {
@@ -48,7 +48,7 @@ class UsernameType extends AbstractType
         $builder->addModelTransformer($transformer);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'invalid_message' => 'This user does not exist',
