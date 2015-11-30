@@ -96,7 +96,7 @@ class GroupController extends CRUDController
     }
 
     /**
-     * @View
+     * @View(serializerEnableMaxDepthChecks=true)
      * @Get(name="s")
      */
     public function cgetAction(Request $request)
@@ -142,8 +142,7 @@ class GroupController extends CRUDController
     }
 
     /**
-     * @ApiDoc
-     * @View(serializerGroups={"admin_group_object", "object"})
+     * @View(serializerGroups={"admin_group_object", "object"}, serializerEnableMaxDepthChecks=true)
      */
     public function getAction(Group $group)
     {
