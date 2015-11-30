@@ -84,8 +84,8 @@ class GroupController extends CRUDController
     }
 
     /**
+     * @View
      * @Get(path="/{group}/members")
-     * @View(serializerGroups={"admin_group_list_members","list"})
      */
     public function getMembersAction(Request $request, Group $group)
     {
@@ -96,13 +96,16 @@ class GroupController extends CRUDController
         $members = $repo->getMembersQueryBuilder($group, $request->query->has('all'));
 
         $pagination = $this->paginate($members, $request);
-        return $this->view($pagination)->setTemplateData(array(
+        $view = $this->view($pagination)
+            ->setTemplateData(array(
             'group' => $group,
         ));
+        $view->getSerializationContext()->setGroups(['admin_group_list_members', 'list']);
+        return $view;
     }
 
     /**
-     * @View(serializerGroups={"admin_group_list", "list"})
+     * @View(serializerEnableMaxDepthChecks=true)
      * @Get(name="s")
      */
     public function cgetAction(Request $request)
@@ -138,15 +141,17 @@ class GroupController extends CRUDController
                     ->setParameter('userLeaveable', !!$searchForm->get('userleave')->getData());
         }
 
-        return $this->view($this->paginate($queryBuilder, $request))
+        $view = $this->view($this->paginate($queryBuilder, $request))
             ->setTemplateData(array(
                 'batch_form'=>$this->createBatchForm()->createView(),
                 'search_form' => $searchForm->createView(),
             ));
+        $view->getSerializationContext()->setGroups(['admin_group_list', 'list']);
+        return $view;
     }
 
     /**
-     * @View(serializerGroups={"admin_group_object", "object"})
+     * @View(serializerGroups={"admin_group_object", "object"}, serializerEnableMaxDepthChecks=true)
      */
     public function getAction(Group $group)
     {

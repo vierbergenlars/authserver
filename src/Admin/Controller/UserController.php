@@ -42,7 +42,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class UserController extends CRUDController
 {
     /**
-     * @View(serializerGroups={"admin_user_list", "list"})
+     * @View
      * @Get(name="s")
      */
     public function cgetAction(Request $request) {
@@ -89,11 +89,13 @@ class UserController extends CRUDController
                 }
             }
         }
-        return $this->view($this->paginate($queryBuilder, $request))
+        $view = $this->view($this->paginate($queryBuilder, $request))
             ->setTemplateData(array(
                 'batch_form' => $this->createBatchForm()->createView(),
                 'search_form' => $searchForm->createView(),
             ));
+        $view->getSerializationContext()->setGroups(['admin_user_list', 'list']);
+        return $view;
     }
 
     /**
