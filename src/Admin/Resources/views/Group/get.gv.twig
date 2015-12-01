@@ -1,0 +1,34 @@
+{% import _self as self %}
+{% macro graph(group, depth, link_map, groups, direction) %}
+    {% if group not in groups %}
+        {% do groups.append(group) %}
+        {% if depth != 0 %}
+            {% import _self as self %}
+            {% if direction in ["down", "both"] %}
+                {% for p in group.groups %}
+                    {% if group.name~"->"~p.name not in link_map %}
+                        {% do link_map.append(group.name~"->"~p.name) %}
+                        "{{ group.name }}" -> "{{ p.name }}";
+                    {% endif %}
+                    {{ self.graph(p, depth-1, link_map, groups, direction) }}
+                {% endfor %}
+            {% endif %}
+            {% if direction in ["up", "both"] %}
+                {% for p in group.memberGroups %}
+                    {% if p.name~"->"~group.name not in link_map %}
+                        {% do link_map.append(p.name~"->"~group.name) %}
+                        "{{ p.name }}" -> "{{ group.name }}";
+                    {% endif %}
+                    {{ self.graph(p, depth-1, link_map, groups, direction) }}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+digraph "{{ data.name }}" {
+    "{{ data.name }}" [fillcolor=gray,style=filled];
+    {{ self.graph(data, depth, link_map, groups, direction) }}
+    {% for group in groups %}
+        "{{ group.name }}" [labelURL="{{ url('admin_group_get', {group: group.name}) }}"]
+    {% endfor %}
+}

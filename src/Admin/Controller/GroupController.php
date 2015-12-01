@@ -141,6 +141,17 @@ class GroupController extends CRUDController
                     ->setParameter('userLeaveable', !!$searchForm->get('userleave')->getData());
         }
 
+        if($request->attributes->get('_format') === 'gv') {
+            $request->setRequestFormat('gv');
+            return $this->view($queryBuilder->getQuery()->getResult())
+                ->setTemplateData(array(
+                    'link_map' => new \ArrayObject(),
+                    'groups' => new \ArrayObject(),
+                    'depth' => (int)$request->query->get('depth', -1),
+                    'request' => $request,
+                ));
+        }
+
         $view = $this->view($this->paginate($queryBuilder, $request))
             ->setTemplateData(array(
                 'batch_form'=>$this->createBatchForm()->createView(),
@@ -153,8 +164,19 @@ class GroupController extends CRUDController
     /**
      * @View(serializerGroups={"admin_group_object", "object"}, serializerEnableMaxDepthChecks=true)
      */
-    public function getAction(Group $group)
+    public function getAction(Group $group, Request $request)
     {
+        if($request->attributes->get('_format') === 'gv') {
+            $request->setRequestFormat('gv');
+            return $this->view($group)
+                ->setTemplateData(array(
+                    'depth' => (int)$request->query->get('depth', 5),
+                    'direction' => $request->query->get('direction', 'both'),
+                    'link_map' => new \ArrayObject(),
+                    'groups' => new \ArrayObject(),
+                ));
+        }
+
         return $group;
     }
 
