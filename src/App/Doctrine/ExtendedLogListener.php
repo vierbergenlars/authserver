@@ -23,6 +23,7 @@ use Doctrine\ORM\UnitOfWork;
 namespace App\Doctrine;
 
 use App\Entity\Group;
+use App\Entity\Property\PropertyNamespace;
 use App\Entity\User;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\PersistentCollection;
@@ -33,7 +34,7 @@ use Gedmo\Loggable\LoggableListener;
 use Gedmo\Loggable\Mapping\Event\LoggableAdapter;
 use Gedmo\Tool\Wrapper\AbstractWrapper;
 
-class ExtendedLogListener extends  LoggableListener
+class ExtendedLogListener extends LoggableListener
 {
     private static function attachManyToManyLogEntry(AbstractLogEntry $logEntry, $fieldName, Collection $collection)
     {
@@ -59,12 +60,15 @@ class ExtendedLogListener extends  LoggableListener
         $logEntry->setData($logEntryData);
     }
 
-    protected function prePersistLogEntry($logEntry, $object)
+    protected function prePersistLogEntry(AbstractLogEntry $logEntry, $object)
     {
         if ($object instanceof User) {
             self::attachManyToManyLogEntry($logEntry, 'groups', $object->getGroups());
         } elseif ($object instanceof Group) {
             self::attachManyToManyLogEntry($logEntry, 'groups', $object->getGroups());
+        } elseif($object instanceof PropertyNamespace) {
+            self::attachManyToManyLogEntry($logEntry, 'readers', $object->getReaders());
+            self::attachManyToManyLogEntry($logEntry, 'writers', $object->getWriters());
         }
     }
 

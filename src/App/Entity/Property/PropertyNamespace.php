@@ -22,12 +22,14 @@ namespace App\Entity\Property;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * PropertyNamespace
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @Gedmo\Loggable
  */
 class PropertyNamespace
 {
@@ -44,6 +46,7 @@ class PropertyNamespace
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Gedmo\Versioned
      */
     private $name;
 
@@ -51,6 +54,7 @@ class PropertyNamespace
      * @var boolean
      *
      * @ORM\Column(name="public_readable", type="boolean")
+     * @Gedmo\Versioned
      */
     private $publicReadable;
 
@@ -58,6 +62,7 @@ class PropertyNamespace
      * @var boolean
      *
      * @ORM\Column(name="public_writeable", type="boolean")
+     * @Gedmo\Versioned
      */
     private $publicWriteable;
 

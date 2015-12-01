@@ -19,6 +19,7 @@
 
 namespace User\Controller\Api;
 
+use App\Controller\PaginateTrait;
 use App\Entity\OAuth\AccessToken;
 use App\Entity\Property\PropertyData;
 use App\Entity\Property\PropertyNamespace;
@@ -38,20 +39,24 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class PropertyController extends BaseController implements ClassResourceInterface
 {
+    use PaginateTrait;
+
     /**
-     * @View(serializerGroups={"api_list"})
+     * @View(serializerGroups={"api_list", "list"})
      */
-    public function cgetAction(PropertyNamespace $ns)
+    public function cgetAction(Request $request, PropertyNamespace $ns)
     {
+        $this->denyAccessUnlessGrantedScope('property:read');
         if(!$this->mayReadNamespace($ns))
             throw $this->createAccessDeniedException('Client not allowed to read this namespace.');
 
-        return $this->getDoctrine()
+        $properties = $this->getDoctrine()
             ->getRepository('AppBundle:Property\\PropertyData')
             ->findBy(array(
                 'namespace' => $ns,
                 'user' => $this->getUser(),
             ));
+        return $this->paginate($properties, $request);
     }
 
     /**
@@ -59,6 +64,7 @@ class PropertyController extends BaseController implements ClassResourceInterfac
      */
     public function getAction(PropertyNamespace $ns, $property)
     {
+        $this->denyAccessUnlessGrantedScope('property:read');
         if(!$this->mayReadNamespace($ns))
             throw $this->createAccessDeniedException('Client not allowed to read this namespace.');
 
@@ -84,6 +90,7 @@ class PropertyController extends BaseController implements ClassResourceInterfac
      */
     public function putAction(Request $request, PropertyNamespace $ns, $property)
     {
+        $this->denyAccessUnlessGrantedScope('property:write');
         if(!$this->mayWriteNamespace($ns))
             throw $this->createAccessDeniedException('Client not allowed to write this namespace.');
 
@@ -115,6 +122,7 @@ class PropertyController extends BaseController implements ClassResourceInterfac
      */
     public function deleteAction(PropertyNamespace $ns, $property)
     {
+        $this->denyAccessUnlessGrantedScope('property:write');
         if(!$this->mayWriteNamespace($ns))
             throw $this->createAccessDeniedException('Client not allowed to write this namespace.');
 
