@@ -14,6 +14,14 @@ admin_user_email:
         user: "[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}"
         email: "[0-9]+"
 
+admin_property_namespace:
+    resource: Admin\Controller\PropertyNamespaceController
+    type: rest
+    name_prefix: admin_property_namespace_
+    prefix: properties/namespaces
+    requirements:
+        ns: "[0-9]+"
+
 admin_group:
     resource: Admin\Controller\GroupController
     type: rest

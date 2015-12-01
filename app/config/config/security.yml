@@ -76,6 +76,7 @@ security:
         - { path: ^/oauth/v2/auth, role: ROLE_USER }
         - { path: ^/admin/apikeys, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/oauth, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/properties/namespaces, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/groups, methods: GET, role: ROLE_SCOPE_R_GROUP }
         - { path: ^/admin/groups, methods: [LINK, UNLINK, PATCH], roles: [ROLE_SCOPE_W_GROUP, ROLE_API] }
         - { path: ^/admin/groups, role: ROLE_SCOPE_W_GROUP }

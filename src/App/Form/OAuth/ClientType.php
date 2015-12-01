@@ -38,6 +38,8 @@ class ClientType extends AbstractType
             'profile:groups'   => 'profile:groups',
             'group:join'       => 'group:join',
             'group:leave'      => 'group:leave',
+            'property:read'    => 'property:read',
+            'property:write'   => 'property:write',
         );
         $builder
             ->add('name')

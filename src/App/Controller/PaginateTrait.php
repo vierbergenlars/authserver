@@ -17,28 +17,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Admin\Controller;
+namespace App\Controller;
 
-use Admin\Form\BatchType;
-use App\Controller\PaginateTrait;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use FOS\RestBundle\Controller\FOSRestController;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class BaseController extends FOSRestController
+trait PaginateTrait
 {
-    use PaginateTrait;
+    /**
+     * Gets a service by id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
+     */
+    abstract public function get($id);
 
     /**
-     * @return EntityManager
+     * @param $item
+     * @param Request $request
+     * @return PaginationInterface
      */
-    protected function getEntityManager()
+    protected function paginate($item, Request $request)
     {
-        return $this->getDoctrine()->getManager();
+        $page = (int)$request->query->get('page', 1);
+        $size = (int)$request->query->get('per_page', 10);
+        if($page <= 0)
+            throw new BadRequestHttpException('The page parameter should be a positive number.');
+        if($size <= 0)
+            throw new BadRequestHttpException('The per_page parameter should be a positive number.');
+        if($size > 1000)
+            throw new BadRequestHttpException('The per_page parameter should not exceed 1000.');
+
+        return $this->get('knp_paginator')->paginate($item, $page, $size);
     }
 }

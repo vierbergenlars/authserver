@@ -31,6 +31,10 @@ This format is the recommended format for all usages of the API.
 The xml format is used when `Accept: text/xml` is sent as a request header, or when the URL ends in `.xml`.
 This format is not recommended, but is available for the benefit of people who find json to mainstream.
 
+## Pagination
+
+See the [Admin API](./admin_api.md#pagination)
+
 ## Endpoints
 
 ### `GET /api/user`
@@ -101,3 +105,41 @@ Required scope `group:leave`.
     > Authorization: Basic YWRtaW46YWRtaW4=
     < HTTP/1.1 204 No Content
     < Content-Length: 0
+
+### `GET /api/properties/{namespace}`
+
+Lists all properties in a namespace.
+This listing only contains the properties that have been set on the user previously.
+
+Requires scope `property:read`
+Requires the namespace to be globally readable, or the application to have read permissions for the namespace.
+
+The returned object contains the keys `name`, the name of the property itself and `_links.self.href`, the URL to fetch
+the contents of the property.
+
+### `GET /api/properties/{namespace}/{name}`
+
+Fetch the content of a property.
+
+Requires scope `property:read`
+Requires the namespace to be globally readable, or the application to have read permissions for the namespace.
+
+The content of the property is returned as it was previously inserted. The `Content-Type` header that was used when
+creating the property is used as content type.
+
+### `PUT /api/properties/{namespace}/{name}`
+
+Updates the content of a property. If the property does not exist, it is created.
+
+Requires scope `property:write`
+Requires the namespace to be globally writeable, or the application to have write permissions for the namespace.
+
+The body of the request is stored as-is and will be returned verbatim on a corresponding GET request.
+The `Content-Type` header used for this request is also stored and returned when the property is fetched.
+
+### `DELETE /api/properties/{namespace}/{name}`
+
+Removes a property.
+
+Requires scope `property:write`
+Requires the namespace to be globally writeable, or the application to have write permissions for the namespace.
