@@ -60,7 +60,7 @@ class ExtendedLogListener extends LoggableListener
         $logEntry->setData($logEntryData);
     }
 
-    protected function prePersistLogEntry(AbstractLogEntry $logEntry, $object)
+    protected function prePersistLogEntry($logEntry, $object)
     {
         if ($object instanceof User) {
             self::attachManyToManyLogEntry($logEntry, 'groups', $object->getGroups());
