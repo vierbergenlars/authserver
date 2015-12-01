@@ -26,6 +26,6 @@ digraph "Group graph (Filter: {{ request.queryString }})" {
         {{ self.graph(group, depth, link_map, groups) }}
     {% endfor %}
     {% for group in groups %}
-        "{{ group.name }}" [labelURL="{{ url('admin_group_get', {group: group.name}) }}"]
+        "{{ group.name }}" [URL="{{ url('admin_group_get', {group: group.name}) }}",style=filled{% if group.exportable %},color=green{% endif %}{% if group.noGroups %},shape=rect{% endif %}]
     {% endfor %}
 }
