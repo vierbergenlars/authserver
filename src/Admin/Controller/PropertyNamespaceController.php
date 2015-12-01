@@ -25,7 +25,6 @@ use App\Entity\Property\PropertyNamespace;
 use App\Form\Property\PropertyNamespaceType;
 use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -36,7 +35,6 @@ use Symfony\Component\HttpFoundation\Request;
 class PropertyNamespaceController extends CRUDController
 {
     /**
-     * @ApiDoc
      * @View
      * @Get(name="s")
      */
@@ -49,7 +47,6 @@ class PropertyNamespaceController extends CRUDController
     }
 
     /**
-     * @ApiDoc
      * @View
      */
     public function getAction(PropertyNamespace $ns)
