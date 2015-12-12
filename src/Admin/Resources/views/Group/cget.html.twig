@@ -43,10 +43,7 @@
         {{ knp_pagination_render(data, "", {"media_type": null}) }}
     </div>
     {{ form_end(batch_form) }}
-    <div class="panel-body js--vizjs-content hidden">
-        <button class="js--vizjs-close-graph close" style="margin-right: 4px; margin-bottom: -21px;">&times;</button>
-        <div class="js--vizjs-target"></div>
-    </div>
+    {% include 'AdminBundle:Group:vizjs_embed.html.twig' %}
 {% endblock %}
 
 {% block radrest_sidebar %}

@@ -43,10 +43,7 @@
             {% endif %}
         </dl>
     </div>
-    <div class="panel-body js--vizjs-content hidden">
-        <button class="js--vizjs-close-graph close" style="margin-right: 4px; margin-bottom: -21px;">&times;</button>
-        <div class="js--vizjs-target"></div>
-    </div>
+    {% include 'AdminBundle:Group:vizjs_embed.html.twig' with { filename: group.name~'.svg' }%}
 {% endblock %}
 
 {% block radrest_sidebar %}

@@ -9,9 +9,18 @@ $(function() {
             url+='?depth='+depth+'&direction='+direction;
         }
         $.get(url, function(data) {
-            $('.js--vizjs-content').siblings().not('.panel-heading').addClass('hidden');
-            $('.js--vizjs-content').removeClass('hidden');
-            $('.js--vizjs-target').html(Viz(data, {format: 'svg', engine:'fdp'})).find('svg').attr('class','img-responsive');
+            var $content = $('.js--vizjs-content');
+            $content.siblings().not('.panel-heading').addClass('hidden');
+            $content.removeClass('hidden');
+            var imgData = Viz(data, {format: 'svg', engine:'fdp'});
+            if(window.Blob&&window.URL.createObjectURL) {
+                var imgBlob = new Blob([imgData], {type: 'image/svg+xml'});
+                var imgUrl = URL.createObjectURL(imgBlob);
+                $content.find('.js--vizjs-download-graph')
+                    .removeClass('hidden')
+                    .attr('href', imgUrl);
+            }
+            $('.js--vizjs-target').html(imgData).find('svg').attr('class','img-responsive');
         });
     });
 
