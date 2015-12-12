@@ -3,8 +3,9 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}AuthServer{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
-        <link rel="stylesheet" href="{{ asset('bundles/app/css/main.css') }}">
+        {% stylesheets '@bootstrap_css' '@AppBundle/Resources/public/css/main.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}">
+        {% endstylesheets %}
         {% block head %}
         {% endblock %}
     </head>
@@ -113,8 +114,9 @@
             </div>
         </footer>
         {% block javascript %}
-            <script src="{{ asset('js/jquery.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.js') }}"></script>
+            {% javascripts '@jquery' '@bootstrap_js' %}
+                <script src="{{ asset_url }}"></script>
+            {% endjavascripts %}
         {% endblock %}
     </body>
 </html>
