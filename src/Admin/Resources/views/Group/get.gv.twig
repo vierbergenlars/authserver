@@ -29,6 +29,6 @@ digraph "{{ data.name }}" {
     "{{ data.name }}" [fillcolor=gray,style=filled];
     {{ self.graph(data, depth, link_map, groups, direction) }}
     {% for group in groups %}
-        "{{ group.name }}" [URL="{{ url('admin_group_get', {group: group.name}) }}",style=filled{% if group.exportable %},color=green{% endif %}{% if group.noGroups %},shape=rect{% endif %}]
+        "{{ group.name }}" [label="{{ group.displayName }}",tooltip="{{ group.name }}",URL="{{ url('admin_group_get', {group: group.name}) }}",style=filled{% if group.exportable %},color=green{% endif %}{% if group.noGroups %},shape=rect{% endif %}]
     {% endfor %}
 }
