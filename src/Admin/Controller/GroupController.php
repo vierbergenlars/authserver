@@ -156,13 +156,14 @@ class GroupController extends CRUDController
             ->setTemplateData(array(
                 'batch_form'=>$this->createBatchForm()->createView(),
                 'search_form' => $searchForm->createView(),
+                'graph_form' => $this->createGraphForm($request, -1, false)->createView(),
             ));
         $view->getSerializationContext()->setGroups(['admin_group_list', 'list']);
         return $view;
     }
 
     /**
-     * @View(serializerGroups={"admin_group_object", "object"}, serializerEnableMaxDepthChecks=true)
+     * @View(serializerEnableMaxDepthChecks=true)
      */
     public function getAction(Group $group, Request $request)
     {
@@ -177,7 +178,12 @@ class GroupController extends CRUDController
                 ));
         }
 
-        return $group;
+        $view = $this->view($group);
+        $view->getSerializationContext()->setGroups(array('admin_group_object', 'object'));
+        $view->setTemplateData(array(
+            'graph_form' => $this->createGraphForm($request, 5, true)->createView(),
+        ));
+        return $view;
     }
 
     /**
@@ -369,5 +375,31 @@ class GroupController extends CRUDController
             ))
             ->add('search', 'submit')
             ->getForm();
+    }
+
+    /**
+     * @return FormInterface
+     */
+    private function createGraphForm(Request $request, $defaultDepth, $includeDirection)
+    {
+        $ff = $this->get('form.factory');
+        /* @var $ff FormFactoryInterface */
+        $builder =  $ff->createNamedBuilder('graph', 'form', array('depth' => $defaultDepth));
+        if($includeDirection)
+            $builder->add('direction', 'choice', array(
+                'choices' => array(
+                    'up' => 'Members',
+                    'down' => 'Parents',
+                    'both' => 'Both'
+                )
+            ));
+        $builder->add('depth', 'integer')
+            ->add('Create graph', 'button', array(
+                'attr' => array(
+                    'class' => 'js--vizjs-load-graph'
+                )
+            ))
+            ->setAction($this->generateUrl($request->attributes->get('_route'), array_merge($request->attributes->get('_route_params'), $request->query->all(), array('_format'=>'gv'))));
+        return $builder->getForm();
     }
 }
