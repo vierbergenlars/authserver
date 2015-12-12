@@ -43,7 +43,7 @@
             {% endif %}
         </dl>
     </div>
-    {% include 'AdminBundle:Group:vizjs_embed.html.twig' with { filename: group.name~'.svg' }%}
+    {% include 'AdminBundle:Group:vizjs_embed.html.twig' with { filename: group.name }%}
 {% endblock %}
 
 {% block radrest_sidebar %}

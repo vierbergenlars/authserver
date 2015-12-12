@@ -16,9 +16,17 @@ $(function() {
             if(window.Blob&&window.URL.createObjectURL) {
                 var imgBlob = new Blob([imgData], {type: 'image/svg+xml'});
                 var imgUrl = URL.createObjectURL(imgBlob);
-                $content.find('.js--vizjs-download-graph')
+                $content.find('.js--vizjs-download-graph-svg')
                     .removeClass('hidden')
                     .attr('href', imgUrl);
+            } else {
+                $content.find('.js--vizjs-download-graph-svg').remove();
+            }
+            var pngImage = Viz.svgXmlToPngImageElement(imgData);
+            pngImage.onload = function() {
+                $content.find('.js--vizjs-download-graph-png')
+                    .removeClass('hidden')
+                    .attr('href', pngImage.src);
             }
             $('.js--vizjs-target').html(imgData).find('svg').attr('class','img-responsive');
         });
