@@ -134,6 +134,8 @@ abstract class CRUDController extends BaseController
                 if (is_string($link)) {
                     throw $this->createNotFoundException(sprintf('Subresource for "%s" not found', $link));
                 }
+                if($link instanceof \FOS\RestBundle\View\View)
+                    $link = $link->getData();
                 if(!isset($handlers[$type]))
                     throw new BadRequestHttpException(sprintf('Invalid relationship (allowed: %s)', implode(', ', array_keys($handlers))));
 
