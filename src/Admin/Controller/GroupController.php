@@ -180,9 +180,11 @@ class GroupController extends CRUDController
 
         $view = $this->view($group);
         $view->getSerializationContext()->setGroups(array('admin_group_object', 'object'));
-        $view->setTemplateData(array(
-            'graph_form' => $this->createGraphForm($request, 5, true)->createView(),
-        ));
+        $view->setTemplateData(\Closure::bind(function() use($request) {
+            return array(
+                'graph_form' => $this->createGraphForm($request, 5, true)->createView(),
+            );
+        }, $this));
         return $view;
     }
 
