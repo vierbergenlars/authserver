@@ -1,0 +1,31 @@
+{% import _self as self %}
+{% macro graph(group, depth, link_map, groups) %}
+    {% if group not in groups %}
+        {% do groups.append(group) %}
+        {% if depth != 0 %}
+            {% import _self as self %}
+            {% for p in group.groups %}
+                {% if group.name~"->"~p.name not in link_map %}
+                    {% do link_map.append(group.name~"->"~p.name) %}
+                    "{{ group.name }}" -> "{{ p.name }}";
+                {% endif %}
+                {{ self.graph(p, depth-1, link_map, groups) }}
+            {% endfor %}
+            {% for p in group.memberGroups %}
+                {% if p.name~"->"~group.name not in link_map %}
+                    {% do link_map.append(p.name~"->"~group.name) %}
+                    "{{ p.name }}" -> "{{ group.name }}";
+                {% endif %}
+                {{ self.graph(p, depth-1, link_map, groups) }}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+digraph "Group graph (Filter: {{ request.queryString }})" {
+    {% for group in data %}
+        {{ self.graph(group, depth, link_map, groups) }}
+    {% endfor %}
+    {% for group in groups %}
+        "{{ group.name }}" [label="{{ group.displayName }}",tooltip="{{ group.name }}",URL="{{ url('admin_group_get', {group: group.name}) }}",style=filled{% if group.exportable %},color=green{% endif %}{% if group.noGroups %},shape=rect{% endif %}]
+    {% endfor %}
+}

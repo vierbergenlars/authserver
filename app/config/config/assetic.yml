@@ -2,7 +2,10 @@
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ AdminBundle ]
+    assets:
+        vizjs:
+            inputs: "../node_modules/viz.js/viz.js"
     filters:
         cssrewrite: ~
         less:

@@ -16,6 +16,9 @@ framework:
     session:
         cookie_httponly: true
     fragments:       ~
+    request:
+        formats:
+            gv: 'text/vnd.graphviz'
 
 # Twig Configuration
 twig:

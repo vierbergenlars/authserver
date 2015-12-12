@@ -141,21 +141,49 @@ class GroupController extends CRUDController
                     ->setParameter('userLeaveable', !!$searchForm->get('userleave')->getData());
         }
 
+        if($request->attributes->get('_format') === 'gv') {
+            $request->setRequestFormat('gv');
+            return $this->view($queryBuilder->getQuery()->getResult())
+                ->setTemplateData(array(
+                    'link_map' => new \ArrayObject(),
+                    'groups' => new \ArrayObject(),
+                    'depth' => (int)$request->query->get('depth', -1),
+                    'request' => $request,
+                ));
+        }
+
         $view = $this->view($this->paginate($queryBuilder, $request))
             ->setTemplateData(array(
                 'batch_form'=>$this->createBatchForm()->createView(),
                 'search_form' => $searchForm->createView(),
+                'graph_form' => $this->createGraphForm($request, -1, false)->createView(),
             ));
         $view->getSerializationContext()->setGroups(['admin_group_list', 'list']);
         return $view;
     }
 
     /**
-     * @View(serializerGroups={"admin_group_object", "object"}, serializerEnableMaxDepthChecks=true)
+     * @View(serializerEnableMaxDepthChecks=true)
      */
-    public function getAction(Group $group)
+    public function getAction(Group $group, Request $request)
     {
-        return $group;
+        if($request->attributes->get('_format') === 'gv') {
+            $request->setRequestFormat('gv');
+            return $this->view($group)
+                ->setTemplateData(array(
+                    'depth' => (int)$request->query->get('depth', 5),
+                    'direction' => $request->query->get('direction', 'both'),
+                    'link_map' => new \ArrayObject(),
+                    'groups' => new \ArrayObject(),
+                ));
+        }
+
+        $view = $this->view($group);
+        $view->getSerializationContext()->setGroups(array('admin_group_object', 'object'));
+        $view->setTemplateData(array(
+            'graph_form' => $this->createGraphForm($request, 5, true)->createView(),
+        ));
+        return $view;
     }
 
     /**
@@ -347,5 +375,31 @@ class GroupController extends CRUDController
             ))
             ->add('search', 'submit')
             ->getForm();
+    }
+
+    /**
+     * @return FormInterface
+     */
+    private function createGraphForm(Request $request, $defaultDepth, $includeDirection)
+    {
+        $ff = $this->get('form.factory');
+        /* @var $ff FormFactoryInterface */
+        $builder =  $ff->createNamedBuilder('graph', 'form', array('depth' => $defaultDepth));
+        if($includeDirection)
+            $builder->add('direction', 'choice', array(
+                'choices' => array(
+                    'up' => 'Members',
+                    'down' => 'Parents',
+                    'both' => 'Both'
+                )
+            ));
+        $builder->add('depth', 'integer')
+            ->add('Create graph', 'button', array(
+                'attr' => array(
+                    'class' => 'js--vizjs-load-graph'
+                )
+            ))
+            ->setAction($this->generateUrl($request->attributes->get('_route'), array_merge($request->attributes->get('_route_params'), $request->query->all(), array('_format'=>'gv'))));
+        return $builder->getForm();
     }
 }

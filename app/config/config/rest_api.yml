@@ -11,11 +11,12 @@ fos_rest:
             json: true
         templating_formats:
             html: true
+            gv:  true
     format_listener:
         rules:
             - { path: ^/admin/(auditlog|oauth|apikeys), priorities: [html], fallback_format: html}
             - { path: ^/api, priorities: [ json, xml ], fallback_format: json }
-            - { path: ^/, priorities: [ html, json, xml ], fallback_format: html, prefer_extension: true }
+            - { path: ^/, priorities: [ html, json, xml, gv ], fallback_format: html, prefer_extension: true }
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404

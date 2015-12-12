@@ -43,4 +43,25 @@
             {% endif %}
         </dl>
     </div>
+    {% include 'AdminBundle:Group:vizjs_embed.html.twig' with { filename: group.name }%}
+{% endblock %}
+
+{% block radrest_sidebar %}
+    {{ parent() }}
+    <div class="panel panel-default hidden-xs">
+        <div class="panel-heading">
+            <h3 class="panel-title">Graph</h3>
+        </div>
+        <div class="panel-body">
+            {{ form(graph_form) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+    {% javascripts '@vizjs' '@AdminBundle/Resources/public/js/graph-form.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

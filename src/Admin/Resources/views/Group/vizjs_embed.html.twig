@@ -1,0 +1,19 @@
+<div class="panel-body js--vizjs-content hidden">
+    <button class="js--vizjs-close-graph close" style="margin-right: 4px; margin-bottom: -21px;">&times;</button>
+    <div class="js--vizjs-target"></div>
+    <div class="btn-group btn-group-sm pull-right" style="margin-top: -30px;">
+        <button class="btn btn-default" type="button" data-toggle="dropdown" title="Download graph" aria-haspopup="true" aria-expanded="false" >
+            {{ icon('cloud-download') }}<span class="sr-only">Download graph</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="js--vizjs-download-graph-png hidden" download="{{ filename|default('graph')~'.png' }}">{{ icon('image fa-fw') }} PNG</a></li>
+            <li><a class="js--vizjs-download-graph-svg hidden" download="{{ filename|default('graph')~'.svg' }}">{{ icon('file-code-o fa-fw') }} SVG</a></li>
+        </ul>
+        <a class="btn btn-default js--vizjs-download-graph-png hidden"
+           target="_blank" title="Show full-size PNG image" style="margin-left: -1px"
+                >{{ icon('image') }}<span class="sr-only">Show full-size PNG image</span></a>
+        <a class="btn btn-default js--vizjs-download-graph-svg hidden"
+           target="_blank" title="Show full-size SVG image"
+                >{{ icon('file-code-o') }}<span class="sr-only">Show full-size SVG image</span></a>
+    </div>
+</div>
