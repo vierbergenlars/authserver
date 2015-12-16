@@ -182,9 +182,7 @@ class ApiKeyController extends CRUDController
             ->setAction($this->generateUrl('admin_apikey_rotate', array('apikey'=>$apiKey->getId())))
             ->add('rotate', 'submit', array(
                 'label' => 'Regenerate key',
-                'attr' => array(
-                    'class' => 'btn-danger btn-xs'
-                )
+                'button_class' => 'danger btn-xs',
             ))
             ->getForm();
     }

@@ -35,9 +35,7 @@ class DeleteGroupType extends AbstractType
             ->add('id', 'hidden')
             ->add('submit', 'submit', array(
                 'label'=>'Leave',
-                'attr' => array(
-                    'class' => 'btn-danger btn-xs',
-                )
+                'button_class' => 'danger btn-xs',
             ))
         ;
     }

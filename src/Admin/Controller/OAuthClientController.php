@@ -197,9 +197,7 @@ class OAuthClientController extends CRUDController
             ->setAction($this->generateUrl('admin_oauth_client_rotate', array('client'=>$client->getId())))
             ->add('rotate', 'submit', array(
                 'label' => 'Regenerate secret',
-                'attr' => array(
-                    'class' => 'btn-danger btn-xs'
-                )
+                'button_class' => 'danger btn-xs',
             ))
             ->getForm();
     }

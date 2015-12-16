@@ -59,7 +59,10 @@ abstract class CRUDController extends BaseController
     {
         return $this->createFormBuilder()
             ->setMethod('DELETE')
-            ->add('submit', 'submit')
+            ->add('submit', 'submit', array(
+                'button_class' => 'danger',
+                'label' => 'Delete',
+            ))
             ->getForm();
     }
 

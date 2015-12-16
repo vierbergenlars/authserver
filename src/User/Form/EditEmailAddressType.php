@@ -34,21 +34,15 @@ class EditEmailAddressType extends AbstractType
             ->setMethod('PUT')
             ->add('setPrimary', 'submit', array(
                 'label'=>'Set as primary address',
-                'attr' => array(
-                    'class' => 'btn-link',
-                )
+                'button_class' => 'link',
             ))
             ->add('sendConfirmation', 'submit', array(
                 'label' => 'Resend confirmation',
-                'attr' => array(
-                    'class' => 'btn-link',
-                )
+                'button_class' => 'link',
             ))
             ->add('remove', 'submit', array(
                 'label' => 'Remove',
-                'attr' => array(
-                    'class' => 'btn-link',
-                )
+                'button_class' => 'link',
             ))
         ;
     }
