@@ -20,6 +20,9 @@
                             {% if 'group:join' in scopes or 'group:leave' in scopes %}
                                 <li class="list-group-item list-group-item-danger">{{ icon('exclamation-triangle fa-fw') }} Change the groups you are member of</li>
                             {% endif %}
+                            {% if 'profile:email' in scopes %}
+                                <li class="list-group-item list-group-item-warning">{{ icon('envelope fa-fw') }} Your email address</li>
+                            {% endif %}
                             {% if 'profile:realname' in scopes %}
                                 <li class="list-group-item list-group-item-warning">{{ icon('user fw') }} Your name</li>
                             {% endif %}
