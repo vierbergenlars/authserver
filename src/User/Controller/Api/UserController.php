@@ -44,6 +44,11 @@ class UserController extends BaseController
             'username' => $this->isGrantedScope('profile:username')?$user->getUsername():null,
             'name' => $this->isGrantedScope('profile:realname')?$user->getDisplayName():null,
             'groups' => $this->isGrantedScope('profile:groups')?$groups:array(),
+            'email' => $this->isGrantedScope('profile:email')
+                        && $user->getPrimaryEmailAddress()
+                        && $user->getPrimaryEmailAddress()->isVerified()
+                        ? $user->getPrimaryEmailAddress()->getEmail()
+                        : null,
         );
     }
 }
