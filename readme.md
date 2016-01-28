@@ -69,7 +69,36 @@ Upgrading can be done easily by overwriting the old files with a fresh copy.
 
 Next, execute the same commands as when installing the dependencies.
 
+### Deployment tool
 
+An automated deployment tool is available as `./deploy.sh`.
 
+It automatically puts the application in maintenance mode,
+pulls the latest version of the current branch and rebases local commits on top of it.
 
+> **WARNING:** When an automatic pull and rebase fails, you will be dropped to a shell to fix the situation.
+> If you have local changes, you can run the following commands to try to fix the situation.
+> ```bash
+git stash
+git pull --rebase
+git stash pop
+exit
+```
+> Because this will result in untested changes, it is recommended to keep your own repository with the necessary
+> changes and merge releases to this repository instead of deploying directly from the master repository.
+
+It then handles the updating dependencies, assets and database migrations.
+When all these steps have completed successfully, the maintenance mode is disabled, and the new version of the application
+is deployed.
+
+#### Advanced usage
+
+The deployment tool has a number of flags to change its default behavior:
+
+* `-n, --no-pull`: Does not pull a new version from the repository
+* `--skip-maintenance`: Skips manipulations of the maintenance mode
+* `-e <env>, --env=<env>`: Changes the symfony environment to run all commands in
+* `-s, --shell`: Starts a shell instead of running any update commands
+* `-l, --lock-maintenance`: Puts the application in maintenance mode. This maintenance mode will only be disabled by running the matching `--unlock-maintenance` command.
+* `-u, --unlock-maintenance`: Disables the maintenance mode
 
