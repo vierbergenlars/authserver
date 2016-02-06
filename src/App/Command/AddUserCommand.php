@@ -19,6 +19,7 @@
 
 namespace App\Command;
 
+use App\Entity\EmailAddress;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,7 +34,7 @@ class AddUserCommand extends Command
         $this->setName('app:adduser')
             ->addArgument('username', InputArgument::REQUIRED, 'The username of the user to add')
             ->addArgument('password', InputArgument::REQUIRED, 'The password of the user to add')
-            ->addArgument('email', InputArgument::REQUIRED, 'The email address of the user to add')
+            ->addArgument('email', InputArgument::OPTIONAL, 'The email address of the user to add')
             ->addOption('super-admin', 'a', InputOption::VALUE_NONE, 'Create a superadmin');
     }
 
@@ -47,7 +48,11 @@ class AddUserCommand extends Command
         $user->setDisplayname($input->getArgument('username'));
         $user->setPasswordEnabled(1);
         $user->setEnabled(true);
-        $user->getEmailAddresses()->first()->setEmail($input->getArgument('email'));
+        if($input->getArgument('email')) {
+            if(!$user->getEmailAddresses()->count())
+                $user->addEmailAddress(new EmailAddress());
+            $user->getEmailAddresses()->first()->setEmail($input->getArgument('email'));
+        }
 
         $encoderFactory = $this->getService('security.encoder_factory');
         $encoder = $encoderFactory->getEncoder(get_class($user));
