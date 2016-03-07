@@ -26,6 +26,6 @@ class UserProvider extends EntityUserProvider
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, 'AppBundle:User', 'username');
+        parent::__construct($registry, 'AppBundle:User');
     }
 }
