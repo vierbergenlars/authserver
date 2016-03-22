@@ -409,6 +409,8 @@ class User implements AdvancedUserInterface, \Serializable
         if ($this->_primaryEmailAddress_ && !$this->getEmailAddresses()) {
             return $this->_primaryEmailAddress_;
         }
+        if(!$this->getEmailAddresses())
+            return null;
         foreach ($this->getEmailAddresses() as $email) {
             if($email->isPrimary())
                 return $this->_primaryEmailAddress_ = $email;
