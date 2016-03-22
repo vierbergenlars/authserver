@@ -7,4 +7,4 @@ fos_oauth_server:
     service:
         user_provider: app.user_provider
         options:
-            supported_scopes: 'profile:username profile:realname profile:groups profile:email group:join group:leave'
+            supported_scopes: 'profile:username profile:realname profile:groups group:join group:leave'

@@ -36,7 +36,6 @@ class ClientType extends AbstractType
             'profile:username' => 'profile:username',
             'profile:realname' => 'profile:realname',
             'profile:groups'   => 'profile:groups',
-            'profile:email'    => 'profile:email',
             'group:join'       => 'group:join',
             'group:leave'      => 'group:leave',
             'property:read'    => 'property:read',
