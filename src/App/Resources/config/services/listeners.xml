@@ -12,6 +12,11 @@
             <argument type="service" id="braincrafted_bootstrap.flash" />
             <tag name="kernel.event_subscriber" />
         </service>
+        <service class="App\EventListener\SwitchUserLogListener">
+            <argument id="security.token_storage" type="service"/>
+            <argument id="doctrine.orm.entity_manager" type="service"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
 
         <!-- Doctrine listeners -->
         <service class="App\EventListener\UserGuidCreatorListener">
