@@ -1,0 +1,11 @@
+{
+  "web-dir": "web",
+  "scripts": {
+    "configure": "bash \"$CLIC_APPCONFIG_DIR\"/.clic-scripts/configure.sh  </dev/tty >/dev/tty 2>/dev/tty",
+    "install": "$($CLIC application:execute configure \"$CLIC_APPNAME\" && $CLIC application:execute redeploy \"$CLIC_APPNAME\") </dev/tty >/dev/tty 2>/dev/tty",
+    "deploy": "bash deploy.sh </dev/tty >/dev/tty 2>/dev/tty",
+    "revert-deploy": "bash deploy.sh --revert </dev/tty >/dev/tty 2>/dev/tty",
+    "redeploy": "bash deploy.sh --no-pull --commit HEAD </dev/tty >/dev/tty 2>/dev/tty",
+    "post-clone": "$CLIC application:exec install \"$CLIC_APPNAME\"</dev/tty >/dev/tty 2>/dev/tty"
+  }
+}
