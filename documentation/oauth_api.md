@@ -47,12 +47,14 @@ Provides information about the logged-in user.
 | `username` | `profile:username` | The username of the user. Unique within an installation, may be changed by an admin and may be reused for another user. |
 | `name`     | `profile:realname` | The real name of the user. Is not unique within an installation and may be changed. |
 | `groups`   | `profile:groups`   | The groups the user is member of (directly or indirectly). Only groups with the `exportable` flag are listed here. Use these to determine the authorization level of the user. |
+| `primary-email` | `profile:email` | The primary email address of the user
 
     {
         "guid":"5FC0F82D-1E70-45E7-B620-781456E6CE10",
         "username":"vierbergenlars",
         "name":"Lars Vierbergen",
-        "groups":["%sysops","opswiki_users"]
+        "groups":["%sysops","opswiki_users"],
+        "primary-email": "lars@vbgn.be"
     }
 
 ### `GET /api/groups`
