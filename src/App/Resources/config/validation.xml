@@ -6,11 +6,11 @@
             <constraint name="NotBlank" />
             <constraint name="Length">
                 <option name="min">2</option>
-                <option name="max">25</option>
+                <option name="max">255</option>
             </constraint>
             <constraint name="Regex">
-                <option name="pattern">/^[a-z0-9_]+$/</option>
-                <option name="message">Username can only contain letters, numbers and underscores.</option>
+                <option name="pattern">/^[a-z0-9_.]+$/</option>
+                <option name="message">Username can only contain letters, numbers, dots and underscores.</option>
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[a-z]/</option>
@@ -66,7 +66,7 @@
             <constraint name="NotBlank" />
             <constraint name="Length">
                 <option name="min">2</option>
-                <option name="max">25</option>
+                <option name="max">255</option>
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[a-z_]+$/</option>
