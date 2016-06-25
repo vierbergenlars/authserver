@@ -1,9 +1,29 @@
-{% block subject %}Confirm your email address for AuthServer{% endblock %}
+{% block subject %}[{{ app.request.host }}] Confirm your email address{% endblock %}
 {% block body_html %}
-Confirmation code: <b>{{ data.verificationCode }}</b>
-Link: <a href="{{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}">Click to verify</a>
+    <p>Hello {{ data.display_name }},</p>
+    <p>Please click the link below to confirm your mailaddress:</p>
+    <p>
+        {% spaceless %}
+            <a href="{{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}">
+                {{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}
+            </a>
+        {% endspaceless %}
+    </p>
+    <p>You can click the link above, or copy it to the addressbar of your browser.</p>
+    <p>If you did not add the mailaddress to your account, you do not have to take any action.</p>
+    <hr>
+    <p>Generated especially for you by <a href="https://github.com/vierbergenlars/authserver">Authserver</a> at <a href="{{ url('home') }}">{{ url('home') }}</a></p>
 {% endblock %}
 {% block body_text %}
-Confirmation code: {{ data.verificationCode }}
-Link: {{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}
+Hello {{ data.display_name }},
+
+Please click the link below to confirm your mailaddress:
+
+{{ url('user_email_verify', {id: data.id, verificationCode: data.verificationCode }) }}
+
+You can click the link above, or copy it to the addressbar of your browser.
+
+If you did not add the mailaddress to your account, you do not have to take any action.
+--------------------------------------------------------------------------------
+Generated especially for you by Authserver at {{ url('home') }}
 {% endblock %}
