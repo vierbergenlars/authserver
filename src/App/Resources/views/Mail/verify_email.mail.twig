@@ -1,6 +1,6 @@
 {% block subject %}[{{ app.request.host }}] Confirm your email address{% endblock %}
 {% block body_html %}
-    <p>Hello {{ data.display_name }},</p>
+    <p>Hello {{ data.user.displayName }},</p>
     <p>Please click the link below to confirm your mailaddress:</p>
     <p>
         {% spaceless %}
@@ -15,7 +15,7 @@
     <p>Generated especially for you by <a href="https://github.com/vierbergenlars/authserver">Authserver</a> at <a href="{{ url('home') }}">{{ url('home') }}</a></p>
 {% endblock %}
 {% block body_text %}
-Hello {{ data.display_name }},
+Hello {{ data.user.displayName }},
 
 Please click the link below to confirm your mailaddress:
 

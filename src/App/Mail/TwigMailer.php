@@ -68,6 +68,8 @@ class TwigMailer
     {
         $template = $this->getTemplate($template);
 
+        $data = array_merge($this->twig->getGlobals(), $data);
+
         $subject = $template->renderBlock('subject', $data);
         $bodyHtml = $template->renderBlock('body_html', $data);
         $bodyText = $template->renderBlock('body_text', $data);
