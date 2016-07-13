@@ -1,11 +1,12 @@
 {
   "web-dir": "web",
   "scripts": {
-    "configure": "bash \"$CLIC_APPCONFIG_DIR\"/.clic-scripts/configure.sh  </dev/tty >/dev/tty 2>/dev/tty",
-    "install": "bash \"$CLIC_APPCONFIG_DIR\"/.clic-scripts/install.sh  </dev/tty >/dev/tty 2>/dev/tty",
-    "deploy": "bash deploy.sh </dev/tty >/dev/tty 2>/dev/tty",
-    "revert-deploy": "bash deploy.sh --revert </dev/tty >/dev/tty 2>/dev/tty",
-    "redeploy": "bash deploy.sh --no-pull --commit HEAD </dev/tty >/dev/tty 2>/dev/tty",
-    "post-clone": "$CLIC application:exec install \"$CLIC_APPNAME\"</dev/tty >/dev/tty 2>/dev/tty"
+    "configure": "bash .clic-scripts/configure.sh </dev/tty >/dev/tty 2>/dev/tty",
+    "install": "bash .clic-scripts/install.sh </dev/tty >/dev/tty 2>/dev/tty",
+    "update": "bash .clic-scripts/active/update.sh",
+    "revert-update": "bash .clic-scripts/active/revert-update.sh",
+    "redeploy": "bash .clic-scripts/active/redeploy.sh",
+    "post-clone": "ln -sf git .clic-scripts/active && $CLIC application:exec install \"$CLIC_APPNAME\"",
+    "post-extract": "ln -sf archive .clic-scripts/active && mkdir -p .clic-scripts/tmp && wget $($CLIC config:get \"applications[$CLIC_APPNAME][archive-url]\" | sed 's/\\.zip$/.tar.gz/') -O .clic-scripts/tmp/update.tar.gz && $CLIC application:exec install \"$CLIC_APPNAME\""
   }
 }

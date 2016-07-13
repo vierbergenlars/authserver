@@ -4,9 +4,14 @@ $CLIC application:variable:set "$CLIC_APPNAME" mysql/database --description="Nam
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/host --description="Hostname of the database" --if-not-global-exists --default-existing-value
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/user --description="Username to connect to the database" --if-not-global-exists --default-existing-value
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/password --description="Password of the database user"  --if-not-global-exists --default-existing-value
+app_env=""
+while [[ "$app_env" != "prod" && "$app_env" != "dev" ]]; do
+    $CLIC application:variable:set "$CLIC_APPNAME" app/environment --description="Environment [prod|dev]" --default-existing-value --default=prod
+    app_env="$($CLIC application:variable:get "$CLIC_APPNAME" app/environment)"
+done;
 mail_transport=""
 while [[ "$mail_transport" != "mail" && "$mail_transport" != "smtp" && "$mail_transport" != "sendmail" && "$mail_transport" != "gmail" ]]; do
-    $CLIC application:variable:set "$CLIC_APPNAME" mail/transport --description="Type of mail transport" --if-not-global-exists --default-existing-value --default=mail
+    $CLIC application:variable:set "$CLIC_APPNAME" mail/transport --description="Type of mail transport [mail|smtp|sendmail|gmail]" --if-not-global-exists --default-existing-value --default=mail
     mail_transport="$($CLIC application:variable:get "$CLIC_APPNAME" mail/transport)"
 done;
 
@@ -38,5 +43,6 @@ parameters:
     mailer_sender:     $($CLIC application:variable:get "$CLIC_APPNAME" mail/sender --filter=json_encode)
 
     locale:            en
-    secret:            $(pwgen -s 100)
+    secret:            '$(pwgen -s 100)'
 EOL
+$CLIC application:execute redeploy "$CLIC_APPNAME"

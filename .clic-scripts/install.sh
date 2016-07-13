@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 $CLIC application:execute configure "$CLIC_APPNAME"
-$CLIC application:execute redeploy "$CLIC_APPNAME"
 
 printf "$(tput setaf 2) Username for admin user$(tput sgr0):\n"
 read -p " > " admin_user
