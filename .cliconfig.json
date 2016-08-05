@@ -6,7 +6,7 @@
     "update": "bash .clic-scripts/active/update.sh",
     "revert-update": "bash .clic-scripts/active/revert-update.sh",
     "redeploy": "bash .clic-scripts/active/redeploy.sh",
-    "post-clone": "ln -sf git .clic-scripts/active && $CLIC application:exec install \"$CLIC_APPNAME\"",
-    "post-extract": "ln -sf archive .clic-scripts/active && mkdir -p .clic-scripts/tmp && wget $($CLIC config:get \"applications[$CLIC_APPNAME][archive-url]\" | sed 's/\\.zip$/.tar.gz/') -O .clic-scripts/tmp/update.tar.gz && $CLIC application:exec install \"$CLIC_APPNAME\""
+    "post-clone": "ln -sf git .clic-scripts/active && $CLIC application:exec \"$CLIC_APPNAME\" install",
+    "post-extract": "ln -sf archive .clic-scripts/active && mkdir -p .clic-scripts/tmp && wget $($CLIC config:get \"applications[$CLIC_APPNAME][archive-url]\" | sed 's/\\.zip$/.tar.gz/') -O .clic-scripts/tmp/update.tar.gz && $CLIC application:exec \"$CLIC_APPNAME\" install"
   }
 }

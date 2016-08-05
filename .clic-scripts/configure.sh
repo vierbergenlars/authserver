@@ -45,4 +45,4 @@ parameters:
     locale:            en
     secret:            '$(pwgen -s 100)'
 EOL
-$CLIC application:execute redeploy "$CLIC_APPNAME"
+$CLIC application:execute "$CLIC_APPNAME" redeploy

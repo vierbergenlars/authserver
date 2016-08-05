@@ -30,5 +30,5 @@ removed_files=$(diff <(tar tf .clic-scripts/tmp/update-prev.tar.gz | sed 's/^[^\
 for removed_file in ${removed_files}; do
     rm $(pwd)/${removed_file};
 done
-$CLIC application:exec redeploy "$CLIC_APPNAME"
+$CLIC application:exec "$CLIC_APPNAME" redeploy
 $CLIC config:set "applications[$CLIC_APPNAME][archive-url]" "$tarball_url"
