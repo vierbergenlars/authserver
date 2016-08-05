@@ -25,7 +25,7 @@ fi;
 $CLIC application:variable:set "$CLIC_APPNAME" mail/sender --description="Sender address of mails"  --default-existing-value
 $CLIC application:variable:set "$CLIC_APPNAME" app/configured 1
 
-cat > app/config/parameters.yml <<EOL
+cat > app/config/parameters-clic.yml <<EOL
 parameters:
     database_driver:   pdo_mysql
     database_host:     $($CLIC application:variable:get "$CLIC_APPNAME" mysql/host --filter=json_encode)
@@ -45,4 +45,10 @@ parameters:
     locale:            en
     secret:            '$(pwgen -s 100)'
 EOL
+if [[ ! -e app/config/parameters.yml ]]; then
+cat > app/config/parameters.yml <<EOL
+imports:
+    - { resource: parameters-clic.yml }
+EOL
+fi
 $CLIC application:execute "$CLIC_APPNAME" redeploy
