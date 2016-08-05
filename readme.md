@@ -17,17 +17,29 @@ See the [LICENSE.md](https://github.com/vierbergenlars/authserver/blob/master/LI
 
 ## Installation
 
-### Download
+### Automated installation
+
+You can quickly deploy this application with [clic](https://github.com/vierbergenlars/clic),
+which provides an interactive installation and asks you for each configuration parameter.
+
+ * To install the master branch: `clic application:clone https://github.com/vierbergenlars/authserver`
+ * To install a specific release (copy the download link from [the releases page](https://github.com/vierbergenlars/authserver/releases)): `clic application:extract https://github.com/vierbergenlars/authserver/archive/v0.8.1.zip authserver`
+
+Application updates will follow the choice you made here and either pull the latest master branch or stick to released versions.
+
+### Manual installation
+
+#### Download
 
 Releases can be downloaded from [the releases page](https://github.com/vierbergenlars/authserver/releases),
 or by checking out a tag from this repository.
 
-### Configuration
+#### Configuration
 
 Create an `app/config/parameters.yml` from the `app/config/parameters.yml.dist` template and fill in the applicable
 configuration parameters.
 
-### Dependencies
+#### Dependencies
 
 PHP dependencies are handled by [`composer`](https://getcomposer.org/),
 these can be installed with a single `SYMFONY_ENV=prod composer install --no-dev -o` inside the project root.
@@ -44,7 +56,7 @@ php app/console braincrafted:bootstrap:install --env=prod
 php app/console doctrine:migrations:migrate --env=prod
 ```
 
-### Creating the first user
+#### Creating the first user
 
 Without any users, authserver is not really useful, so let's add our first user.
 (Who will be a super-admin to manage the application.)
@@ -56,7 +68,7 @@ php app/console app:adduser --super-admin $username $password $email --env=prod
 If you ever happen to forget your password,
 you can set a new one with `php app/console app:passwd $username $new_password --env=prod`.
 
-### Publishing the application
+#### Publishing the application
 
 Only the `web/` directory should be publicly accessible, all requests that do not match a file in the `web/` directory
 should be rewritten to `web/app.php` by the webserver. How to accomplish this depends on your webserver,
@@ -70,6 +82,20 @@ Upgrading can be done easily by overwriting the old files with a fresh copy.
 Next, execute the same commands as when installing the dependencies.
 
 ### Deployment tool
+
+There are two different automated deployment tools available: [clic](#clic) and [./deploy.sh](#deploy-sh).
+
+#### clic
+
+Update to the latest version with `clic application:execute authserver update`.
+
+If you are running from the git repository, this will automatically pull down the latest `master` version from the repository
+(it should be stable) and start a deployment.
+
+If you are running from an extracted archive, this will automatically download and extract the archive for the latest tag
+(this is definitely stable) and start a deployment.
+
+#### deploy.sh
 
 An automated deployment tool is available as `./deploy.sh`.
 
@@ -91,7 +117,7 @@ It then handles the updating dependencies, assets and database migrations.
 When all these steps have completed successfully, the maintenance mode is disabled, and the new version of the application
 is deployed.
 
-#### Advanced usage
+##### Advanced usage
 
 The deployment tool has a number of flags to change its default behavior:
 
