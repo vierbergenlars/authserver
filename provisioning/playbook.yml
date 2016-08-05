@@ -1,7 +1,5 @@
-- hosts: all
+- hosts: localhost
   tasks:
-    - name: Add wheezy-backports apt repository
-      apt_repository: repo="deb http://ftp.us.debian.org/debian wheezy-backports main" state=present
     - name: Install packages
       apt: name={{ item }} state=present update_cache=yes
       with_items:
@@ -30,11 +28,8 @@ EOF"
       notify: reload httpd
     - name: Install composer
       shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
-    - name: Set document root to web/
-      lineinfile: regexp='DocumentRoot' line='DocumentRoot /var/www/web' dest=/etc/apache2/sites-available/default state=present
-      notify: reload httpd
-    - name: Allow all .htaccess rules
-      replace: regexp='AllowOverride None' replace='AllowOverride All' dest=/etc/apache2/sites-available/default
+    - name: Set up apache configuration
+      copy: src=apache.conf dest=/etc/apache2/sites-available/000-default.conf
       notify: reload httpd
     - name: Enable mod_rewrite
       command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load

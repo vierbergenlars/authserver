@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-if [[ ! -e "/etc/ansible/hosts" ]]; then
-    sudo apt-get install -y python python-pip python-dev
+if [[ ! -e "/usr/local/bin/ansible" ]]; then
+    sudo apt-get install -y python python-pip python-dev \
+     libyaml-0-2 python-crypto python-ecdsa python-httplib2 python-jinja2 \
+     python-markupsafe python-paramiko python-selinux python-yaml
+
     sudo pip install ansible
-    mkdir /etc/ansible
-    echo "localhost" >> /etc/ansible/hosts
-    chmod 666 /etc/ansible/hosts
 fi
-ansible-playbook /vagrant/provisioning/playbook.yml --connection=local
+sudo ansible-playbook /vagrant/provisioning/playbook.yml --connection=local

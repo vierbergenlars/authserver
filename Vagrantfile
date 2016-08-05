@@ -10,7 +10,7 @@ def which(cmd)
 end
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "debian/wheezy64"
+    config.vm.box = "debian/jessie64"
     config.vm.network "private_network", ip: "192.168.80.2"
     config.vm.synced_folder "src", "/var/www/src", create: true
 
