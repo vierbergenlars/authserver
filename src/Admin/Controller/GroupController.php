@@ -26,12 +26,12 @@ use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\Util\Codes;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -100,7 +100,7 @@ class GroupController extends CRUDController
             ->setTemplateData(array(
             'group' => $group,
         ));
-        $view->getSerializationContext()->setGroups(['admin_group_list_members', 'list']);
+        $view->getContext()->setGroups(['admin_group_list_members', 'list']);
         return $view;
     }
 
@@ -158,7 +158,7 @@ class GroupController extends CRUDController
                 'search_form' => $searchForm->createView(),
                 'graph_form' => $this->createGraphForm($request, -1, false)->createView(),
             ));
-        $view->getSerializationContext()->setGroups(['admin_group_list', 'list']);
+        $view->getContext()->setGroups(['admin_group_list', 'list']);
         return $view;
     }
 
@@ -179,7 +179,7 @@ class GroupController extends CRUDController
         }
 
         $view = $this->view($group);
-        $view->getSerializationContext()->setGroups(array('admin_group_object', 'object'));
+        $view->getContext()->setGroups(array('admin_group_object', 'object'));
         $view->setTemplateData(\Closure::bind(function() use($request) {
             return array(
                 'graph_form' => $this->createGraphForm($request, 5, true)->createView(),
@@ -195,7 +195,7 @@ class GroupController extends CRUDController
     {
         $this->handleBatch($request);
 
-        return $this->routeRedirectView('admin_group_gets');
+        return $this->routeRedirectView('admin_group_gets', [], Response::HTTP_NO_CONTENT);
     }
 
     protected function getBatchActions()
@@ -236,7 +236,7 @@ class GroupController extends CRUDController
 
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_group_get', array('group'=>$group->getName()), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_group_get', array('group'=>$group->getName()), Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -261,7 +261,7 @@ class GroupController extends CRUDController
         $this->getEntityManager()->persist($form->getData());
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_group_get', array('group'=>$form->getData()->getName()));
+        return $this->routeRedirectView('admin_group_get', array('group'=>$form->getData()->getName()), Response::HTTP_CREATED);
     }
 
     /**
@@ -281,7 +281,7 @@ class GroupController extends CRUDController
         if($ret)
             return $ret;
 
-        return $this->routeRedirectView('admin_group_gets', array(), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_group_gets', array(), Response::HTTP_NO_CONTENT);
     }
 
     public function linkAction(Request $request, Group $group)

@@ -24,7 +24,6 @@ use App\Entity\Group;
 use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityRepository;
-use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -34,6 +33,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -94,7 +94,7 @@ class UserController extends CRUDController
                 'batch_form' => $this->createBatchForm()->createView(),
                 'search_form' => $searchForm->createView(),
             ));
-        $view->getSerializationContext()->setGroups(['admin_user_list', 'list']);
+        $view->getContext()->setGroups(['admin_user_list', 'list']);
         return $view;
     }
 
@@ -109,7 +109,7 @@ class UserController extends CRUDController
         if($this->isGranted('ROLE_SCOPE_R_PROFILE_EMAIL'))
             $serializationGroups[] = 'admin_user_object_scope_email';
 
-        $view->getSerializationContext()->setGroups($serializationGroups);
+        $view->getContext()->setGroups($serializationGroups);
 
         return $view;
     }
@@ -135,7 +135,7 @@ class UserController extends CRUDController
 
         $this->handleBatch($request);
 
-        return $this->routeRedirectView('admin_user_gets');
+        return $this->routeRedirectView('admin_user_gets', [], Response::HTTP_NO_CONTENT);
     }
 
     protected function getBatchActions()
@@ -173,7 +173,7 @@ class UserController extends CRUDController
 
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_user_get', array('user'=>$user->getGuid()), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_user_get', array('user'=>$user->getGuid()), Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -198,7 +198,7 @@ class UserController extends CRUDController
         $this->getEntityManager()->persist($form->getData());
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_user_get', array('user'=>$form->getData()->getGuid()));
+        return $this->routeRedirectView('admin_user_get', array('user'=>$form->getData()->getGuid()), Response::HTTP_CREATED);
     }
 
     /**
@@ -217,7 +217,7 @@ class UserController extends CRUDController
         $ret = $this->handleDelete($request, $user);
         if($ret)
             return $ret;
-        return $this->routeRedirectView('admin_user_gets', array(), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_user_gets', array(), Response::HTTP_NO_CONTENT);
     }
 
     public function linkAction(Request $request, User $user)

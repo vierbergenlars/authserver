@@ -19,16 +19,9 @@
 
 namespace Admin\Controller;
 
-use Admin\Form\BatchType;
 use App\Controller\PaginateTrait;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\Controller\FOSRestController;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseController extends FOSRestController
 {

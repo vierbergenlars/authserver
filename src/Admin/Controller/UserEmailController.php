@@ -25,9 +25,9 @@ use App\Form\EmailAddressType;
 use App\Mail\PrimedTwigMailer;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -69,7 +69,7 @@ class UserEmailController extends BaseController implements ClassResourceInterfa
         if(!$form->isValid())
             return $form->get('email');
         $this->getEntityManager()->flush();
-        return $this->routeRedirectView('admin_user_email_get_user_email', array('user' => $user->getGuid(), 'email' => $email->getId()), Codes::HTTP_CREATED);
+        return $this->routeRedirectView('admin_user_email_get_user_email', array('user' => $user->getGuid(), 'email' => $email->getId()), Response::HTTP_CREATED);
     }
 
     public function deleteAction(User $user, EmailAddress $email)
@@ -95,7 +95,7 @@ class UserEmailController extends BaseController implements ClassResourceInterfa
         /* @var $mailer PrimedTwigMailer */
         if(!$mailer->sendMessage($email->getEmail(), $email))
             throw new ServiceUnavailableHttpException('Failed to send an email');
-        return $this->view(null, Codes::HTTP_ACCEPTED);
+        return $this->view(null, Response::HTTP_ACCEPTED);
     }
 
     public function verifyAction(User $user, EmailAddress $email)

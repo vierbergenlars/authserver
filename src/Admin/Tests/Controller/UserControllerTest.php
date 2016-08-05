@@ -25,11 +25,11 @@ use App\Entity\Group;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\UuidGenerator;
-use FOS\RestBundle\Util\Codes;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
 class UserControllerTest extends WebTestCase
@@ -151,7 +151,7 @@ class UserControllerTest extends WebTestCase
     public function testCget()
     {
         $this->client->request('GET', '/admin/users');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -164,7 +164,7 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users?page=2');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(2, $data->page);
@@ -177,7 +177,7 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users?per_page=20');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(20, $data->items);
         $this->assertEquals(1, $data->page);
@@ -192,7 +192,7 @@ class UserControllerTest extends WebTestCase
     public function testCgetSearch()
     {
         $this->client->request('GET', '/admin/users?q%5Busername%5D=user_4%25');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -205,7 +205,7 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users?q%5Busername%5D=user_4');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->items);
         $this->assertEquals(1, $data->page);
@@ -217,7 +217,7 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users?q%5Bname%5D=User+4%25');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -230,37 +230,37 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=enabled');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(120, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=disabled');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(120, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=user');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=admin');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(240, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=superadmin');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(30, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=disabled&q%5Bis%5D%5B%5D=superadmin');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0, $data->total);
 
         $this->client->request('GET', '/admin/users?q%5Bis%5D%5B%5D=user&q%5Bis%5D%5B%5D=admin');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0, $data->total);
     }
@@ -276,7 +276,7 @@ class UserControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
         $this->assertRegExp('#http://localhost/admin/users/[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}#', $this->client->getResponse()->headers->get('Location'));
 
         $this->client->request('GET', $this->client->getResponse()->headers->get('Location'));
@@ -295,7 +295,7 @@ class UserControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->errors->children->username->errors);
 
@@ -308,7 +308,7 @@ class UserControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->errors->children->displayName->errors);
 
@@ -337,7 +337,7 @@ class UserControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
 
         $this->assertRegExp('#/admin/users/[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{12}#', $this->client->getResponse()->headers->get('Location'));
 
@@ -353,7 +353,7 @@ class UserControllerTest extends WebTestCase
     public function testGet()
     {
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('00000000-0000-0000-0000-000000000000', $data->guid);
         $this->assertEquals('user_0', $data->username);
@@ -373,24 +373,24 @@ class UserControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/users/10000000-0000-0000-0000-000000000000');
-        //TODO: $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        //TODO: $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testPatchDisplayname()
     {
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000000/displayname', array(), array(), array(), 'New display name');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('New display name', $data->display_name);
 
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000001/displayname', array(), array(), array(), '');
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000001');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('User 1', $data->display_name);
     }
@@ -398,18 +398,18 @@ class UserControllerTest extends WebTestCase
     public function testPatchUsername()
     {
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000000/username', array(), array(), array(), 'xxxx');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('xxxx', $data->username);
 
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000001/username', array(), array(), array(), '');
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000001');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('user_1', $data->username);
     }
@@ -427,18 +427,18 @@ class UserControllerTest extends WebTestCase
     public function testPatchRole()
     {
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000000/role', array(), array(), array(), 'ROLE_USER');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('ROLE_USER', $data->role);
 
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000001/username', array(), array(), array(), 'XXX');
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000001');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('ROLE_ADMIN', $data->role);
     }
@@ -446,18 +446,18 @@ class UserControllerTest extends WebTestCase
     public function testPatchEnable()
     {
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000000/disable');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($data->enabled);
 
         $this->client->request('PATCH', '/admin/users/00000000-0000-0000-0000-000000000000/enable');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertTrue($data->enabled);
     }
@@ -465,11 +465,11 @@ class UserControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->client->request('DELETE', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        //TODO: $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        //TODO: $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testLink()
@@ -477,11 +477,11 @@ class UserControllerTest extends WebTestCase
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_1>; rel="group", </admin/groups/group_2>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(3, $data->groups);
@@ -498,33 +498,33 @@ class UserControllerTest extends WebTestCase
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_2>; rel="group", </admin/groups/group_3>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_2>; rel="qq", </admin/groups/group_4>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_4>'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('LINK', '/admin/users/00000000-0000-0000-0000-000000000000', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000000');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(3, $data->groups);
@@ -543,10 +543,10 @@ class UserControllerTest extends WebTestCase
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_5>; rel="group", </admin/groups/group_6>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000008');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(1, $data->groups);
@@ -559,32 +559,32 @@ class UserControllerTest extends WebTestCase
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_5>; rel="group", </admin/groups/group_6>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_7>; rel="qq", </admin/groups/group_8>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_7>'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('UNLINK', '/admin/users/00000000-0000-0000-0000-000000000008', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/users/00000000-0000-0000-0000-000000000008');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(1, $data->groups);

@@ -24,11 +24,11 @@ use App\Entity\Group;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\UuidGenerator;
-use FOS\RestBundle\Util\Codes;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
 class GroupControllerTest extends WebTestCase
@@ -164,7 +164,7 @@ class GroupControllerTest extends WebTestCase
     public function testCget()
     {
         $this->client->request('GET', '/admin/groups');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -177,7 +177,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?page=2');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(2, $data->page);
@@ -190,7 +190,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?page=7');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(4, $data->items);
         $this->assertEquals(7, $data->page);
@@ -203,7 +203,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?per_page=20');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(20, $data->items);
         $this->assertEquals(1, $data->page);
@@ -219,7 +219,7 @@ class GroupControllerTest extends WebTestCase
     public function testCgetSearch()
     {
         $this->client->request('GET', '/admin/groups?q%5Btechname%5D=group_4%25');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -232,7 +232,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?q%5Btechname%5D=group_4');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->items);
         $this->assertEquals(1, $data->page);
@@ -244,7 +244,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?q%5Bname%5D=DisplayName+4%25');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
@@ -257,57 +257,57 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->exportable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->exportable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Bgroups%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->noGroups, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Bgroups%5D=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->noGroups, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Busers%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->noUsers, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Busers%5D=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->noUsers, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Buserjoin%5D=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->userJoinable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Buserjoin%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->userJoinable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Buserleave%5D=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(self::$numFlags->userLeaveable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Buserleave%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(0x40-self::$numFlags->userLeaveable, $data->total);
 
         $this->client->request('GET', '/admin/groups?q%5Bexportable%5D=1&q%5Buserjoin%5D=0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(12, $data->total);
     }
@@ -321,7 +321,7 @@ class GroupControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('http://localhost/admin/groups/abc', $this->client->getResponse()->headers->get('Location'));
 
 
@@ -338,7 +338,7 @@ class GroupControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->errors->children->name->errors);
 
@@ -350,7 +350,7 @@ class GroupControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(1, $data->errors->children->displayName->errors);
 
@@ -367,7 +367,7 @@ class GroupControllerTest extends WebTestCase
             )
         ));
 
-        $this->assertEquals(Codes::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('http://localhost/admin/groups/def', $this->client->getResponse()->headers->get('Location'));
 
     }
@@ -375,7 +375,7 @@ class GroupControllerTest extends WebTestCase
     public function testGet()
     {
         $this->client->request('GET', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('group_0', $data->name);
         $this->assertEquals('DisplayName 0', $data->display_name);
@@ -388,7 +388,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertEquals('/admin/groups/group_0/members', $data->_links->members->href);
 
         $this->client->request('GET', '/admin/groups/group_1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('group_1', $data->name);
         $this->assertEquals('DisplayName 1', $data->display_name);
@@ -401,13 +401,13 @@ class GroupControllerTest extends WebTestCase
         $this->assertEquals('/admin/groups/group_1/members', $data->_links->members->href);
 
         $this->client->request('GET', '/admin/groups/non_existing_group');
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testGetMembers()
     {
         $this->client->request('GET', '/admin/groups/group_3/members');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(2, $data->total);
@@ -418,7 +418,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups/group_3/members?all=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(8, $data->total);
@@ -439,7 +439,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups/group_3/members?per_page=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(2, $data->total);
@@ -448,7 +448,7 @@ class GroupControllerTest extends WebTestCase
 
 
         $this->client->request('GET', '/admin/groups/group_3/members?all=1&per_page=1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertEquals(8, $data->total);
@@ -460,18 +460,18 @@ class GroupControllerTest extends WebTestCase
     public function testPatchDisplayname()
     {
         $this->client->request('PATCH', '/admin/groups/group_0/displayname', array(), array(), array(), 'New display name');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('New display name', $data->display_name);
 
         $this->client->request('PATCH', '/admin/groups/group_1/displayname', array(), array(), array(), '');
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/groups/group_1');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('DisplayName 1', $data->display_name);
     }
@@ -484,11 +484,11 @@ class GroupControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->client->request('DELETE', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
     }
 
     public function testLink()
@@ -496,11 +496,11 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_2>; rel="group", </admin/groups/group_3>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(3, $data->parents);
@@ -517,33 +517,33 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_2>; rel="group", </admin/groups/group_3>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_2>; rel="qq", </admin/groups/group_4>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_4>'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('LINK', '/admin/groups/group_0', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/groups/group_0');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(3, $data->parents);
@@ -562,10 +562,10 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_3>; rel="group", </admin/groups/group_6>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('GET', '/admin/groups/group_5');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(2, $data->parents);
@@ -579,33 +579,33 @@ class GroupControllerTest extends WebTestCase
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_3>; rel="group", </admin/groups/group_6>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_7>; rel="qq", </admin/groups/group_8>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/group_7>'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/groups/non_existing_group>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
 
         $this->client->request('UNLINK', '/admin/groups/group_5', array(), array(), array(
             'HTTP_LINK' => '</admin/users/00000000-0000-0000-0000-000000000000>; rel="group"'
         ));
-        $this->assertEquals(Codes::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->client->getResponse()->getStatusCode());
 
 
         $this->client->request('GET', '/admin/groups/group_5');
-        $this->assertEquals(Codes::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(2, $data->parents);

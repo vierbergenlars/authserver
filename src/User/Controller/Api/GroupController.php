@@ -26,7 +26,6 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use User\SerializationHelper\Api\JoinableLeaveableGroups;
 
@@ -56,8 +55,10 @@ class GroupController extends BaseController implements ClassResourceInterface
         $joinable = $joinableQb->getQuery()
             ->execute();
 
-        return \FOS\RestBundle\View\View::create(new JoinableLeaveableGroups($joinable, $leaveable))
-            ->setSerializationContext(SerializationContext::create()->setGroups(array('oauth_api')));
+        $view = \FOS\RestBundle\View\View::create(new JoinableLeaveableGroups($joinable, $leaveable));
+        $view->getContext()->setGroups(array('oauth_api'));
+
+        return $view;
     }
 
     /**

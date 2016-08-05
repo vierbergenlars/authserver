@@ -23,7 +23,6 @@ use Admin\Entity\ApiKey;
 use Admin\Form\ApiKeyType;
 use App\Entity\Property\PropertyNamespace;
 use App\Form\Property\PropertyNamespaceType;
-use FOS\RestBundle\Util\Codes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
@@ -31,6 +30,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PropertyNamespaceController extends CRUDController
 {
@@ -72,7 +72,7 @@ class PropertyNamespaceController extends CRUDController
     {
         $this->handleBatch($request);
 
-        return $this->routeRedirectView('admin_property_namespace_gets');
+        return $this->routeRedirectView('admin_property_namespace_gets', [], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -96,7 +96,7 @@ class PropertyNamespaceController extends CRUDController
 
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_property_namespace_get', array('ns'=>$ns->getId()), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_property_namespace_get', array('ns'=>$ns->getId()), Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -121,7 +121,7 @@ class PropertyNamespaceController extends CRUDController
         $this->getEntityManager()->persist($form->getData());
         $this->getEntityManager()->flush();
 
-        return $this->routeRedirectView('admin_property_namespace_get', array('ns'=>$form->getData()->getId()));
+        return $this->routeRedirectView('admin_property_namespace_get', array('ns'=>$form->getData()->getId()), Response::HTTP_CREATED);
     }
 
     /**
@@ -140,7 +140,7 @@ class PropertyNamespaceController extends CRUDController
         $ret = $this->handleDelete($request, $ns);
         if ($ret)
             return $ret;
-        return $this->routeRedirectView('admin_property_namespace_gets', array(), Codes::HTTP_NO_CONTENT);
+        return $this->routeRedirectView('admin_property_namespace_gets', array(), Response::HTTP_NO_CONTENT);
     }
 
     protected function getFormType()

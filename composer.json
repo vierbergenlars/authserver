@@ -7,33 +7,33 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "~2.3",
-        "symfony/icu": "~1.0",
+        "symfony/symfony": "~2.8",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.3",
-        "sensio/distribution-bundle": "~2.3",
         "sensio/framework-extra-bundle": "~3.0",
-        "sensio/generator-bundle": "~2.3",
-        "jms/serializer-bundle": "~0.13.0",
-        "friendsofsymfony/rest-bundle": "~1.4,>=1.5.1",
-        "friendsofsymfony/http-cache-bundle": "~1.0",
-        "willdurand/hateoas-bundle": "~0.4",
+        "jms/serializer-bundle": "^1.1.0",
+        "friendsofsymfony/rest-bundle": "^2.0",
+        "willdurand/hateoas-bundle": "^1.2",
         "hautelook/templated-uri-bundle": "~2.0",
-        "willdurand/rest-extra-bundle": "~1.0",
-        "braincrafted/bootstrap-bundle": "~2.1",
+        "willdurand/rest-extra-bundle": "^1.0",
+        "braincrafted/bootstrap-bundle": "dev-develop#41aaa9f3212add20d46faac86e6ebcb4651cde57 as v2.2.0-p1",
         "twbs/bootstrap": "~3.0",
         "components/jquery": "~1.11",
-        "doctrine/migrations": "dev-master",
+        "doctrine/migrations": "^1.4",
         "fortawesome/font-awesome": "~4.1",
         "knplabs/knp-paginator-bundle": "~2.4",
         "friendsofsymfony/oauth-server-bundle": "dev-master as 1.4.2",
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "ircmaxell/password-compat": "~1.0",
-        "stof/doctrine-extensions-bundle": "dev-master"
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "symfony/intl": "^3.1"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "^3.0"
     },
     "repositories": [
         {
@@ -41,14 +41,6 @@
           "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle"
         }
     ],
-    "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ],
-        "post-update-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
-        ]
-    },
     "config": {
         "bin-dir": "bin"
     },
