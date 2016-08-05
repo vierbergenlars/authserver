@@ -19,7 +19,13 @@
 
 namespace App\Form;
 
+use App\Entity\Group;
+use Braincrafted\Bundle\BootstrapBundle\Form\Type\FormStaticControlType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
@@ -39,8 +45,8 @@ class GroupType extends AbstractType
         $builder
             // Disable editing of the name after the initial submission
             // If the id is set, the form is used for an edit operation
-            ->add('name',  $id > 0?'bs_static':'text')
-            ->add('displayName')
+            ->add('name',  $id > 0?(FormStaticControlType::class):(TextType::class))
+            ->add('displayName', TextType::class)
             ->add('groups', null, array(
                 'label'=>'Member of',
                 'query_builder'=>function (EntityRepository $repo) use ($id) {
@@ -54,40 +60,43 @@ class GroupType extends AbstractType
                 'required'=>false,
                 'expanded' => true,
             ))
-            ->add('exportable', 'checkbox', array(
+            ->add('exportable', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
+                    'help_text' => 'This group is visible through OAuth',
                 ),
             ))
-            ->add('userJoinable', 'checkbox', array(
+            ->add('userJoinable', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
+                    'help_text' => 'A user can join this group from his profile',
                 ),
             ))
-            ->add('userLeaveable', 'checkbox', array(
+            ->add('userLeaveable', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
+                    'help_text' => 'A user can leave this group from his profile',
                 ),
             ))
 
-            ->add('noGroups', 'checkbox', array(
+            ->add('noGroups', CheckboxType::class, array(
                 'required' => false,
                 'label'=>'No groups can be member of this group',
                 'attr' => array(
                     'align_with_widget' => true,
                 ),
             ))
-            ->add('noUsers', 'checkbox', array(
+            ->add('noUsers', CheckboxType::class, array(
                 'required' => false,
                 'label'=> 'No users can be member of this group',
                 'attr' => array(
                     'align_with_widget' => true,
                 ),
             ))
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
     }
 
@@ -97,14 +106,14 @@ class GroupType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Group'
+            'data_class' => Group::class,
         ));
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_group';
     }

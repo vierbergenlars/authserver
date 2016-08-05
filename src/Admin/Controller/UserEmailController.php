@@ -64,7 +64,7 @@ class UserEmailController extends BaseController implements ClassResourceInterfa
     {
         $email = new EmailAddress();
         $user->addEmailAddress($email);
-        $form = $this->createForm(new EmailAddressType(), $email);
+        $form = $this->createForm(EmailAddressType::class, $email);
         $form->submit(array('email'=>$request->getContent()));
         if(!$form->isValid())
             return $form->get('email');

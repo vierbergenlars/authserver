@@ -19,8 +19,14 @@
 
 namespace App\Form\Property;
 
+use App\Entity\OAuth\Client;
+use App\Entity\Property\PropertyNamespace;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PropertyNamespaceType extends AbstractType
@@ -32,17 +38,19 @@ class PropertyNamespaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('publicReadable', 'checkbox', array(
+            ->add('name', TextType::class)
+            ->add('publicReadable', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
+                    'help_text' => 'All OAuth applications and the user himself can read properties in this namespace.',
                 ),
             ))
-            ->add('publicWriteable', 'checkbox', array(
+            ->add('publicWriteable', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
+                    'help_text' => 'All OAuth applications and the user himself can write properties in this namespace.',
                 ),
             ))
             ->add('readers', null, array(
@@ -56,21 +64,10 @@ class PropertyNamespaceType extends AbstractType
         ;
     }
     
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\Property\PropertyNamespace'
+            'data_class' => PropertyNamespace::class,
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'app_property_propertynamespace';
     }
 }

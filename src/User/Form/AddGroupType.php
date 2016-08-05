@@ -19,21 +19,24 @@
 
 namespace User\Form;
 
+use App\Entity\Group;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class AddGroupType extends AbstractType
 {
-    private $user;
+    private $tokenStorage;
 
-    function __construct(User $user)
+    function __construct(TokenStorage $tokenStorage)
     {
-        $this->user = $user;
+        $this->tokenStorage = $tokenStorage;
     }
-
 
     /**
      * @param FormBuilderInterface $builder
@@ -41,11 +44,16 @@ class AddGroupType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $user = $this->user;
+        if(($token = $this->tokenStorage->getToken()) === null)
+            throw new \InvalidArgumentException('Authentication token does not exist');
+        $user = $token->getUser();
+        if($user === null)
+            throw new \InvalidArgumentException('There is no authenticated user.');
+
         $builder
-            ->add('group', 'entity', array(
+            ->add('group', EntityType::class, array(
                 'choice_label'=>'displayName',
-                'class' => 'App\Entity\Group',
+                'class' => Group::class,
                 'query_builder'=>function (EntityRepository $repo) use($user) {
                     $qb = $repo->createQueryBuilder('g')
                                 ->where('g.noUsers = false AND g.userJoinable = true');
@@ -57,20 +65,12 @@ class AddGroupType extends AbstractType
                 'required'=>true,
                 'multiple'=>false,
             ))
-            ->add('submit', 'submit', array(
+            ->add('submit', SubmitType::class, array(
                 'label' => 'Join group',
                 'attr' => array(
                     'class' => 'btn-sm',
                 )
             ))
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'usr_group_add';
     }
 }

@@ -20,45 +20,49 @@
 namespace Admin\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Choice;
 
 class BatchType extends AbstractType
 {
-    private $choices;
-
-    public function __construct($actions)
-    {
-        $this->choices = $actions;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $constraints = [];
+        foreach($options['actions'] as $val)
+            foreach((array)$val as $v)
+                $constraints[] = $v; // Flatten optionally 2-dimensional array. Values are the possible choices
         $builder
-            ->add('subjects', 'collection', array(
-                'type' => 'checkbox',
+            ->add('subjects', CollectionType::class, array(
+                'entry_type' => CheckboxType::class,
                 'allow_add' => true,
                 'required' => false,
             ))
-            ->add('action', 'choice', array(
+            ->add('action', ChoiceType::class, array(
                 'placeholder' => 'Select batch action',
-                'choices' => $this->choices,
-                'constraints' => new Choice(array('choices'=>array_keys($this->choices))),
+                'choices' => $options['actions'],
+                'choices_as_values' => true,
+                'constraints' => new Choice(array('choices'=>$constraints)),
             ))
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
     }
 
     /**
-     * @return string
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options
      */
-    public function getName()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return 'admin_batch';
+        $resolver->setRequired('actions')->setAllowedTypes('actions', 'array');
     }
 }

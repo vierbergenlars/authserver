@@ -20,6 +20,8 @@
 namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -33,12 +35,12 @@ class EmailAddressType extends AbstractType
     {
         $builder
             ->setMethod('POST')
-            ->add('email', 'text', array(
+            ->add('email', EmailType::class, array(
                 'attr' => array(
                     'class' => 'input-sm',
                 )
             ))
-            ->add('submit', 'submit', array(
+            ->add('submit', SubmitType::class, array(
                 'label' => 'Add email address',
                 'attr' => array(
                     'class' => 'btn-sm',
@@ -57,13 +59,5 @@ class EmailAddressType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'App\Entity\EmailAddress',
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'usr_new_email_address';
     }
 }

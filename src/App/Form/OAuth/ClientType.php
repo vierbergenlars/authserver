@@ -19,8 +19,16 @@
 
 namespace App\Form\OAuth;
 
+use App\Entity\Group;
 use App\Entity\GroupRepository;
+use App\Entity\OAuth\Client;
+use Braincrafted\Bundle\BootstrapBundle\Form\Type\BootstrapCollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -43,37 +51,39 @@ class ClientType extends AbstractType
             'property:write'   => 'property:write',
         );
         $builder
-            ->add('name')
-            ->add('redirectUris', 'bootstrap_collection', array(
-                'type' => 'text',
+            ->add('name', TextType::class)
+            ->add('redirectUris', BootstrapCollectionType::class, array(
+                'entry_type' => TextType::class,
                 'allow_add' => true,
                 'allow_delete'=>true
             ))
-            ->add('preApproved', 'checkbox', array(
+            ->add('preApproved', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
                 ),
             ))
-            ->add('preApprovedScopes', 'choice', array(
+            ->add('preApprovedScopes', ChoiceType::class, array(
                 'choices' => $scopes,
+                'choices_as_values' => true,
                 'multiple' => true,
                 'expanded' => true,
             ))
-            ->add('groupRestriction', 'entity', array(
-                'class' => 'AppBundle:Group',
+            ->add('groupRestriction', EntityType::class, array(
+                'class' => Group::class,
                 'query_builder' => function(GroupRepository $repository) {
                     return $repository->createQueryBuilder('g')->where('g.exportable = true');
                 },
                 'choice_label' => 'name',
                 'required' => false,
             ))
-            ->add('maxScopes', 'choice', array(
+            ->add('maxScopes', ChoiceType::class, array(
                 'choices' => $scopes,
+                'choices_as_values' => true,
                 'multiple' => true,
                 'expanded' => true,
             ))
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
     }
 
@@ -83,15 +93,7 @@ class ClientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\OAuth\Client'
+            'data_class' => Client::class,
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'app_oauth_client';
     }
 }

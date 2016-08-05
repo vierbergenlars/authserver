@@ -20,6 +20,8 @@
 namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class DeleteAuthorizedAppType extends AbstractType
@@ -32,19 +34,12 @@ class DeleteAuthorizedAppType extends AbstractType
     {
         $builder
             ->setMethod('DELETE')
-            ->add('id', 'hidden')
-            ->add('submit', 'submit', array(
+            ->add('id', HiddenType::class)
+            ->add('submit', SubmitType::class, array(
                 'label'=>'Delete',
                 'button_class' => 'danger btn-sm',
             ))
         ;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'usr_auth_app_delete';
-    }
 }

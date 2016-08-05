@@ -19,7 +19,11 @@
 
 namespace Admin\Form;
 
+use Admin\Entity\ApiKey;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,26 +36,27 @@ class ApiKeyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('scopes', 'choice', array(
+            ->add('name', TextType::class)
+            ->add('scopes', ChoiceType::class, array(
                 'choices' => array(
-                    'r_profile' => 'Profile::read',
-                    'r_profile_email' => 'Profile::read::email',
-                    'w_profile' => 'Profile::write',
-                    'w_profile_email' => 'Profile::write::email',
-                    'w_profile_cred' => 'Profile::write::password',
-                    'w_profile_groups' => 'Profile::write::groups',
-                    'w_profile_enabled' => 'Profile::write::lock',
-                    'w_profile_enabled_admin'=>'Profile::write::lock::admins',
-                    'w_profile_username' => 'Profile::write::username',
-                    'w_profile_admin' => 'Profile::write::admin',
-                    'r_group' => 'Group::read',
-                    'w_group' => 'Group::write',
+                    'Profile::read' => 'r_profile',
+                    'Profile::read::email' => 'r_profile_email',
+                    'Profile::write' => 'w_profile',
+                    'Profile::write::email' => 'w_profile_email',
+                    'Profile::write::password' => 'w_profile_cred',
+                    'Profile::write::groups' => 'w_profile_groups',
+                    'Profile::write::lock' => 'w_profile_enabled',
+                    'Profile::write::lock::admins' => 'w_profile_enabled_admin',
+                    'Profile::write::username' => 'w_profile_username',
+                    'Profile::write::admin' => 'w_profile_admin',
+                    'Group::read' => 'r_group',
+                    'Group::write' => 'w_group',
                 ),
+                'choices_as_values' => true,
                 'expanded' => true,
                 'multiple' => true,
             ))
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
     }
 
@@ -61,15 +66,7 @@ class ApiKeyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Admin\Entity\ApiKey'
+            'data_class' => ApiKey::class,
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'admin_apikey';
     }
 }

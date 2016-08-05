@@ -20,6 +20,9 @@
 namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -29,8 +32,8 @@ class AddPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('password', 'repeated', array(
-                'type' => 'password',
+            ->add('password', RepeatedType::class, array(
+                'type' => PasswordType::class,
                 'constraints' => array(
                     new NotBlank(),
                     new Length(array('min'=>8)),
@@ -43,12 +46,7 @@ class AddPasswordType extends AbstractType
                 ),
                 'invalid_message' => 'Your repeated password does not match',
             ))
-            ->add('submit', 'submit')
+            ->add('submit', SubmitType::class)
         ;
-    }
-
-    public function getName()
-    {
-        return 'usr_passwd_change';
     }
 }

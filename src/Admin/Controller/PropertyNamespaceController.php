@@ -145,7 +145,7 @@ class PropertyNamespaceController extends CRUDController
 
     protected function getFormType()
     {
-        return new PropertyNamespaceType();
+        return PropertyNamespaceType::class;
     }
 
     protected function createNewEntity()

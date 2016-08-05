@@ -2,43 +2,37 @@ user_profile:
     path: profile
     defaults:
         _controller: UserBundle:Profile:index
-    requirements:
-        _method: GET
+    methods: GET
 
 user_app_auth_delete:
     path: oauthapp
     defaults:
         _controller: UserBundle:Profile:deleteAuthorizedApp
-    requirements:
-        _method: DELETE
+    methods: DELETE
 
 user_put_email_addresses:
     path: mailaddr/{addr}
     defaults:
         _controller: UserBundle:Profile:putEmailAddresses
-    requirements:
-        _method: PUT
+    methods: PUT
 
 user_post_email_addresses:
     path: mailaddr
     defaults:
         _controller: UserBundle:Profile:postEmailAddresses
-    requirements:
-        _method: POST
+    methods: POST
 
 user_post_group:
     path: group
     defaults:
         _controller: UserBundle:Profile:postGroup
-    requirements:
-        _method: POST
+    methods: POST
 
 user_delete_group:
     path: group
     defaults:
         _controller: UserBundle:Profile:deleteGroup
-    requirements:
-        _method: DELETE
+    methods: DELETE
 
 user_kill_session:
     path: kill-session
@@ -50,5 +44,4 @@ user_change_password:
     path: passwd
     defaults:
         _controller: UserBundle:Profile:changePassword
-    requirements:
-        _method: GET|POST
+    methods: [GET, POST]

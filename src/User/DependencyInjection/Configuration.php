@@ -17,36 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Form\DataTransformer;
+namespace User\DependencyInjection;
 
-use App\Entity\User;
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class HashToPasswordTransformer implements DataTransformerInterface
+/**
+ * This is the class that validates and merges configuration from your app/config files
+ *
+ * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ */
+class Configuration implements ConfigurationInterface
 {
     /**
-     * @var EncoderFactoryInterface
+     * {@inheritDoc}
      */
-    private $encoderFactory;
-
-    public function __construct(EncoderFactoryInterface $encoderFactory)
+    public function getConfigTreeBuilder()
     {
-        $this->encoderFactory = $encoderFactory;
-    }
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('user');
 
-    public function transform($value)
-    {
-        return '';
-    }
-
-    public function reverseTransform($value)
-    {
-        if(!$value)
-
-            return null;
-
-        return $this->encoderFactory->getEncoder(User::class)
-            ->encodePassword($value, null);
+        // Here you should define the parameters that are allowed to
+        // configure your bundle. See the documentation linked above for
+        // more information on that topic.
+        return $treeBuilder;
     }
 }

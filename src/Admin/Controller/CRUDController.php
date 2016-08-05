@@ -22,6 +22,7 @@ namespace Admin\Controller;
 use Admin\Form\BatchType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -39,12 +40,16 @@ abstract class CRUDController extends BaseController
         return $this->paginate($this->getEntityRepository()->createQueryBuilder('e'), $request);
     }
 
+    /**
+     * @param $entity
+     * @return \Symfony\Component\Form\FormInterface
+     */
     protected function createEditForm($entity)
     {
         return $this->createForm($this->getFormType(), $entity, array(
             'method' => 'PUT'
         ))
-            ->add('submit', 'submit');
+            ->add('submit', SubmitType::class);
     }
 
     protected function createCreateForm()
@@ -52,14 +57,14 @@ abstract class CRUDController extends BaseController
         return $this->createForm($this->getFormType(), $this->createNewEntity(), array(
             'method' => 'POST'
         ))
-            ->add('submit', 'submit');
+            ->add('submit', SubmitType::class);
     }
 
     protected function createDeleteForm()
     {
         return $this->createFormBuilder()
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array(
+            ->add('submit', SubmitType::class, array(
                 'button_class' => 'danger',
                 'label' => 'Delete',
             ))
@@ -81,13 +86,13 @@ abstract class CRUDController extends BaseController
 
     protected function createBatchForm()
     {
-        return $this->createForm(new BatchType($this->getBatchActions()));
+        return $this->createForm(BatchType::class, null, ['actions' => $this->getBatchActions()]);
     }
 
     protected function getBatchActions()
     {
         return array(
-            'DELETE' => 'Delete',
+            'Delete' => 'DELETE',
         );
     }
 
@@ -148,7 +153,7 @@ abstract class CRUDController extends BaseController
     }
 
     /**
-     * @return AbstractType
+     * @return string
      */
     abstract protected function getFormType();
 

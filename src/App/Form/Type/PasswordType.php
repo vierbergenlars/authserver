@@ -46,11 +46,7 @@ class PasswordType extends AbstractType
 
     public function getParent()
     {
-        return 'password';
+        return \Symfony\Component\Form\Extension\Core\Type\PasswordType::class;
     }
 
-    public function getName()
-    {
-        return 'app_password';
-    }
 }

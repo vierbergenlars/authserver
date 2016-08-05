@@ -28,6 +28,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -162,7 +163,7 @@ class ApiKeyController extends CRUDController
 
     protected function getFormType()
     {
-        return new ApiKeyType();
+        return ApiKeyType::class;
     }
 
     protected function createNewEntity()
@@ -180,7 +181,7 @@ class ApiKeyController extends CRUDController
         return $this->createFormBuilder()
             ->setMethod('POST')
             ->setAction($this->generateUrl('admin_apikey_rotate', array('apikey'=>$apiKey->getId())))
-            ->add('rotate', 'submit', array(
+            ->add('rotate', SubmitType::class, array(
                 'label' => 'Regenerate key',
                 'button_class' => 'danger btn-xs',
             ))

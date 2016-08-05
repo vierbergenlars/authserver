@@ -37,7 +37,7 @@ class ResetPasswordController extends Controller
      */
     public function forgotPasswordAction(Request $request)
     {
-        $form  = $this->createForm(new AccountSubmitType(), array('user'=>$request->query->get('user', '')));
+        $form  = $this->createForm(AccountSubmitType::class, array('user'=>$request->query->get('user', '')));
         $flash = $this->get('braincrafted_bootstrap.flash');
         $mailer = $this->get('app.mailer.user.reset_password');
         /* @var $flash FlashMessage */
@@ -75,7 +75,7 @@ class ResetPasswordController extends Controller
     public function resetPasswordAction(Request $request, $username, $verificationCode)
     {
 
-        $form = $this->createForm(new AddPasswordType());
+        $form = $this->createForm(AddPasswordType::class);
         $flash = $this->get('braincrafted_bootstrap.flash');
         /* @var $flash FlashMessage */
 

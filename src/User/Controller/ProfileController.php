@@ -21,12 +21,15 @@ namespace User\Controller;
 
 use App\Entity\EmailAddress;
 use App\Entity\Group;
+use App\Entity\OAuth\AccessToken;
+use App\Entity\OAuth\RefreshToken;
 use App\Entity\OAuth\UserAuthorization;
 use App\Entity\User;
 use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Email;
 use User\Form\AddGroupType;
 use User\Form\AddPasswordType;
 use User\Form\ChangePasswordType;
@@ -38,31 +41,31 @@ use User\Form\EmailAddressType;
 class ProfileController extends Controller
 {
     /**
-     * @Template
+     * @View
      */
     public function indexAction()
     {
         return array(
             'data'=>$this->getUser(),
             'form' => array(
-                'add_email' => $this->createForm(new EmailAddressType())->createView(),
-                'add_group' => $this->createForm(new AddGroupType($this->getUser()))->createView(),
+                'add_email' => $this->createForm(EmailAddressType::class)->createView(),
+                'add_group' => $this->createForm(AddGroupType::class)->createView(),
             ),
         );
     }
 
     /**
-     * @Template
+     * @View
      * Internal action, not exposed in a route
      */
     public function removeAuthorizedAppAction($appId)
     {
-        return $this->createForm(new DeleteAuthorizedAppType(), array('id'=>$appId));
+        return $this->createForm(DeleteAuthorizedAppType::class, array('id'=>$appId));
     }
 
     public function deleteAuthorizedAppAction(Request $request)
     {
-        $form = $this->createForm(new DeleteAuthorizedAppType());
+        $form = $this->createForm(DeleteAuthorizedAppType::class);
         $user = $this->getUser();
 
         $form->handleRequest($request);
@@ -70,7 +73,7 @@ class ProfileController extends Controller
         if ($form->isValid()) {
             $appId = $form->get('id')->getData();
             $userAuthorization = $this->getDoctrine()
-                ->getRepository('AppBundle:OAuth\UserAuthorization')
+                ->getRepository(UserAuthorization::class)
                 ->findOneBy(array(
                     'client' => $appId,
                     'user' => $user,
@@ -79,7 +82,7 @@ class ProfileController extends Controller
 
             if ($userAuthorization) {
                 $this->getDoctrine()->getManager()->beginTransaction();
-                $this->getDoctrine()->getRepository('AppBundle:OAuth\\RefreshToken')
+                $this->getDoctrine()->getRepository(RefreshToken::class)
                         ->createQueryBuilder('t')
                         ->delete()
                         ->where('t.client = :client AND t.user = :user')
@@ -87,7 +90,7 @@ class ProfileController extends Controller
                         ->setParameter('user', $user)
                         ->getQuery()
                         ->execute();
-                $this->getDoctrine()->getRepository('AppBundle:OAuth\\AccessToken')
+                $this->getDoctrine()->getRepository(AccessToken::class)
                         ->createQueryBuilder('t')
                         ->delete()
                         ->where('t.client = :client AND t.user = :user')
@@ -95,7 +98,7 @@ class ProfileController extends Controller
                         ->setParameter('user', $user)
                         ->getQuery()
                         ->execute();
-                $em = $this->getDoctrine()->getManagerForClass('AppBundle:OAuth\UserAuthorization');
+                $em = $this->getDoctrine()->getManagerForClass(UserAuthorization::class);
                 $em->remove($userAuthorization);
                 $em->flush();
 
@@ -112,12 +115,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Template
+     * @View
      * Internal action, not exposed in a route
      */
     public function editEmailAddressesAction(EmailAddress $addr)
     {
-        return array('form'=>$this->createForm(new EditEmailAddressType())->createView(), 'data'=>$addr);
+        return array('form'=>$this->createForm(EditEmailAddressType::class)->createView(), 'data'=>$addr);
     }
 
     public function putEmailAddressesAction(EmailAddress $addr, Request $request)
@@ -126,7 +129,7 @@ class ProfileController extends Controller
             throw $this->createNotFoundException();
         $mailer = $this->get('app.mailer.user.verify_email');
 
-        $form  = $this->createForm(new EditEmailAddressType());
+        $form  = $this->createForm(EditEmailAddressType::class);
 
         $form->handleRequest($request);
 
@@ -161,7 +164,7 @@ class ProfileController extends Controller
                 case 'remove':
                     if (!$addr->isPrimary()) {
                         $this->getDoctrine()
-                                ->getManagerForClass('AppBundle:EmailAddress')
+                                ->getManagerForClass(EmailAddress::class)
                                 ->remove($addr);
                         $this->getFlash()->success('Email address removed');
                     } else {
@@ -173,7 +176,7 @@ class ProfileController extends Controller
                     $this->getFlash()->error('Internal error: Unknown button pressed');
             }
             $this->getDoctrine()
-                    ->getManagerForClass('AppBundle:EmailAddress')
+                    ->getManagerForClass(EmailAddress::class)
                     ->flush();
         } else {
             $this->getFlash()->error('Error modifying email address');
@@ -184,9 +187,9 @@ class ProfileController extends Controller
 
     public function postEmailAddressesAction(Request $request)
     {
-        $form  = $this->createForm(new EmailAddressType());
+        $form  = $this->createForm(EmailAddressType::class);
 
-        $em = $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress');
+        $em = $this->getDoctrine()->getManagerForClass(EmailAddress::class);
         $mailer = $this->get('app.mailer.user.verify_email');
 
         $form->handleRequest($request);
@@ -217,7 +220,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Template
+     * @View
      */
     public function changePasswordAction(Request $request)
     {
@@ -230,10 +233,10 @@ class ProfileController extends Controller
                 return $this->redirectToProfile();
                 break;
             case 1:
-                $form = $this->createForm(new ChangePasswordType());
+                $form = $this->createForm(ChangePasswordType::class);
                 break;
             case 2:
-                $form = $this->createForm(new AddPasswordType());
+                $form = $this->createForm(AddPasswordType::class);
                 break;
         }
 
@@ -242,11 +245,11 @@ class ProfileController extends Controller
         if ($form->isValid()) {
             $user->setPassword(
                 $this->get('security.encoder_factory')
-                    ->getEncoder('App\Entity\User')
+                    ->getEncoder(User::class)
                     ->encodePassword($form->get('password')->getData(), null)
             );
             $user->setPasswordEnabled(1);
-            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
+            $this->getDoctrine()->getManagerForClass(User::class)->flush();
             $this->getFlash()->success('Password has been changed successfully');
 
             return $this->redirectToProfile();
@@ -257,7 +260,7 @@ class ProfileController extends Controller
 
     public function postGroupAction(Request $request)
     {
-        $form = $this->createForm(new AddGroupType($this->getUser()));
+        $form = $this->createForm(AddGroupType::class);
 
         $form->handleRequest($request);
 
@@ -273,7 +276,7 @@ class ProfileController extends Controller
                 return $this->redirectToProfile();
             }
             $user->addGroup($group);
-            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
+            $this->getDoctrine()->getManagerForClass(User::class)->flush();
             $this->getFlash()->success('You joined the group '.$group->getDisplayName().'.');
         } else {
             $errString = 'Problems while adding group.';
@@ -287,23 +290,23 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Template
+     * @View
      * Internal action, not exposed in a route
      */
     public function removeGroupAction($groupId)
     {
-        return $this->createForm(new DeleteGroupType(), array('id'=>$groupId));
+        return $this->createForm(DeleteGroupType::class, array('id'=>$groupId));
     }
 
     public function deleteGroupAction(Request $request)
     {
-        $form = $this->createForm(new DeleteGroupType());
+        $form = $this->createForm(DeleteGroupType::class);
 
         $form->handleRequest($request);
 
         if($form->isValid()) {
             $groupId = $form->get('id')->getData();
-            $group = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
+            $group = $this->getDoctrine()->getRepository(Group::class)->find($groupId);
             /* @var $group Group */
             if($group === null)
                 throw $this->createNotFoundException('This group does not exist.');
@@ -313,7 +316,7 @@ class ProfileController extends Controller
             $user = $this->getUser();
             /* @var $user User */
             $user->removeGroup($group);
-            $this->getDoctrine()->getManagerForClass('AppBundle:User')->flush();
+            $this->getDoctrine()->getManagerForClass(User::class)->flush();
             $this->getFlash()->success('You left the group '.$group->getDisplayName().'.');
         } else {
             $this->getFlash()->error('Cannot leave this group.');

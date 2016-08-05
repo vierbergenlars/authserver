@@ -29,6 +29,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -169,7 +170,7 @@ class OAuthClientController extends CRUDController
 
     protected function getFormType()
     {
-        return new ClientType();
+        return ClientType::class;
     }
 
     protected function getEntityRepository()
@@ -185,8 +186,8 @@ class OAuthClientController extends CRUDController
     protected function getBatchActions()
     {
         $actions = parent::getBatchActions();
-        $actions['Pre approved']['PATCH_preApproved_true'] = 'Enable';
-        $actions['Pre approved']['PATCH_preApproved_false'] = 'Disable';
+        $actions['Pre approved']['Enable'] = 'PATCH_preApproved_true';
+        $actions['Pre approved']['Disable'] = 'PATCH_preApproved_false';
         return $actions;
     }
 
@@ -195,7 +196,7 @@ class OAuthClientController extends CRUDController
         return $this->createFormBuilder()
             ->setMethod('POST')
             ->setAction($this->generateUrl('admin_oauth_client_rotate', array('client'=>$client->getId())))
-            ->add('rotate', 'submit', array(
+            ->add('rotate', SubmitType::class, array(
                 'label' => 'Regenerate secret',
                 'button_class' => 'danger btn-xs',
             ))

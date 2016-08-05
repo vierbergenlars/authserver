@@ -22,6 +22,7 @@ namespace App\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use App\Form\DataTransformer\UserToUsernameTransformer;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -57,12 +58,7 @@ class UsernameType extends AbstractType
 
     public function getParent()
     {
-        return 'text';
-    }
-
-    public function getName()
-    {
-        return 'app_username';
+        return TextType::class;
     }
 
 }

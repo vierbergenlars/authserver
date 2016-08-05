@@ -20,6 +20,7 @@
 namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class EditEmailAddressType extends AbstractType
@@ -32,26 +33,18 @@ class EditEmailAddressType extends AbstractType
     {
         $builder
             ->setMethod('PUT')
-            ->add('setPrimary', 'submit', array(
+            ->add('setPrimary', SubmitType::class, array(
                 'label'=>'Set as primary address',
                 'button_class' => 'link',
             ))
-            ->add('sendConfirmation', 'submit', array(
+            ->add('sendConfirmation', SubmitType::class, array(
                 'label' => 'Resend confirmation',
                 'button_class' => 'link',
             ))
-            ->add('remove', 'submit', array(
+            ->add('remove', SubmitType::class, array(
                 'label' => 'Remove',
                 'button_class' => 'link',
             ))
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'usr_edit_email_address';
     }
 }

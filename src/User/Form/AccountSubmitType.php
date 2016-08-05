@@ -19,7 +19,9 @@
 
 namespace User\Form;
 
+use App\Form\Type\UsernameType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AccountSubmitType extends AbstractType
@@ -27,13 +29,8 @@ class AccountSubmitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', 'app_username')
-            ->add('submit', 'submit')
+            ->add('user', UsernameType::class)
+            ->add('submit', SubmitType::class)
         ;
-    }
-
-    public function getName()
-    {
-        return 'usr_account_resend_verification';
     }
 }

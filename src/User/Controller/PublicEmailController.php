@@ -57,7 +57,7 @@ class PublicEmailController extends Controller
      */
     public function resendVerificationAction(Request $request)
     {
-        $form  = $this->createForm(new AccountSubmitType(), array('user'=>$request->query->get('user', '')));
+        $form  = $this->createForm(AccountSubmitType::class, array('user'=>$request->query->get('user', '')));
         $flash = $this->get('braincrafted_bootstrap.flash');
         $mailer = $this->get('app.mailer.user.verify_email');
 

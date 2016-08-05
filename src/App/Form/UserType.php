@@ -19,7 +19,16 @@
 
 namespace App\Form;
 
+use App\Entity\Group;
+use App\Entity\User;
+use App\Form\Type\PasswordType;
+use Braincrafted\Bundle\BootstrapBundle\Form\Type\BootstrapCollectionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
@@ -27,11 +36,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserType extends AbstractType
 {
-    private $subscriber;
-    public function __construct(EventSubscriberInterface $subscriber)
-    {
-        $this->subscriber = $subscriber;
-    }
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -44,33 +48,35 @@ class UserType extends AbstractType
             $id = 0;
 
         $builder
-            ->add('username',  'text')
-            ->add('displayName')
-            ->add('password', 'app_password', array(
+            ->add('username', TextType::class)
+            ->add('displayName', TextType::class)
+            ->add('password', PasswordType::class, array(
                 'required'=>false,
             ))
-            ->add('passwordEnabled', 'choice', array(
+            ->add('passwordEnabled', ChoiceType::class, array(
                 'label' => 'Password authentication',
                 'choices' => array(
-                    0 => 'Disabled',
-                    1 => 'Enabled',
-                    2 => 'Allow user to set initial password',
+                    'Disabled' => 0,
+                    'Enabled' => 1,
+                    'Allow user to set initial password' => 2,
                 ),
+                'choices_as_values' => true,
                 'expanded' => true
             ))
-            ->add('emailAddresses', 'bootstrap_collection', array(
-                'type' => new EmailAddressType(),
+            ->add('emailAddresses', BootstrapCollectionType::class, array(
+                'entry_type' => EmailAddressType::class,
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete'=>true
             ))
-            ->add('role', 'choice', array(
+            ->add('role', ChoiceType::class, array(
                 'choices' => array(
-                    'ROLE_USER' => 'User',
-                    'ROLE_AUDIT' => 'Audit',
-                    'ROLE_ADMIN' => 'Admin',
-                    'ROLE_SUPER_ADMIN' => 'Super admin',
+                    'User' => 'ROLE_USER',
+                    'Audit' => 'ROLE_AUDIT',
+                    'Admin' => 'ROLE_ADMIN',
+                    'Super admin' => 'ROLE_SUPER_ADMIN',
                 ),
+                'choices_as_values' => true,
                 'multiple'=>false,
                 'expanded' => true,
             ))
@@ -85,15 +91,13 @@ class UserType extends AbstractType
                 'required'=>false,
                 'expanded'=>true,
             ))
-            ->add('enabled', 'checkbox', array(
+            ->add('enabled', CheckboxType::class, array(
                 'required' => false,
                 'attr' => array(
                     'align_with_widget' => true,
                 ),
             ))
-            ->add('submit', 'submit');
-        if($this->subscriber)
-            $builder->addEventSubscriber($this->subscriber)
+            ->add('submit', SubmitType::class);
         ;
     }
 
@@ -103,15 +107,16 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\User'
+            'data_class' => User::class,
         ));
     }
 
     /**
-     * @return string
+     * @return string The prefix of the template block name
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'app_user';
     }
+
 }

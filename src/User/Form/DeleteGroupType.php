@@ -20,6 +20,8 @@
 namespace User\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class DeleteGroupType extends AbstractType
@@ -32,19 +34,11 @@ class DeleteGroupType extends AbstractType
     {
         $builder
             ->setMethod('DELETE')
-            ->add('id', 'hidden')
-            ->add('submit', 'submit', array(
+            ->add('id', HiddenType::class)
+            ->add('submit', SubmitType::class, array(
                 'label'=>'Leave',
                 'button_class' => 'danger btn-xs',
             ))
         ;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'usr_group_delete';
     }
 }
