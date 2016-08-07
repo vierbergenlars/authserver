@@ -34,16 +34,16 @@
                             {% endif %}
                         </ul>
                         <div class="panel-footer text-center">
-                            <form action="{{ path('fos_oauth_server_authorize') }}" method="POST" class="fos_oauth_server_authorize" {{ form_enctype(form) }}>
-                                <input class="btn btn-primary btn-lg" type="submit" name="accepted" value="Authorize app" />
-                                <input class="btn btn-default" type="submit" name="rejected" value="Cancel" />
-                                {{ form_row(form.client_id) }}
-                                {{ form_row(form.response_type) }}
-                                {{ form_row(form.redirect_uri) }}
-                                {{ form_row(form.state) }}
-                                {{ form_row(form.scope) }}
-                                {{ form_rest(form) }}
-                            </form>
+                            {{ form_start(form) }}
+                            <input class="btn btn-primary btn-lg" type="submit" name="accepted" value="Authorize app" />
+                            <input class="btn btn-default" type="submit" name="rejected" value="Cancel" />
+                            {{ form_row(form.client_id) }}
+                            {{ form_row(form.response_type) }}
+                            {{ form_row(form.redirect_uri) }}
+                            {{ form_row(form.state) }}
+                            {{ form_row(form.scope) }}
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 {% else %}

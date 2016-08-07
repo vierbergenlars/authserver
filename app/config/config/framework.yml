@@ -10,7 +10,6 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -19,6 +18,8 @@ framework:
     request:
         formats:
             gv: 'text/vnd.graphviz'
+    assets:
+      version: 1
 
 # Twig Configuration
 twig:
