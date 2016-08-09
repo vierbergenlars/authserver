@@ -19,7 +19,7 @@
         "friendsofsymfony/rest-bundle": "^2.0",
         "willdurand/hateoas-bundle": "^1.2",
         "hautelook/templated-uri-bundle": "~2.0",
-        "willdurand/rest-extra-bundle": "dev-symfony3-support as 1.1.0-p1",
+        "willdurand/rest-extra-bundle": "~1.2.0",
         "braincrafted/bootstrap-bundle": "dev-develop#41aaa9f3212add20d46faac86e6ebcb4651cde57 as v2.2.0-p1",
         "twbs/bootstrap": "~3.0",
         "components/jquery": "~1.11",
@@ -36,10 +36,6 @@
         "sensio/generator-bundle": "^3.0"
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/vierbergenlars/BazingaRestExtraBundle"
-        },
         {
           "type": "vcs",
           "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle"

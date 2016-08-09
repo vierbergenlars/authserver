@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e4b95b575e6f31e88d91d09326ea40e",
-    "content-hash": "bf1bbe659c188919035e3ae1555bf3e8",
+    "hash": "d5c12ac09758b867be65b0902ec0c89b",
+    "content-hash": "50a81c9c7ae6adba83a04ca75fde9502",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3560,16 +3560,16 @@
         },
         {
             "name": "willdurand/rest-extra-bundle",
-            "version": "dev-symfony3-support",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/vierbergenlars/BazingaRestExtraBundle.git",
-                "reference": "1623543745f4c40a227891ec6e1316d8e00a2280"
+                "url": "https://github.com/willdurand/BazingaRestExtraBundle.git",
+                "reference": "39c329017b7d09084f1bbe5582d749d0651aac2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierbergenlars/BazingaRestExtraBundle/zipball/1623543745f4c40a227891ec6e1316d8e00a2280",
-                "reference": "1623543745f4c40a227891ec6e1316d8e00a2280",
+                "url": "https://api.github.com/repos/willdurand/BazingaRestExtraBundle/zipball/39c329017b7d09084f1bbe5582d749d0651aac2d",
+                "reference": "39c329017b7d09084f1bbe5582d749d0651aac2d",
                 "shasum": ""
             },
             "require": {
@@ -3585,7 +3585,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -3593,13 +3593,14 @@
                     "Bazinga\\Bundle\\RestExtraBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "William Durand",
-                    "email": "william.durand1@gmail.com"
+                    "email": "will+git@drnd.me"
                 }
             ],
             "description": "This bundle provides extra features for your REST APIs built using Symfony2.",
@@ -3607,10 +3608,7 @@
                 "api",
                 "rest"
             ],
-            "support": {
-                "source": "https://github.com/vierbergenlars/BazingaRestExtraBundle/tree/symfony3-support"
-            },
-            "time": "2016-08-07 10:58:33"
+            "time": "2016-08-08 12:24:20"
         },
         {
             "name": "zendframework/zend-code",
@@ -3775,27 +3773,20 @@
     ],
     "aliases": [
         {
-            "alias": "1.1.0-p1",
-            "alias_normalized": "1.1.0.0-patch1",
-            "version": "dev-symfony3-support",
-            "package": "willdurand/rest-extra-bundle"
-        },
-        {
             "alias": "v2.2.0-p1",
             "alias_normalized": "2.2.0.0-patch1",
             "version": "dev-develop",
             "package": "braincrafted/bootstrap-bundle"
         },
         {
-            "alias": "1.4.2",
-            "alias_normalized": "1.4.2.0",
+            "alias": "1.5.2-p1",
+            "alias_normalized": "1.5.2.0-patch1",
             "version": "9999999-dev",
             "package": "friendsofsymfony/oauth-server-bundle"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "willdurand/rest-extra-bundle": 20,
         "braincrafted/bootstrap-bundle": 20,
         "friendsofsymfony/oauth-server-bundle": 20
     },
