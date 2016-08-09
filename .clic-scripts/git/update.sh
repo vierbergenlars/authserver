@@ -6,9 +6,9 @@ source .clic-scripts/maintenance.inc.sh
 
 git fetch origin
 
-old_stash=$(git rev-parse -q --verify refs/stash)
+old_stash=$(git rev-parse -q --verify refs/stash || true)
 git stash save -q --keep-index
-new_stash=$(git rev-parse -q --verify refs/stash)
+new_stash=$(git rev-parse -q --verify refs/stash || true)
 
 git checkout origin/HEAD
 

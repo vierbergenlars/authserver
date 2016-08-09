@@ -18,8 +18,17 @@ if [[ -n ${removed_migrations} ]]; then
     [[ "$cont" != "y" && "$cont" != "Y" ]] && (printf "\x1b[37;41mMigration cancelled\x1b[0m\n"; exit 1)
     php app/console doctrine:migrations:migrate "$prev_migration" -n
 fi
+
+old_stash=$(git rev-parse -q --verify refs/stash || true)
+git stash save -q --keep-index
+new_stash=$(git rev-parse -q --verify refs/stash || true)
+
 git checkout "$target_commit"
 
+if [[ "$old_stash" != "$new_stash" ]]; then
+    git stash pop
+fi
 source .clic-scripts/deploy.inc.sh
+
 
 printf "\x1b[30;42mRevert finished\x1b[0m \x1b[30;46m$(git rev-parse --short 'HEAD@{1}')\x1b[0m -> \x1b[30;46m$(git rev-parse --short HEAD)\x1b[0m\n"
