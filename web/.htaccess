@@ -8,6 +8,12 @@ DirectoryIndex app.php
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # php-cgi/fastcgi under Apache does not pass HTTP Basic user/pass to PHP by default
+    # This workaround makes sure the HTTP_AUTHORIZATION environment variable gets
+    # added when an Authorization header is present.
+    RewriteCond %{HTTP:Authorization} ^(.+)$
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
     # Redirect to URI without front controller to prevent duplicate content
     # (with and without `/app.php`). Only do this redirect on the initial
     # rewrite by Apache and not on subsequent cycles. Otherwise we would get an
