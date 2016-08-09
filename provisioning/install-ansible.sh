@@ -6,4 +6,4 @@ if [[ ! -e "/usr/local/bin/ansible" ]]; then
 
     sudo pip install ansible
 fi
-sudo ansible-playbook /vagrant/provisioning/playbook.yml --connection=local
+
