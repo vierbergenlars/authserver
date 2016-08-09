@@ -50,14 +50,14 @@ class ExtendedLogListener extends LoggableListener
         if(count($insertDiff) > 0) {
             $logEntryData[$fieldName]['+'] = array_map(function($obj) {
                 if($obj instanceof Group)
-                    return $obj->getMigrateId();
+                    return $obj->getId();
                 return $obj->getId();
             },$insertDiff);
         }
         if(count($deleteDiff) > 0) {
             $logEntryData[$fieldName]['-'] = array_map(function($obj) {
                 if($obj instanceof Group)
-                    return $obj->getMigrateId();
+                    return $obj->getId();
                 return $obj->getId();
             },$deleteDiff);
         }

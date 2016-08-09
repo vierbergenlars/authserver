@@ -21,10 +21,13 @@ namespace App\EventListener;
 
 use App\Entity\OAuth\UserAuthorization;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\OAuthServerBundle\Form\Handler\AuthorizeFormHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use App\Entity\OAuth\Client;
 use App\Entity\User;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -32,56 +35,86 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 {
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+    /**
+     * @var FormInterface
+     */
+    private $authorizeForm;
+    /**
+     * @var AuthorizeFormHandler
+     */
+    private $authorizeFormHandler;
+
+    public function __construct(EntityManagerInterface $em, RequestStack $requestStack, FormInterface $authorizeForm, AuthorizeFormHandler $authorizeFormHandler)
     {
         $this->em = $em;
+        $this->requestStack = $requestStack;
+        $this->authorizeForm = $authorizeForm;
+        $this->authorizeFormHandler = $authorizeFormHandler;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            'fos_oauth_server.pre_authorization_process' => 'onPreAuthorizationProcess',
-            'fos_oauth_server.post_authorization_process' => 'onPostAuthorizationProcess',
+            OAuthEvent::PRE_AUTHORIZATION_PROCESS => 'onPreAuthorizationProcess',
+            OAuthEvent::POST_AUTHORIZATION_PROCESS => 'onPostAuthorizationProcess',
         );
     }
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $scopes = $event->getScopes()?explode(' ', $event->getScopes()):array();
-        if (($client = $event->getClient())&&$client instanceof Client) {
-            if ($client->isPreApproved()&&$this->matchesScope($scopes, $client->getPreApprovedScopes())) {
-                $event->setAuthorizedClient(true);
-            }
-            if (($user = $event->getUser())&&$user instanceof User) {
-                $authorization = $this->getAuthorization($client, $user);
-                if($authorization&&$this->matchesScope($scopes, $authorization->getScopes())) {
-                    $event->setAuthorizedClient(true);
-                }
-                if(!$this->matchesGroupRestriction($client, $user))
-                    $event->setAuthorizedClient(false);
-            }
-            if(!$this->matchesScope($scopes, $client->getMaxScopes()))
-                throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
+        $scopes = explode(' ', $this->requestStack->getMasterRequest()->query->get('scope', ''));
+        $client = $event->getClient();
+        $user = $event->getUser();
+        if(!($client instanceof Client) || !($user instanceof User))
+            throw new \UnexpectedValueException('Invalid type of OAuth Client or User');
+        /* @var $client Client */
+        /* @var $user User */
+        if(!$this->matchesScope($scopes, $client->getMaxScopes()))
+            throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
+
+        if(!$this->matchesGroupRestriction($client, $user)) {
+            $event->setAuthorizedClient(false);
+            return;
         }
+
+        if ($client->isPreApproved()&&$this->matchesScope($scopes, $client->getPreApprovedScopes())) {
+            $event->setAuthorizedClient(true);
+            return;
+        }
+
+        $authorization = $this->getAuthorization($client, $user);
+        if($authorization&&$this->matchesScope($scopes, $authorization->getScopes()))
+            $event->setAuthorizedClient(true);
     }
 
     public function onPostAuthorizationProcess(OAuthEvent $event)
     {
-        if ($event->isAuthorizedClient()) {
-            if(($client = $event->getClient())&&$client instanceof Client&&
-                ($user = $event->getUser())&&$user instanceof User) {
-                if(!$this->matchesGroupRestriction($client, $user)) {
-                    throw new UnauthorizedHttpException('User is not member of the required group to use this client.');
-                } else {
-                    $authorization = $this->getAuthorization($client, $user);
-                    if ($authorization === null)
-                        $authorization = new UserAuthorization($client, $user);
-                    $authorization->setScopes(explode(' ', $event->getScopes()));
-                    $this->em->persist($authorization);
-                    $this->em->flush($authorization);
-                }
-            }
-        }
+        $scopes = explode(' ', $this->authorizeFormHandler->getScope());
+        $client = $event->getClient();
+        $user = $event->getUser();
+        if(!($client instanceof Client) || !($user instanceof User))
+            throw new \UnexpectedValueException('Invalid type of OAuth Client or User');
+        /* @var $client Client */
+        /* @var $user User */
+        if(!$this->matchesScope($scopes, $client->getMaxScopes()))
+            throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
+
+        if(!$this->matchesGroupRestriction($client, $user))
+            throw new UnauthorizedHttpException('User is not member of the required group to use this client.');
+
+        if(!$event->isAuthorizedClient())
+            return;
+
+        $authorization = $this->getAuthorization($client, $user);
+        if ($authorization === null)
+            $authorization = new UserAuthorization($client, $user);
+        $authorization->setScopes($scopes);
+        $this->em->persist($authorization);
+        $this->em->flush($authorization);
     }
 
     private function matchesGroupRestriction(Client $client, User $user)

@@ -143,17 +143,6 @@ class Group
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getMigrateId()
-    {
-        @trigger_error(__METHOD__.'() is deprecated. Use '.__CLASS__.'::getId().', E_USER_DEPRECATED);
-        return $this->id;
-    }
-
-    /**
      * Set name
      *
      * @param  string $name
