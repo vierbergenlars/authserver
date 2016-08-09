@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d5c12ac09758b867be65b0902ec0c89b",
-    "content-hash": "50a81c9c7ae6adba83a04ca75fde9502",
+    "hash": "1e4c15eb2f2444f5d1342a2a0a23bdc7",
+    "content-hash": "9783ced569616bbedafc841e6f2600d0",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1098,22 +1098,21 @@
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
-            "version": "dev-master",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle.git",
-                "reference": "6a31af74c43f566b49231e97c1acb6a0af9fa495"
+                "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
+                "reference": "0b25cdaae8983c630bb62d14b6993219b1dadb8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vierbergenlars/FOSOAuthServerBundle/zipball/6a31af74c43f566b49231e97c1acb6a0af9fa495",
-                "reference": "6a31af74c43f566b49231e97c1acb6a0af9fa495",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/0b25cdaae8983c630bb62d14b6993219b1dadb8d",
+                "reference": "0b25cdaae8983c630bb62d14b6993219b1dadb8d",
                 "shasum": ""
             },
             "require": {
                 "friendsofsymfony/oauth2-php": "~1.1",
                 "php": "^5.3.3|^7.0",
-                "symfony/dependency-injection": "^2.0.5|~3.0",
                 "symfony/framework-bundle": "~2.2|~3.0",
                 "symfony/security-bundle": "~2.1|~3.0"
             },
@@ -1124,7 +1123,6 @@
                 "phing/phing": "~2.4",
                 "propel/propel1": "^1.6.5",
                 "symfony/class-loader": "~2.1|~3.0",
-                "symfony/console": "~2.1|~3.0",
                 "symfony/form": "~2.3|~3.0",
                 "symfony/yaml": "~2.1|~3.0",
                 "willdurand/propel-typehintable-behavior": "^1.0.4"
@@ -1133,7 +1131,6 @@
                 "doctrine/doctrine-bundle": "*",
                 "doctrine/mongodb-odm-bundle": "*",
                 "propel/propel-bundle": "If you want to use Propel with Symfony2, then you will have to install the PropelBundle",
-                "symfony/console": "Needed to be able to use commands",
                 "symfony/form": "Needed to be able to use the AuthorizeFormType",
                 "willdurand/propel-typehintable-behavior": "The Typehintable behavior is useful to add type hints on generated methods, to be compliant with interfaces"
             },
@@ -1148,6 +1145,7 @@
                     "FOS\\OAuthServerBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1168,10 +1166,7 @@
                 "oauth2",
                 "server"
             ],
-            "support": {
-                "source": "https://github.com/vierbergenlars/FOSOAuthServerBundle/tree/master"
-            },
-            "time": "2016-08-07 19:14:29"
+            "time": "2016-02-22 13:57:55"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -3777,18 +3772,11 @@
             "alias_normalized": "2.2.0.0-patch1",
             "version": "dev-develop",
             "package": "braincrafted/bootstrap-bundle"
-        },
-        {
-            "alias": "1.5.2-p1",
-            "alias_normalized": "1.5.2.0-patch1",
-            "version": "9999999-dev",
-            "package": "friendsofsymfony/oauth-server-bundle"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "braincrafted/bootstrap-bundle": 20,
-        "friendsofsymfony/oauth-server-bundle": 20
+        "braincrafted/bootstrap-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

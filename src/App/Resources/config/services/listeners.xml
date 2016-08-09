@@ -3,6 +3,9 @@
     <services>
         <service id="app.oauth.pre_authorization_listener" class="App\EventListener\OAuthPreAuthorizationEventListener">
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="fos_oauth_server.authorize.form" />
+            <argument type="service" id="fos_oauth_server.authorize.form.handler" />
             <tag name="kernel.event_subscriber" />
         </service>
         <service class="App\EventListener\HasEmailAddressListener">

@@ -26,7 +26,7 @@
         "doctrine/migrations": "^1.4",
         "fortawesome/font-awesome": "~4.1",
         "knplabs/knp-paginator-bundle": "~2.4",
-        "friendsofsymfony/oauth-server-bundle": "dev-master as 1.5.2-p1",
+        "friendsofsymfony/oauth-server-bundle": "~1.5.2",
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "ircmaxell/password-compat": "~1.0",
         "stof/doctrine-extensions-bundle": "~1.2",
@@ -35,12 +35,6 @@
     "require-dev": {
         "sensio/generator-bundle": "^3.0"
     },
-    "repositories": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/vierbergenlars/FOSOAuthServerBundle"
-        }
-    ],
     "config": {
         "bin-dir": "bin"
     },
