@@ -234,7 +234,6 @@ A more detailed overview of a user.
 
 | Field          | Required scope         | Description |
 | -------------- | ---------------------- | ----------- |
-| `email`        | `Profile::read::email` | **DEPRECATED** The primary email address of the user. (may not be verified, may not be present) |
 | `non-locked`   | `Profile::read`        | If the user account is not locked due to lack of verified primary email address. |
 | `guid`         | `Profile::read`        | The globally-unique identifier of a user. Is guaranteed unique within one installation, and should be unique across different installations. This value does not change after user creation. |
 | `username`     | `Profile::read`        | The username of the user. Is guaranteed to be unique within one installation, but may be changed after user creation and may be reassigned to another user. |

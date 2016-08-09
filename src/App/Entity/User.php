@@ -220,12 +220,6 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->id;
     }
 
-    public function getMigrateId()
-    {
-        @trigger_error(__METHOD__.'() is deprecated. Use '.__CLASS__.'::getId().', E_USER_DEPRECATED);
-        return $this->id;
-    }
-
     /**
      * Set username
      *
@@ -273,21 +267,6 @@ class User implements AdvancedUserInterface, \Serializable
         }
 
         return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @deprecated
-     * @return string
-     */
-    public function getEmail()
-    {
-        @trigger_error(__METHOD__.' is deprecated.', E_USER_DEPRECATED);
-        $primary = $this->getPrimaryEmailAddress();
-        if($primary)
-            return $primary->getEmail();
-        return null;
     }
 
     /**
