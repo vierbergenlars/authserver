@@ -6,16 +6,7 @@ For a properly secured application, a couple of minor changes must be made to th
 
 To prevent unauthorized access to private files, you MUST NOT expose any directories other than `web/` to the public.
 
-> You MUST sett the `DocumentRoot` to the `web/` directory.
-
-Unless you are running the site in development, you SHOULD force the use https for all requests to this application.
-
-> Add to `web/.htaccess`, after `RewriteEngine On`:
-> ```
-# Redirect to HTTPS on all URLS
-RewriteCond %{HTTPS} !=on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-```
+> You MUST set the `DocumentRoot` to the `web/` directory.
 
 To prevent cookie leakage on the initial request over http, before the redirect to https, cookies MUST be marked secure. 
 
