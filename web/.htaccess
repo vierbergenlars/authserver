@@ -9,7 +9,7 @@ DirectoryIndex app.php
     RewriteEngine On
 
     # Redirect to HTTPS on all URLS
-    RewriteCond %{HTTPS} != on
+    RewriteCond %{HTTPS} !=on
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # php-cgi/fastcgi under Apache does not pass HTTP Basic user/pass to PHP by default
