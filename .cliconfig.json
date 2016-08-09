@@ -5,7 +5,7 @@
     "install": "bash .clic-scripts/install.sh </dev/tty >/dev/tty 2>/dev/tty",
     "update": "bash .clic-scripts/active/update.sh",
     "revert-update": "bash .clic-scripts/active/revert-update.sh",
-    "redeploy": "bash .clic-scripts/active/redeploy.sh",
+    "redeploy": "bash .clic-scripts/redeploy.sh",
     "maintenance-lock": "bash .clic-scripts/maintenance-lock.sh",
     "maintenance-unlock": "bash .clic-scripts/maintenance-unlock.sh",
     "post-clone": "ln -sf git .clic-scripts/active && $CLIC application:exec \"$CLIC_APPNAME\" install",
