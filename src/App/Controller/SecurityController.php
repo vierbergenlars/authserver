@@ -50,6 +50,7 @@ class SecurityController extends Controller
             'last_username' => $session->get(Security::LAST_USERNAME),
             'error'         => $error,
             'error_type'    => $error?get_class($error):null,
+            'register_enabled' => $this->has('registration.handler'),
         ));
     }
 }

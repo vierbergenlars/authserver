@@ -11,7 +11,11 @@
                         {% if not data %}
                             <p>Your email address could not be verified, because it was removed from your account.</p>
                         {% elseif data.verified %}
-                            <p>Your email address has been verified, and your account has been activated.</p>
+                            {% if data.user.enabled %}
+                                <p>Your email address has been verified, and your account has been activated.</p>
+                            {% else %}
+                                <p>Your email address has been verified, and your account is pending activation by an administrator.</p>
+                            {% endif %}
                         {% else %}
                             <p>Your email address could not be verified, because you tried to submit an old verification code.</p>
                             <p>You can <a href="{{ url('user_email_resend', { user: data.user.username }) }}">request a new verification code</a>
