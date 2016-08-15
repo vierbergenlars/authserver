@@ -62,7 +62,9 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class)
-            ->add('displayName', TextType::class)
+            ->add('displayName', TextType::class, array(
+                'label' => 'Name',
+            ))
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'constraints' => array(
@@ -78,11 +80,14 @@ class UserType extends AbstractType
                 'invalid_message' => 'Your repeated password does not match',
             ))
             ->add('emailAddresses', EmailType::class, array(
+                'label' => 'Email address',
                 'constraints' => array(
                     new EmailSelfRegistration(['registrationRules'=>$this->registrationRules]),
                 ),
             ))
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, array(
+                'label' => 'Create account',
+            ))
         ;
         $builder->get('emailAddresses')->addModelTransformer(new PrimaryEmailAddressToStringTransformer());
     }
