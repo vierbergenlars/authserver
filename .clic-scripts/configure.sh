@@ -27,6 +27,53 @@ parameters:
     locale:            en
     secret:            '$(pwgen -s 100)'
 EOL
+
+if [[ $($CLIC application:variable:get "$CLIC_APPNAME" app/registration) == "y" ]]; then
+    count="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/count)"
+    i=1
+    message="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/message --filter=json_encode)"
+    if [[ "$message" == '"#"' ]]; then
+        message='null'
+    fi
+    cat >> app/config/parameters-clic.yml <<EOL
+# Registration configuration
+registration:
+    enabled: true
+    registration_message: $message
+    email_rules:
+EOL
+
+    while [[ "$i" -lt "$count" ]]; do
+        regex="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/regex_match --filter=json_encode)"
+        if [[ "$regex" == '"*"' ]]; then
+            regex='null'
+        fi
+        domain="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/domain --filter=json_encode)"
+        if [[ "$domain" == '"*"' ]]; then
+            domain='null'
+        fi
+
+        self_registration="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/self_registration)"
+        if [[ "$self_registration" == "y" ]]; then
+            self_registration='true'
+        else
+            self_registration='false'
+        fi
+
+        auto_activate="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/auto_activate)"
+        if [[ "$auto_activate" == "y" ]]; then
+            auto_activate='true'
+        else
+            auto_activate='false'
+        fi
+
+        cat >> app/config/parameters-clic.yml <<EOL
+        - { regex_match: ${regex}, domain: ${domain}, self_registration: $self_registration, auto_activate: $auto_activate }
+EOL
+        i=$(($i+1))
+    done
+fi
+
 if [[ ! -e app/config/parameters.yml ]]; then
 cat > app/config/parameters.yml <<EOL
 imports:
