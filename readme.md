@@ -39,6 +39,8 @@ or by checking out a tag from this repository.
 Create an `app/config/parameters.yml` from the `app/config/parameters.yml.dist` template and fill in the applicable
 configuration parameters.
 
+You can allow users to register themselves by enabling the [registration module](https://github.com/vierbergenlars/authserver/blob/master/documentation/registration.md)
+
 #### Dependencies
 
 PHP dependencies are handled by [`composer`](https://getcomposer.org/),
