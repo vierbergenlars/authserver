@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="registration.rule.abstract" class="Registration\RegistrationHandler\RegistrationRule" abstract="true" public="false">
+            <argument />
+            <argument />
+            <argument />
+            <argument />
+            <argument />
+        </service>
+        <service id="registration.rules" class="Registration\RegistrationHandler\RegistrationRules">
+            <argument />
+        </service>
+        <service class="Registration\Form\UserType">
+            <argument type="service" id="registration.rules" />
+            <tag name="form.type" />
+        </service>
+        <service id="registration.handler" class="Registration\RegistrationHandler\RegistrationHandler">
+            <argument type="service" id="registration.rules" />
+            <argument type="service" id="app.mailer.user.verify_email" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="braincrafted_bootstrap.flash"/>
+        </service>
+    </services>
+
+    <!--
+    <services>
+        <service id="registration.example" class="vierbergenlars\Registration\Example">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+</container>

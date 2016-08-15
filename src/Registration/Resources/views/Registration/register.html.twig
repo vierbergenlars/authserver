@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{ parent() }} - Register{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            {{ form_start(form, {style: 'horizontal'}) }}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Register account</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% if registration_message %}
+                            <div class="alert alert-info">
+                                {{ registration_message }}
+                            </div>
+                        {% endif %}
+                        {{ form_row(form.username) }}
+                        {{ form_row(form.displayName) }}
+                        {{ form_row(form.password) }}
+                        {{ form_row(form.emailAddresses) }}
+                    </div>
+                    <div class="panel-footer">
+                        {{ form_row(form.submit) }}
+                    </div>
+                </div>
+            {{ form_rest(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

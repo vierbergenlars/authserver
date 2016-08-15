@@ -49,4 +49,10 @@ class PasswordType extends AbstractType
         return \Symfony\Component\Form\Extension\Core\Type\PasswordType::class;
     }
 
+    public function getBlockPrefix()
+    {
+        return 'app_password';
+    }
+
+
 }

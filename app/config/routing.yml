@@ -36,3 +36,7 @@ user:
 user_public:
     resource: "@UserBundle/Resources/config/routing/public.yml"
     prefix: /pub
+
+registration:
+    resource: "@RegistrationBundle/Resources/config/routing.xml"
+    prefix: /pub

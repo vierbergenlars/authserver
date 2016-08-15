@@ -19,6 +19,7 @@
 
 namespace User\Controller;
 
+use App\Entity\EmailAddress;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,7 @@ class PublicEmailController extends Controller
     {
         $em    = $this->getDoctrine()->getManagerForClass('AppBundle:EmailAddress');
         $addr  = $em->find('AppBundle:EmailAddress', $id);
+        /* @var EmailAddress $addr */
         $flash = $this->get('braincrafted_bootstrap.flash');
 
         if ($addr) {
@@ -43,7 +45,11 @@ class PublicEmailController extends Controller
                 $em->flush();
             }
             if ($addr->isVerified() && !$this->getUser()) {
-                $flash->success('Your email address has been verified, and your account has been activated. You can now log in.');
+                if($addr->getUser()->isEnabled()) {
+                    $flash->success('Your email address has been verified, and your account has been activated. You can now log in.');
+                } else {
+                    $flash->info('Your email address has been verified, and your account is pending activation by an administrator.');
+                }
 
                 return $this->redirect($this->generateUrl('app_login'));
             }
