@@ -11,3 +11,4 @@ web/js
 web/fonts
 .vagrant
 app/config/parameters.yml
+app/config/parameters-clic.yml
