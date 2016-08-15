@@ -7,7 +7,6 @@
         <property name="emailAddresses" groups="admin_user_object_scope_email" serialized-name="emails" expose="true">
             <xml-list entry-name="email" />
         </property>
-        <virtual-property method="getEmail" serialized-name="email" groups="admin_user_object_scope_email" xml-attribute="true" expose="true" />
         <virtual-property method="getPrimaryEmailAddress" serialized-name="primary-email" groups="admin_user_object_scope_email" />
         <property name="role" groups="admin_user_object" xml-attribute="true" expose="true" />
         <property name="enabled" serialized-name="enabled" groups="admin_user_object" xml-attribute="true" expose="true" />
