@@ -3,7 +3,7 @@
   "scripts": {
     "configure": "bash .clic-scripts/configure.sh",
     "reconfigure": "bash .clic-scripts/reconfigure.sh </dev/tty >/dev/tty 2>/dev/tty",
-    "install": "bash .clic-scripts/install.sh </dev/tty >/dev/tty 2>/dev/tty",
+    "install": "bash .clic-scripts/install.sh",
     "update": "bash .clic-scripts/active/update.sh",
     "revert-update": "bash .clic-scripts/active/revert-update.sh",
     "redeploy": "bash .clic-scripts/redeploy.sh",
