@@ -16,7 +16,10 @@ else
         echo "Cannot determine archive type; you'll have to download and extract a new version yourself." >&2
         exit 1
     fi
-    tarball_url=$(curl https://api.github.com/repos/${repo}/tags | php -r 'echo json_decode(file_get_contents("php://stdin"), true)[0]["tarball_url"];')
+    tarball_url=$(curl https://api.github.com/repos/${repo}/releases | \
+        php -r 'echo array_filter(json_decode(file_get_contents("php://stdin")), function($release) {
+            return !$release->prerelease && !$release->draft;
+            })[0]->tarball_url;')
     if [[ "$current_archive" == "$tarball_url" ]]; then
         echo "No update available"
         exit 0
