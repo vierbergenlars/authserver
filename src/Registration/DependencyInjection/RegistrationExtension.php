@@ -33,8 +33,9 @@ class RegistrationExtension extends Extension
                 $rule->replaceArgument(0, $emailRule['regex_match']);
                 $rule->replaceArgument(1, $emailRule['domain']);
                 $rule->replaceArgument(2, $emailRule['default_groups']);
-                $rule->replaceArgument(3, $emailRule['self_registration']);
-                $rule->replaceArgument(4, $emailRule['auto_activate']);
+                $rule->replaceArgument(3, $emailRule['role']);
+                $rule->replaceArgument(4, $emailRule['self_registration']);
+                $rule->replaceArgument(5, $emailRule['auto_activate']);
                 $rule->setAbstract(false);
                 return $rule;
             }, $config['email_rules']);

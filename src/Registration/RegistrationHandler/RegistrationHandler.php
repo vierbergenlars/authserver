@@ -78,6 +78,7 @@ class RegistrationHandler
                 throw new \LogicException('Self-registration checking should already have been applied on the form');
 
             $user->setEnabled($registrationRule->isAutoActivate());
+            $user->setRole($registrationRule->getRole());
 
             $defaultGroups = $registrationRule->getDefaultGroups();
             if(count($defaultGroups) > 0) {

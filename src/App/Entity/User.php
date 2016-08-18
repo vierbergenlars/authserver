@@ -186,8 +186,6 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        if($this->role === 'ROLE_SUPER_ADMIN')
-            return true;
         if(!$this->getPrimaryEmailAddress())
             return true;
         return $this->getPrimaryEmailAddress()->isVerified();

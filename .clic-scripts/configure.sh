@@ -67,8 +67,20 @@ EOL
             auto_activate='false'
         fi
 
+        groups="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/groups || echo ".")"
+        if [[ "$groups" == "." ]]; then
+            groups=""
+        fi
+
+        role="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/role || echo "ROLE_USER")"
+        if [[ "$role" == "ROLE_USER" ]]; then
+            role_config=""
+        else
+            role_config=", role: $role"
+        fi
+
         cat >> app/config/parameters-clic.yml <<EOL
-        - { regex_match: ${regex}, domain: ${domain}, self_registration: $self_registration, auto_activate: $auto_activate }
+        - { regex_match: ${regex}, domain: ${domain}, self_registration: $self_registration, auto_activate: $auto_activate, default_groups: [ $groups ] $role_config }
 EOL
         i=$(($i+1))
     done

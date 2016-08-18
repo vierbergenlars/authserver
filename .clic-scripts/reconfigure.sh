@@ -49,8 +49,16 @@ while [[ "$add_another_domain" == "y" ]]; do
         auto_activate="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/auto_activate)"
     done
 
+    $CLIC application:variable:set "$CLIC_APPNAME" app/registration/$i/groups --description="Rule $i: Automatically put users with email addresses matching this rule in following groups (comma separated, '.' to leave empty)" --default-existing-value --default="."
+
+    role=""
+    while [[ "$role" != "ROLE_USER" && "$role" != "ROLE_AUDIT" && "$role" != "ROLE_ADMIN" && "$role" != "ROLE_SUPER_ADMIN" ]]; do
+        $CLIC application:variable:set "$CLIC_APPNAME" app/registration/$i/role --description="Rule $i: Automatically assign this role to users with email addresses matching this rule. [ROLE_USER|ROLE_AUDIT|ROLE_ADMIN|ROLE_SUPER_ADMIN]" --default-existing-value --default=ROLE_USER
+        role="$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/$i/role)"
+    done
+
     add_another_domain=""
-    if [[ "$i" -lt "$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/count || echo 99999)" ]]; then
+    if [[ "$i" -lt "$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/count || echo 0)" ]]; then
         default_action="y"
     else
         default_action="n"

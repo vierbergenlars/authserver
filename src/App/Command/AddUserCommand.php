@@ -49,9 +49,11 @@ class AddUserCommand extends Command
         $user->setPasswordEnabled(1);
         $user->setEnabled(true);
         if($input->getArgument('email')) {
-            if(!$user->getEmailAddresses()->count())
-                $user->addEmailAddress(new EmailAddress());
-            $user->getEmailAddresses()->first()->setEmail($input->getArgument('email'));
+            $emailAddress = new EmailAddress();
+            $user->addEmailAddress($emailAddress);
+            $emailAddress->setEmail($input->getArgument('email'));
+            $emailAddress->setVerified(true);
+            $emailAddress->setPrimary(true);
         }
 
         $encoderFactory = $this->getService('security.encoder_factory');
