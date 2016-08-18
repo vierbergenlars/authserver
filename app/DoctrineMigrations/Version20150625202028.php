@@ -15,7 +15,7 @@ class Version20150625202028 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $schema->getTable('user_oauthclient')->addColumn('scopes', 'simple_array')->setDefault('');
+        $schema->getTable('user_oauthclient')->addColumn('scopes', 'simple_array')->setNotnull(false);
 
     }
 

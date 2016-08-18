@@ -57,6 +57,8 @@ EOF"
         - package.json
     - name: Start mysql
       service: name=mysql state=started
+    - name: Use mysql strict mode
+      mysql_variables: variable=sql_mode value=STRICT_ALL_TABLES
     - name: Create mysql user
       mysql_user: name=authserver password=authserver priv=*.*:ALL state=present
     - name: Create mysql database

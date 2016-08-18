@@ -36,7 +36,7 @@ class Version20151115221256 extends AbstractMigration
         $userPropertiesTable->addColumn('id', 'integer');
         $userPropertiesTable->addColumn('user_id', 'integer');
         $userPropertiesTable->addColumn('property_id', 'integer');
-        $userPropertiesTable->addColumn('data', 'text')->setNotNull(false);
+        $userPropertiesTable->addColumn('data', 'text')->setNotnull(false);
         $userPropertiesTable->setPrimaryKey(array('id'));
         $userPropertiesTable->addUniqueIndex(array('user_id', 'property_id'));
 

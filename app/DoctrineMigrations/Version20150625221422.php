@@ -15,7 +15,7 @@ class Version20150625221422 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $schema->getTable('Client')->addColumn('preApprovedScopes', 'simple_array')->setDefault('');
+        $schema->getTable('Client')->addColumn('preApprovedScopes', 'simple_array')->setNotnull(false);
     }
 
     /**
