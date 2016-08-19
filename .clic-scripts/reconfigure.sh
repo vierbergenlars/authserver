@@ -64,10 +64,10 @@ while [[ "$add_another_domain" == "y" ]]; do
     done
 
     add_another_domain=""
-    if [[ "$i" -lt "$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/count || echo 0)" ]]; then
-        default_action="y"
-    else
+    if [[ "$i" -gt "$($CLIC application:variable:get "$CLIC_APPNAME" app/registration/count || echo 0)" ]]; then
         default_action="n"
+    else
+        default_action="y"
     fi
     while [[ "$add_another_domain" != "y" && "$add_another_domain" != "n" ]]; do
         printf "$(tput setaf 2) Add another email rule? [y|n]$(tput sgr0) [$(tput setaf 3)$default_action$(tput sgr0)]:\n"
