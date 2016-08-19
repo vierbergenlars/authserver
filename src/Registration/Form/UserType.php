@@ -21,6 +21,7 @@
 namespace Registration\Form;
 
 use App\Entity\User;
+use App\Form\DataTransformer\HashToPasswordTransformer;
 use Registration\Form\Constraint\EmailSelfRegistration;
 use Registration\Form\DataTransformer\PrimaryEmailAddressToStringTransformer;
 use Registration\RegistrationHandler\RegistrationRules;
@@ -32,6 +33,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -42,18 +44,23 @@ class UserType extends AbstractType
      * @var \Registration\RegistrationHandler\RegistrationRules
      */
     private $registrationRules;
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
 
     /**
      * UserType constructor.
      *
      * @param RegistrationRules $registrationRules
      */
-    public function __construct(RegistrationRules $registrationRules)
+    public function __construct(RegistrationRules $registrationRules, EncoderFactoryInterface $encoderFactory)
     {
 
         $this->registrationRules = $registrationRules;
+        $this->encoderFactory = $encoderFactory;
     }
-    
+
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -90,6 +97,7 @@ class UserType extends AbstractType
             ))
         ;
         $builder->get('emailAddresses')->addModelTransformer(new PrimaryEmailAddressToStringTransformer());
+        $builder->get('password')->addModelTransformer(new HashToPasswordTransformer($this->encoderFactory));
     }
 
     /**

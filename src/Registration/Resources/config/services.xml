@@ -18,6 +18,7 @@
         </service>
         <service class="Registration\Form\UserType">
             <argument type="service" id="registration.rules" />
+            <argument type="service" id="security.encoder_factory" />
             <tag name="form.type" />
         </service>
         <service id="registration.handler" class="Registration\RegistrationHandler\RegistrationHandler">
