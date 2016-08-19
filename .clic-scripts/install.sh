@@ -2,11 +2,11 @@
 set -e
 $CLIC application:execute "$CLIC_APPNAME" configure
 
-if [[ -e /dev/tty ]]; then
+if tty -s; then
     printf "$(tput setaf 2) Username for admin user$(tput sgr0):\n"
-    read -p " > " admin_user < /dev/tty
+    read -p " > " admin_user
     printf "$(tput setaf 2) Desired password for admin user$(tput sgr0):\n"
-    read -sp " > " admin_pass < /dev/tty
+    read -sp " > " admin_pass
 
     php app/console app:adduser --super-admin "$admin_user" "$admin_pass"
     printf "Created new super-admin user $(tput setaf 3)$admin_user$(tput sgr0).\n"

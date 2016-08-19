@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e # Quit script on error
 
+if [[ ! tty -s ]]; then
+    printf "$(tput setab 1)You are not on a terminal, so we cannot ask you configuration questions.$(tput sgr0)\n"
+    printf "Run $(tput setaf 2)$CLIC application:execute \"$CLIC_APPNAME\" reconfigure$(tput sgr0) in a terminal to configure interactively"
+    exit 1
+fi
+
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/database --description="Name of the database" --default-existing-value
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/host --description="Hostname of the database" --if-not-global-exists --default-existing-value
 $CLIC application:variable:set "$CLIC_APPNAME" mysql/user --description="Username to connect to the database" --if-not-global-exists --default-existing-value

@@ -2,7 +2,7 @@
   "web-dir": "web",
   "scripts": {
     "configure": "bash .clic-scripts/configure.sh",
-    "reconfigure": "bash .clic-scripts/reconfigure.sh </dev/tty >/dev/tty 2>/dev/tty",
+    "reconfigure": "bash .clic-scripts/reconfigure.sh",
     "install": "bash .clic-scripts/install.sh",
     "update": "bash .clic-scripts/active/update.sh",
     "revert-update": "bash .clic-scripts/active/revert-update.sh",
