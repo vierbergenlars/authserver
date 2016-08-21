@@ -19,10 +19,9 @@
 
 namespace App\Form\DataTransformer;
 
+use App\Entity\UserRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use App\Entity\User;
-use Doctrine\ORM\EntityRepository;
 
 class UserToUsernameTransformer implements DataTransformerInterface
 {
@@ -36,7 +35,7 @@ class UserToUsernameTransformer implements DataTransformerInterface
      *
      * @param \Doctrine\ORM\EntityRepository $repo
      */
-    public function __construct(EntityRepository $repo)
+    public function __construct(UserRepository $repo)
     {
         $this->repo = $repo;
     }
@@ -57,9 +56,8 @@ class UserToUsernameTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if(!$value)
-
             return null;
-        $user = $this->repo->findOneByUsername($value);
+        $user = $this->repo->loadUserByUsername($value);
         if (null === $user) {
             throw new TransformationFailedException('User does not exist '.$value);
         }
