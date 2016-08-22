@@ -356,32 +356,27 @@ class GroupController extends CRUDController
             ))
             ->add('exportable', ChoiceType::class, array(
                 'choices' => array('No' => 0, 'Yes' => 1),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'required' => false,
             ))
             ->add('groups', ChoiceType::class, array(
                 'choices' => array('No' => 0, 'Yes' => 1),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'required' => false,
             ))
             ->add('users', ChoiceType::class, array(
                 'choices' => array('No' => 0, 'Yes' => 1),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'required' => false,
             ))
             ->add('userjoin', ChoiceType::class, array(
                 'choices' => array('No' => 0, 'Yes' => 1),
-                'choices_as_values' => true,
                 'label' => 'User joinable',
                 'expanded' => true,
                 'required' => false,
             ))
             ->add('userleave', ChoiceType::class, array(
                 'choices' => array('No' => 0, 'Yes' => 1),
-                'choices_as_values' => true,
                 'label' => 'User leaveable',
                 'expanded' => true,
                 'required' => false,

@@ -65,7 +65,6 @@ class ClientType extends AbstractType
             ))
             ->add('preApprovedScopes', ChoiceType::class, array(
                 'choices' => $scopes,
-                'choices_as_values' => true,
                 'multiple' => true,
                 'expanded' => true,
             ))
@@ -79,7 +78,6 @@ class ClientType extends AbstractType
             ))
             ->add('maxScopes', ChoiceType::class, array(
                 'choices' => $scopes,
-                'choices_as_values' => true,
                 'multiple' => true,
                 'expanded' => true,
             ))

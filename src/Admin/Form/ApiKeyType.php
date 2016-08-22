@@ -52,7 +52,6 @@ class ApiKeyType extends AbstractType
                     'Group::read' => 'r_group',
                     'Group::write' => 'w_group',
                 ),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'multiple' => true,
             ))

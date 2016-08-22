@@ -49,7 +49,6 @@ class BatchType extends AbstractType
             ->add('action', ChoiceType::class, array(
                 'placeholder' => 'Select batch action',
                 'choices' => $options['actions'],
-                'choices_as_values' => true,
                 'constraints' => new Choice(array('choices'=>$constraints)),
             ))
             ->add('submit', SubmitType::class)

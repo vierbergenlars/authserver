@@ -382,7 +382,6 @@ class UserController extends CRUDController
                     'Audit' => 'audit',
                     'Users' => 'user'
                 ),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'required' => false,
             ))
@@ -391,7 +390,6 @@ class UserController extends CRUDController
                     'Yes' => 'enabled',
                     'No' => 'disabled',
                 ),
-                'choices_as_values' => true,
                 'expanded' => true,
                 'required' => false,
             ));

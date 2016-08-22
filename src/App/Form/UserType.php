@@ -60,7 +60,6 @@ class UserType extends AbstractType
                     'Enabled' => 1,
                     'Allow user to set initial password' => 2,
                 ),
-                'choices_as_values' => true,
                 'expanded' => true
             ))
             ->add('emailAddresses', BootstrapCollectionType::class, array(
@@ -76,7 +75,6 @@ class UserType extends AbstractType
                     'Admin' => 'ROLE_ADMIN',
                     'Super admin' => 'ROLE_SUPER_ADMIN',
                 ),
-                'choices_as_values' => true,
                 'multiple'=>false,
                 'expanded' => true,
             ))
