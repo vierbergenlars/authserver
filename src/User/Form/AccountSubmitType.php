@@ -29,7 +29,9 @@ class AccountSubmitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', UsernameType::class)
+            ->add('user', UsernameType::class, [
+                'label' => 'Username/Email'
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
