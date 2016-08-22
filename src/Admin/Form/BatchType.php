@@ -65,4 +65,9 @@ class BatchType extends AbstractType
     {
         $resolver->setRequired('actions')->setAllowedTypes('actions', 'array');
     }
+
+    public function getBlockPrefix()
+    {
+        return 'admin_batch';
+    }
 }
