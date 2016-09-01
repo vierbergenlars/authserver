@@ -45,11 +45,22 @@ class ProfileController extends Controller
      */
     public function indexAction()
     {
+        $hasJoinableGroupsBuilder = $this->getDoctrine()
+            ->getManagerForClass(Group::class)
+            ->getRepository(Group::class)
+            ->createQueryBuilder('g')
+            ->select('COUNT(g)')
+            ->where('g.noUsers = false AND g.userJoinable = true');
+        if($this->getUser()->getGroups()->count() > 0)
+            $hasJoinableGroupsBuilder->andWhere('g NOT IN(:groups)')
+                ->setParameter('groups', $this->getUser()->getGroups());
+        $hasJoinableGroups = $hasJoinableGroupsBuilder->getQuery()
+            ->getSingleScalarResult() > 0;
         return array(
             'data'=>$this->getUser(),
             'form' => array(
                 'add_email' => $this->createForm(EmailAddressType::class)->createView(),
-                'add_group' => $this->createForm(AddGroupType::class)->createView(),
+                'add_group' => $hasJoinableGroups?$this->createForm(AddGroupType::class)->createView():null,
             ),
         );
     }
@@ -267,6 +278,8 @@ class ProfileController extends Controller
         if($form->isValid()) {
             $group = $form->get('group')->getData();
             /* @var $group Group */
+            if(!$group)
+                throw $this->createNotFoundException('This group does not exist');
             if(!$group->isUserJoinable())
                 throw $this->createAccessDeniedException('This group is not user-joinable');
             $user = $this->getUser();
