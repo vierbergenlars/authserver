@@ -10,11 +10,11 @@
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[a-z0-9_.]+$/</option>
-                <option name="message">Username can only contain letters, numbers, dots and underscores.</option>
+                <option name="message">Username can only contain lowercase letters, numbers, dots and underscores.</option>
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[a-z]/</option>
-                <option name="message">Username must start with a letter.</option>
+                <option name="message">Username must start with a lowercase letter.</option>
             </constraint>
             <constraint name="Regex">
                 <option name="pattern">/^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$/</option>
