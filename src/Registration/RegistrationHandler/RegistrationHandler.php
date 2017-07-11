@@ -78,19 +78,6 @@ class RegistrationHandler
                 throw new \LogicException('Self-registration checking should already have been applied on the form');
 
             $user->setEnabled($registrationRule->isAutoActivate());
-            $user->setRole($registrationRule->getRole());
-
-            $defaultGroups = $registrationRule->getDefaultGroups();
-            if(count($defaultGroups) > 0) {
-                $groups = $this->em->getRepository(Group::class)
-                    ->createQueryBuilder('g')
-                    ->where('g.name IN(:groups)')
-                    ->setParameter('groups', $defaultGroups)
-                    ->getQuery()
-                    ->getResult();
-                foreach($groups as $group)
-                    $user->addGroup($group);
-            }
 
             $this->em->persist($user);
             $this->em->flush();

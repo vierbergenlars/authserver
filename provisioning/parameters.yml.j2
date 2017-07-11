@@ -22,5 +22,5 @@ registration:
     email_rules:
         - { domain: vbgn.be, self_registration: true }
         - { domain: activate.vbgn.be, self_registration: true, auto_activate: true }
-        - { domain: sysops.vbgn.be, self_registration: true, auto_activate: true, default_groups: ['%sysops'], role: ROLE_SUPER_ADMIN}
+        - { domain: sysops.vbgn.be, self_registration: true, auto_activate: true}
     registration_message: 'You can register with @vbgn.be email addresses; @activate.vbgn.be addresses are automatically activated and @sysops.vbgn.be is automatically added to the %sysops group if it exists, and will be granted ROLE_SUPER_ADMIN.'

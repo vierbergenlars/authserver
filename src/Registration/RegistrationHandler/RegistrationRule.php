@@ -36,10 +36,7 @@ class RegistrationRule
      * @var string
      */
     private $emailDomain;
-    /**
-     * @var array
-     */
-    private $defaultGroups;
+
     /**
      * @var bool
      */
@@ -48,30 +45,22 @@ class RegistrationRule
      * @var bool
      */
     private $autoActivate;
-    /**
-     * @var string
-     */
-    private $role;
 
     /**
      * RegistrationRule constructor.
      *
      * @param string|null $emailRegex
      * @param string|null $emailDomain
-     * @param string[] $defaultGroups
-     * @param string $role
      * @param bool $selfRegistration
      * @param bool $autoActivate
      */
-    public function __construct($emailRegex, $emailDomain, array $defaultGroups, $role, $selfRegistration, $autoActivate)
+    public function __construct($emailRegex, $emailDomain, $selfRegistration, $autoActivate)
     {
 
         $this->emailRegex = $emailRegex;
         $this->emailDomain = $emailDomain;
-        $this->defaultGroups = $defaultGroups;
         $this->selfRegistration = $selfRegistration;
         $this->autoActivate = $autoActivate;
-        $this->role = $role;
     }
 
     public function match($emailAddress)
@@ -94,22 +83,6 @@ class RegistrationRule
         $host = substr($emailAddress, strrpos($emailAddress, '@') + 1);
 
         return $host === $this->emailDomain;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultGroups()
-    {
-        return $this->defaultGroups;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**

@@ -10,8 +10,6 @@
             <argument />
             <argument />
             <argument />
-            <argument />
-            <argument />
         </service>
         <service id="registration.rules" class="Registration\RegistrationHandler\RegistrationRules">
             <argument />
