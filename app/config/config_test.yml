@@ -19,3 +19,6 @@ doctrine:
     dbal:
         driver: pdo_sqlite
         path: '%kernel.root_dir%/test_db.sqlite'
+
+auth_request:
+    enabled: true

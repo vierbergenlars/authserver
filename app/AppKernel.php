@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Admin\AdminBundle(),
             new User\UserBundle(),
             new Registration\RegistrationBundle(),
+            new AuthRequestBundle\AuthRequestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

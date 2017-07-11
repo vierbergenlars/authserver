@@ -1,0 +1,5 @@
+auth_request:
+  prefix: /auth_request
+  name_prefix: auth_request_
+  resource: AuthRequestBundle\Controller\AuthController
+  type: rest

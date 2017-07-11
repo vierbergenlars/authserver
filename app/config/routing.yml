@@ -40,3 +40,8 @@ user_public:
 registration:
     resource: "@RegistrationBundle/Resources/config/routing.xml"
     prefix: /pub
+
+auth_request:
+    resource: "@AuthRequestBundle/Resources/config/routing.yml"
+    prefix:   /api
+    type: rest
