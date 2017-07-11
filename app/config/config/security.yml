@@ -50,6 +50,11 @@ security:
             pattern:    ^/oauth/v2/token
             security:   false
 
+        api_auth_request_basic:
+            pattern: ^/api/auth_request/basic
+            http_basic: ~
+            stateless: true
+
         api:
             pattern:    ^/api
             http_basic: ~
