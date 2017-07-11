@@ -1,19 +1,19 @@
 {% set details = details|default(false) %}
-{% if cls == 'App\\Entity\\User' %}
+{% if cls == 'App\\Entity\\User' and id %}
     {% set entity = em.find(cls, id) %}
     {% if entity %}
         <a href="{{ url('admin_user_get', {user: entity.guid}) }}" title="{{ entity.displayName }}">{{ icon('user fa-fw') }} {{ entity.username }}</a>
     {% else %}
         <span class="text-muted">{{ icon('user fa-fw') }}</span>
     {% endif %}
-{% elseif cls == 'App\\Entity\\Group' %}
+{% elseif cls == 'App\\Entity\\Group' and id %}
     {% set entity = em.find(cls, id) %}
     {% if entity %}
         <a href="{{ url('admin_group_get', {group: entity.name}) }}" title="{{ entity.displayName }}">{{ icon('group fa-fw') }} {{ entity.name }}</a>
     {% else %}
         <span class="text-muted">{{ icon('group fa-fw') }}</span>
     {% endif %}
-{% elseif cls == 'App\\Entity\\EmailAddress' %}
+{% elseif cls == 'App\\Entity\\EmailAddress' and id %}
     {% set entity = em.find(cls, id) %}
     {% if entity %}
         {{ icon('envelope fa-fw') }}
@@ -24,7 +24,7 @@
     {% else %}
         <span class="text-muted">{{ icon('envelope fa-fw') }}</span>
     {% endif %}
-{% elseif cls == 'App\\Entity\\OAuth\\Client' %}
+{% elseif cls == 'App\\Entity\\OAuth\\Client' and id %}
     {% if details %}
         {% set entity = em.find(cls, id) %}
         {% if entity %}
@@ -35,7 +35,7 @@
     {% else %}
         <a href="{{ url('admin_oauth_client_get', {client: id}) }}">{{ icon('cube fa-fw') }}</a>
     {% endif %}
-{% elseif cls == 'Admin\\Entity\\ApiKey' %}
+{% elseif cls == 'Admin\\Entity\\ApiKey' and id %}
     {% if details %}
         {% set entity = em.find(cls, id) %}
         {% if entity %}
