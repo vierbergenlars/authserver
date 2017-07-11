@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="email_rules.rule.abstract" class="EmailRulesBundle\EmailHandler\EmailRule" abstract="true" public="false">
+            <argument />
+            <argument />
+            <argument />
+            <argument />
+            <argument />
+        </service>
+        <service id="email_rules.rules" class="EmailRulesBundle\EmailHandler\EmailRules">
+            <argument />
+        </service>
+        <service class="EmailRulesBundle\EmailHandler\EmailValidationSubscriber">
+            <argument type="service" id="email_rules.rules" />
+            <argument type="service" id="braincrafted_bootstrap.flash" />
+            <tag name="doctrine.event_subscriber" />
+        </service>
+    </services>
+</container>
