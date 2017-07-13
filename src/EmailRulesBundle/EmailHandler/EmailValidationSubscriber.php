@@ -78,14 +78,17 @@ class EmailValidationSubscriber implements EventSubscriber
                     // Cancel insertion of rejected email address
                     $this->flashMessage->error('This email address has been rejected.');
                     $uow->scheduleForDelete($entity);
+                    $event->getEntityManager()->remove($entity);
                 }
             }
             if($entity instanceof LogEntry) {
                 if($entity->getObjectClass() !== EmailAddress::class)
                     continue;
                 $data = $entity->getData();
-                if(isset($data['email']) && $this->isRejected($data['email']))
+                if(isset($data['email']) && $this->isRejected($data['email'])) {
                     $uow->scheduleForDelete($entity);
+                    $event->getEntityManager()->remove($entity);
+                }
             }
         }
     }

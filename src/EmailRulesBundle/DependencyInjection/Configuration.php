@@ -45,7 +45,16 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeOverwritten()
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('regex_match')->defaultNull()->info('Email address must match this regex')->end()
+                            ->scalarNode('regex_match')
+                                ->defaultNull()
+                                ->validate()
+                                    ->ifTrue(function($value) {
+                                        return @preg_match($value, '') === false;
+                                    })
+                                    ->thenInvalid('The regex %s is not valid.')
+                                ->end()
+                                ->info('Email address must match this regex')
+                            ->end()
                             ->scalarNode('domain')->defaultNull()->info('Email address must be in this domain name')->end()
                             ->arrayNode('groups')
                                 ->prototype('scalar')->end()
