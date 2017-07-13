@@ -33,8 +33,7 @@
         "symfony/intl": "^3.1"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^6.2"
+        "sensio/generator-bundle": "^3.0"
     },
     "config": {
         "bin-dir": "bin"
