@@ -237,7 +237,7 @@ class EmailRulesTest extends WebTestCase
     {
         $client = self::createClient();
 
-        $swiftMailerProfiler = $this->addEmailAddress($client, '10','abc@example.invalid');
+        $swiftMailerProfiler = $this->addEmailAddress($client, '10','abc@example.be');
 
         // And continue to profile
         $addedCrawler = $client->followRedirect();
@@ -259,7 +259,7 @@ class EmailRulesTest extends WebTestCase
     {
         $client = self::createClient();
 
-        $swiftMailerProfiler = $this->addEmailAddress($client, '20','abc@example.invalid');
+        $swiftMailerProfiler = $this->addEmailAddress($client, '20','abc@example.be');
 
         // And continue to profile
         $addedCrawler = $client->followRedirect();
@@ -281,7 +281,7 @@ class EmailRulesTest extends WebTestCase
     {
         $client = self::createClient();
 
-        $swiftMailerProfiler = $this->addEmailAddress($client, '10', 'abc@xyz.invalid');
+        $swiftMailerProfiler = $this->addEmailAddress($client, '10', 'abc@xyz.be');
 
         $this->assertEquals(0, $swiftMailerProfiler->getMessageCount());
 

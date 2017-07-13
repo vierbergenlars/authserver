@@ -27,5 +27,5 @@ email_rules:
     enabled: true
     rules:
       - { domain: example.com, groups: ['group_1', 'group_3'] }
-      - { domain: example.invalid, role: ROLE_AUDIT, groups: ['group_1'] }
-      - { regex_match: '/\.invalid$/', reject: true }
+      - { domain: example.be, role: ROLE_AUDIT, groups: ['group_1'] }
+      - { regex_match: '/\.be$/', reject: true }
