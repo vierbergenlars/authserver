@@ -1,4 +1,6 @@
 language: php
+dist: trusty
+sudo: false
 
 php:
   - 5.5
@@ -13,5 +15,6 @@ matrix:
 before_script:
   - "cp app/config/parameters.yml{.dist,}"
   - "composer install --prefer-source"
+  - "composer require --dev phpunit/phpunit"
 
 script: phpunit -c app
