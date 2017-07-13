@@ -114,6 +114,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $authorizedApplications;
 
+    static private function getRolesOrder()
+    {
+        return ['ROLE_USER', 'ROLE_AUDIT', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+    }
+
     public function __construct()
     {
         $this->role = 'ROLE_USER';
@@ -153,6 +158,15 @@ class User implements AdvancedUserInterface, \Serializable
         $this->role = $role;
 
         return $this;
+    }
+
+    public function upgradeRole($role)
+    {
+        $currentIndex = array_search($this->getRole(), self::getRolesOrder(), true);
+        $newIndex = array_search($role, self::getRolesOrder(), true);
+
+        if($currentIndex < $newIndex)
+            $this->setRole($role);
     }
 
     public function eraseCredentials()

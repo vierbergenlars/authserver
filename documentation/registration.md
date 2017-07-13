@@ -29,15 +29,7 @@ registrations:
 ```
 ## Automatically putting users in a group
 
-When users self-register, they can be added to groups automatically based on their email address with the `default_groups` option.
-
-Permissions inside authserver can also be set for the registering user with the `role` option.
-
-```yaml
-registrations:
-  enabled: true
-  email_rules:
-    - { domain: vbgn.be, self_registration: true, default_groups: [%sysops, domain_admins], role: ROLE_SUPER_ADMIN}
+This configuration has moved to the [email rules module](email_rules.md)
 
 ## Showing a message on the registration screen
 

@@ -18,15 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Registration\RegistrationHandler;
+namespace EmailRulesBundle\EmailHandler;
 
-use App\Entity\Group;
-use App\Entity\User;
-use Doctrine\Common\Collections\ExpressionBuilder;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr;
-
-class RegistrationRule
+class EmailRule
 {
     /**
      * @var string
@@ -38,29 +32,37 @@ class RegistrationRule
     private $emailDomain;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $selfRegistration;
+    private $role;
+
+    /**
+     * @var string[]
+     */
+    private $groups;
+
     /**
      * @var bool
      */
-    private $autoActivate;
+    private $reject;
 
     /**
      * RegistrationRule constructor.
      *
      * @param string|null $emailRegex
      * @param string|null $emailDomain
-     * @param bool $selfRegistration
-     * @param bool $autoActivate
+     * @param string|null $role
+     * @param string[] $groups
+     * @param bool $reject
      */
-    public function __construct($emailRegex, $emailDomain, $selfRegistration, $autoActivate)
+    public function __construct($emailRegex, $emailDomain, $role, $groups, $reject)
     {
 
         $this->emailRegex = $emailRegex;
         $this->emailDomain = $emailDomain;
-        $this->selfRegistration = $selfRegistration;
-        $this->autoActivate = $autoActivate;
+        $this->role = $role;
+        $this->groups = $groups;
+        $this->reject = $reject;
     }
 
     public function match($emailAddress)
@@ -86,19 +88,27 @@ class RegistrationRule
     }
 
     /**
-     * @return boolean
+     * @return string
      */
-    public function isSelfRegistration()
+    public function getRole()
     {
-        return $this->selfRegistration;
+        return $this->role;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
     }
 
     /**
      * @return boolean
      */
-    public function isAutoActivate()
+    public function isReject()
     {
-        return $this->autoActivate;
+        return $this->reject;
     }
 }
 

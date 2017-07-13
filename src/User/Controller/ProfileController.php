@@ -214,10 +214,13 @@ class ProfileController extends Controller
             $em->persist($addr);
             $em->flush();
 
-            if ($mailer->sendMessage($addr->getEmail(), $addr)) {
-                $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
-            } else {
-                $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
+
+            if($addr->getId()) {
+                if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                    $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
+                } else {
+                    $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
+                }
             }
         } else {
             $errString = 'Problems with email address '.$form->get('email')->getData().'.';
