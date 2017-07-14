@@ -28,11 +28,11 @@ api:
     resource: "@UserBundle/Resources/config/routing/api.yml"
     prefix: /api
     type: rest
-    
+
 user:
     resource: "@UserBundle/Resources/config/routing/user.yml"
     prefix: /usr
-    
+
 user_public:
     resource: "@UserBundle/Resources/config/routing/public.yml"
     prefix: /pub

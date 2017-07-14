@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new Registration\RegistrationBundle(),
             new AuthRequestBundle\AuthRequestBundle(),
             new EmailRulesBundle\EmailRulesBundle(),
+            new ThemingBundle\ThemingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

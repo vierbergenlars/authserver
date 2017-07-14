@@ -134,6 +134,7 @@ else
     npm install
     rm -rf app/cache/$SYMFONY_ENV/* # Prevent class not found errors during cache clear
     php app/console cache:clear
+    php app/console theming:generate:bootstrap
     php app/console assets:install
     php app/console assetic:dump
     php app/console braincrafted:bootstrap:install
