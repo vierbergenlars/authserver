@@ -18,9 +18,21 @@
  */
 
 {% if theming.navbar.backgroundColor %}
-{% if theming.navbar.inverse %}
-@navbar-inverse-bg: {{ theming.navbar.backgroundColor }};
-{% else %}
-@navbar-default-bg: {{ theming.navbar.backgroundColor }};
+@{{ theming.navbar.variablePrefix }}-bg: {{ theming.navbar.backgroundColor }};
 {% endif %}
+
+{% if theming.navbar.textColor %}
+@{{ theming.navbar.variablePrefix }}-color: {{ theming.navbar.textColor }};
 {% endif %}
+
+{% if theming.navbar.linkColor %}
+@{{ theming.navbar.variablePrefix }}-link-color: {{ theming.navbar.linkColor }};
+{% endif %}
+
+{% if theming.navbar.linkHoverColor %}
+@{{ theming.navbar.variablePrefix }}-link-hover-color: {{ theming.navbar.linkHoverColor }};
+{% endif %}
+
+@{{ theming.navbar.variablePrefix }}-toggle-hover-bg:            darken(@{{ theming.navbar.variablePrefix }}-bg, 10%);
+@{{ theming.navbar.variablePrefix }}-toggle-icon-bar-bg:         #fff;
+@{{ theming.navbar.variablePrefix }}-toggle-border-color:        @{{ theming.navbar.variablePrefix }}-toggle-hover-bg;

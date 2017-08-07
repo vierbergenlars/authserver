@@ -47,6 +47,9 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('background')->defaultNull()->info('Background color for the navbar')->end()
                         ->booleanNode('inverse')->defaultFalse()->info('Enable for dark background colors')->end()
+                        ->scalarNode('text_color')->defaultNull()->info('Navbar text color')->end()
+                        ->scalarNode('link_color')->defaultNull()->info('Navbar link color')->end()
+                        ->scalarNode('link_hover_color')->defaultNull()->info('Navbar link hover color')->end()
                     ->end()
                 ->end()
         ;

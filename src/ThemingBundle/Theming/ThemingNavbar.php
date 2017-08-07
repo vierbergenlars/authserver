@@ -39,4 +39,21 @@ class ThemingNavbar
     {
         return $this->isInverse()?'navbar-inverse':'navbar-default';
     }
+
+    public function getVariablePrefix()
+    {
+        return $this->isInverse()?'navbar-inverse':'navbar-default';
+    }
+
+    public function getTextColor() {
+        return $this->config['text_color'];
+    }
+
+    public function getLinkColor() {
+        return $this->config['link_color']?:$this->getTextColor();
+    }
+
+    public function getLinkHoverColor() {
+        return $this->config['link_hover_color'];
+    }
 }
