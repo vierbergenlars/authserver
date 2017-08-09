@@ -20,22 +20,37 @@
 
 namespace ThemingBundle\Theming;
 
-class ThemingRoot
+
+class ThemingBranding
 {
     use ConfigTrait;
 
-    public function getNavbar()
+    public function getTitle()
     {
-        return new ThemingNavbar($this->config['navbar']);
+        return $this->config['title'];
     }
 
-    public function getBrand()
+    public function getLogo()
     {
-        return new ThemingBranding($this->config['brand']);
+        return $this->config['logo'];
     }
 
-    public function getAdminEmail()
+    public function getPrefer()
     {
-        return $this->config['admin_email'];
+        if(!$this->getLogo())
+            return 'title';
+        if($this->config['prefer'])
+            return $this->config['prefer'];
+        return 'logo';
+    }
+
+    public function getShowLogo()
+    {
+        return in_array($this->getPrefer(), ['logo', 'both'], true);
+    }
+
+    public function getShowTitle()
+    {
+        return in_array($this->getPrefer(), ['title', 'both'], true);
     }
 }

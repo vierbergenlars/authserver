@@ -40,8 +40,15 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('title')->defaultValue('AuthServer')->info('Title used for the application')->end()
                 ->scalarNode('admin_email')->defaultNull()->info('Administrator email address')->end()
+                ->arrayNode('brand')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('title')->defaultValue('AuthServer')->info('Title used for the application')->end()
+                        ->scalarNode('logo')->defaultNull()->info('Logo used for the application')->end()
+                        ->enumNode('prefer')->values(['title', 'logo', 'both'])->defaultNull()->info('Whether to show title, logo or both in contexts where both are appropriate.')->end()
+                    ->end()
+                ->end()
                 ->arrayNode('navbar')
                     ->addDefaultsIfNotSet()
                     ->children()

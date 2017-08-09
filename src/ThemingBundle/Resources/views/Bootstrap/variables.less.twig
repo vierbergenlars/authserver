@@ -19,6 +19,8 @@
 
 {% if theming.navbar.backgroundColor %}
 @{{ theming.navbar.variablePrefix }}-bg: {{ theming.navbar.backgroundColor }};
+@{{ theming.navbar.variablePrefix }}-toggle-hover-bg: {% if theming.navbar.inverse %}lighten{% else %}darken{% endif %}(@{{ theming.navbar.variablePrefix }}-bg, 10%);
+@{{ theming.navbar.variablePrefix }}-toggle-border-color: @{{ theming.navbar.variablePrefix }}-toggle-hover-bg;
 {% endif %}
 
 {% if theming.navbar.textColor %}
@@ -32,7 +34,3 @@
 {% if theming.navbar.linkHoverColor %}
 @{{ theming.navbar.variablePrefix }}-link-hover-color: {{ theming.navbar.linkHoverColor }};
 {% endif %}
-
-@{{ theming.navbar.variablePrefix }}-toggle-hover-bg:            darken(@{{ theming.navbar.variablePrefix }}-bg, 10%);
-@{{ theming.navbar.variablePrefix }}-toggle-icon-bar-bg:         #fff;
-@{{ theming.navbar.variablePrefix }}-toggle-border-color:        @{{ theming.navbar.variablePrefix }}-toggle-hover-bg;

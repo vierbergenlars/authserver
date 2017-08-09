@@ -16,3 +16,4 @@ braincrafted_bootstrap:
     icon_prefix: fa
     customize:
       variables_file: %kernel.root_dir%/Resources/less/variables.less
+      bootstrap_template: ThemingBundle:Bootstrap:bootstrap.less.twig

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}{{ theming.title }}{% endblock %}</title>
+        <title>{% block title %}{{ theming.brand.title }}{% endblock %}</title>
         {% stylesheets '@bootstrap_css' '@AppBundle/Resources/public/css/main.css' %}
             <link rel="stylesheet" href="{{ asset_url }}">
         {% endstylesheets %}
@@ -19,7 +19,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url('user_profile') }}">{{ theming.title }}</a>
+                    <a class="navbar-brand" href="{{ url('user_profile') }}">
+                        {% if theming.brand.showLogo %}
+                            <img src="{{ theming.brand.logo }}" alt="{{ theming.brand.title }}" />
+                        {% endif %}
+                        {% if theming.brand.showTitle %}
+                            {{ theming.brand.title }}
+                        {% endif %}
+                    </a>
                 </div>
                 <div class="collapse navbar-collapse">
                         {% macro render_link(route, ico, text) %}
