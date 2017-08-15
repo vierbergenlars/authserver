@@ -18,7 +18,7 @@ server {
 
     location = /auth {
         auth_request off;
-        proxy_pass https://auth.vbgn.be/api/auth_request/basic?groups[]=admin
+        proxy_pass https://auth.vbgn.be/api/auth_request/basic?groups[]=admin;
         proxy_pass_request_body off;
         proxy_set_header Content-Length "";
         internal;
