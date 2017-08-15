@@ -29,37 +29,12 @@
                     </a>
                 </div>
                 <div class="collapse navbar-collapse">
+                    {{ knp_menu_render('main', {style: 'navbar'}) }}
+                    {% block navigation %}
                         {% macro render_link(route, ico, text) %}
                             <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
                         {% endmacro %}
-                        {% macro render_admin_link(routepfx, ico, text) %}
-                                <li{% if app.request.attributes.get('_route') starts with routepfx %} class="active"{% endif %}><a href="{{ url(routepfx~'gets') }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
-                        {% endmacro %}
                         {% import _self as self %}
-                        <ul class="nav navbar-nav navbar-left">
-                            {% if app.user %}
-                                {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
-                                    {{ self.render_admin_link('admin_user_', 'user', 'Users') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_SCOPE_R_GROUP') %}
-                                    {{ self.render_admin_link('admin_group_', 'group', 'Groups') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_AUDIT') %}
-                                    {{  self.render_admin_link('admin_audit_', 'heartbeat', 'Audit Log') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                    <li class="dropdown">
-                                        <a href="{{ url('admin_dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">{{ icon('ellipsis-v fa-fw') }} More <span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            {{ self.render_admin_link('admin_oauth_client_', 'cube', 'OAuth Apps') }}
-                                            {{ self.render_admin_link('admin_apikey_', 'key', 'API keys') }}
-                                            {{ self.render_admin_link('admin_property_namespace_', 'object-group', 'Property namespaces') }}
-                                        </ul>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-                        </ul>
-                    {% block navigation %}
                         <ul class="nav navbar-nav navbar-right">
                             {% if app.user %}
                                 <li class="dropdown">

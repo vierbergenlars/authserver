@@ -17,3 +17,7 @@ braincrafted_bootstrap:
     customize:
       variables_file: %kernel.root_dir%/Resources/less/variables.less
       bootstrap_template: ThemingBundle:Bootstrap:bootstrap.less.twig
+
+knp_menu:
+    twig:
+      template: "AppBundle:Menu:bootstrap.html.twig"
