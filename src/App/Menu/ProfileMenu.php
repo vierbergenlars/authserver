@@ -18,24 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App;
+namespace App\Menu;
 
+use App\AppEvents;
+use App\Event\MenuEvent;
+use Knp\Menu\FactoryInterface;
+use Knp\Menu\MenuItem;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-final class AppEvents
+class ProfileMenu extends MenuItem
 {
-
-    /**
-     * Emits {@link App\Event\MenuEvent}
-     */
-    const MAIN_MENU = 'app.main_menu';
-
-    /**
-     * Emits {@link App\Event\MenuEvent}
-     */
-    const PROFILE_MENU = 'app.profile_menu';
-
-    private function __construct()
+    public function __construct(FactoryInterface $factory, EventDispatcherInterface $dispatcher)
     {
+        parent::__construct('root', $factory);
+
+        $dispatcher->dispatch(AppEvents::PROFILE_MENU, new MenuEvent($this));
     }
 
 }

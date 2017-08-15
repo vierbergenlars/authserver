@@ -31,24 +31,7 @@
                 <div class="collapse navbar-collapse">
                     {{ knp_menu_render('main', {style: 'navbar'}) }}
                     {% block navigation %}
-                        {% macro render_link(route, ico, text) %}
-                            <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
-                        {% endmacro %}
-                        {% import _self as self %}
-                        <ul class="nav navbar-nav navbar-right">
-                            {% if app.user %}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user fa-fw') }} {{ app.user.displayName }} <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        {{ self.render_link('user_profile', 'user', 'Profile') }}
-                                        <li class="divider" role="presentation"></li>
-                                        {{ self.render_link('logout', 'sign-out', 'Sign out') }}
-                                    </ul>
-                                </li>
-                            {% else %}
-                                {{ self.render_link('app_login', 'sign-in', 'Sign in') }}
-                            {% endif %}
-                        </ul>
+                        {{ knp_menu_render('profile', {style: 'navbar-right'}) }}
                     {% endblock %}
                 </div>
             </div>

@@ -21,6 +21,11 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service class="App\EventListener\ProfileMenuListener">
+            <argument type="service" id="security.token_storage" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
         <!-- Doctrine listeners -->
         <service class="App\EventListener\UserGuidCreatorListener">
             <tag name="doctrine.event_subscriber" />

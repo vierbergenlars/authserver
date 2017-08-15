@@ -25,5 +25,10 @@
             <argument type="service" id="event_dispatcher" />
             <tag name="knp_menu.menu" alias="main" />
         </service>
+        <service class="App\Menu\ProfileMenu">
+            <argument type="service" id="knp_menu.factory" />
+            <argument type="service" id="event_dispatcher" />
+            <tag name="knp_menu.menu" alias="profile" />
+        </service>
     </services>
 </container>
