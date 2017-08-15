@@ -26,15 +26,10 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="braincrafted_bootstrap.flash"/>
         </service>
-    </services>
 
-    <!--
-    <services>
-        <service id="registration.example" class="vierbergenlars\Registration\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service class="Registration\EventListener\ProfileMenuListener">
+            <argument type="service" id="security.token_storage" />
+            <tag name="kernel.event_subscriber" />
         </service>
     </services>
-    -->
 </container>
