@@ -56,5 +56,19 @@ theming:
       hover_link_color: white
 ```
 
+### Adding menu items
+
+You can add extra menu items to the navbar, to link to other applications.
+
+Every menu item is identified by their key in the menu dictionary.
+The menu labels can contain icons from [FontAwesome](http://fontawesome.io/icons/), with the icon name prefixed by `.icon-` 
+
+```yaml
+theming:
+    navbar:
+      menu:
+        homepage: { label: '.icon-home Home', uri: 'https://vbgn.be/' }
+        github: { label: 'GitHub', uri: 'https://github.com/vierbergenlars/authserver' }
+```
 
 

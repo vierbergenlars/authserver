@@ -57,10 +57,34 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('text_color')->defaultNull()->info('Navbar text color')->end()
                         ->scalarNode('link_color')->defaultNull()->info('Navbar link color')->end()
                         ->scalarNode('link_hover_color')->defaultNull()->info('Navbar link hover color')->end()
+                        ->append($this->getMenuTreeBuilder())
                     ->end()
                 ->end()
         ;
 
         return $treeBuilder;
+    }
+
+    private function getMenuTreeBuilder()
+    {
+        $builder = new TreeBuilder();
+
+        $menuNode = $builder->root('menu');
+
+        $menuNode
+            ->normalizeKeys(false)
+            ->useAttributeAsKey('id')
+            ->prototype('array')
+                ->children()
+                    ->scalarNode('uri')->isRequired()->end()
+                    ->scalarNode('label')->isRequired()->end()
+                    ->arrayNode('attributes')->end()
+                    ->arrayNode('linkAttributes')->end()
+                    ->arrayNode('childrenAttributes')->end()
+                    ->arrayNode('extras')->end()
+                ->end()
+            ->end()
+        ;
+        return $menuNode;
     }
 }

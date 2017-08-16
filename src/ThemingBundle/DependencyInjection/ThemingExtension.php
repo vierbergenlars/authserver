@@ -37,12 +37,6 @@ class ThemingExtension extends Extension implements PrependExtensionInterface
 {
     public function prepend(ContainerBuilder $container)
     {
-        $container->prependExtensionConfig('braincrafted_bootstrap', [
-            'customize' => [
-                'variables_file' => '%kernel.root_dir%/Resources/less/variables.less',
-            ]
-        ]);
-
         $container->prependExtensionConfig('twig', [
             'globals' => [
                 'theming' => '@theming'

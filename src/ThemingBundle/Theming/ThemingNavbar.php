@@ -56,4 +56,11 @@ class ThemingNavbar
     public function getLinkHoverColor() {
         return $this->config['link_hover_color'];
     }
+
+    /**
+     * @return array
+     */
+    public function getMenu() {
+        return $this->config['menu'];
+    }
 }
