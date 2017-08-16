@@ -4,6 +4,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )" # cd to the directory containg the script
 trap '[[ -e "maintenance" ]] && printf "\x1b[30;43mMaintenance mode is still enabled\x1b[0m\n"' EXIT
 ARGS=$(getopt -o nse:luh --long no-pull,shell,env:,skip-maintenance,lock-maintenance,unlock-maintenance,help,commit:,revert -n "deploy.sh" -- "$@")
 no_pull=0
+no_git=0
 shell=0
 skip_maintenance=0
 target_commit="origin/HEAD"
@@ -115,21 +116,27 @@ if [[ shell -ne 0 ]]
 then
     bash --norc
 else
-    original_commit=$(git rev-parse HEAD)
-    [[ no_pull -eq 0 ]] && git fetch
-    removed_migrations=$(git diff --name-status -R "$target_commit" -- app/DoctrineMigrations | grep ^D | cut -f2 | sed -r 's/^.*\/Version([0-9]+)\.php$/\1/')
-    if [[ -n ${removed_migrations} ]] # There are migrations that are removed when going to this version
-    then
-        earliest_migration=$(echo "$removed_migrations" | sort -n | head -1) # Find the earlies migration to revert
-        prev_migration=$(ls app/DoctrineMigrations/Version*.php | sed -r 's/^.*\/Version([0-9]+)\.php$/\1/' | sort | grep -C1 "$earliest_migration" | head -1) # And find the version before that
-        printf "\x1b[37;41mWARNING:\x1b[0m Migrations \x1b[33m$earliest_migration\x1b[0m and later will be removed when moving to $target_commit.\n"
-        php app/console doctrine:migrations:migrate --dry-run "$prev_migration"
-        printf "\x1b[37;41mDANGER!\x1b[0m You are about to \x1b[32mdowngrade\x1b[0m the database to version \x1b[33m$prev_migration\x1b[0m\n"
-        read -p "WARNING! You are about to execute a database migration that could result in schema changes and data lost. Are you sure you wish to continue? (y/n)" cont
-        [[ "$cont" != "y" && "$cont" != "Y" ]] && (printf "\x1b[37;41mMigration cancelled\x1b[0m\n"; exit 1)
-        php app/console doctrine:migrations:migrate "$prev_migration" -n
+    if [[ ! -e ".git" ]]; then
+        no_git=1
+        printf "\x1b[37;41mWARNING:\x1b[0m This is not a git repository. Automatic updates are disabled."
     fi
-    git checkout "$target_commit"
+    if [[ no_git -eq 0 ]]; then
+        original_commit=$(git rev-parse HEAD)
+        [[ no_pull -eq 0 ]] && git fetch
+        removed_migrations=$(git diff --name-status -R "$target_commit" -- app/DoctrineMigrations | grep ^D | cut -f2 | sed -r 's/^.*\/Version([0-9]+)\.php$/\1/')
+        if [[ -n ${removed_migrations} ]] # There are migrations that are removed when going to this version
+        then
+            earliest_migration=$(echo "$removed_migrations" | sort -n | head -1) # Find the earlies migration to revert
+            prev_migration=$(ls app/DoctrineMigrations/Version*.php | sed -r 's/^.*\/Version([0-9]+)\.php$/\1/' | sort | grep -C1 "$earliest_migration" | head -1) # And find the version before that
+            printf "\x1b[37;41mWARNING:\x1b[0m Migrations \x1b[33m$earliest_migration\x1b[0m and later will be removed when moving to $target_commit.\n"
+            php app/console doctrine:migrations:migrate --dry-run "$prev_migration"
+            printf "\x1b[37;41mDANGER!\x1b[0m You are about to \x1b[32mdowngrade\x1b[0m the database to version \x1b[33m$prev_migration\x1b[0m\n"
+            read -p "WARNING! You are about to execute a database migration that could result in schema changes and data lost. Are you sure you wish to continue? (y/n)" cont
+            [[ "$cont" != "y" && "$cont" != "Y" ]] && (printf "\x1b[37;41mMigration cancelled\x1b[0m\n"; exit 1)
+            php app/console doctrine:migrations:migrate "$prev_migration" -n
+        fi
+        git checkout "$target_commit"
+    fi
     composer install --no-dev --optimize-autoloader
     npm install
     rm -rf app/cache/$SYMFONY_ENV/* # Prevent class not found errors during cache clear
@@ -140,11 +147,15 @@ else
     # Only execute migrations when there are new migrations available.
     php app/console doctrine:migrations:status | grep "New Migrations:" | cut -d: -f2 |grep "^ *0" > /dev/null || \
     php app/console doctrine:migrations:migrate
-    if [[ "$original_commit" == $(git rev-parse "$target_commit") ]]
-    then
-        printf "\x1b[30;42mRe-deploy finished\x1b[0m \x1b[30:46m$(git rev-parse --short "$original_commit")\x1b[0m\n"
+    if [[ no_git -eq 0 ]]; then
+        if [[ "$original_commit" == $(git rev-parse "$target_commit") ]]
+        then
+            printf "\x1b[30;42mRe-deploy finished\x1b[0m \x1b[30:46m$(git rev-parse --short "$original_commit")\x1b[0m\n"
+        else
+            printf "\x1b[30;42mDeploy finished\x1b[0m \x1b[30;46m$(git rev-parse --short "$original_commit")\x1b[0m -> \x1b[30;46m$(git rev-parse --short HEAD)\x1b[0m\n"
+        fi
     else
-        printf "\x1b[30;42mDeploy finished\x1b[0m \x1b[30;46m$(git rev-parse --short "$original_commit")\x1b[0m -> \x1b[30;46m$(git rev-parse --short HEAD)\x1b[0m\n"
+        printf "\x1b[30;42mDeploy finished\x1b[0m\n"
     fi
 fi
 [[ -e "maintenance.lock" ]] && echo "Warning: maintenance mode is locked. Not disabling maintenance mode"
