@@ -73,7 +73,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                                 ->info('Role the user will be given on validation of email address')
                             ->end()
-                            ->booleanNode('reject')->defaultFalse()->info('Rejects the email address')->end()
+                            ->scalarNode('reject')->defaultFalse()->info('Rejects the email address. Optionally, the reason for the reject can be given.')->end()
                         ->end()
                     ->end()
                 ->end()

@@ -23,19 +23,13 @@ namespace EmailRulesBundle\EmailHandler;
 use App\Entity\EmailAddress;
 use App\Entity\Group;
 use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
-use Doctrine\Common\EventArgs;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
-use Gedmo\Loggable\Entity\LogEntry;
-use Gedmo\Loggable\LoggableListener;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class EmailValidationSubscriber implements EventSubscriber
+class EmailVerificationSubscriber implements EventSubscriber
 {
     /**
      * @var EmailRules
@@ -46,65 +40,29 @@ class EmailValidationSubscriber implements EventSubscriber
      * @var FlashMessage
      */
     private $flashMessage;
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
 
     /**
      * RegistrationHandler constructor.
      *
      * @param EmailRules $emailRules
      * @param FlashMessage $flashMessage
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(EmailRules $emailRules, FlashMessage $flashMessage)
+    public function __construct(EmailRules $emailRules, FlashMessage $flashMessage, TokenStorageInterface $tokenStorage)
     {
         $this->emailRules = $emailRules;
         $this->flashMessage = $flashMessage;
+        $this->tokenStorage = $tokenStorage;
     }
 
     private function getRuleMatching($entity) {
         if(!($entity instanceof EmailAddress))
             return null;
         return $this->emailRules->getFirstRuleMatching($entity->getEmail());
-    }
-
-    private function isRejected($email) {
-        $rule = $this->emailRules->getFirstRuleMatching($email);
-        return $rule && $rule->isReject();
-    }
-
-    public function onFlush(OnFlushEventArgs $event) {
-        $uow = $event->getEntityManager()->getUnitOfWork();
-        foreach($uow->getScheduledEntityInsertions() as $entity) {
-            if($entity instanceof EmailAddress) {
-                if($this->isRejected($entity->getEmail())) {
-                    // Cancel insertion of rejected email address
-                    $this->flashMessage->error('This email address has been rejected.');
-                    $uow->scheduleForDelete($entity);
-                    $event->getEntityManager()->remove($entity);
-                }
-            }
-            if($entity instanceof LogEntry) {
-                if($entity->getObjectClass() !== EmailAddress::class)
-                    continue;
-                $data = $entity->getData();
-                if(isset($data['email']) && $this->isRejected($data['email'])) {
-                    $uow->scheduleForDelete($entity);
-                    $event->getEntityManager()->remove($entity);
-                }
-            }
-        }
-    }
-
-    public function preUpdate(PreUpdateEventArgs $event)
-    {
-        if(($rule = $this->getRuleMatching($event->getEntity())) !== null) {
-            if($rule->isReject()) {
-                $this->flashMessage->error('This email address has been rejected.');
-                // If email address is rejected, set all changed fields to their previous values
-                foreach($event->getEntityChangeSet() as $field => $_) {
-                    $event->setNewValue($field, $event->getOldValue($field));
-                }
-            }
-        }
-
     }
 
     private function onVerifyMailAddress(LifecycleEventArgs $event)
@@ -118,15 +76,42 @@ class EmailValidationSubscriber implements EventSubscriber
             $em = $event->getEntityManager();
             $groups = $rule->getGroups();
 
-            if(count($groups) > 0) {
+            $userGroupNames = $user->getGroups()->map(function(Group $group) {
+                return $group->getName();
+            })->toArray();
+
+            $newGroups = array_diff($groups, $userGroupNames);
+
+            if(count($newGroups) > 0) {
                 $groupEntities = $em->getRepository(Group::class)
                     ->createQueryBuilder('g')
                     ->where('g.name IN(:groups)')
-                    ->setParameter('groups', $groups)
+                    ->setParameter('groups', $newGroups)
                     ->getQuery()
                     ->getResult();
                 foreach($groupEntities as $group)
                     $user->addGroup($group);
+
+                $matchedGroupEntities = count($groupEntities);
+                $token = $this->tokenStorage->getToken();
+                if(!$token || $token->getUser() === $user) {
+                    $alertMessage = 'You have been added to the ';
+                } else {
+                    $alertMessage = 'User '.$user->getUsername().' has been added to the ';
+                }
+
+                switch($matchedGroupEntities) {
+                    case 0:
+                        break;
+                    case 1:
+                        $alertMessage .= sprintf('"%s" group.', $groupEntities[0]->getDisplayName());
+                        break;
+                    default:
+                        $lastGroup = array_pop($groupEntities);
+                        $alertMessage .= sprintf('following groups: "%s" and "%s".', implode('", "', array_map(function($g) { return $g->getDisplayName(); }, $groupEntities)), $lastGroup->getDisplayName());
+                }
+
+                $this->flashMessage->success($alertMessage);
             }
 
             $user->upgradeRole($rule->getRole());
@@ -146,6 +131,20 @@ class EmailValidationSubscriber implements EventSubscriber
         $this->onVerifyMailAddress($event);
     }
 
+    public function onFlush(OnFlushEventArgs $event)
+    {
+        $uow = $event->getEntityManager()->getUnitOfWork();
+        foreach(array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledCollectionUpdates()) as $entity) {
+            if($entity instanceof EmailAddress) {
+                $rule = $this->emailRules->getFirstRuleMatching($entity->getEmail());
+
+                if($rule && $rule->isReject()) {
+                    throw new \LogicException('Rejected email address was not stopped before flush.');
+                }
+            }
+        }
+    }
+
     /**
      * Returns an array of events this subscriber wants to listen to.
      *
@@ -155,7 +154,6 @@ class EmailValidationSubscriber implements EventSubscriber
     {
         return [
             Events::onFlush,
-            Events::preUpdate,
             Events::postUpdate,
             Events::postPersist,
         ];

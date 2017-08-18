@@ -288,9 +288,31 @@ class EmailRulesTest extends WebTestCase
         // And continue to profile
         $addedCrawler = $client->followRedirect();
 
-        $this->assertContains('rejected', $addedCrawler
+        $this->assertContains('email address is blacklisted', $addedCrawler
             ->filter('.alert-danger')
             ->eq(0)
+            ->text()
+        );
+    }
+
+    public function testRegisterEmailAddressReject()
+    {
+        $client = self::createClient();
+
+        $registerCrawler = $client->request('GET', '/pub/register');
+
+        $registerForm = $registerCrawler->filter('.btn.btn-primary')->form();
+
+        $registerSubmitCrawler = $client->submit($registerForm, [
+            'registration_user[username]' => 'abc',
+            'registration_user[displayName]' => 'ABC',
+            'registration_user[password][first]' => 'abc',
+            'registration_user[password][second]' => 'abc',
+            'registration_user[emailAddresses]' => 'abc@xyz.be',
+        ]);
+
+        $this->assertContains('email address is blacklisted', $registerSubmitCrawler
+            ->filter('form')
             ->text()
         );
     }
