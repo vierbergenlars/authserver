@@ -22,12 +22,14 @@ Matching is performed from top to bottom, and stops at the first matching expres
 Besides adding users to groups or granting roles, it is possible to refuse certain email addresses.
 
 This feature can be used to prevent users from adding blacklisted email addresses to their account.
+An explanation of the reason for the reject can be specified by setting the reject property to a string.
 
 ```yaml
 email_rules:
   enabled: true
   rules:
     - { domain: example.com, reject: true }
+    - { domain: example.org, reject: 'Received too much spam registrations from this domain.' }
 ```
 
 It can also be used to reject all email addresses that do not match a whitelist by adding a reject without a domain as final rule.

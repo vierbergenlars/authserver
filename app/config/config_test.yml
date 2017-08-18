@@ -20,6 +20,9 @@ doctrine:
         driver: pdo_sqlite
         path: '%kernel.root_dir%/test_db.sqlite'
 
+registration:
+    enabled: true
+
 auth_request:
     enabled: true
 

@@ -42,7 +42,7 @@ class EmailRule
     private $groups;
 
     /**
-     * @var bool
+     * @var string
      */
     private $reject;
 
@@ -53,7 +53,7 @@ class EmailRule
      * @param string|null $emailDomain
      * @param string|null $role
      * @param string[] $groups
-     * @param bool $reject
+     * @param string $reject
      */
     public function __construct($emailRegex, $emailDomain, $role, $groups, $reject)
     {
@@ -108,7 +108,18 @@ class EmailRule
      */
     public function isReject()
     {
-        return $this->reject;
+        return (bool)$this->reject;
     }
+
+    /**
+     * @return string
+     */
+    public function getRejectMessage()
+    {
+        if(!$this->isReject())
+            return null;
+        return is_string($this->reject)?$this->reject:'Unspecified reason';
+    }
+
 }
 

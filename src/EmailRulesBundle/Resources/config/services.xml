@@ -15,10 +15,28 @@
         <service id="email_rules.rules" class="EmailRulesBundle\EmailHandler\EmailRules">
             <argument />
         </service>
-        <service class="EmailRulesBundle\EmailHandler\EmailValidationSubscriber">
+        <service class="EmailRulesBundle\EmailHandler\EmailVerificationSubscriber">
             <argument type="service" id="email_rules.rules" />
             <argument type="service" id="braincrafted_bootstrap.flash" />
+            <argument type="service" id="security.token_storage" />
             <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <service id="email_rules.form.validation_subscriber" class="EmailRulesBundle\Form\EmailValidationSubscriber" public="false">
+            <argument type="service" id="email_rules.rules" />
+        </service>
+
+        <service class="EmailRulesBundle\Form\AdminEmailTypeInterceptorExtension">
+            <argument type="service" id="email_rules.form.validation_subscriber" />
+            <tag name="form.type_extension" extended_type="App\Form\EmailAddressType" />
+        </service>
+        <service class="EmailRulesBundle\Form\UserEmailTypeInterceptorExtension">
+            <argument type="service" id="email_rules.form.validation_subscriber" />
+            <tag name="form.type_extension" extended_type="User\Form\EmailAddressType" />
+        </service>
+        <service class="EmailRulesBundle\Form\RegistrationEmailTypeInterceptorExtension">
+            <argument type="service" id="email_rules.form.validation_subscriber" />
+            <tag name="form.type_extension" extended_type="Registration\Form\UserType" />
         </service>
     </services>
 </container>

@@ -29,7 +29,6 @@ use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Email;
 use User\Form\AddGroupType;
 use User\Form\AddPasswordType;
 use User\Form\ChangePasswordType;
@@ -214,13 +213,10 @@ class ProfileController extends Controller
             $em->persist($addr);
             $em->flush();
 
-
-            if($addr->getId()) {
-                if($mailer->sendMessage($addr->getEmail(), $addr)) {
-                    $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
-                } else {
-                    $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
-                }
+            if($mailer->sendMessage($addr->getEmail(), $addr)) {
+                $this->getFlash()->success('A verification email has been sent to your email address. Please click the link to verify your email address.');
+            } else {
+                $this->getFlash()->error('We are having some troubles sending you a verification mail. Please try again later.');
             }
         } else {
             $errString = 'Problems with email address '.$form->get('email')->getData().'.';
