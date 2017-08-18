@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Bazinga\Bundle\RestExtraBundle\BazingaRestExtraBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
@@ -32,6 +33,7 @@ class AppKernel extends Kernel
             new Registration\RegistrationBundle(),
             new AuthRequestBundle\AuthRequestBundle(),
             new EmailRulesBundle\EmailRulesBundle(),
+            new ThemingBundle\ThemingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

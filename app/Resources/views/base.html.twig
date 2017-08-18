@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}AuthServer{% endblock %}</title>
+        <title>{% block title %}{{ theming.brand.title }}{% endblock %}</title>
         {% stylesheets '@bootstrap_css' '@AppBundle/Resources/public/css/main.css' %}
             <link rel="stylesheet" href="{{ asset_url }}">
         {% endstylesheets %}
@@ -10,7 +10,7 @@
         {% endblock %}
     </head>
     <body class="env-{{ app.environment }}">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav class="navbar {{ theming.navbar.cssClass }} navbar-fixed-top" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -19,54 +19,19 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{{ url('user_profile') }}">AuthServer</a>
+                    <a class="navbar-brand" href="{{ url('user_profile') }}">
+                        {% if theming.brand.showLogo %}
+                            <img src="{{ theming.brand.logo }}" alt="{{ theming.brand.title }}" />
+                        {% endif %}
+                        {% if theming.brand.showTitle %}
+                            {{ theming.brand.title }}
+                        {% endif %}
+                    </a>
                 </div>
                 <div class="collapse navbar-collapse">
-                        {% macro render_link(route, ico, text) %}
-                            <li{% if route == app.request.attributes.get('_route') %} class="active"{% endif %}><a href="{{ url(route) }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
-                        {% endmacro %}
-                        {% macro render_admin_link(routepfx, ico, text) %}
-                                <li{% if app.request.attributes.get('_route') starts with routepfx %} class="active"{% endif %}><a href="{{ url(routepfx~'gets') }}">{{ icon(ico~' fa-fw') }} {{ text }}</a></li>
-                        {% endmacro %}
-                        {% import _self as self %}
-                        <ul class="nav navbar-nav navbar-left">
-                            {% if app.user %}
-                                {% if is_granted('ROLE_SCOPE_R_PROFILE') %}
-                                    {{ self.render_admin_link('admin_user_', 'user', 'Users') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_SCOPE_R_GROUP') %}
-                                    {{ self.render_admin_link('admin_group_', 'group', 'Groups') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_AUDIT') %}
-                                    {{  self.render_admin_link('admin_audit_', 'heartbeat', 'Audit Log') }}
-                                {% endif %}
-                                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                    <li class="dropdown">
-                                        <a href="{{ url('admin_dashboard') }}" class="dropdown-toggle" data-toggle="dropdown">{{ icon('ellipsis-v fa-fw') }} More <span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            {{ self.render_admin_link('admin_oauth_client_', 'cube', 'OAuth Apps') }}
-                                            {{ self.render_admin_link('admin_apikey_', 'key', 'API keys') }}
-                                            {{ self.render_admin_link('admin_property_namespace_', 'object-group', 'Property namespaces') }}
-                                        </ul>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-                        </ul>
+                    {{ knp_menu_render('main', {style: 'navbar'}) }}
                     {% block navigation %}
-                        <ul class="nav navbar-nav navbar-right">
-                            {% if app.user %}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ icon('user fa-fw') }} {{ app.user.displayName }} <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        {{ self.render_link('user_profile', 'user', 'Profile') }}
-                                        <li class="divider" role="presentation"></li>
-                                        {{ self.render_link('logout', 'sign-out', 'Sign out') }}
-                                    </ul>
-                                </li>
-                            {% else %}
-                                {{ self.render_link('app_login', 'sign-in', 'Sign in') }}
-                            {% endif %}
-                        </ul>
+                        {{ knp_menu_render('profile', {style: 'navbar-right'}) }}
                     {% endblock %}
                 </div>
             </div>
@@ -84,7 +49,15 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-4">
-                        <span class="text-muted">Authserver</span>
+                        <span class="text-muted">
+                            Authserver
+                            {% if theming.adminEmail %}
+                                &middot;
+                                Administrator: <a href="mailto:{{ theming.adminEmail }}">
+                                {{ icon('envelope') }} {{ theming.adminEmail }}
+                            </a>
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="col-xs-4 pull-right text-right text-muted">
                         {% spaceless %}

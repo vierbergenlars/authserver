@@ -20,7 +20,7 @@
         "willdurand/hateoas-bundle": "^1.2",
         "hautelook/templated-uri-bundle": "~2.0",
         "willdurand/rest-extra-bundle": "~1.2.0",
-        "braincrafted/bootstrap-bundle": "dev-develop#41aaa9f3212add20d46faac86e6ebcb4651cde57 as v2.2.0-p1",
+        "braincrafted/bootstrap-bundle": "dev-develop#4367295d62d9ca4190fdf9e944148c19e04d0aa7 as v2.2.0-p2",
         "twbs/bootstrap": "~3.0",
         "components/jquery": "~1.11",
         "doctrine/migrations": "^1.4",
@@ -30,7 +30,8 @@
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "ircmaxell/password-compat": "~1.0",
         "stof/doctrine-extensions-bundle": "~1.2",
-        "symfony/intl": "^3.1"
+        "symfony/intl": "^3.1",
+        "knplabs/knp-menu-bundle": "^2.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0"

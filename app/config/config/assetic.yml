@@ -14,3 +14,6 @@ assetic:
 braincrafted_bootstrap:
     jquery_path: %kernel.root_dir%/../vendor/components/jquery/jquery.min.js
     icon_prefix: fa
+    customize:
+      variables_file: %kernel.root_dir%/Resources/less/variables.less
+      bootstrap_template: ThemingBundle:Bootstrap:bootstrap.less.twig

@@ -31,3 +31,14 @@ email_rules:
         - { domain: sysops.vbgn.be, groups: ['%sysops'], role: ROLE_SUPER_ADMIN}
         - { domain: admin.vbgn.be, role: ROLE_ADMIN }
         - { domain: reject.vbgn.be, reject: true }
+
+theming:
+    brand:
+        title: AuthServer Dev
+    admin_email: noreply@vbgn.be
+    navbar:
+        background: red
+        text_color: darken(white, 10%)
+        inverse: true
+        menu:
+            github: { label: '.icon-github GitHub', uri: 'https://github.com/vierbergenlars/authserver' }

@@ -1,0 +1,20 @@
+{% include 'BraincraftedBootstrapBundle:Bootstrap:bootstrap.less.twig' %}
+{% if not theming.brand.showTitle %}
+{# Branding without title: smaller padding for brand, so logo shows larger #}
+.navbar-brand {
+    padding: 5px;
+}
+{% endif %}
+{% if theming.brand.showLogo and theming.brand.showTitle %}
+{# Branding with title and logo: Make sure logo floats next to title and there is spacing between #}
+.navbar-brand > img {
+    float: left;
+    margin-right: 10px; // Spacing between logo and title
+}
+{% endif %}
+
+{% if theming.brand.showLogo %}
+.navbar-brand > img {
+    height: 100%;
+}
+{% endif %}

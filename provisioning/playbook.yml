@@ -72,12 +72,15 @@ EOF"
       composer: working_dir=/var/www no_dev=no
     - name: npm install
       npm: path=/var/www
+    - name: Blow away caches
+      file: state=absent path=/var/www/app/cache
     - name: Clear cache, install assets and migrate database
       command: php app/console {{ item }} -n chdir=/var/www
       with_items:
         - cache:clear
         - assets:install
         - braincrafted:bootstrap:install
+        - theming:generate:bootstrap
         - assetic:dump
         - doctrine:migrations:migrate
     - name: Create admin user 'admin'
