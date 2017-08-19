@@ -27,6 +27,9 @@ class SecurityController extends Controller
 {
     public function loginAction(Request $request)
     {
+        if($this->getUser())
+            return $this->redirectToRoute('user_profile');
+
         $session = $request->getSession();
 
         $error = null;
@@ -38,7 +41,6 @@ class SecurityController extends Controller
             $session->remove(Security::AUTHENTICATION_ERROR);
         }
 
-        // Add the following lines
         if ($session->has('_security.target_path')) {
             if (false !== strpos($session->get('_security.target_path'), $this->generateUrl('fos_oauth_server_authorize'))) {
                 $session->set('_fos_oauth_server.ensure_logout', true);
