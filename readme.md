@@ -107,11 +107,11 @@ pulls the latest version of the current branch and rebases local commits on top 
 > **WARNING:** When an automatic pull and rebase fails, you will be dropped to a shell to fix the situation.
 > If you have local changes, you can run the following commands to try to fix the situation.
 > ```bash
-git stash
-git pull --rebase
-git stash pop
-exit
-```
+> git stash
+> git pull --rebase
+> git stash pop
+> exit
+> ```
 > Because this will result in untested changes, it is recommended to keep your own repository with the necessary
 > changes and merge releases to this repository instead of deploying directly from the master repository.
 
