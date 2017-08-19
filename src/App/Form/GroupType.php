@@ -45,7 +45,9 @@ class GroupType extends AbstractType
         $builder
             // Disable editing of the name after the initial submission
             // If the id is set, the form is used for an edit operation
-            ->add('name',  $id > 0?(FormStaticControlType::class):(TextType::class))
+            ->add('name',  $id > 0?(FormStaticControlType::class):(TextType::class), [
+                'label' => 'Technical name',
+            ])
             ->add('displayName', TextType::class)
             ->add('groups', null, array(
                 'label'=>'Member of',
@@ -56,7 +58,9 @@ class GroupType extends AbstractType
                         ->andWhere('g.id != :id')
                         ->setParameter('id', $id);
                 },
-                'choice_label'=>'name',
+                'choice_label'=> function(Group $group) {
+                    return sprintf('%s (%s)', $group->getDisplayName(), $group->getName());
+                },
                 'required'=>false,
                 'expanded' => true,
             ))

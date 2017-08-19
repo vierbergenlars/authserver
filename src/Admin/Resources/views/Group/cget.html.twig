@@ -1,15 +1,15 @@
 {% extends 'AdminBundle:Group:skeleton.html.twig' %}
 {% block radrest_content %}
     <div class="panel-heading">
-        <h3 class="panel-title">Groups</h3>
+        <h3 class="panel-title">{{ icon('group') }} Groups</h3>
     </div>
     {{ form_start(batch_form, { action: url('admin_group_batch', { _params: app.request.query.all }), style: 'inline' }) }}
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name</th>
                     <th>Technical name</th>
+                    <th>Display name</th>
                     <th>Flags</th>
                     <th>Actions</th>
                 </tr>
@@ -20,10 +20,10 @@
                         <td>
                             <label>
                                 <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if not is_granted('ROLE_SCOPE_W_GROUP') %}disabled{% endif %}>
-                                {{ obj.displayName }}
+                                {{ obj.name }}
                             </label>
                         </td>
-                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.displayName }}</td>
                         <td>
                             {% include 'AdminBundle:Group:flags.html.twig' with {obj: obj} only %}
                         </td>

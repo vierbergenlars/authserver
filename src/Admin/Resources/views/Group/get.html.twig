@@ -6,10 +6,10 @@
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Name</dt><dd>{{ data.displayName }}</dd>
             <dt>Technical Name</dt><dd>
                 {{ data.name }}
             </dd>
+            <dt>Display Name</dt><dd>{{ data.displayName }}</dd>
             <dt>Flags</dt><dd>
                 {% include 'AdminBundle:Group:flags.html.twig' with {obj: data} only %}
             </dd>

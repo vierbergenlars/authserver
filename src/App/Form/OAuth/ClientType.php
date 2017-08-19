@@ -73,7 +73,9 @@ class ClientType extends AbstractType
                 'query_builder' => function(GroupRepository $repository) {
                     return $repository->createQueryBuilder('g')->where('g.exportable = true');
                 },
-                'choice_label' => 'name',
+                'choice_label'=> function(Group $group) {
+                    return sprintf('%s (%s)', $group->getDisplayName(), $group->getName());
+                },
                 'required' => false,
             ))
             ->add('maxScopes', ChoiceType::class, array(

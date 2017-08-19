@@ -79,7 +79,9 @@ class UserType extends AbstractType
                 'expanded' => true,
             ))
             ->add('groups', null, array(
-                'choice_label'=>'name',
+                'choice_label'=> function(Group $group) {
+                    return sprintf('%s (%s)', $group->getDisplayName(), $group->getName());
+                },
                 'query_builder'=>function (EntityRepository $repo) use ($id) {
                     return $repo->createQueryBuilder('g')
                         ->leftJoin('g.members', 'm')
