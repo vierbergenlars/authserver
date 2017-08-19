@@ -20,7 +20,7 @@ framework:
         formats:
             gv: 'text/vnd.graphviz'
     assets:
-      version: 1
+        version_strategy: app.asset.hash_versioning_strategy
 
 # Twig Configuration
 twig:
