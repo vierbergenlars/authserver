@@ -216,13 +216,13 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals('/admin/users/00000000-0000-0000-0000-000000000004', $data->items[0]->_links->self->href);
 
 
-        $this->client->request('GET', '/admin/users?q%5Bname%5D=User+4%25');
+        $this->client->request('GET', '/admin/users?q%5Bname%5D=User%204%25');
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
         $data = json_decode($this->client->getResponse()->getContent());
         $this->assertCount(10, $data->items);
         $this->assertEquals(1, $data->page);
         $this->assertEquals(11, $data->total);
-        $this->assertEquals('/admin/users?q%5Bname%5D=User+4%25&page=2', $data->_links->next->href);
+        $this->assertEquals('/admin/users?q%5Bname%5D=User%204%25&page=2', $data->_links->next->href);
         $this->assertArrayNotHasKey('prev', (array)$data->_links);
         $this->assertEquals('user_49', $data->items[0]->username);
         $this->assertEquals('User 49', $data->items[0]->display_name);
