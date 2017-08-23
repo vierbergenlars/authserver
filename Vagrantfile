@@ -4,6 +4,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     config.vm.synced_folder "src", "/var/www/src", create: true, type: "virtualbox"
+    config.vm.synced_folder "plugins", "/var/www/plugins", create: true, type: "virtualbox"
 
     config.vm.provision :shell, path: "provisioning/install-ansible.sh"
     config.vm.provision :shell, inline: "PYTHONUNBUFFERED=1 sudo ansible-playbook /vagrant/provisioning/playbook.yml --connection=local"

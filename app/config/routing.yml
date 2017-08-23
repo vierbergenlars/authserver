@@ -45,3 +45,7 @@ auth_request:
     resource: "@AuthRequestBundle/Resources/config/routing.yml"
     prefix:   /api
     type: rest
+
+plugin:
+    resource: .
+    type: plugin
