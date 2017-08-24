@@ -19,17 +19,13 @@
 
 namespace App;
 
-use App\Plugin\BundleExtension\FirewallManipulatorTrait;
 use App\Plugin\Event\ContainerConfigEvent;
 use App\Plugin\PluginEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class AppBundle extends Bundle implements EventSubscriberInterface
 {
-    use FirewallManipulatorTrait;
-
     public static function getSubscribedEvents()
     {
         return [
@@ -39,16 +35,18 @@ class AppBundle extends Bundle implements EventSubscriberInterface
 
     public function loadFirewallConfig(ContainerConfigEvent $event)
     {
+        $configManipulator = $event->getConfigManipulator('[security][firewalls]');
         if($event->getKernel()->getEnvironment() === 'dev') {
-            $this->addFirewall($event, [
+            $configManipulator->prependConfig([
                 'dev' => [
                     'pattern'  => '^/(_(profiler|wdt)|css|images|js)/',
                     'security' => false,
                 ]
-            ], true);
+            ]);
         }
 
-        $this->addFirewall($event, [
+
+        $configManipulator->appendConfig([
             'oauth_token' => [
                 'pattern' => '^/oauth/v2/token',
                 'security' => false

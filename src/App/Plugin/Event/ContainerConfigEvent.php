@@ -21,6 +21,7 @@
 namespace App\Plugin\Event;
 
 
+use App\Plugin\BundleExtension\ConfigManipulator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -63,5 +64,14 @@ class ContainerConfigEvent extends KernelEvent
         $this->config = $config;
 
         return $this;
+    }
+
+    /**
+     * @param string $propertyPath
+     * @return ConfigManipulator
+     */
+    public function getConfigManipulator($propertyPath)
+    {
+        return new ConfigManipulator($this, $propertyPath);
     }
 }

@@ -21,37 +21,31 @@
 /**
  * Created by PhpStorm.
  * User: lars
- * Date: 23/08/17
- * Time: 22:32
+ * Date: 24/08/17
+ * Time: 8:05
  */
 
 namespace App\Tests\Plugin\BundleExtension;
 
-use App\Plugin\BundleExtension\FirewallManipulatorTrait;
+use App\Plugin\BundleExtension\ConfigManipulator;
 use App\Plugin\Event\ContainerConfigEvent;
-use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
-class FirewallManipulatorTraitContainer {
-    use FirewallManipulatorTrait;
-
-    public function __call($name, $arguments)
-    {
-        return call_user_func_array([$this, $name], $arguments);
-    }
-}
-class FirewallManipulatorTraitTest extends TestCase
+class ConfigManipulatorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ConfigManipulator
+     */
     private $manipulator;
     private $cceProphet;
 
     protected function setUp()
     {
-        $this->manipulator = new FirewallManipulatorTraitContainer();
         $this->cceProphet = $this->prophesize(ContainerConfigEvent::class);
+        $this->manipulator = new ConfigManipulator($this->cceProphet->reveal(), '[security][firewalls]');
     }
 
-    public function testGetFirewallConfig()
+    public function testGetConfig()
     {
         $conf = [
             'security' => [
@@ -70,16 +64,16 @@ class FirewallManipulatorTraitTest extends TestCase
         ];
         $this->cceProphet->getConfig()->willReturn($conf);
 
-        $this->assertEquals($conf['security']['firewalls'], $this->manipulator->getFirewallConfig($this->cceProphet->reveal()));
+        $this->assertEquals($conf['security']['firewalls'], $this->manipulator->getConfig());
     }
 
-    public function testGetFirewallConfigNoConfig()
+    public function testGetConfigNoConfig()
     {
         $this->cceProphet->getConfig()->willReturn([]);
-        $this->assertEquals([], $this->manipulator->getFirewallConfig($this->cceProphet->reveal()));
+        $this->assertEquals(null, $this->manipulator->getConfig());
     }
 
-    public function testSetFirewallConfig()
+    public function testSetConfig()
     {
         $conf = [
             'security' => [
@@ -103,13 +97,12 @@ class FirewallManipulatorTraitTest extends TestCase
             $this->getConfig()->willReturn($args[0]);
         })->shouldBeCalled();
 
-        $event = $this->cceProphet->reveal();
-        $this->manipulator->setFirewallConfig($event, $conf['security']['firewalls']);
+        $this->manipulator->setConfig($conf['security']['firewalls']);
 
-        $this->assertEquals($conf, $event->getConfig());
+        $this->assertEquals($conf, $this->cceProphet->reveal()->getConfig());
     }
 
-    public function testAddFirewall()
+    public function testAppendConfig()
     {
         $this->cceProphet->getConfig()->willReturn([
             'security' => [
@@ -127,9 +120,7 @@ class FirewallManipulatorTraitTest extends TestCase
             $this->getConfig()->willReturn($args[0]);
         })->shouldBeCalled();
 
-        $event = $this->cceProphet->reveal();
-
-        $this->manipulator->addFirewall($event, [
+        $this->manipulator->appendConfig([
             'fw3' => [
                 'xyz' => 123
             ],
@@ -155,10 +146,10 @@ class FirewallManipulatorTraitTest extends TestCase
                     ],
                 ]
             ]
-        ], $event->getConfig());
+        ], $this->cceProphet->reveal()->getConfig());
     }
 
-    public function testAddFirewallBefore()
+    public function testPrependConfig()
     {
         $this->cceProphet->getConfig()->willReturn([
             'security' => [
@@ -178,14 +169,14 @@ class FirewallManipulatorTraitTest extends TestCase
 
         $event = $this->cceProphet->reveal();
 
-        $this->manipulator->addFirewall($event, [
+        $this->manipulator->prependConfig([
             'fw3' => [
                 'xyz' => 123
             ],
             'fw4' => [
                 'mno' => 897,
             ],
-        ], true);
+        ]);
 
         $this->assertEquals([
             'security' => [
@@ -207,7 +198,7 @@ class FirewallManipulatorTraitTest extends TestCase
         ], $event->getConfig());
     }
 
-    public function testAddFirewallBeforeNamed()
+    public function testAppendConfigNamed()
     {
         $this->cceProphet->getConfig()->willReturn([
             'security' => [
@@ -227,7 +218,56 @@ class FirewallManipulatorTraitTest extends TestCase
 
         $event = $this->cceProphet->reveal();
 
-        $this->manipulator->addFirewall($event, [
+        $this->manipulator->appendConfig([
+            'fw3' => [
+                'xyz' => 123
+            ],
+            'fw4' => [
+                'mno' => 897,
+            ],
+        ], 'fw1');
+
+        $this->assertEquals([
+            'security' => [
+                'firewalls' => [
+                    'fw1' => [
+                        'security' => false,
+                    ],
+                    'fw3' => [
+                        'xyz' => 123
+                    ],
+                    'fw4' => [
+                        'mno' => 897,
+                    ],
+                    'fw2' => [
+                        'http_basic' => null,
+                    ],
+                ]
+            ]
+        ], $event->getConfig());
+    }
+
+    public function testPrependConfigNamed()
+    {
+        $this->cceProphet->getConfig()->willReturn([
+            'security' => [
+                'firewalls' => [
+                    'fw1' => [
+                        'security' => false,
+                    ],
+                    'fw2' => [
+                        'http_basic' => null,
+                    ]
+                ]
+            ]
+        ]);
+        $this->cceProphet->setConfig(Argument::type('array'))->will(function($args) {
+            $this->getConfig()->willReturn($args[0]);
+        })->shouldBeCalled();
+
+        $event = $this->cceProphet->reveal();
+
+        $this->manipulator->prependConfig([
             'fw3' => [
                 'xyz' => 123
             ],
@@ -256,7 +296,7 @@ class FirewallManipulatorTraitTest extends TestCase
         ], $event->getConfig());
     }
 
-    public function testAddFirewallBeforeNamedNonExisting()
+    public function testAppendConfigNamedNonExisting()
     {
         $this->cceProphet->getConfig()->willReturn([
             'security' => [
@@ -276,7 +316,7 @@ class FirewallManipulatorTraitTest extends TestCase
 
         $event = $this->cceProphet->reveal();
 
-        $this->manipulator->addFirewall($event, [
+        $this->manipulator->appendConfig([
             'fw3' => [
                 'xyz' => 123
             ],
@@ -294,6 +334,119 @@ class FirewallManipulatorTraitTest extends TestCase
                     'fw2' => [
                         'http_basic' => null,
                     ],
+                    'fw3' => [
+                        'xyz' => 123
+                    ],
+                    'fw4' => [
+                        'mno' => 897,
+                    ],
+                ]
+            ]
+        ], $event->getConfig());
+    }
+
+    public function testPrependConfigNamedNonExisting()
+    {
+        $this->cceProphet->getConfig()->willReturn([
+            'security' => [
+                'firewalls' => [
+                    'fw1' => [
+                        'security' => false,
+                    ],
+                    'fw2' => [
+                        'http_basic' => null,
+                    ]
+                ]
+            ]
+        ]);
+        $this->cceProphet->setConfig(Argument::type('array'))->will(function($args) {
+            $this->getConfig()->willReturn($args[0]);
+        })->shouldBeCalled();
+
+        $event = $this->cceProphet->reveal();
+
+        $this->manipulator->prependConfig([
+            'fw3' => [
+                'xyz' => 123
+            ],
+            'fw4' => [
+                'mno' => 897,
+            ],
+        ], 'xyz');
+
+        $this->assertEquals([
+            'security' => [
+                'firewalls' => [
+                    'fw1' => [
+                        'security' => false,
+                    ],
+                    'fw2' => [
+                        'http_basic' => null,
+                    ],
+                    'fw3' => [
+                        'xyz' => 123
+                    ],
+                    'fw4' => [
+                        'mno' => 897,
+                    ],
+                ]
+            ]
+        ], $event->getConfig());
+    }
+
+    public function testAppendConfigEmptyConfig()
+    {
+        $this->cceProphet->getConfig()->willReturn([]);
+        $this->cceProphet->setConfig(Argument::type('array'))->will(function($args) {
+            $this->getConfig()->willReturn($args[0]);
+        })->shouldBeCalled();
+
+        $event = $this->cceProphet->reveal();
+
+        $this->manipulator->appendConfig([
+            'fw3' => [
+                'xyz' => 123
+            ],
+            'fw4' => [
+                'mno' => 897,
+            ],
+        ]);
+
+        $this->assertEquals([
+            'security' => [
+                'firewalls' => [
+                    'fw3' => [
+                        'xyz' => 123
+                    ],
+                    'fw4' => [
+                        'mno' => 897,
+                    ],
+                ]
+            ]
+        ], $event->getConfig());
+    }
+
+    public function testPrependConfigEmptyConfig()
+    {
+        $this->cceProphet->getConfig()->willReturn([]);
+        $this->cceProphet->setConfig(Argument::type('array'))->will(function($args) {
+            $this->getConfig()->willReturn($args[0]);
+        })->shouldBeCalled();
+
+        $event = $this->cceProphet->reveal();
+
+        $this->manipulator->prependConfig([
+            'fw3' => [
+                'xyz' => 123
+            ],
+            'fw4' => [
+                'mno' => 897,
+            ],
+        ]);
+
+        $this->assertEquals([
+            'security' => [
+                'firewalls' => [
                     'fw3' => [
                         'xyz' => 123
                     ],
