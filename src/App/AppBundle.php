@@ -19,6 +19,7 @@
 
 namespace App;
 
+use App\Plugin\BundleExtension\FirewallManipulatorTrait;
 use App\Plugin\Event\ContainerConfigEvent;
 use App\Plugin\PluginEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class AppBundle extends Bundle implements EventSubscriberInterface
 {
+    use FirewallManipulatorTrait;
 
     public static function getSubscribedEvents()
     {
@@ -37,60 +39,41 @@ class AppBundle extends Bundle implements EventSubscriberInterface
 
     public function loadFirewallConfig(ContainerConfigEvent $event)
     {
-        $config = $event->getConfig();
-        $pa = PropertyAccess::createPropertyAccessor();
-        $firewall = $pa->getValue($config, '[security][firewall]');
-        if(!$firewall)
-            $firewall = [];
-
-        $firewallOrder = array_keys($firewall);
-
         if($event->getKernel()->getEnvironment() === 'dev') {
-            array_unshift($firewallOrder, 'dev');
-            $firewall['dev'] = [
-                'name' => 'dev',
-                'pattern'  => '^/(_(profiler|wdt)|css|images|js)/',
-                'security' => false,
-            ];
+            $this->addFirewall($event, [
+                'dev' => [
+                    'pattern'  => '^/(_(profiler|wdt)|css|images|js)/',
+                    'security' => false,
+                ]
+            ], true);
         }
 
-        array_push($firewallOrder, 'oauth_token', 'api', 'public');
-
-        $firewall['oauth_token'] =[
-            'name' => 'oauth_token',
-            'pattern' => '^/oauth/v2/token',
-            'security' => false
-        ];
-        $firewall['api'] = [
-            'name' => 'api',
-            'pattern' => '^/api',
-            'http_basic' => null,
-            'fos_oauth' => true,
-            'stateless' => true,
-        ];
-        $firewall['public'] = [
-            'name' => 'public',
-            'pattern' => '^/',
-            'form_login' => [
-                'login_path' => 'app_login',
-                'check_path' => 'app_login_check',
+        $this->addFirewall($event, [
+            'oauth_token' => [
+                'pattern' => '^/oauth/v2/token',
+                'security' => false
             ],
-            'simple_preauth' => [
-                'authenticator' => 'app.admin.security.apikey_authenticator',
+            'api' => [
+                'pattern' => '^/api',
+                'http_basic' => null,
+                'fos_oauth' => true,
+                'stateless' => true,
             ],
-            'logout' => [
-                'handlers' => ['app.security.logout_handler'],
-            ],
-            'anonymous' => null,
-            'switch_user' => true
-        ];
-
-        uksort($firewall, function($a, $b) use($firewallOrder) {
-            return array_search($a, $firewallOrder, true) - array_search($b, $firewallOrder, true);
-        });
-
-        $pa->setValue($config, '[security][firewall]', $firewall);
-
-        $event->setConfig($config);
+            'public' => [
+                'pattern' => '^/',
+                'form_login' => [
+                    'login_path' => 'app_login',
+                    'check_path' => 'app_login_check',
+                ],
+                'simple_preauth' => [
+                    'authenticator' => 'app.admin.security.apikey_authenticator',
+                ],
+                'logout' => [
+                    'handlers' => ['app.security.logout_handler'],
+                ],
+                'anonymous' => null,
+                'switch_user' => true
+            ]
+        ]);
     }
 }
