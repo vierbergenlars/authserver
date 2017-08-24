@@ -150,7 +150,9 @@ class TokenParser
                     $currentNs = $this->parseNamespace();
                     break;
                 case T_CLASS:
-                    $classes[] = $currentNs.'\\'.$this->parseClass();
+                    $class = $this->parseClass();
+                    if($class)
+                        $classes[] = $currentNs.'\\'.$class;
                     break;
             }
         }

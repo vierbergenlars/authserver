@@ -47,6 +47,10 @@ class TestClass {
     private function fn2() {
         return this->t1;
     }
+
+    public function fn3() {
+        return \ABC::class;
+    }
 }
 EOL
         );
