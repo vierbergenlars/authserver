@@ -26,5 +26,9 @@
             <argument type="service" id="app.plugin.manager" />
             <tag name="routing.loader" />
         </service>
+        <service class="App\Plugin\AddMigrationsListener">
+            <argument type="service" id="kernel" />
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 </container>
