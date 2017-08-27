@@ -17,7 +17,7 @@ class AuthRequestBundle extends Bundle implements EventSubscriberInterface
 
     public function addFirewallConfig(ContainerConfigEvent $event)
     {
-        $event->getConfigManipulator('[security][firewall]')->prependConfig([
+        $event->getConfigManipulator('[security][firewalls]')->prependConfig([
             'auth_request_basic_api' => [
                 'pattern' => '^/api/auth_request/basic',
                 'http_basic' => null,
