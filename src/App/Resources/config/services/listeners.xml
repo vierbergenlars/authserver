@@ -31,5 +31,10 @@
         <service class="App\EventListener\UserGuidCreatorListener">
             <tag name="doctrine.event_subscriber" />
         </service>
+
+        <!-- Template defaults listeners -->
+        <service class="App\EventListener\LoginTemplateEventListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 </container>

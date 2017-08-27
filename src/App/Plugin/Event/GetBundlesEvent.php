@@ -55,4 +55,15 @@ class GetBundlesEvent extends KernelEvent
 
         return $this;
     }
+
+    /**
+     * @param BundleInterface $bundle
+     * @return $this
+     */
+    public function addBundle(BundleInterface $bundle)
+    {
+        $this->bundles[] = $bundle;
+
+        return $this;
+    }
 }

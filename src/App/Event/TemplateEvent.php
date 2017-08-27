@@ -18,27 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App;
+/**
+ * Created by PhpStorm.
+ * User: lars
+ * Date: 24/08/17
+ * Time: 16:39
+ */
+
+namespace App\Event;
 
 
-final class AppEvents
+use Symfony\Component\EventDispatcher\GenericEvent;
+
+class TemplateEvent extends GenericEvent implements \Countable
 {
-
-    /**
-     * Emits {@link App\Event\MenuEvent}
-     */
-    const MAIN_MENU = 'app.menu.main';
-
-    /**
-     * Emits {@link App\Event\MenuEvent}
-     */
-    const PROFILE_MENU = 'app.menu.profile';
-
-    const LOGIN_VIEW_BODY = 'app.view.login.body';
-    const LOGIN_VIEW_FOOTER = 'app.view.login.footer';
-
-    private function __construct()
-    {
-    }
-
+    use TemplateEventTrait;
 }

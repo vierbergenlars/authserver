@@ -4,41 +4,16 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-            <form action="{{ url('app_login_check') }}" method="post">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Login</h3>
                     </div>
-                    <div class="panel-body">
-                        {% if error %}
-                            <div class="alert alert-danger" role="alert">
-                                {% if error_type == "Symfony\\Component\\Security\\Core\\Exception\\LockedException" %}
-                                    <p>Your email address has not yet been validated.</p>
-                                    <p>If you did not receive a verification mail, you can <a class="alert-link" href="{{ url('user_email_resend', { user: last_username }) }}">resend the verification email.</a></p>
-                                {% else %}
-                                    <p>{{ error.message }}</p>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                        <div class="form-group">
-                            <label for="username">Username/Email</label>
-                            <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="_password">
-                        </div>
-                    </div>
+                    {% include 'AppBundle::templateEvent.html.twig' with {event: bodyTemplateEvent } only %}
                     <div class="panel-footer text-center">
-                        <button class="btn btn-primary btn-block" type="submit">Login</button>
-                        <a class="btn btn-link btn-sm pull-right" href="{{ url('user_password_forgot', {user: last_username}) }}">Forgot password?</a>
-                        {% if register_enabled %}
-                            <a class="btn btn-link btn-sm pull-right" href="{{ url('registration_register') }}">Register account</a>
-                        {% endif %}
+                        {% include 'AppBundle::templateEvent.html.twig' with {event: footerTemplateEvent } only %}
                         <div class="clearfix"></div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 </div>
