@@ -1,0 +1,9 @@
+<dt>Permissions</dt><dd>
+    {% if role == 'ROLE_ADMIN' %}
+        {{ label_danger('Admin') }}
+    {% elseif role == 'ROLE_SUPER_ADMIN' %}
+        {{ label_danger('Super admin') }}
+    {% else %}
+        {{ role }}
+    {% endif %}
+</dd>
