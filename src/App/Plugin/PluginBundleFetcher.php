@@ -78,10 +78,9 @@ class PluginBundleFetcher
         $pluginBundles = Finder::create()
             ->in($this->pluginDir)
             ->ignoreVCS(true)
-            ->notPath('/\/vendor\//')
+            ->exclude('vendor')
             ->name('*Bundle.php')
             ->followLinks()
-            ->getIterator()
         ;
 
         return $this->pluginBundleFiles = iterator_to_array($pluginBundles);
