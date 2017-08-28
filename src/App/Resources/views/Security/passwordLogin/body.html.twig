@@ -1,7 +1,10 @@
 {% set hiddenPasswordLogin = event.hasArgument('hiddenPasswordLogin') %}
 {% if hiddenPasswordLogin %}
     <div class="panel-body">
-        <button class="btn btn-default btn-block js-password-login-btn">Password login</button>
+        <button
+                class="btn btn-default btn-block"
+                onclick="$('.panel .panel-body:not(.js-password-login)').addClass('hidden');$('.panel .js-password-login').removeClass('hidden');"
+        >Password login</button>
     </div>
 {% endif %}
 <div class="panel-body {% if hiddenPasswordLogin %}hidden{% endif %} js-password-login">
@@ -16,19 +19,9 @@
         </div>
         <button class="btn btn-primary btn-block" type="submit">Login</button>
         {% if hiddenPasswordLogin %}
-            <button class="btn btn-default btn-block js-password-login-btn-back">Back</button>
+            <button class="btn btn-default btn-block"
+                    onclick="$('.panel .panel-body:not(.js-password-login)').removeClass('hidden');$('.panel .js-password-login').addClass('hidden');"
+            >Back</button>
         {% endif %}
     </form>
-    <script>
-        $(function() {
-            $('.js-password-login-btn').on('click', function () {
-                $('.panel .panel-body:not(.js-password-login)').addClass('hidden');
-                $('.panel .js-password-login').removeClass('hidden');
-            });
-            $('.js-password-login-btn-back').on('click', function () {
-                $('.panel .panel-body:not(.js-password-login)').removeClass('hidden');
-                $('.panel .js-password-login').addClass('hidden');
-            });
-        });
-    </script>
 </div>
