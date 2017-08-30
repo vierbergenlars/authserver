@@ -15,3 +15,21 @@ Removing an installed plugin is accomplished by running `./plugin.sh remove $PLU
 
 A plugin can be updated by running `./plugin.sh update $PLUGIN_NAME`,
 or all plugins can be updated with `./plugin.sh update`.
+
+## Developing plugins
+
+A plugin is a single [Symfony bundle](http://symfony.com/doc/current/bundles.html),
+all files ending in `Bundle.php` are loaded and registered as bundles.
+To prevent traversal of the whole dependency graph of a bundle,
+the bundle locator does not descend into `vendor` directories.
+
+File paths in the following description are relative to the location of the bundle file.
+
+While autoloading of composer-installed plugins happens automatically, manually installed plugins (by extracting a zip file to the plugins folder)
+require an `autoload.php` and/or `vendor/autoload.php` file in which autoloading is set up for the bundle.
+
+Routing for a bundle is defined in `Resources/config/routing.yml`, `Resources/config/routing.xml` or `Resources/config/routing.php`.
+These files are processed by the standard Symfony route loaders for their respective type.
+
+Doctrine database migrations for a bundle are located in `Resources/migrations`.
+These are loaded automatically when migrations are run for the application.
