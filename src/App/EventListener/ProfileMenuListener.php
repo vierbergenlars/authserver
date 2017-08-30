@@ -26,6 +26,8 @@ use App\Entity\User;
 use App\Event\MenuEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 class ProfileMenuListener implements EventSubscriberInterface
 {
@@ -33,10 +35,15 @@ class ProfileMenuListener implements EventSubscriberInterface
      * @var TokenStorageInterface
      */
     private $tokenStorage;
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
 
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->tokenStorage = $tokenStorage;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public static function getSubscribedEvents()
@@ -63,6 +70,17 @@ class ProfileMenuListener implements EventSubscriberInterface
                 'route' => 'user_profile',
                 'label' => '.icon-user Profile',
             ]);
+            try {
+                if($this->authorizationChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
+                    $userMenu->addChild('exit_switch_user', [
+                        'route' => 'home',
+                        'routeParameters' => ['_switch_user' => '_exit'],
+                        'label' => '.icon-stethoscope Stop impersonation',
+                    ]);
+                }
+            } catch(AuthenticationCredentialsNotFoundException $ex) {
+                // nothing
+            }
 
             $userMenu->addChild('divider_1', [
                 'attributes' => [
