@@ -112,6 +112,8 @@ class PluginBundleFetcher
             '/autoload.php',
             '/vendor/autoload.php'
         ];
+        if(file_exists($this->pluginDir. '/vendor/autoload.php'))
+            $this->autoloaders[] = $this->pluginDir.'/vendor/autoload.php';
         foreach($this->getPluginDirs() as $pluginDir) {
             foreach($autoloaderLocations as $autoloaderLocation) {
                 if(file_exists($pluginDir.$autoloaderLocation)) {
