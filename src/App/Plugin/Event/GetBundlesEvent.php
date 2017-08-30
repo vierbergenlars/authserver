@@ -31,10 +31,22 @@ class GetBundlesEvent extends KernelEvent
      */
     private $bundles;
 
+    /**
+     * @var array
+     */
+    private $nameMap;
+
     public function __construct(Kernel $kernel, array $bundles)
     {
         parent::__construct($kernel);
         $this->bundles = $bundles;
+    }
+
+    private function updateNameMap($bundles)
+    {
+        foreach($bundles as $bundle) {
+            $this->nameMap[$bundle->getName()] = $bundle;
+        }
     }
 
     /**
@@ -51,6 +63,8 @@ class GetBundlesEvent extends KernelEvent
      */
     public function setBundles($bundles)
     {
+        $this->nameMap = [];
+        $this->updateNameMap($bundles);
         $this->bundles = $bundles;
 
         return $this;
@@ -62,7 +76,17 @@ class GetBundlesEvent extends KernelEvent
      */
     public function addBundle(BundleInterface $bundle)
     {
-        $this->bundles[] = $bundle;
+        if(!$this->nameMap)
+            $this->updateNameMap($this->bundles);
+        if(!isset($this->nameMap[$bundle->getName()])) {
+            $this->updateNameMap([$bundle]);
+            $this->bundles[] = $bundle;
+        } else {
+            $existingBundle = $this->nameMap[$bundle->getName()];
+            /* @var $existingBundle \Symfony\Component\HttpKernel\Bundle\BundleInterface */
+            if($existingBundle->getNamespace() !== $bundle->getNamespace())
+                throw new \LogicException(sprintf('Trying to register two bundles with the same name "%s"', $existingBundle->getName()));
+        }
 
         return $this;
     }
