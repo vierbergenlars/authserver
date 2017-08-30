@@ -18,6 +18,8 @@ or all plugins can be updated with `./plugin.sh update`.
 
 ## Developing plugins
 
+### Structure
+
 A plugin is a single [Symfony bundle](http://symfony.com/doc/current/bundles.html),
 all files ending in `Bundle.php` are loaded and registered as bundles.
 To prevent traversal of the whole dependency graph of a bundle,
@@ -33,3 +35,20 @@ These files are processed by the standard Symfony route loaders for their respec
 
 Doctrine database migrations for a bundle are located in `Resources/migrations`.
 These are loaded automatically when migrations are run for the application.
+
+### Plugin events
+
+During the booting of the AppKernel, events are emitted to let plugins hook into the boot phase.
+As the container is not yet available during the boot phase, these events are handled by a separate
+event dispatcher. To subscribe to these events, let your Bundle class implement the `Symfony\Component\EventDispatcher\EventSubscriberInterface` interface.
+
+ * `App\Plugin\PluginEvents::INITIALIZE_BUNDLES`: Emitted after plugin bundles are located,
+ but before bundles are registered in the kernel. This event can be used to modify the list of bundles
+ to be loaded (for example, when a plugin is dependent on another bundle). Emits a `App\Plugin\Event\GetBundlesEvent`.
+ * `App\Plugin\PluginEvents::INITIALIZE_CONTAINER`: Emitted after the container has been initialized.
+  I don't know why it would be useful, as everything is already initialized at this point. Emits a `App\Plugin\Event\KernelEvent`.
+ * `App\Plugin\PluginEvents::CONTAINER_CONFIG`: Emitted when the container loads its configuration.
+  Use this event to inject extra configuration that needs to be available
+  before the `Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface::prepend()`
+  method is called. It can also be used to let multiple bundles modify configurations that are dependent on order,
+  and disallow adding new array keys in multiple configuration files (like `security.firewalls`).
