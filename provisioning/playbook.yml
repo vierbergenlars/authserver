@@ -1,5 +1,11 @@
 - hosts: localhost
   tasks:
+    - name: Install apt https transport
+      apt: name=apt-transport-https state=present
+    - name: Install nodesource nodejs repo
+      apt_repository: repo='deb https://deb.nodesource.com/node_8.x jessie main' filename=nodesource
+    - name: Add nodesource signing key
+      apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
     - name: Install packages
       apt: name={{ item }} state=present update_cache=yes
       with_items:
@@ -9,7 +15,7 @@
         - php5-sqlite
         - php5-curl
         - git
-        - nodejs-legacy
+        - nodejs
         - curl
         - python-mysqldb
         - mysql-server
@@ -24,7 +30,7 @@ EOF"
     - name: Install npm
       shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
     - name: Enable php5 apache module
-      apache2_module: name=php5 state=present
+      command: a2enmod php5 creates=/etc/apache2/mods-enabled/php5.load
       notify: reload httpd
     - name: Install composer
       shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
