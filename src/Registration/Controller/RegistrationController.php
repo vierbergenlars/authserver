@@ -23,6 +23,7 @@ class RegistrationController extends Controller
             return [
                 'form' =>$form,
                 'registration_message' => $this->getParameter('registration.message'),
+                'temporary_user' => $this->isGranted('ROLE_TEMPORARY_USER') ? $this->getUser() : null
             ];
         return $this->redirectToRoute('app_login');
     }

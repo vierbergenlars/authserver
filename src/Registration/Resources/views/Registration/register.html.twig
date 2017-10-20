@@ -15,10 +15,14 @@
                                 {{ registration_message }}
                             </div>
                         {% endif %}
-                        {{ form_row(form.username) }}
-                        {{ form_row(form.displayName) }}
-                        {{ form_row(form.password) }}
-                        {{ form_row(form.emailAddresses) }}
+                        {% if temporary_user %}
+                            <div class="alert alert-warning">
+                                Your new account will automatically be linked to your external account {{ temporary_user.displayName }}.
+                            </div>
+                        {% endif %}
+                        {% for field in form if field.vars.full_name != 'registration_user[submit]' %}
+                            {{ form_row(field) }}
+                        {% endfor %}
                     </div>
                     <div class="panel-footer">
                         {{ form_row(form.submit) }}

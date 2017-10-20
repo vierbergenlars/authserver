@@ -40,6 +40,8 @@ class LogoutHandler implements LogoutHandlerInterface
     public function logout(Request $request, Response $response, TokenInterface $token)
     {
         $user = $token->getUser();
+        if (!($user instanceof User))
+            return;
         $this->manager->beginTransaction();
         $this->manager->getRepository('AppBundle:OAuth\\RefreshToken')
                 ->createQueryBuilder('t')

@@ -29,8 +29,8 @@ class SecurityController extends Controller
 {
     public function loginAction(Request $request)
     {
-        if($this->getUser())
-            return $this->redirectToRoute('user_profile');
+        if ($this->getUser())
+            return $this->redirectToRoute('home');
 
         $session = $request->getSession();
 
