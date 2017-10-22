@@ -39,6 +39,6 @@ class RegistrationHandler
         if ($event->getForm()->isValid())
             $this->eventDispatcher->dispatch(RegistrationEvents::HANDLE_FORM, $event);
 
-        return $event->isSucceeded() ? null : $event->getForm();
+        return !$event->isFailed() ? null : $event->getForm();
     }
 }

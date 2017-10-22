@@ -35,12 +35,12 @@ class RegistrationHandleEvent extends Event
      *
      * @var boolean
      */
-    private $succeeded;
+    private $failed;
 
     public function __construct(FormInterface $form)
     {
         $this->form = $form;
-        $this->succeeded = false;
+        $this->failed = false;
     }
 
     /**
@@ -56,18 +56,14 @@ class RegistrationHandleEvent extends Event
      *
      * @return boolean
      */
-    public function isSucceeded()
+    public function isFailed()
     {
-        return $this->succeeded;
+        return $this->failed;
     }
 
-    /**
-     *
-     * @param boolean $succeeded
-     */
-    public function setSucceeded($succeeded)
+    public function setFailed()
     {
-        $this->succeeded = $succeeded;
+        $this->failed = true;
     }
 }
 

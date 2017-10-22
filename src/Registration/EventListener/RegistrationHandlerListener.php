@@ -89,20 +89,26 @@ class RegistrationHandlerListener implements EventSubscriberInterface
 
     public function handleFormRegistrationRules(RegistrationHandleEvent $event)
     {
+        if ($event->isFailed())
+            return;
         $user = $event->getForm()->getData();
         if (!$user)
             return;
         /* @var $user User */
         $emailAddress = $user->getPrimaryEmailAddress()->getEmail();
         $registrationRule = $this->registrationRules->getFirstRuleMatching($emailAddress);
-        if (!$registrationRule || !$registrationRule->isSelfRegistration())
-            throw new \LogicException('Self-registration checking should already have been applied on the form');
+        if (!$registrationRule || !$registrationRule->isSelfRegistration()) {
+            $this->flashMessage->error('Self-registration is not allowed with this email address.');
+            $event->setFailed();
+        }
 
         $user->setEnabled($registrationRule->isAutoActivate());
     }
 
     public function handleFormPersist(RegistrationHandleEvent $event)
     {
+        if ($event->isFailed())
+            return;
         $user = $event->getForm()->getData();
         if (!$user)
             return;
@@ -114,28 +120,34 @@ class RegistrationHandlerListener implements EventSubscriberInterface
 
     public function handleFormMail(RegistrationHandleEvent $event)
     {
+        if ($event->isFailed())
+            return;
         $user = $event->getForm()->getData();
         if (!$user)
             return;
-        /* @var $user User */
+        /* @var $user \App\Entity\User */
+        if ($user->getPrimaryEmailAddress()->isVerified()) {
+            $this->flashMessage->success('Your account has been registered, and your email address has been verified automatically.');
+            return;
+        }
 
         if (!$this->mailer->sendMessage($user->getPrimaryEmailAddress()
             ->getEmail(), $user->getPrimaryEmailAddress())) {
             $this->flashMessage->error('We are having some troubles sending you a verification mail. Please try again later.');
-            $event->stopPropagation();
+            $event->setFailed();
         } else {
             $this->flashMessage->success('Your account has been registered, please check your mails to confirm your email address.');
-            $event->setSucceeded(true);
         }
     }
 
     public function handleFormFlushData(RegistrationHandleEvent $event)
     {
+        if ($event->isFailed())
+            return;
         $user = $event->getForm()->getData();
         if (!$user)
             return;
         /* @var $user User */
-        if ($event->isSucceeded())
-            $this->em->flush();
+        $this->em->flush();
     }
 }
