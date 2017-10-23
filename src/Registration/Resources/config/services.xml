@@ -44,6 +44,7 @@
         <service class="Registration\EventListener\TemporaryUserListener">
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="router" />
+            <argument type="service" id="logger" />
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

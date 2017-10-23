@@ -36,8 +36,9 @@ class RegistrationHandler
     {
         $event = new RegistrationHandleEvent($this->getRegistrationForm());
         $event->getForm()->handleRequest($request);
-        if ($event->getForm()->isValid())
-            $this->eventDispatcher->dispatch(RegistrationEvents::HANDLE_FORM, $event);
+        if (!$event->getForm()->isValid())
+            return $event->getForm();
+        $this->eventDispatcher->dispatch(RegistrationEvents::HANDLE_FORM, $event);
 
         return !$event->isFailed() ? null : $event->getForm();
     }
