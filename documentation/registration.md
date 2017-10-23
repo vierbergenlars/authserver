@@ -40,3 +40,11 @@ you can use to register on the site.
 registrations:
     registration_message: 'You can register an account with your @vbgn.be email address'
 ```
+
+## Extending registration
+
+The registrations module exposes two events, `Registration\RegistrationEvents::BUILD_FORM` and `Registration\RegistrationEvents::HANDLE_FORM`.
+
+Build form listeners are called with a `Registration\Event\RegistrationFormEvent`, which allows to modify the form and its data.
+
+Handle form listeners are called with a `Registration\Event\RegistrationHandleEvent`, which allows to modify the result of submitting the registration form. Every handler should check the `isFailed()` method on the event before performing any positive actions with regard to the registration.
