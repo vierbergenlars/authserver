@@ -76,6 +76,12 @@ Only the `web/` directory should be publicly accessible, all requests that do no
 should be rewritten to `web/app.php` by the webserver. How to accomplish this depends on your webserver,
 but a `.htaccess` file that accomplishes this is present in the `web/` folder.
 
+### Plugins
+
+Plugins that extend Authserver and add functionality can be installed with the `./plugin.sh` command.
+
+More information is available in [the plugins documentation](https://github.com/vierbergenlars/authserver/blob/master/documentation/plugins.md)
+
 ## Upgrading
 
 Upgrading can be done easily by overwriting the old files with a fresh copy.
