@@ -100,6 +100,7 @@ class RegistrationHandlerListener implements EventSubscriberInterface
         if (!$registrationRule || !$registrationRule->isSelfRegistration()) {
             $this->flashMessage->error('Self-registration is not allowed with this email address.');
             $event->setFailed();
+            return;
         }
 
         $user->setEnabled($registrationRule->isAutoActivate());
