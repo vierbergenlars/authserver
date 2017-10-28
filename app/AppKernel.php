@@ -1,10 +1,31 @@
 <?php
 
+use App\Plugin\Event\ContainerConfigEvent;
+use App\Plugin\Event\GetBundlesEvent;
+use App\Plugin\Event\KernelEvent;
+use App\Plugin\PluginBundleFetcher;
+use App\Plugin\PluginEvents;
+use App\Plugin\PluginManager;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+    /**
+     * @var PluginManager
+     */
+    private $pluginManager;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $pluginEventDispatcher;
+
     public function registerBundles()
     {
         $bundles = array(
@@ -36,16 +57,68 @@ class AppKernel extends Kernel
             new ThemingBundle\ThemingBundle(),
         );
 
+        $this->loadPluginManager();
+
+        // Load plugins and add them to the bundles list
+        foreach($this->pluginManager->getBundles() as $bundle) {
+            $bundles[] = $bundle;
+        }
+
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
 
-        return $bundles;
+        // Subscribe all bundles implementing the EventSubscriberInterface to the plugin EventDispatcher
+        foreach($bundles as $bundle) {
+            if($bundle instanceof EventSubscriberInterface) {
+                $this->pluginEventDispatcher->addSubscriber($bundle);
+            }
+        }
+
+        // Emit Initialize Bundles event to fetch the final list of bundles to be loaded.
+        $event = new GetBundlesEvent($this, $bundles);
+        $this->pluginEventDispatcher->dispatch(PluginEvents::INITIALIZE_BUNDLES, $event);
+        return $event->getBundles();
+    }
+
+    /**
+     * Load the plugin fetcher, manager and event dispatcher
+     */
+    private function loadPluginManager()
+    {
+        $pluginCache = $this->getCacheDir()?new ConfigCache($this->getCacheDir().'/plugins.php', $this->isDebug()):null;
+        $pluginFetcher = new PluginBundleFetcher($this->getProjectDir() . '/plugins', $pluginCache);
+        $this->pluginEventDispatcher = new EventDispatcher();
+        $this->pluginManager = new PluginManager($pluginFetcher, $this->pluginEventDispatcher);
+    }
+
+    protected function initializeContainer()
+    {
+        parent::initializeContainer();
+
+        // Add plugin manager and plugin EventDispatcher as services
+        $this->getContainer()->set('app.plugin.manager', $this->pluginManager);
+        $this->getContainer()->set('app.plugin.event_dispatcher', $this->pluginEventDispatcher);
+
+        // Emit Initialize Container event
+        $event = new KernelEvent($this);
+        $this->pluginEventDispatcher->dispatch(PluginEvents::INITIALIZE_CONTAINER, $event);
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        // Enable event subscribers to add their own configuration before the normal configuration is loaded.
+        // The primary usecase is letting multiple bundles configure security.firewall incrementally.
+        $loader->load(\Closure::bind(function(ContainerBuilder $containerBuilder) {
+            $event = new ContainerConfigEvent($this, $containerBuilder);
+            $this->pluginEventDispatcher->dispatch(PluginEvents::CONTAINER_CONFIG, $event);
+            foreach($event->getConfig() as $ns => $values) {
+                $containerBuilder->loadFromExtension($ns, $values);
+            }
+        }, $this));
+
+        // Load normal configuration
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 }

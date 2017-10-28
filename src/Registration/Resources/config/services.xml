@@ -20,15 +20,31 @@
             <tag name="form.type" />
         </service>
         <service id="registration.handler" class="Registration\RegistrationHandler\RegistrationHandler">
-            <argument type="service" id="registration.rules" />
-            <argument type="service" id="app.mailer.user.verify_email" />
-            <argument type="service" id="form.factory" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="braincrafted_bootstrap.flash"/>
+            <argument type="service" id="event_dispatcher" />
         </service>
 
         <service class="Registration\EventListener\ProfileMenuListener">
             <argument type="service" id="security.token_storage" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service class="Registration\EventListener\RegistrationFormListener">
+            <argument type="service" id="form.factory" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service class="Registration\EventListener\RegistrationHandlerListener">
+            <argument type="service" id="registration.rules" />
+            <argument type="service" id="app.mailer.user.verify_email" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="braincrafted_bootstrap.flash"/>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service class="Registration\EventListener\TemporaryUserListener">
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="router" />
+            <argument type="service" id="logger" />
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

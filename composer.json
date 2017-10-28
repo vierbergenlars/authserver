@@ -42,6 +42,7 @@
     "minimum-stability": "stable",
     "extra": {
         "symfony-app-dir": "app",
-        "symfony-web-dir": "web"
+        "symfony-web-dir": "web",
+        "authserver-plugin-dir": "plugins"
     }
 }

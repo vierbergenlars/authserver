@@ -19,9 +19,61 @@
 
 namespace App;
 
+use App\Plugin\Event\ContainerConfigEvent;
+use App\Plugin\PluginEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AppBundle extends Bundle
+class AppBundle extends Bundle implements EventSubscriberInterface
 {
+    public static function getSubscribedEvents()
+    {
+        return [
+            PluginEvents::CONTAINER_CONFIG => 'loadFirewallConfig',
+        ];
+    }
 
+    public function loadFirewallConfig(ContainerConfigEvent $event)
+    {
+        $configManipulator = $event->getConfigManipulator('[security][firewalls]');
+        if($event->getKernel()->getEnvironment() === 'dev') {
+            $configManipulator->prependConfig([
+                'dev' => [
+                    'pattern'  => '^/(_(profiler|wdt)|css|images|js)/',
+                    'security' => false,
+                ]
+            ]);
+        }
+
+
+        $configManipulator->appendConfig([
+            'oauth_token' => [
+                'pattern' => '^/oauth/v2/token',
+                'security' => false
+            ],
+            'api' => [
+                'pattern' => '^/api',
+                'provider' => 'main',
+                'http_basic' => null,
+                'fos_oauth' => true,
+                'stateless' => true,
+            ],
+            'public' => [
+                'pattern' => '^/',
+                'provider' => 'main',
+                'form_login' => [
+                    'login_path' => 'app_login',
+                    'check_path' => 'app_login_check',
+                ],
+                'simple_preauth' => [
+                    'authenticator' => 'app.admin.security.apikey_authenticator',
+                ],
+                'logout' => [
+                    'handlers' => ['app.security.logout_handler'],
+                ],
+                'anonymous' => null,
+                'switch_user' => true
+            ]
+        ]);
+    }
 }

@@ -23,12 +23,18 @@
 
         <service class="App\EventListener\ProfileMenuListener">
             <argument type="service" id="security.token_storage" />
+            <argument type="service" id="security.authorization_checker" />
             <tag name="kernel.event_subscriber" />
         </service>
 
         <!-- Doctrine listeners -->
         <service class="App\EventListener\UserGuidCreatorListener">
             <tag name="doctrine.event_subscriber" />
+        </service>
+
+        <!-- Template defaults listeners -->
+        <service class="App\EventListener\LoginTemplateEventListener">
+            <tag name="kernel.event_subscriber" />
         </service>
     </services>
 </container>

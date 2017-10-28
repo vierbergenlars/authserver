@@ -1,0 +1,27 @@
+{% set hiddenPasswordLogin = event.hasArgument('hiddenPasswordLogin') %}
+{% if hiddenPasswordLogin %}
+    <div class="panel-body">
+        <button
+                class="btn btn-default btn-block"
+                onclick="$('.panel .panel-body:not(.js-password-login)').addClass('hidden');$('.panel .js-password-login').removeClass('hidden');"
+        >Password login</button>
+    </div>
+{% endif %}
+<div class="panel-body {% if hiddenPasswordLogin %}hidden{% endif %} js-password-login">
+    <form action="{{ url('app_login_check') }}" method="post">
+        <div class="form-group">
+            <label for="username">Username/Email</label>
+            <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="_password">
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Login</button>
+        {% if hiddenPasswordLogin %}
+            <button class="btn btn-default btn-block"
+                    onclick="$('.panel .panel-body:not(.js-password-login)').removeClass('hidden');$('.panel .js-password-login').addClass('hidden');"
+            >Back</button>
+        {% endif %}
+    </form>
+</div>

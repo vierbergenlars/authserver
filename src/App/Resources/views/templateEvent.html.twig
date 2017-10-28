@@ -1,0 +1,3 @@
+{% for template in event.templates %}
+    {% include template with event.getTemplateData(template) %}
+{% endfor %}

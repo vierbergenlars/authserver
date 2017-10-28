@@ -29,78 +29,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-12 col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Profile</h2>
-                </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal">
-                        <dt>Name</dt><dd>{{ data.displayName }}</dd>
-                        <dt>Username</dt><dd>{{ data.username }}</dd>
-                        <dt>Email</dt><dd>
-                            {% for email in data.emailAddresses %}
-                                {{ email.email }}
-                                {% if not email.verified %}
-                                    <span class="text-muted">(Pending verification)</span>
-                                {% endif %}
-                                {{ render(controller('UserBundle:Profile:editEmailAddresses', {
-                                    addr: email
-                                })) }}
-                                <br>
-                            {% endfor %}
-                            <div id="add_email_address_text" class="collapse in">
-                                <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_email_address_form, #add_email_address_text">{{ icon('plus') }} Add email address</button>
-                            </div>
-                            <div id="add_email_address_form" class="collapse">
-                                {{ form(form.add_email, { action: url('user_post_email_addresses'), style: 'inline' }) }}
-                            </div>
-                        </dd>
-                        {% if data.passwordEnabled %}
-                            <dt>Password</dt>
-                            <dd>
-                                {% if data.passwordEnabled == 1 %}
-                                    ****** <a class="btn btn-sm btn-link" href="{{ url('user_change_password') }}">{{ icon('pencil') }} Edit</a>
-                                {% else %}
-                                    <span class="text-muted">(None)</span> <a class="btn btn-sm btn-link" href="{{ url('user_change_password') }}">{{ icon('key') }} Configure password</a>
-                                {% endif %}
-                            </dd>
-                        {% endif %}
-
-                        <dt>Groups</dt><dd class="list-groups">
-                            {% for group in data.groups %}
-                                {{ icon('group') }} {{ group.displayName }}
-                                {% if group.userLeaveable %}
-                                    {{- render(controller('UserBundle:Profile:removeGroup', {
-                                        groupId: group.id
-                                    })) -}}
-                                {% endif %}
-                                <br>
-                            {% else %}
-                                <span class="text-muted">(None)</span>
-                            {% endfor %}
-                            {% if form.add_group %}
-                                <div id="add_group_text" class="collapse in">
-                                    <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_group_form, #add_group_text">{{ icon('plus') }} Join group</button>
-                                </div>
-                                <div id="add_group_form" class="collapse">
-                                    {{ form(form.add_group, { action: url('user_post_group'), style: 'inline' }) }}
-                                </div>
-                            {% endif %}
-                        </dd>
-                        {% if data.role != 'ROLE_USER' %}
-                            <dt>Permissions</dt><dd>
-                                {% if data.role == 'ROLE_ADMIN' %}
-                                    {{ label_danger('Admin') }}
-                                {% elseif data.role == 'ROLE_SUPER_ADMIN' %}
-                                    {{ label_danger('Super admin') }}
-                                {% else %}
-                                    {{ data.role }}
-                                {% endif %}
-                            </dd>
-                        {% endif %}
-                    </dl>
-                </div>
-            </div>
+            {% include 'AppBundle::templateEvent.html.twig' with {event: userProfileEvent } only %}
         </div>
         <div class="col-xs-12 col-sm-4">
             <div class="panel panel-default panel-authorized-apps">

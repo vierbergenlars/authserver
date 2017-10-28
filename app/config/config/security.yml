@@ -41,37 +41,7 @@ security:
         main:
             id: app.user_provider
 
-    firewalls:
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        oauth_token:
-            pattern:    ^/oauth/v2/token
-            security:   false
-
-        api_auth_request_basic:
-            pattern: ^/api/auth_request/basic
-            http_basic: ~
-            stateless: true
-
-        api:
-            pattern:    ^/api
-            http_basic: ~
-            fos_oauth:  true
-            stateless:  true
-
-        public:
-            pattern: ^/
-            form_login:
-                login_path: app_login
-                check_path: app_login_check
-            simple_preauth:
-                authenticator: app.admin.security.apikey_authenticator
-            logout:
-                handlers: [app.security.logout_handler]
-            anonymous: ~
-            switch_user: true
+#    firewalls: ~  #See src/App/AppBundle.php for firewall config
 
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -27,12 +27,15 @@ final class AppEvents
     /**
      * Emits {@link App\Event\MenuEvent}
      */
-    const MAIN_MENU = 'app.main_menu';
+    const MAIN_MENU = 'app.menu.main';
 
     /**
      * Emits {@link App\Event\MenuEvent}
      */
-    const PROFILE_MENU = 'app.profile_menu';
+    const PROFILE_MENU = 'app.menu.profile';
+
+    const LOGIN_VIEW_BODY = 'app.view.login.body';
+    const LOGIN_VIEW_FOOTER = 'app.view.login.footer';
 
     private function __construct()
     {

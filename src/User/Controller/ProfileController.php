@@ -25,6 +25,7 @@ use App\Entity\OAuth\AccessToken;
 use App\Entity\OAuth\RefreshToken;
 use App\Entity\OAuth\UserAuthorization;
 use App\Entity\User;
+use App\Event\TemplateEvent;
 use Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,6 +37,7 @@ use User\Form\DeleteAuthorizedAppType;
 use User\Form\DeleteGroupType;
 use User\Form\EditEmailAddressType;
 use User\Form\EmailAddressType;
+use User\UserEvents;
 
 class ProfileController extends Controller
 {
@@ -44,24 +46,12 @@ class ProfileController extends Controller
      */
     public function indexAction()
     {
-        $hasJoinableGroupsBuilder = $this->getDoctrine()
-            ->getManagerForClass(Group::class)
-            ->getRepository(Group::class)
-            ->createQueryBuilder('g')
-            ->select('COUNT(g)')
-            ->where('g.noUsers = false AND g.userJoinable = true');
-        if($this->getUser()->getGroups()->count() > 0)
-            $hasJoinableGroupsBuilder->andWhere('g NOT IN(:groups)')
-                ->setParameter('groups', $this->getUser()->getGroups());
-        $hasJoinableGroups = $hasJoinableGroupsBuilder->getQuery()
-            ->getSingleScalarResult() > 0;
-        return array(
-            'data'=>$this->getUser(),
-            'form' => array(
-                'add_email' => $this->createForm(EmailAddressType::class)->createView(),
-                'add_group' => $hasJoinableGroups?$this->createForm(AddGroupType::class)->createView():null,
-            ),
-        );
+        $event = new TemplateEvent($this->getUser());
+        $this->container->get('event_dispatcher')->dispatch(UserEvents::USER_PROFILE_VIEW, $event);
+        return [
+            'userProfileEvent' => $event,
+            'data' => $event->getSubject(),
+        ];
     }
 
     /**

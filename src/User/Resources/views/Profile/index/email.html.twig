@@ -1,0 +1,18 @@
+<dt>Email</dt><dd>
+    {% for email in emailAddresses %}
+        {{ email.email }}
+        {% if not email.verified %}
+            <span class="text-muted">(Pending verification)</span>
+        {% endif %}
+        {{ render(controller('UserBundle:Profile:editEmailAddresses', {
+            addr: email
+        })) }}
+        <br>
+    {% endfor %}
+    <div id="add_email_address_text" class="collapse in">
+        <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_email_address_form, #add_email_address_text">{{ icon('plus') }} Add email address</button>
+    </div>
+    <div id="add_email_address_form" class="collapse">
+        {{ form(form, { action: url('user_post_email_addresses'), style: 'inline' }) }}
+    </div>
+</dd>

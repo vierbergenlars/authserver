@@ -18,6 +18,8 @@ doctrine:
                 dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
                 is_bundle: false
 
+doctrine_migrations:
+    dir_name: "%kernel.cache_dir%/migrations"
 
 stof_doctrine_extensions:
     orm:
