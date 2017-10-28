@@ -61,6 +61,12 @@ EOF"
         - composer.json
         - composer.lock
         - package.json
+    - name: Configure apache to use development environment
+      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
+    - name: Remove HTTPS redirection
+      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
+    - name: Remove restrictions on web/app_dev.php
+      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: Start mysql
       service: name=mysql state=started
     - name: Use mysql strict mode
@@ -103,12 +109,6 @@ EOF"
         - app
         - app/cache
         - app/logs
-    - name: Configure apache to use development environment
-      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
-    - name: Remove HTTPS redirection
-      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
-    - name: Remove restrictions on web/app_dev.php
-      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: "
     Some helpful information.\n
     Webserver running at http://192.168.80.2/\n
