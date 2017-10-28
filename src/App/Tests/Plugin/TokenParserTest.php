@@ -23,7 +23,7 @@ namespace App\Tests\Plugin;
 
 use App\Plugin\TokenParser;
 
-class TokenParserTest extends \PHPUnit_Framework_TestCase
+class TokenParserTest extends \PHPUnit\Framework\TestCase
 {
     public function testParseClassWithNamespace()
     {

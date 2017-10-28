@@ -14,7 +14,6 @@ matrix:
 
 before_script:
   - "cp app/config/parameters.yml{.dist,}"
-  - "composer install --prefer-source"
-  - "composer require --dev phpunit/phpunit --profile -vvv"
+  - "composer install"
 
-script: phpunit -c app
+script: bin/phpunit -c app

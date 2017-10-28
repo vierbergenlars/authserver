@@ -31,7 +31,7 @@ use App\Plugin\BundleExtension\ConfigManipulator;
 use App\Plugin\Event\ContainerConfigEvent;
 use Prophecy\Argument;
 
-class ConfigManipulatorTest extends \PHPUnit_Framework_TestCase
+class ConfigManipulatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigManipulator
