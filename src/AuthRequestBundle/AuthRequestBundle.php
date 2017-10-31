@@ -20,8 +20,9 @@ class AuthRequestBundle extends Bundle implements EventSubscriberInterface
         $event->getConfigManipulator('[security][firewalls]')->prependConfig([
             'auth_request_basic_api' => [
                 'pattern' => '^/api/auth_request/basic',
+                'provider' => 'main',
                 'http_basic' => null,
-                'stateless' => true,
+                'stateless' => true
             ]
         ], 'api');
     }
