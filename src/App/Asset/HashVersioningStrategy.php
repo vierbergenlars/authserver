@@ -24,36 +24,43 @@
  * Date: 19/08/17
  * Time: 19:10
  */
-
 namespace App\Asset;
-
 
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 class HashVersioningStrategy implements VersionStrategyInterface
 {
 
+    private $webRoot;
+
+    public function __construct($webRoot)
+    {
+        $this->webRoot = $webRoot;
+    }
+
     /**
      * Returns the asset version for an asset.
      *
-     * @param string $path A path
+     * @param string $path
+     *            A path
      *
      * @return string The version string
      */
     public function getVersion($path)
     {
-        return sha1_file($path);
+        return sha1_file($this->webRoot . $path);
     }
 
     /**
      * Applies version to the supplied path.
      *
-     * @param string $path A path
+     * @param string $path
+     *            A path
      *
      * @return string The versionized path
      */
     public function applyVersion($path)
     {
-        return $path.'?'.$this->getVersion($path);
+        return $path . '?' . $this->getVersion($path);
     }
 }

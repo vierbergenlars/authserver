@@ -35,10 +35,13 @@ final class AppEvents
     const PROFILE_MENU = 'app.menu.profile';
 
     const LOGIN_VIEW_BODY = 'app.view.login.body';
+
     const LOGIN_VIEW_FOOTER = 'app.view.login.footer';
 
-    private function __construct()
-    {
-    }
+    const GENERATE_HTACCESS = 'app.generate.htaccess';
 
+    const GENERATE_MAINTENANCE = 'app.generate.maintenance';
+
+    private function __construct()
+    {}
 }

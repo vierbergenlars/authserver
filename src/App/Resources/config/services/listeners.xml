@@ -36,5 +36,8 @@
         <service class="App\EventListener\LoginTemplateEventListener">
             <tag name="kernel.event_subscriber" />
         </service>
+        <service class="App\EventListener\GenerateEventListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 </container>

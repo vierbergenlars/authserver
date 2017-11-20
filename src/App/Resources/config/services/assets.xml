@@ -20,6 +20,8 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="app.asset.hash_versioning_strategy" class="App\Asset\HashVersioningStrategy" />
+        <service id="app.asset.hash_versioning_strategy" class="App\Asset\HashVersioningStrategy">
+            <argument>%kernel.root_dir%/../web/</argument>
+        </service>
     </services>
 </container>

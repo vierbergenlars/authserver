@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{ parent() }} - Maintenance{% endblock %}
+{% block body %}
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Maintenance</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>Application is currently under maintenance.</p>
+                            <p>Please try again later.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
