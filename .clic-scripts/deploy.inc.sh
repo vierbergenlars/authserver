@@ -12,6 +12,7 @@ php app/console theming:generate:bootstrap
 php app/console assets:install
 php app/console assetic:dump
 php app/console braincrafted:bootstrap:install
+php app/console app:generate
 if tty -s; then
     # Only execute migrations when there are new migrations available.
     php app/console doctrine:migrations:status | grep "New Migrations:" | cut -d: -f2 |grep "^ *0" > /dev/null || \

@@ -15,3 +15,5 @@
 /app/Resources/less/
 /plugins/*
 !/plugins/.gitkeep
+/_maintenance.html
+/web/.htaccess

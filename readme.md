@@ -56,6 +56,7 @@ php app/console assets:install --env=prod
 php app/console assetic:dump --env=prod
 php app/console braincrafted:bootstrap:install --env=prod
 php app/console doctrine:migrations:migrate --env=prod
+php app/console app:generate --env=prod
 ```
 
 #### Creating the first user
