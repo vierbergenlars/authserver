@@ -56,7 +56,6 @@ EOF"
         - app/AppCache.php
         - app/console
         - app/autoload.php
-        - web/.htaccess
         - web/app_dev.php
         - composer.json
         - composer.lock
@@ -94,6 +93,7 @@ EOF"
         - braincrafted:bootstrap:install
         - theming:generate:bootstrap
         - assetic:dump
+        - app:generate
         - doctrine:migrations:migrate
     - name: Create admin user 'admin'
       command: php app/console app:adduser --super-admin admin admin admin@vbgn.be -n chdir=/var/www
