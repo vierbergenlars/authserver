@@ -11,18 +11,7 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
-monolog:
-    handlers:
-        main:
-            type:  stream
-            path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
-        firephp:
-            type:  firephp
-            level: info
-        chromephp:
-            type:  chromephp
-            level: info
+# monolog: ~  #See src/App/AppBundle.php for logging config
 
 assetic:
     use_controller: true

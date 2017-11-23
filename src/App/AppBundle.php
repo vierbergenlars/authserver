@@ -1,7 +1,8 @@
 <?php
-/* Authserver, an OAuth2-based single-signon authentication provider written in PHP.
+/*
+ * Authserver, an OAuth2-based single-signon authentication provider written in PHP.
  *
- * Copyright (C) 2015  Lars Vierbergen
+ * Copyright (C) 2015 Lars Vierbergen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -10,13 +11,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace App;
 
 use App\Plugin\Event\ContainerConfigEvent;
@@ -26,25 +26,32 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AppBundle extends Bundle implements EventSubscriberInterface
 {
+
     public static function getSubscribedEvents()
     {
         return [
-            PluginEvents::CONTAINER_CONFIG => 'loadFirewallConfig',
+            PluginEvents::CONTAINER_CONFIG => [
+                [
+                    'loadFirewallConfig'
+                ],
+                [
+                    'loadLoggingConfig'
+                ]
+            ]
         ];
     }
 
     public function loadFirewallConfig(ContainerConfigEvent $event)
     {
         $configManipulator = $event->getConfigManipulator('[security][firewalls]');
-        if($event->getKernel()->getEnvironment() === 'dev') {
+        if ($event->getKernel()->getEnvironment() === 'dev') {
             $configManipulator->prependConfig([
                 'dev' => [
-                    'pattern'  => '^/(_(profiler|wdt)|css|images|js)/',
-                    'security' => false,
+                    'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
+                    'security' => false
                 ]
             ]);
         }
-
 
         $configManipulator->appendConfig([
             'oauth_token' => [
@@ -56,24 +63,69 @@ class AppBundle extends Bundle implements EventSubscriberInterface
                 'provider' => 'main',
                 'http_basic' => null,
                 'fos_oauth' => true,
-                'stateless' => true,
+                'stateless' => true
             ],
             'public' => [
                 'pattern' => '^/',
                 'provider' => 'main',
                 'form_login' => [
                     'login_path' => 'app_login',
-                    'check_path' => 'app_login_check',
+                    'check_path' => 'app_login_check'
                 ],
                 'simple_preauth' => [
-                    'authenticator' => 'app.admin.security.apikey_authenticator',
+                    'authenticator' => 'app.admin.security.apikey_authenticator'
                 ],
                 'logout' => [
-                    'handlers' => ['app.security.logout_handler'],
+                    'handlers' => [
+                        'app.security.logout_handler'
+                    ]
                 ],
                 'anonymous' => null,
                 'switch_user' => true
             ]
         ]);
+    }
+
+    public function loadLoggingConfig(ContainerConfigEvent $event)
+    {
+        $configManipulator = $event->getConfigManipulator('[monolog][handlers]');
+        switch ($event->getKernel()->getEnvironment()) {
+            case 'prod':
+                $configManipulator->appendConfig([
+                    'main' => [
+                        'type' => 'fingers_crossed',
+                        'action_level' => 'error',
+                        'handler' => 'nested'
+                    ],
+                    'nested' => [
+                        'type' => 'stream',
+                        'path' => $event->getKernel()
+                            ->getLogDir() . '/' . $event->getKernel()
+                            ->getEnvironment() . '.log',
+                        'level' => 'debug'
+                    ]
+                ]);
+                break;
+            case 'dev':
+                $configManipulator->appendConfig([
+                    'main' => [
+                        'type' => 'stream',
+                        'path' => $event->getKernel()
+                            ->getLogDir() . '/' . $event->getKernel()
+                            ->getEnvironment() . '.log',
+                        'level' => 'debug'
+                    ],
+                    'firephp' => [
+                        'type' => 'firephp',
+                        'level' => 'info'
+                    ],
+                    'chromephp' => [
+                        'type' => 'chromephp',
+                        'level' => 'info'
+                    ]
+
+                ]);
+                break;
+        }
     }
 }
