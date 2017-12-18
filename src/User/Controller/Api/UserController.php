@@ -47,4 +47,21 @@ class UserController extends BaseController
             'primary-email' => $this->isGrantedScope('profile:email')&&$user->getPrimaryEmailAddress()?$user->getPrimaryEmailAddress()->getEmail():null,
         );
     }
+
+    /**
+     * Userinfo endpoint for OpenID Connect
+     * @View
+     */
+    public function getInfoAction()
+    {
+        $user = $this->getUser();
+        /* @var $user User */
+        return array(
+            'sub' => $user->getGuid(),
+            'name' => $this->isGrantedScope('profile:realname') ? $user->getDisplayName() : null,
+            'preferred_username' => $user->isGrantedScope('profile:username') ? $user->getUsername() : null,
+            'email' => $this->isGrantedScope('profile:email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->getEmail() : null,
+            'email_verified' => $this->isGrantedScope('profile:email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->isVerified() : null
+        );
+    }
 }

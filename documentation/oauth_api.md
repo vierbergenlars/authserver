@@ -57,6 +57,10 @@ Provides information about the logged-in user.
         "primary-email": "lars@vbgn.be"
     }
 
+### `GET /api/userinfo`
+
+Provides an [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse)-compatible endpoint for user information.
+
 ### `GET /api/groups`
 
 Lists the groups the user can join and leave.

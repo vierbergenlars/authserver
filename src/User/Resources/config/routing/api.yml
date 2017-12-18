@@ -4,6 +4,12 @@ api_user_get:
         _controller: User\Controller\Api\UserController::getAction
         _format: ~
 
+api_user_get_info:
+    pattern: userinfo
+    defaults:
+        _controller: User\Controller\Api\UserController::getInfoAction
+        _format: ~
+
 api_group:
     name_prefix: api_
     resource: User\Controller\Api\GroupController
