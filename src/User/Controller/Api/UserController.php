@@ -59,7 +59,7 @@ class UserController extends BaseController
         return array(
             'sub' => $user->getGuid(),
             'name' => $this->isGrantedScope('profile:realname') ? $user->getDisplayName() : null,
-            'preferred_username' => $user->isGrantedScope('profile:username') ? $user->getUsername() : null,
+            'preferred_username' => $this->isGrantedScope('profile:username') ? $user->getUsername() : null,
             'email' => $this->isGrantedScope('profile:email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->getEmail() : null,
             'email_verified' => $this->isGrantedScope('profile:email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->isVerified() : null
         );
