@@ -1,7 +1,8 @@
 <?php
-/* Authserver, an OAuth2-based single-signon authentication provider written in PHP.
+/*
+ * Authserver, an OAuth2-based single-signon authentication provider written in PHP.
  *
- * Copyright (C) 2015  Lars Vierbergen
+ * Copyright (C) 2015 Lars Vierbergen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -10,13 +11,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace App\Form\OAuth;
 
 use App\Entity\Group;
@@ -34,66 +34,71 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ClientType extends AbstractType
 {
+
     /**
+     *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $scopes = array(
+            'OpenID Connect' => 'openid',
+            'OpenID Connect: Basic profile' => 'profile',
+            'OpenID Connect: Email' => 'email',
             'profile:username' => 'profile:username',
             'profile:realname' => 'profile:realname',
-            'profile:groups'   => 'profile:groups',
-            'profile:email'    => 'profile:email',
-            'group:join'       => 'group:join',
-            'group:leave'      => 'group:leave',
-            'property:read'    => 'property:read',
-            'property:write'   => 'property:write',
+            'profile:groups' => 'profile:groups',
+            'profile:email' => 'profile:email',
+            'group:join' => 'group:join',
+            'group:leave' => 'group:leave',
+            'property:read' => 'property:read',
+            'property:write' => 'property:write'
         );
-        $builder
-            ->add('name', TextType::class)
+        $builder->add('name', TextType::class)
             ->add('redirectUris', BootstrapCollectionType::class, array(
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete'=>true
-            ))
+            'entry_type' => TextType::class,
+            'allow_add' => true,
+            'allow_delete' => true
+        ))
             ->add('preApproved', CheckboxType::class, array(
-                'required' => false,
-                'attr' => array(
-                    'align_with_widget' => true,
-                ),
-            ))
+            'required' => false,
+            'attr' => array(
+                'align_with_widget' => true
+            )
+        ))
             ->add('preApprovedScopes', ChoiceType::class, array(
-                'choices' => $scopes,
-                'multiple' => true,
-                'expanded' => true,
-            ))
+            'choices' => $scopes,
+            'multiple' => true,
+            'expanded' => true
+        ))
             ->add('groupRestriction', EntityType::class, array(
-                'class' => Group::class,
-                'query_builder' => function(GroupRepository $repository) {
-                    return $repository->createQueryBuilder('g')->where('g.exportable = true');
-                },
-                'choice_label'=> function(Group $group) {
-                    return sprintf('%s (%s)', $group->getDisplayName(), $group->getName());
-                },
-                'required' => false,
-            ))
+            'class' => Group::class,
+            'query_builder' => function (GroupRepository $repository) {
+                return $repository->createQueryBuilder('g')
+                    ->where('g.exportable = true');
+            },
+            'choice_label' => function (Group $group) {
+                return sprintf('%s (%s)', $group->getDisplayName(), $group->getName());
+            },
+            'required' => false
+        ))
             ->add('maxScopes', ChoiceType::class, array(
-                'choices' => $scopes,
-                'multiple' => true,
-                'expanded' => true,
-            ))
-            ->add('submit', SubmitType::class)
-        ;
+            'choices' => $scopes,
+            'multiple' => true,
+            'expanded' => true
+        ))
+            ->add('submit', SubmitType::class);
     }
 
     /**
+     *
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Client::class,
+            'data_class' => Client::class
         ));
     }
 }

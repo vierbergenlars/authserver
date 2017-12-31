@@ -1,7 +1,8 @@
 <?php
-/* Authserver, an OAuth2-based single-signon authentication provider written in PHP.
+/*
+ * Authserver, an OAuth2-based single-signon authentication provider written in PHP.
  *
- * Copyright (C) 2015  Lars Vierbergen
+ * Copyright (C) 2015 Lars Vierbergen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -10,13 +11,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace User\Controller\Api;
 
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BaseController extends Controller
 {
+
     protected function getToken()
     {
         if (!$this->container->has('security.token_storage')) {
@@ -44,14 +45,20 @@ class BaseController extends Controller
 
     protected function isGrantedScope($scope)
     {
-        if(!$this->isOAuth())
+        if (!$this->isOAuth())
             return true;
-        return $this->isGranted('ROLE_'.strtoupper($scope));
+        return $this->isGranted('ROLE_' . strtoupper($scope));
     }
 
     protected function denyAccessUnlessGrantedScope($scope)
     {
-        if(!$this->isGrantedScope($scope))
-            throw $this->createAccessDeniedException('OAuth scope '.$scope.' is required to access this resource.');
+        if (!$this->isGrantedScope($scope))
+            throw $this->createAccessDeniedException('OAuth scope ' . $scope . ' is required to access this resource.');
+    }
+
+    protected function denyAccessIfGrantedScope($scope)
+    {
+        if ($this->isOAuth() && $this->isGrantedScope($scope))
+            throw $this->createAccessDeniedException('OAuth scope ' . $scope . ' is forbidden to access this resource.');
     }
 }
