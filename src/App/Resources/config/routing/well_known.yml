@@ -1,0 +1,11 @@
+app_wellknown_oidc_config:
+    path: openid-configuration
+    defaults:
+        _controller: AppBundle:OpenIDConnect:getOpenIDConfiguration
+        format: json
+
+app_wellknown_webfinger:
+    path: webfinger
+    defaults:
+        _controller: AppBundle:OpenIDConnect:getWebfinger
+        format: json

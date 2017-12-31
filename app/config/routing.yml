@@ -13,6 +13,10 @@ fos_oauth_server_authorize:
 app_security:
     resource: "@AppBundle/Resources/config/routing/security.yml"
 
+app_wellknown:
+    prefix: /.well-known
+    resource: "@AppBundle/Resources/config/routing/well_known.yml"
+
 admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
     prefix: admin
