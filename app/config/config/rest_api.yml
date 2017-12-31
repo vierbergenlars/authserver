@@ -16,6 +16,7 @@ fos_rest:
         rules:
             - { path: ^/admin/(auditlog|oauth|apikeys), priorities: [html], fallback_format: html}
             - { path: ^/api, priorities: [ json, xml ], fallback_format: json }
+            - { path: ^/.well-known, priorities: [ json ], fallback_format: json }
             - { path: ^/, priorities: [ html, json, xml, gv ], fallback_format: html, prefer_extension: true }
     exception:
         codes:
