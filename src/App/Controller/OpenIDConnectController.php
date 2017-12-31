@@ -36,7 +36,7 @@ class OpenIDConnectController extends Controller
         $router = $this->get('router');
         /* @var $router \Symfony\Component\Routing\Router */
         return [
-            'issuer' => $request->getBaseUrl(),
+            'issuer' => $router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'authorization_endpoint' => $router->generate('fos_oauth_server_authorize', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'token_endpoint' => $router->generate('fos_oauth_server_token', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'userinfo_endpoint' => $router->generate('api_user_get_info', [], UrlGeneratorInterface::ABSOLUTE_URL),
@@ -64,7 +64,7 @@ class OpenIDConnectController extends Controller
             'links' => [
                 [
                     'rel' => 'http://openid.net/specs/connect/1.0/issuer',
-                    'href' => $request->getBaseUrl()
+                    'href' => $router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL)
                 ]
             ]
         ];
