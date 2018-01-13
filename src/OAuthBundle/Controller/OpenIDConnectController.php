@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace App\Controller;
+namespace OAuthBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,16 +36,34 @@ class OpenIDConnectController extends Controller
         $router = $this->get('router');
         /* @var $router \Symfony\Component\Routing\Router */
         return [
-            'issuer' => $router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'authorization_endpoint' => $router->generate('fos_oauth_server_authorize', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'token_endpoint' => $router->generate('fos_oauth_server_token', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'issuer' => $this->container->getParameter('oauth_issuer'),
+            'authorization_endpoint' => $router->generate('oauth_authorize_handle', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'token_endpoint' => $router->generate('oauth_token', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'userinfo_endpoint' => $router->generate('api_user_get_info', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'jwks_uri' => $router->generate('oauth_wellknown_jwks', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'response_types_supported' => [
+                "code",
+                "token",
+                "id_token",
+                "code token",
+                "code id_token",
+                "token id_token",
+                "code token id_token"
+            ],
+            'subject_types_supported' => [
+                'public'
+            ],
+            'id_token_signing_alg_values_supported' => [
+                'RS256',
+                $this->container->getParameter('oauth_signature_algorithm')
+            ],
             'end_session_endpoint' => $router->generate('user_kill_session', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'scopes_supported' => [
                 'openid',
                 'profile',
                 'email'
             ]
+
         ];
     }
 
@@ -64,9 +82,15 @@ class OpenIDConnectController extends Controller
             'links' => [
                 [
                     'rel' => 'http://openid.net/specs/connect/1.0/issuer',
-                    'href' => $router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL)
+                    'href' => $this->container->getParameter('oauth_issuer')
+
                 ]
             ]
         ];
+    }
+
+    public function getJwksAction()
+    {
+        return [];
     }
 }

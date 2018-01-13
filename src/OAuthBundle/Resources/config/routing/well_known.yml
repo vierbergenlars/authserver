@@ -1,0 +1,17 @@
+oauth_wellknown_oidc_config:
+    path: openid-configuration
+    defaults:
+        _controller: OAuthBundle:OpenIDConnect:getOpenIDConfiguration
+        format: json
+
+oauth_wellknown_webfinger:
+    path: webfinger
+    defaults:
+        _controller: OAuthBundle:OpenIDConnect:getWebfinger
+        format: json
+
+oauth_wellknown_jwks:
+    path: jwks
+    defaults:
+        _controller: OAuthBundle:OpenIDConnect:getJwks
+        format: json

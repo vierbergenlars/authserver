@@ -55,6 +55,8 @@ class AppKernel extends Kernel
             new AuthRequestBundle\AuthRequestBundle(),
             new EmailRulesBundle\EmailRulesBundle(),
             new ThemingBundle\ThemingBundle(),
+            new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            new OAuthBundle\OAuthBundle()
         );
 
         $this->loadPluginManager();

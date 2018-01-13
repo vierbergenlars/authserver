@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef620f914550ea0d7af1eb50fa618fc6",
+    "content-hash": "f2c14830f4f66742978ed037744eab9f",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -110,6 +110,159 @@
                 "bootstrap"
             ],
             "time": "2016-10-10T21:30:05+00:00"
+        },
+        {
+            "name": "bshaffer/oauth2-server-bundle",
+            "version": "v0.4",
+            "target-dir": "OAuth2/ServerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-bundle.git",
+                "reference": "bb951b7606a44afbb29d0123a72e1f8bb54efc74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/bb951b7606a44afbb29d0123a72e1f8bb54efc74",
+                "reference": "bb951b7606a44afbb29d0123a72e1f8bb54efc74",
+                "shasum": ""
+            },
+            "require": {
+                "bshaffer/oauth2-server-httpfoundation-bridge": "^1.2",
+                "bshaffer/oauth2-server-php": ">=1.0",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.4,>=2.4.5",
+                "symfony/symfony": "^2.8|^3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2\\ServerBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com"
+                }
+            ],
+            "description": "Symfony OAuth2ServerBundle",
+            "homepage": "http://github.com/bshaffer/oauth2-server-bundle",
+            "keywords": [
+                "oauth",
+                "oauth2",
+                "security"
+            ],
+            "time": "2017-01-09T19:38:50+00:00"
+        },
+        {
+            "name": "bshaffer/oauth2-server-httpfoundation-bridge",
+            "version": "V1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-httpfoundation-bridge.git",
+                "reference": "7113bfeaf863cc3e7f5a8a047123b354e5eea14a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-httpfoundation-bridge/zipball/7113bfeaf863cc3e7f5a8a047123b354e5eea14a",
+                "reference": "7113bfeaf863cc3e7f5a8a047123b354e5eea14a",
+                "shasum": ""
+            },
+            "require": {
+                "bshaffer/oauth2-server-php": ">=0.9",
+                "php": ">=5.3.0",
+                "symfony/http-foundation": ">=2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2\\HttpFoundationBridge": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://brentertainment.com"
+                }
+            ],
+            "description": "A bridge to HttpFoundation for oauth2-server-php",
+            "homepage": "http://github.com/bshaffer/oauth2-server-httpfoundation-bridge",
+            "keywords": [
+                "auth",
+                "httpfoundation",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2016-12-27T20:03:09+00:00"
+        },
+        {
+            "name": "bshaffer/oauth2-server-php",
+            "version": "v1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-php.git",
+                "reference": "d158878425392fe5a0cc34f15dbaf46315ae0ed9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-php/zipball/d158878425392fe5a0cc34f15dbaf46315ae0ed9",
+                "reference": "d158878425392fe5a0cc34f15dbaf46315ae0ed9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "~2.8",
+                "firebase/php-jwt": "~2.2",
+                "mongodb/mongodb": "^1.1",
+                "phpunit/phpunit": "^4.0",
+                "predis/predis": "dev-master",
+                "thobbs/phpcassa": "dev-master"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "~2.8 is required to use DynamoDB storage",
+                "firebase/php-jwt": "~2.2 is required to use JWT features",
+                "mongodb/mongodb": "^1.1 is required to use MongoDB storage",
+                "predis/predis": "Required to use Redis storage",
+                "thobbs/phpcassa": "Required to use Cassandra storage"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://brentertainment.com"
+                }
+            ],
+            "description": "OAuth2 Server for PHP",
+            "homepage": "http://github.com/bshaffer/oauth2-server-php",
+            "keywords": [
+                "auth",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2017-11-15T01:41:02+00:00"
         },
         {
             "name": "components/jquery",

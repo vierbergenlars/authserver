@@ -1,6 +1,8 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    # Redirect to HTTPS on all URLS
-    RewriteCond %{HTTPS} !=on
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
+{% if not app.debug %}
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        # Redirect to HTTPS on all URLS
+        RewriteCond %{HTTPS} !=on
+        RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    </IfModule>
+{% endif %}

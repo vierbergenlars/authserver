@@ -10,12 +10,17 @@ fos_oauth_server_token:
 fos_oauth_server_authorize:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
 
+oauth_server:
+    resource: "@OAuthBundle/Resources/config/routing/oauth.yml"
+    type: rest
+    prefix:   /new-oauth2
+
 app_security:
     resource: "@AppBundle/Resources/config/routing/security.yml"
 
-app_wellknown:
+oauth_wellknown:
     prefix: /.well-known
-    resource: "@AppBundle/Resources/config/routing/well_known.yml"
+    resource: "@OAuthBundle/Resources/config/routing/well_known.yml"
 
 admin:
     resource: "@AdminBundle/Resources/config/routing.yml"
