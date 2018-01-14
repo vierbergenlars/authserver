@@ -31,6 +31,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use OAuth2\OAuth2;
 
 class ClientType extends AbstractType
 {
@@ -85,6 +86,15 @@ class ClientType extends AbstractType
         ))
             ->add('maxScopes', ChoiceType::class, array(
             'choices' => $scopes,
+            'multiple' => true,
+            'expanded' => true
+        ))
+            ->add('allowedGrantTypes', ChoiceType::class, array(
+            'choices' => [
+                'Auth code' => OAuth2::GRANT_TYPE_AUTH_CODE,
+                'Implicit' => OAuth2::GRANT_TYPE_IMPLICIT,
+                'Refresh token' => OAuth2::GRANT_TYPE_REFRESH_TOKEN
+            ],
             'multiple' => true,
             'expanded' => true
         ))

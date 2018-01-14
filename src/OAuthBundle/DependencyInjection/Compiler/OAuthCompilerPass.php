@@ -11,6 +11,7 @@ use OAuthBundle\Storage\RefreshTokenStorage;
 use OAuthBundle\Storage\UserClaimsStorage;
 use Symfony\Component\DependencyInjection\Reference;
 use OAuthBundle\Storage\AccessTokenStorage;
+use OAuth2\OpenID\GrantType\AuthorizationCode;
 
 class OAuthCompilerPass implements CompilerPassInterface
 {
@@ -21,10 +22,12 @@ class OAuthCompilerPass implements CompilerPassInterface
         $container->setParameter("oauth2.storage.client_credentials.class", ClientStorage::class);
         $container->setParameter("oauth2.storage.access_token.class", AccessTokenStorage::class);
         $container->setParameter("oauth2.storage.refresh_token.class", RefreshTokenStorage::class);
+        $container->setParameter("oauth2.grant_type.authorization_code.class", AuthorizationCode::class);
 
         $container->setParameter('oauth2.server.config', [
             'issuer' => $container->getParameter('oauth_issuer'),
-            'use_openid_connect' => true
+            'use_openid_connect' => true,
+            'allow_implicit' => true
         ]);
 
         $container->setAlias('oauth2.user_provider', 'app.user_provider');
@@ -32,9 +35,7 @@ class OAuthCompilerPass implements CompilerPassInterface
         $container->getDefinition("oauth2.storage.public_key")
             ->setClass(PublicKeyStorage::class)
             ->setArguments([
-            $container->getParameter('oauth_public_key_file'),
-            $container->getParameter('oauth_private_key_file'),
-            $container->getParameter('oauth_signature_algorithm')
+            new Reference("oauth.jwt_keys")
         ]);
 
         $container->getDefinition("oauth2.storage.user_claims")

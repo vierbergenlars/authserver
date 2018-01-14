@@ -20,7 +20,9 @@ class UserClaimsStorage implements UserClaimsInterface
 
     public function getUserClaims($user_id, $scope)
     {
-        $user = $this->em->find('AppBundle:User', $user_id);
+        $user = $this->em->getRepository('AppBundle:User')->findOneBy([
+            'guid' => $user_id
+        ]);
         if (!$user) {
             return false;
         }

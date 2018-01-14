@@ -3,50 +3,9 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <parameters>
-        <parameter key="oauth2.storage.client_credentials.class">OAuthBundle\Storage\ClientStorage</parameter>
-        <parameter key="oauth2.server.config" type="collection">
-            <parameter key="use_openid_connect">true</parameter>
-        </parameter>
-
-        <parameter key="oauth2.storage.scope.class">OAuth2\Storage\Memory</parameter>
-
-        <parameter key="oauth2.storage.public_key.class">OAuthBundle\Storage\PublicKeyStorage</parameter>
-        <parameter key="oauth2.storage.user_claims.class">OAuthBundle\Storage\UserClaimsStorage</parameter>
-
-        <parameter key="oauth2.user_provider.class">App\Security\User\UserProvider</parameter>
-
-
-    </parameters>
     <services>
-        <service id="oauth2.storage.public_key" class="%oauth2.storage.public_key.class%">
-            <argument>%oauth_public_key_file%</argument>
-            <argument>%oauth_private_key_file%</argument>
-            <argument>%oauth_signature_algorithm%</argument>
-        </service>
-        <service id="oauth2.storage.user_claims" class="%oauth2.storage.user_claims.class%">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-        </service>
-        <service id="oauth2.storage.scope" class="%oauth2.storage.scope.class%">
-            <argument type="collection">
-                <argument key="default_scope">profile:guid</argument>
-                <argument key="supported_scopes" type="collection">
-                    <!--  OpenID connect scopes -->
-                    <argument>openid</argument>
-                    <argument>profile</argument>
-                    <argument>email</argument>
-                    <!-- Authserver scopes -->
-                    <argument>profile:guid</argument>
-                    <argument>profile:username</argument>
-                    <argument>profile:realname</argument>
-                    <argument>profile:groups</argument>
-                    <argument>profile:email</argument>
-                    <argument>group:join</argument>
-                    <argument>group:leave</argument>
-                    <argument>property:read</argument>
-                    <argument>property:write</argument>
-                </argument>
-            </argument>
+        <service id="oauth.jwt_keys" class="OAuthBundle\Service\JwtKeys">
+            <argument>%kernel.cache_dir%/oauth.keyset</argument>
         </service>
     </services>
 

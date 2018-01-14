@@ -2,35 +2,34 @@
 namespace OAuthBundle\Storage;
 
 use OAuth2\Storage\PublicKeyInterface;
+use OAuthBundle\Service\JwtKeys;
+use Jose\KeyConverter\KeyConverter;
+use Jose\KeyConverter\RSAKey;
 
 class PublicKeyStorage implements PublicKeyInterface
 {
 
-    private $publicKeyFile;
+    private $jwtKeys;
 
-    private $privateKeyFile;
-
-    private $signingAlgorithm;
-
-    public function __construct($publicKeyFile, $privateKeyFile, $signingAlgorithm)
+    public function __construct(JwtKeys $jwtKeys)
     {
-        $this->publicKeyFile = $publicKeyFile;
-        $this->privateKeyFile = $privateKeyFile;
-        $this->signingAlgorithm = $signingAlgorithm;
+        $this->jwtKeys = $jwtKeys;
     }
 
     public function getEncryptionAlgorithm($client_id = null)
     {
-        return $this->signingAlgorithm;
+        return $this->jwtKeys->getSignatureKey()->get('alg');
     }
 
     public function getPublicKey($client_id = null)
     {
-        return file_get_contents($this->publicKeyFile);
+        $rsaKey = new RSAKey($this->jwtKeys->getSignatureKey()->toPublic());
+        return $rsaKey->toPEM();
     }
 
     public function getPrivateKey($client_id = null)
     {
-        return file_get_contents($this->privateKeyFile);
+        $rsaKey = new RSAKey($this->jwtKeys->getSignatureKey());
+        return $rsaKey->toPEM();
     }
 }

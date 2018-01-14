@@ -18,9 +18,6 @@ parameters:
     locale: en
     secret: {{ random.stdout }}
     
-    oauth_public_key_file: %kernel.root_dir%/config/pubkey.pem
-    oauth_private_key_file: %kernel.root_dir%/config/privkey.pem
-    oauth_signature_algorithm: RS256
     oauth_issuer: http://authserver.dev.vbgn.be
 
 registration:

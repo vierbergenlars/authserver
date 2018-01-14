@@ -43,8 +43,8 @@ class ClientStorage implements ClientCredentialsInterface
         if (!$client)
             return false;
         return [
-            'redirect_uri' => implode(' ', $client->getRedirectUris()),
-            'grant_types' => $client->getAllowedGrantTypes()
+            'redirect_uri' => implode(' ', $client->getRedirectUris())
+            // 'grant_types' => $client->getAllowedGrantTypes()
         ];
     }
 

@@ -1,4 +1,4 @@
 oauth_server:
     resource: "@OAuthBundle/Controller/"
     type:     annotation
-    name_prefix: oauth_
+    name_prefix: oauth

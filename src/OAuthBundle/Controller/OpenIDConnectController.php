@@ -29,7 +29,6 @@ class OpenIDConnectController extends Controller
 
     /**
      * OpenID Connect configuration endpoint
-     * @View
      */
     public function getOpenIDConfigurationAction(Request $request)
     {
@@ -39,7 +38,7 @@ class OpenIDConnectController extends Controller
             'issuer' => $this->container->getParameter('oauth_issuer'),
             'authorization_endpoint' => $router->generate('oauth_authorize_handle', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'token_endpoint' => $router->generate('oauth_token', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'userinfo_endpoint' => $router->generate('api_user_get_info', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'userinfo_endpoint' => $router->generate('oauth_userinfo', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'jwks_uri' => $router->generate('oauth_wellknown_jwks', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'response_types_supported' => [
                 "code",
@@ -54,23 +53,27 @@ class OpenIDConnectController extends Controller
                 'public'
             ],
             'id_token_signing_alg_values_supported' => [
-                'RS256',
-                $this->container->getParameter('oauth_signature_algorithm')
+                'RS256'
             ],
             'end_session_endpoint' => $router->generate('user_kill_session', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'scopes_supported' => [
                 'openid',
                 'profile',
                 'email'
+            ],
+            'claims_supported' => [
+                'iss',
+                'sub',
+                'name',
+                'preferred_username',
+                'email',
+                'email_verified'
             ]
-
         ];
     }
 
     /**
      * OpenID Connect webfinger endpoint
-     *
-     * @param Request $request
      */
     public function getWebfingerAction(Request $request)
     {
@@ -89,8 +92,13 @@ class OpenIDConnectController extends Controller
         ];
     }
 
+    /**
+     * JWK set endpoint
+     */
     public function getJwksAction()
     {
-        return [];
+        $jwtKeys = $this->get('oauth.jwt_keys');
+        /* @var $jwtKeys \OAuthBundle\Service\JwtKeys */
+        return $jwtKeys->getKeyset()->jsonSerialize();
     }
 }
