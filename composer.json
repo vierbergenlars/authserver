@@ -8,7 +8,7 @@
         }
     },
     "require" : {
-        "php" : ">=5.6.0",
+        "php" : ">=7.0.0",
         "symfony/symfony" : "~3.0",
         "doctrine/orm" : "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle" : "~1.2",
@@ -34,7 +34,8 @@
         "stof/doctrine-extensions-bundle" : "~1.2",
         "symfony/intl" : "^3.1",
         "knplabs/knp-menu-bundle" : "^2.1",
-        "bshaffer/oauth2-server-bundle": "^0.4.0"
+        "bshaffer/oauth2-server-bundle": "^0.4.0",
+        "spomky-labs/jose": "^7.0"
     },
     "require-dev" : {
         "sensio/generator-bundle" : "^3.0",
@@ -43,7 +44,7 @@
     "config" : {
         "bin-dir" : "bin",
         "platform" : {
-            "php" : "5.6"
+            "php" : "7.0.10"
         }
     },
     "minimum-stability" : "stable",

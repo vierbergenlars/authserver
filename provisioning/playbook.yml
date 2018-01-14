@@ -2,18 +2,19 @@
   tasks:
     - name: Install apt https transport
       apt: name=apt-transport-https state=present
-    - name: Install nodesource nodejs repo
-      apt_repository: repo='deb https://deb.nodesource.com/node_8.x jessie main' filename=nodesource
     - name: Add nodesource signing key
       apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    - name: Install nodesource nodejs repo
+      apt_repository: repo='deb https://deb.nodesource.com/node_8.x stretch main' filename=nodesource
     - name: Install packages
       apt: name={{ item }} state=present update_cache=yes
       with_items:
         - apache2
-        - libapache2-mod-php5
-        - php5
-        - php5-sqlite
-        - php5-curl
+        - libapache2-mod-php7.0
+        - php7.0
+        - php7.0-sqlite3
+        - php7.0-curl
+        - php7.0-gmp
         - git
         - nodejs
         - curl
@@ -29,8 +30,8 @@ Owners: phpmyadmin\n
 EOF"
     - name: Install npm
       shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
-    - name: Enable php5 apache module
-      command: a2enmod php5 creates=/etc/apache2/mods-enabled/php5.load
+    - name: Enable php apache module
+      command: a2enmod php7.0 creates=/etc/apache2/mods-enabled/php7.0.load
       notify: reload httpd
     - name: Install composer
       shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
@@ -73,10 +74,6 @@ EOF"
     - name: Generate random secret
       shell: base64 < /dev/urandom | head -1
       register: random
-    - name: Generate private key
-      shell: openssl genrsa -out /var/www/app/config/privkey.pem 2048
-    - name: Derive public key from private key
-      shell: openssl rsa -in /var/www/app/config/privkey.pem -pubout -out /var/www/app/config/pubkey.pem
     - name: Create app/config/parameters.yml
       template: src=parameters.yml.j2 dest=/var/www/app/config/parameters.yml
     - name: composer install
@@ -118,8 +115,8 @@ EOF"
     Run 'vagrant provision' when you update files outside src/\n
     \n
     "
-      service: name=apache2 state=started
+      systemd: name=apache2 state=started
 
   handlers:
    - name: reload httpd
-     service: name=apache2 state=reloaded
+     systemd: name=apache2 state=reloaded
