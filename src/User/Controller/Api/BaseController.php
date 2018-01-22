@@ -19,8 +19,11 @@
  */
 namespace User\Controller\Api;
 
-use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use OAuthBundle\Security\OAuthToken;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use OAuthBundle\Security\ErrorThrowingResponse;
+use Symfony\Component\VarDumper\VarDumper;
 
 class BaseController extends Controller
 {
@@ -47,18 +50,14 @@ class BaseController extends Controller
     {
         if (!$this->isOAuth())
             return true;
-        return $this->isGranted('ROLE_' . strtoupper($scope));
+        return $this->isGranted('SCOPE_' . strtoupper($scope));
     }
 
     protected function denyAccessUnlessGrantedScope($scope)
     {
-        if (!$this->isGrantedScope($scope))
-            throw $this->createAccessDeniedException('OAuth scope ' . $scope . ' is required to access this resource.');
-    }
-
-    protected function denyAccessIfGrantedScope($scope)
-    {
-        if ($this->isOAuth() && $this->isGrantedScope($scope))
-            throw $this->createAccessDeniedException('OAuth scope ' . $scope . ' is forbidden to access this resource.');
+        $server = $this->container->get('oauth2.server');
+        $response = new ErrorThrowingResponse(403);
+        $server->verifyResourceRequest($this->get('oauth2.request'), $response, $scope);
+        $response->throwIfError();
     }
 }

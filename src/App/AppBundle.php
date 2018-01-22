@@ -62,7 +62,6 @@ class AppBundle extends Bundle implements EventSubscriberInterface
                 'pattern' => '^/api',
                 'provider' => 'main',
                 'http_basic' => null,
-                'fos_oauth' => true,
                 'stateless' => true
             ],
             'public' => [

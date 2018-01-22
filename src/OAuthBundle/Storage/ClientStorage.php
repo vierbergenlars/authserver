@@ -3,6 +3,8 @@ namespace OAuthBundle\Storage;
 
 use OAuth2\Storage\ClientCredentialsInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use OAuthBundle\Service\OAuthScopes;
 
 class ClientStorage implements ClientCredentialsInterface
 {
@@ -13,9 +15,16 @@ class ClientStorage implements ClientCredentialsInterface
      */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    /**
+     *
+     * @var OAuthScopes
+     */
+    private $scopes;
+
+    public function __construct(EntityManagerInterface $em, OAuthScopes $scopes)
     {
         $this->em = $em;
+        $this->scopes = $scopes;
     }
 
     /**
@@ -23,7 +32,7 @@ class ClientStorage implements ClientCredentialsInterface
      * @param string $client_id
      * @return null|\App\Entity\OAuth\Client
      */
-    private function getClient($client_id)
+    public function getClient($client_id)
     {
         $parts = explode('_', $client_id);
         if (count($parts) != 2) {
@@ -43,8 +52,8 @@ class ClientStorage implements ClientCredentialsInterface
         if (!$client)
             return false;
         return [
-            'redirect_uri' => implode(' ', $client->getRedirectUris())
-            // 'grant_types' => $client->getAllowedGrantTypes()
+            'redirect_uri' => implode(' ', $client->getRedirectUris()),
+            'grant_types' => $client->getAllowedGrantTypes()
         ];
     }
 
@@ -54,10 +63,6 @@ class ClientStorage implements ClientCredentialsInterface
 
         if (!$client) {
             return false;
-        }
-
-        if (empty($client['grant_types'])) {
-            return true;
         }
 
         if (in_array($grant_type, $client['grant_types'])) {
@@ -79,7 +84,8 @@ class ClientStorage implements ClientCredentialsInterface
 
     public function getClientScope($client_id)
     {
-        return implode(' ', $this->getClient($client_id)->getMaxScopes());
+        return implode(' ', $this->scopes->getReachableScopes($this->getClient($client_id)
+            ->getMaxScopes()));
     }
 
     public function isPublicClient($client_id)

@@ -1,7 +1,8 @@
 <?php
-/* Authserver, an OAuth2-based single-signon authentication provider written in PHP.
+/*
+ * Authserver, an OAuth2-based single-signon authentication provider written in PHP.
  *
- * Copyright (C) 2015  Lars Vierbergen
+ * Copyright (C) 2015 Lars Vierbergen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -10,20 +11,18 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace App\EventListener;
 
 use App\Entity\OAuth\UserAuthorization;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\OAuthServerBundle\Form\Handler\AuthorizeFormHandler;
+use OAuthBundle\Event\OAuthEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use FOS\OAuthServerBundle\Event\OAuthEvent;
 use App\Entity\OAuth\Client;
 use App\Entity\User;
 use Symfony\Component\Form\FormInterface;
@@ -33,34 +32,26 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 {
+
     private $em;
 
     /**
+     *
      * @var RequestStack
      */
     private $requestStack;
-    /**
-     * @var FormInterface
-     */
-    private $authorizeForm;
-    /**
-     * @var AuthorizeFormHandler
-     */
-    private $authorizeFormHandler;
 
-    public function __construct(EntityManagerInterface $em, RequestStack $requestStack, FormInterface $authorizeForm, AuthorizeFormHandler $authorizeFormHandler)
+    public function __construct(EntityManagerInterface $em, RequestStack $requestStack)
     {
         $this->em = $em;
         $this->requestStack = $requestStack;
-        $this->authorizeForm = $authorizeForm;
-        $this->authorizeFormHandler = $authorizeFormHandler;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
             OAuthEvent::PRE_AUTHORIZATION_PROCESS => 'onPreAuthorizationProcess',
-            OAuthEvent::POST_AUTHORIZATION_PROCESS => 'onPostAuthorizationProcess',
+            OAuthEvent::POST_AUTHORIZATION_PROCESS => 'onPostAuthorizationProcess'
         );
     }
 
@@ -69,44 +60,38 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
         $scopes = explode(' ', $this->requestStack->getMasterRequest()->query->get('scope', ''));
         $client = $event->getClient();
         $user = $event->getUser();
-        if(!($client instanceof Client) || !($user instanceof User))
+        if (!($client instanceof Client) || !($user instanceof User))
             throw new \UnexpectedValueException('Invalid type of OAuth Client or User');
         /* @var $client Client */
         /* @var $user User */
-        if(!$this->matchesScope($scopes, $client->getMaxScopes()))
-            throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
-
-        if(!$this->matchesGroupRestriction($client, $user)) {
+        if (!$this->matchesGroupRestriction($client, $user)) {
             $event->setAuthorizedClient(false);
             return;
         }
 
-        if ($client->isPreApproved()&&$this->matchesScope($scopes, $client->getPreApprovedScopes())) {
+        if ($client->isPreApproved() && $this->matchesScope($scopes, $client->getPreApprovedScopes())) {
             $event->setAuthorizedClient(true);
             return;
         }
 
         $authorization = $this->getAuthorization($client, $user);
-        if($authorization&&$this->matchesScope($scopes, $authorization->getScopes()))
+        if ($authorization && $this->matchesScope($scopes, $authorization->getScopes()))
             $event->setAuthorizedClient(true);
     }
 
     public function onPostAuthorizationProcess(OAuthEvent $event)
     {
-        $scopes = explode(' ', $this->authorizeFormHandler->getScope());
+        $scopes = explode(' ', $this->requestStack->getMasterRequest()->query->get('scope', ''));
         $client = $event->getClient();
         $user = $event->getUser();
-        if(!($client instanceof Client) || !($user instanceof User))
+        if (!($client instanceof Client) || !($user instanceof User))
             throw new \UnexpectedValueException('Invalid type of OAuth Client or User');
         /* @var $client Client */
         /* @var $user User */
-        if(!$this->matchesScope($scopes, $client->getMaxScopes()))
-            throw new BadRequestHttpException('Client requested scopes outside its allowed scope.');
-
-        if(!$this->matchesGroupRestriction($client, $user))
+        if (!$this->matchesGroupRestriction($client, $user))
             throw new UnauthorizedHttpException('User is not member of the required group to use this client.');
 
-        if(!$event->isAuthorizedClient())
+        if (!$event->isAuthorizedClient())
             return;
 
         $authorization = $this->getAuthorization($client, $user);
@@ -128,17 +113,17 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
     }
 
     /**
+     *
      * @param Client $client
-     * @param User   $user
+     * @param User $user
      *
      * @return UserAuthorization
      */
     private function getAuthorization(Client $client, User $user)
     {
-        return $this->em->getRepository('AppBundle:OAuth\UserAuthorization')
-            ->findOneBy(array(
-                'user' => $user,
-                'client' => $client,
-            ));
+        return $this->em->getRepository('AppBundle:OAuth\UserAuthorization')->findOneBy(array(
+            'user' => $user,
+            'client' => $client
+        ));
     }
 }

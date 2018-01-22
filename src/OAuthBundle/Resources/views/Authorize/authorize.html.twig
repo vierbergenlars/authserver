@@ -1,18 +1,63 @@
-<h1>Authorize</h1>
-
-{% if scopes|length > 0 %}
-<p>{{ request.query.get('client_id') }} would like to access the following data:</p>
-
-<ul>
-    {% for scope in scopes %}
-    <li>{{ scope }}</li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>{{ request.query.get('client_id') }} would like to access.</p>
-{% endif %}
-
-<form action="?{{ qs|url_encode }}" method="post">
-    <input type="hidden" name="authorize" value="1" />
-    <input type="submit" value="Auhtorize" />
-</form>
+{% extends '::base.html.twig' %}
+{% block title %}{{ parent() }} - Authorize {{ client.name }}{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                {% if client.groupRestriction is null or client.groupRestriction in app.user.groupsRecursive %}
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Authorize <strong>{{ client.name }}</strong> to use your account?</h3>
+                        </div>
+                        <div class="panel-body">
+                            This application will have access to:
+                        </div>
+                        <ul class="list-group">
+                            {% set scopes = form.scope.vars.value|split(' ') %}
+                            {% if form.scope.vars.value == '' or scopes|length == 0 %}
+                                <li class="list-group-item list-group-item-success">{{ icon('check fa-fw') }} Nothing</li>
+                            {% endif %}
+                            {% if 'group:join' in scopes or 'group:leave' in scopes %}
+                                <li class="list-group-item list-group-item-danger">{{ icon('exclamation-triangle fa-fw') }} Change the groups you are member of</li>
+                            {% endif %}
+                            {% if 'profile:email' in scopes %}
+                                <li class="list-group-item list-group-item-warning">{{ icon('envelope fa-fw') }} Your primary email address</li>
+                            {% endif %}
+                            {% if 'profile:realname' in scopes %}
+                                <li class="list-group-item list-group-item-warning">{{ icon('user fa-fw') }} Your name</li>
+                            {% endif %}
+                            {% if 'profile:username' in scopes %}
+                                <li class="list-group-item">{{ icon('user-secret fa-fw') }} Your username</li>
+                            {% endif %}
+                            {% if 'profile:groups' in scopes %}
+                                <li class="list-group-item">{{ icon('users fa-fw') }} The groups you are member of</li>
+                            {% endif %}
+                        </ul>
+                        <div class="panel-footer text-center">
+                            {{ form_start(form) }}
+                            <input class="btn btn-primary btn-lg" type="submit" name="accepted" value="Authorize app" />
+                            <input class="btn btn-default" type="submit" name="rejected" value="Cancel" />
+                            {{ form_row(form.client_id) }}
+                            {{ form_row(form.response_type) }}
+                            {{ form_row(form.redirect_uri) }}
+                            {{ form_row(form.state) }}
+                            {{ form_row(form.scope) }}
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">You are not allowed to use <strong>{{ client.name }}</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>You are not allowed to use this application.</p>
+                            <p>If you think this is an error, please contact an administrator.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

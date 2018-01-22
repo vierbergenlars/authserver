@@ -3,17 +3,10 @@ home:
     defaults:
         _controller: FrameworkBundle:Redirect:redirect
         route: user_profile
-
-fos_oauth_server_token:
-    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
-
-fos_oauth_server_authorize:
-    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
-
 oauth_server:
     resource: "@OAuthBundle/Resources/config/routing/oauth.yml"
     type: rest
-    prefix:   /new-oauth2
+    prefix:   /oauth/v2
 
 app_security:
     resource: "@AppBundle/Resources/config/routing/security.yml"

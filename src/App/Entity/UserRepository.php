@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\EntityRepository;
@@ -15,13 +14,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 class UserRepository extends EntityRepository implements UserLoaderInterface
 {
+
     /**
      * Loads the user for the given username.
      *
      * This method must throw UsernameNotFoundException if the user is not
      * found.
      *
-     * @param string $username The username
+     * @param string $username
+     *            The username
      *
      * @return UserInterface
      *
@@ -31,13 +32,26 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->findOneBy(['username' => $username]);
-        if($user)
+        if (preg_match('/^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$/<', $username)) {
+            $user = $this->findOneBy([
+                'guid' => $username
+            ]);
+            if ($user) {
+                return $user;
+            } else {
+                throw new UsernameNotFoundException();
+            }
+        }
+        $user = $this->findOneBy([
+            'username' => $username
+        ]);
+        if ($user)
             return $user;
-        $email = $this->_em->getRepository('AppBundle:EmailAddress')
-            ->findOneBy(['email' => $username]);
-        if($email)
+        $email = $this->_em->getRepository('AppBundle:EmailAddress')->findOneBy([
+            'email' => $username
+        ]);
+        if ($email)
             return $email->getUser();
-        return null;
+        throw new UsernameNotFoundException();
     }
 }

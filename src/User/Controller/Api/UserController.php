@@ -31,7 +31,6 @@ class UserController extends BaseController
      */
     public function getAction()
     {
-        $this->denyAccessIfGrantedScope('openid');
         $user = $this->getUser();
         /* @var $user User */
         $exportableGroups = array_filter($user->getGroupsRecursive(), function (Group $group) {
@@ -47,24 +46,6 @@ class UserController extends BaseController
             'name' => $this->isGrantedScope('profile:realname') ? $user->getDisplayName() : null,
             'groups' => $this->isGrantedScope('profile:groups') ? $groups : array(),
             'primary-email' => $this->isGrantedScope('profile:email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->getEmail() : null
-        );
-    }
-
-    /**
-     * Userinfo endpoint for OpenID Connect
-     * @View
-     */
-    public function getInfoAction()
-    {
-        $this->denyAccessUnlessGrantedScope('openid');
-        $user = $this->getUser();
-        /* @var $user User */
-        return array(
-            'sub' => $user->getGuid(),
-            'name' => $this->isGrantedScope('profile') ? $user->getDisplayName() : null,
-            'preferred_username' => $this->isGrantedScope('profile') ? $user->getUsername() : null,
-            'email' => $this->isGrantedScope('email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->getEmail() : null,
-            'email_verified' => $this->isGrantedScope('email') && $user->getPrimaryEmailAddress() ? $user->getPrimaryEmailAddress()->isVerified() : null
         );
     }
 }

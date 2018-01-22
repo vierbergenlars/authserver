@@ -4,8 +4,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="oauth.jwt_keys" class="OAuthBundle\Service\JwtKeys">
+        <service id="app.oauth.jwt_keys" class="OAuthBundle\Service\JwtKeys">
             <argument>%kernel.cache_dir%/oauth.keyset</argument>
+        </service>
+        <service id="app.oauth.authenticator" class="OAuthBundle\Security\OAuthAuthenticator">
+            <argument type="service" id="oauth2.server" />
+        </service>
+        <service id="app.oauth.scopes" class="OAuthBundle\Service\OAuthScopes">
+            <argument type="service" id="security.role_hierarchy" />
+        </service>
+        <service class="Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter" public="false">
+            <argument type="service" id="security.role_hierarchy" />
+            <argument>SCOPE_</argument>
+            <tag name="security.voter" />
         </service>
     </services>
 

@@ -32,9 +32,30 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use OAuth2\OAuth2;
+use OAuthBundle\Service\OAuthScopes;
+use OAuth2\Server;
+use OAuth2\GrantType\GrantTypeInterface;
 
 class ClientType extends AbstractType
 {
+
+    /**
+     *
+     * @var OAuthScopes
+     */
+    private $scopes;
+
+    /**
+     *
+     * @var Server
+     */
+    private $server;
+
+    public function __construct(OAuthScopes $scopes, Server $server)
+    {
+        $this->scopes = $scopes;
+        $this->server = $server;
+    }
 
     /**
      *
@@ -43,19 +64,15 @@ class ClientType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $scopes = array(
-            'OpenID Connect' => 'openid',
-            'OpenID Connect: Basic profile' => 'profile',
-            'OpenID Connect: Email' => 'email',
-            'profile:username' => 'profile:username',
-            'profile:realname' => 'profile:realname',
-            'profile:groups' => 'profile:groups',
-            'profile:email' => 'profile:email',
-            'group:join' => 'group:join',
-            'group:leave' => 'group:leave',
-            'property:read' => 'property:read',
-            'property:write' => 'property:write'
-        );
+        $allScopes = $this->scopes->getSupportedScopes();
+        $scopes = array_combine($allScopes, $allScopes);
+        $allGrantTypes = array_map(function (GrantTypeInterface $grantType) {
+            return $grantType->getQueryStringIdentifier();
+        }, $this->server->getGrantTypes()) + [
+            'implicit'
+        ];
+        $grantTypes = array_combine($allGrantTypes, $allGrantTypes);
+
         $builder->add('name', TextType::class)
             ->add('redirectUris', BootstrapCollectionType::class, array(
             'entry_type' => TextType::class,
@@ -90,11 +107,7 @@ class ClientType extends AbstractType
             'expanded' => true
         ))
             ->add('allowedGrantTypes', ChoiceType::class, array(
-            'choices' => [
-                'Auth code' => OAuth2::GRANT_TYPE_AUTH_CODE,
-                'Implicit' => OAuth2::GRANT_TYPE_IMPLICIT,
-                'Refresh token' => OAuth2::GRANT_TYPE_REFRESH_TOKEN
-            ],
+            'choices' => $grantTypes,
             'multiple' => true,
             'expanded' => true
         ))

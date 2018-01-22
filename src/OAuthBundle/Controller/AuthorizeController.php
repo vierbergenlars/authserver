@@ -2,54 +2,66 @@
 namespace OAuthBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpFoundation\Request;
+use OAuthBundle\Event\OAuthEvent;
+use OAuthBundle\Form\AuthorizeFormType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Entity\OAuth\Client;
+use Symfony\Component\VarDumper\VarDumper;
 
 class AuthorizeController extends Controller
 {
 
     /**
-     * @Route("/authorize", name="_authorize_validate")
-     *
-     * @method ({"GET"})
-     *         @Template("OAuthBundle:Authorize:authorize.html.twig")
+     * @Get("/auth", name="_authorize_validate")
+     * @Post("/auth", name="_authorize_handle")
+     * @View("OAuthBundle:Authorize:authorize.html.twig")
      */
     public function validateAuthorizeAction(Request $request)
     {
         $server = $this->get('oauth2.server');
 
+        $request->query->set('scope', $this->get('app.oauth.scopes')
+            ->getReachableScopes($request->query->get('scope', '')));
         if (!$server->validateAuthorizeRequest($this->get('oauth2.request'), $this->get('oauth2.response'))) {
             return $server->getResponse();
         }
 
-        // Get descriptions for scopes if available
-        $scopes = array();
-        $scopeStorage = $this->get('oauth2.storage.scope');
-        foreach (explode(' ', $this->get('oauth2.request')->query->get('scope')) as $scope) {
-            $scopes[] = $scope;
+        $form = $this->createForm(AuthorizeFormType::class, $request->query->all());
+        $form->handleRequest($request);
+        $client = $this->getClient($request->query->get('client_id'));
+
+        $event = $this->container->get('event_dispatcher')->dispatch(OAuthEvent::PRE_AUTHORIZATION_PROCESS, new OAuthEvent($this->getUser(), $client));
+        if ($form->isValid()) {
+            $event = $this->container->get('event_dispatcher')->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, new OAuthEvent($this->getUser(), $client, $request->request->has('accepted')));
+        }
+        if ($form->isValid() || $event->isAuthorizedClient()) {
+            $request->query->add($form->getData());
+            return $server->handleAuthorizeRequest($this->get('oauth2.request'), $this->get('oauth2.response'), $event->isAuthorizedClient(), $this->getUser()
+                ->getGuid());
         }
 
-        $qs = array_intersect_key($this->get('oauth2.request')->query->all(), array_flip(explode(' ', 'response_type client_id redirect_uri scope state nonce')));
-
         return array(
-            'qs' => $qs,
-            'scopes' => $scopes,
-            'request' => $request
+            'client' => $client,
+            'form' => $form->createView()
         );
     }
 
     /**
-     * @Route("/authorize", name="_authorize_handle")
      *
-     * @method ({"POST"})
+     * @param string $clientId
+     * @throws NotFoundHttpException
+     * @return Client
      */
-    public function handleAuthorizeAction()
+    private function getClient($clientId)
     {
-        $server = $this->get('oauth2.server');
-
-        return $server->handleAuthorizeRequest($this->get('oauth2.request'), $this->get('oauth2.response'), true, $this->getUser()
-            ->getGuid());
+        $client = $this->get('oauth2.storage.client_credentials')->getClient($clientId);
+        if (!$client) {
+            throw new NotFoundHttpException('Client not found.');
+        }
+        return $client;
     }
 }

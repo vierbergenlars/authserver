@@ -22,5 +22,10 @@
             </argument>
             <tag name="form.type" />
         </service>
+        <service class="App\Form\OAuth\ClientType" public="false">
+            <argument type="service" id="app.oauth.scopes" />
+            <argument type="service" id="oauth2.server" />
+            <tag name="form.type" />
+        </service>
     </services>
 </container>

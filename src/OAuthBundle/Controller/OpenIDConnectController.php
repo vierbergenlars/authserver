@@ -97,7 +97,7 @@ class OpenIDConnectController extends Controller
      */
     public function getJwksAction()
     {
-        $jwtKeys = $this->get('oauth.jwt_keys');
+        $jwtKeys = $this->get('app.oauth.jwt_keys');
         /* @var $jwtKeys \OAuthBundle\Service\JwtKeys */
         return $jwtKeys->getKeyset()->jsonSerialize();
     }

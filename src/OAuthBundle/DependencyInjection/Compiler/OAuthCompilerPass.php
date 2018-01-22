@@ -12,6 +12,7 @@ use OAuthBundle\Storage\UserClaimsStorage;
 use Symfony\Component\DependencyInjection\Reference;
 use OAuthBundle\Storage\AccessTokenStorage;
 use OAuth2\OpenID\GrantType\AuthorizationCode;
+use OAuthBundle\Storage\ScopeStorage;
 
 class OAuthCompilerPass implements CompilerPassInterface
 {
@@ -27,7 +28,8 @@ class OAuthCompilerPass implements CompilerPassInterface
         $container->setParameter('oauth2.server.config', [
             'issuer' => $container->getParameter('oauth_issuer'),
             'use_openid_connect' => true,
-            'allow_implicit' => true
+            'allow_implicit' => true,
+            'enforce_state' => false
         ]);
 
         $container->setAlias('oauth2.user_provider', 'app.user_provider');
@@ -35,7 +37,7 @@ class OAuthCompilerPass implements CompilerPassInterface
         $container->getDefinition("oauth2.storage.public_key")
             ->setClass(PublicKeyStorage::class)
             ->setArguments([
-            new Reference("oauth.jwt_keys")
+            new Reference("app.oauth.jwt_keys")
         ]);
 
         $container->getDefinition("oauth2.storage.user_claims")
@@ -43,26 +45,29 @@ class OAuthCompilerPass implements CompilerPassInterface
             ->setArguments([
             new Reference("doctrine.orm.entity_manager")
         ]);
-        $container->getDefinition("oauth2.storage.scope")
-            ->setClass(Memory::class)
+
+        $container->getDefinition('oauth2.storage.scope')
+            ->setClass(ScopeStorage::class)
             ->setArguments([
-            [
-                'default_scope' => 'profile:guid',
-                'supported_scopes' => [
-                    'openid',
-                    'profile',
-                    'email',
-                    'profile:guid',
-                    'profile:username',
-                    'profile:realname',
-                    'profile:groups',
-                    'profile:email',
-                    'group:join',
-                    'group:leave',
-                    'property:read',
-                    'property:write'
-                ]
-            ]
+            new Reference('app.oauth.scopes')
+        ]);
+
+        $container->getDefinition('oauth2.storage.client_credentials')
+            ->setClass(ClientStorage::class)
+            ->setArguments([
+            new Reference('doctrine.orm.entity_manager'),
+            new Reference('app.oauth.scopes')
+        ]);
+
+        $container->getDefinition('oauth2.server')
+            ->addMethodCall('addGrantType', [
+            new Reference('oauth2.grant_type.authorization_code')
+        ])
+            ->addMethodCall('addGrantType', [
+            new Reference('oauth2.grant_type.refresh_token')
+        ])
+            ->addMethodCall('addGrantType', [
+            new Reference('oauth2.grant_type.user_credentials')
         ]);
     }
 }
