@@ -10,10 +10,10 @@
       apt: name={{ item }} state=present update_cache=yes
       with_items:
         - apache2
-        - libapache2-mod-php5
-        - php5
-        - php5-sqlite
-        - php5-curl
+        - libapache2-mod-php
+        - php
+        - php-sqlite3
+        - php-curl
         - git
         - nodejs
         - curl
@@ -29,8 +29,8 @@ Owners: phpmyadmin\n
 EOF"
     - name: Install npm
       shell: curl https://www.npmjs.com/install.sh | sh creates=/usr/bin/npm
-    - name: Enable php5 apache module
-      command: a2enmod php5 creates=/etc/apache2/mods-enabled/php5.load
+    - name: Enable php apache module
+      command: a2enmod php7.0 creates=/etc/apache2/mods-enabled/php7.0.load
       notify: reload httpd
     - name: Install composer
       shell: creates=/usr/local/bin/composer php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer
@@ -60,12 +60,6 @@ EOF"
         - composer.json
         - composer.lock
         - package.json
-    - name: Configure apache to use development environment
-      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
-    - name: Remove HTTPS redirection
-      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
-    - name: Remove restrictions on web/app_dev.php
-      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: Start mysql
       service: name=mysql state=started
     - name: Use mysql strict mode
@@ -95,6 +89,12 @@ EOF"
         - assetic:dump
         - app:generate
         - doctrine:migrations:migrate
+    - name: Remove HTTPS redirection
+      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
+    - name: Configure apache to use development environment
+      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
+    - name: Remove restrictions on web/app_dev.php
+      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: Create admin user 'admin'
       command: php app/console app:adduser --super-admin admin admin admin@vbgn.be -n chdir=/var/www
       register: adduser
