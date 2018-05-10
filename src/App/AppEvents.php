@@ -42,6 +42,16 @@ final class AppEvents
 
     const GENERATE_MAINTENANCE = 'app.generate.maintenance';
 
+    /**
+     * Emits {@link App\Event\UserCheckerEvent}
+     */
+    const SECURITY_USER_CHECK_PRE = 'app.security.user_check.pre';
+
+    /**
+     * Emits {@link App\Event\UserCheckerEvent}
+     */
+    const SECURITY_USER_CHECK_POST = 'app.security.user_check.post';
+
     private function __construct()
     {}
 }
