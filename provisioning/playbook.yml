@@ -60,12 +60,6 @@ EOF"
         - composer.json
         - composer.lock
         - package.json
-    - name: Configure apache to use development environment
-      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
-    - name: Remove HTTPS redirection
-      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
-    - name: Remove restrictions on web/app_dev.php
-      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: Start mysql
       service: name=mysql state=started
     - name: Use mysql strict mode
@@ -95,6 +89,12 @@ EOF"
         - assetic:dump
         - app:generate
         - doctrine:migrations:migrate
+    - name: Remove HTTPS redirection
+      command: 'sed -e "/Redirect to HTTPS/,+3d" -i /var/www/web/.htaccess'
+    - name: Configure apache to use development environment
+      command: sed s/app\.php/app_dev.php/ -i /var/www/web/.htaccess
+    - name: Remove restrictions on web/app_dev.php
+      command: 'sed -e "/production servers/,+9d" -i /var/www/web/app_dev.php'
     - name: Create admin user 'admin'
       command: php app/console app:adduser --super-admin admin admin admin@vbgn.be -n chdir=/var/www
       register: adduser
