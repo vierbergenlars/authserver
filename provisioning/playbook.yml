@@ -80,7 +80,7 @@ EOF"
     - name: Blow away caches
       file: state=absent path=/var/www/app/cache
     - name: Clear cache, install assets and migrate database
-      command: php app/console {{ item }} -n chdir=/var/www
+      command: php app/console {{ item }} -n --no-debug chdir=/var/www
       with_items:
         - cache:clear
         - assets:install
