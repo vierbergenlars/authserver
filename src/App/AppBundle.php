@@ -61,6 +61,7 @@ class AppBundle extends Bundle implements EventSubscriberInterface
             'api' => [
                 'pattern' => '^/api',
                 'provider' => 'main',
+                'user_checker' => 'app.security.user_checker',
                 'http_basic' => null,
                 'fos_oauth' => true,
                 'stateless' => true
@@ -68,6 +69,7 @@ class AppBundle extends Bundle implements EventSubscriberInterface
             'public' => [
                 'pattern' => '^/',
                 'provider' => 'main',
+                'user_checker' => 'app.security.user_checker',
                 'form_login' => [
                     'login_path' => 'app_login',
                     'check_path' => 'app_login_check'

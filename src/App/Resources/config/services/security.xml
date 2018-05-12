@@ -4,6 +4,11 @@
         <service id="app.user_provider" class="App\Security\User\UserProvider">
             <argument type="service" id="doctrine" />
         </service>
+        <service id="app.security.user_checker" class="App\Security\User\UserChecker">
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="security.user_checker" />
+            <tag name="kernel.event_subscriber" />
+        </service>
         <service id="app.security.logout_handler" class="App\Handler\LogoutHandler">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
