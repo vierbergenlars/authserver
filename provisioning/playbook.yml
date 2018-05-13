@@ -104,11 +104,12 @@ EOF"
       command: php app/console app:passwd admin admin -n chdir=/var/www
       when: adduser.rc != 0
     - name: Make cache & logs writeable by webserver
-      file: path=/var/www/{{ item }} owner=www-data mode=0775 recurse=yes state=directory
+      file: path=/var/www/{{ item }} owner=www-data mode=0777 recurse=yes state=directory
       with_items:
         - app
         - app/cache
         - app/logs
+        - web
     - name: "
     Some helpful information.\n
     Webserver running at http://192.168.80.2/\n
@@ -118,7 +119,7 @@ EOF"
     Run 'vagrant provision' when you update files outside src/\n
     \n
     "
-      service: name=apache2 state=started
+      service: name=apache2 state=restarted
 
   handlers:
    - name: reload httpd
