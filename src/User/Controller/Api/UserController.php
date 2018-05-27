@@ -39,6 +39,9 @@ class UserController extends BaseController
             return $group->getName();
         }, $exportableGroups);
 
+        // Reset indexes of groups, if some groups were filtered out because they are not exportable
+        $groups = array_values($groups);
+
         return array(
             'guid' => $user->getGuid(),
             'username' => $this->isGrantedScope('profile:username')?$user->getUsername():null,
