@@ -64,9 +64,17 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
         );
     }
 
+    private static function explodeScope($scope)
+    {
+        if ($scope === '') {
+            return [];
+        }
+        return explode(' ', $scope);
+    }
+
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $scopes = explode(' ', $this->requestStack->getMasterRequest()->query->get('scope', ''));
+        $scopes = self::explodeScope($this->requestStack->getMasterRequest()->query->get('scope', ''));
         $client = $event->getClient();
         $user = $event->getUser();
         if(!($client instanceof Client) || !($user instanceof User))
@@ -93,7 +101,7 @@ class OAuthPreAuthorizationEventListener implements EventSubscriberInterface
 
     public function onPostAuthorizationProcess(OAuthEvent $event)
     {
-        $scopes = explode(' ', $this->authorizeFormHandler->getScope());
+        $scopes = self::explodeScope($this->authorizeFormHandler->getScope());
         $client = $event->getClient();
         $user = $event->getUser();
         if(!($client instanceof Client) || !($user instanceof User))
