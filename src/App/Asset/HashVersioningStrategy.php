@@ -27,15 +27,28 @@
 namespace App\Asset;
 
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class HashVersioningStrategy implements VersionStrategyInterface
 {
 
     private $webRoot;
 
-    public function __construct($webRoot)
+    /**
+     *
+     * @var CacheItemPoolInterface
+     */
+    private $cache;
+
+    public function __construct($webRoot, CacheItemPoolInterface $cache = null)
     {
         $this->webRoot = $webRoot;
+        if ($cache !== null) {
+            $this->cache = $cache;
+        } else {
+            $this->cache = new ArrayAdapter(0, false);
+        }
     }
 
     /**
@@ -48,7 +61,22 @@ class HashVersioningStrategy implements VersionStrategyInterface
      */
     public function getVersion($path)
     {
-        return sha1_file($this->webRoot . $path);
+        $cachePath = str_replace([
+            '{',
+            '}',
+            '(',
+            ')',
+            '/',
+            '\\',
+            '@',
+            ':'
+        ], '_', $path);
+        $versionHashCache = $this->cache->getItem($cachePath);
+        if (!$versionHashCache->isHit()) {
+            $versionHashCache->set(sha1_file($this->webRoot . $path));
+            $this->cache->save($versionHashCache);
+        }
+        return $versionHashCache->get();
     }
 
     /**

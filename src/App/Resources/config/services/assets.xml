@@ -20,8 +20,12 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="app.asset.cache" parent="cache.system" public="false">
+            <tag name="cache.pool" />
+        </service>
         <service id="app.asset.hash_versioning_strategy" class="App\Asset\HashVersioningStrategy">
             <argument>%kernel.root_dir%/../web/</argument>
+            <argument type="service" id="app.asset.cache" />
         </service>
     </services>
 </container>
