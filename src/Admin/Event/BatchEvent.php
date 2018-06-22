@@ -3,6 +3,9 @@ namespace Admin\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Creates handlers for batch actions in the admin panel
+ */
 class BatchEvent extends Event
 {
 
@@ -24,11 +27,25 @@ class BatchEvent extends Event
     }
 
     /**
+     * Get the classname of the entity for which the batch actions are generated
+     *
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * Creates/replaces a batch action
      *
      * @param string $name
+     *            The unique name of the batch action
      * @param string|[string,string] $label
+     *            Label for the batch action. Use a string for a simple label,
+     *            or a 2 element array to use option groups
      * @param callable $callback
-     *            Takes an object as parameter
+     *            Callback function to execute the action on a matched object
      * @return $this
      */
     public function setAction($name, $label, callable $callback)
@@ -42,6 +59,8 @@ class BatchEvent extends Event
 
     /**
      *
+     * @internal Handles an action on a set of objects
+     * @ignore
      * @param string $name
      * @param object[] $enrollments
      */
@@ -54,6 +73,8 @@ class BatchEvent extends Event
 
     /**
      *
+     * @internal Gets the choices for the batch form
+     * @ignore
      * @return array
      */
     public function getChoices()
