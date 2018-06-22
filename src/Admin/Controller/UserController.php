@@ -56,9 +56,12 @@ class UserController extends CRUDController
             ->createQueryBuilder('u')
             ->orderBy('u.id', 'DESC');
 
-        $searchForm = $this->createSearchForm()->handleRequest($request);
+        $listFilter = $this->dispatchFilter($this->createSearchFormBuilder());
 
-        if($searchForm->isValid()) {
+        $searchForm = $listFilter->getSearchForm();
+        $queryBuilder->addCriteria($listFilter->getCriteria());
+
+        if ($searchForm->isValid()) {
             if (!$searchForm->get('username')->isEmpty())
                 $queryBuilder->andWhere('u.username LIKE :username')
                     ->setParameter('username', $searchForm->get('username')->getData());
@@ -364,9 +367,10 @@ class UserController extends CRUDController
     }
 
     /**
-     * @return FormInterface
+     *
+     * @return \Symfony\Component\Form\FormBuilderInterface
      */
-    private function createSearchForm()
+    private function createSearchFormBuilder()
     {
         $ff = $this->get('form.factory');
         /* @var $ff FormFactoryInterface */
@@ -407,9 +411,7 @@ class UserController extends CRUDController
             ->add('email', TextType::class, array(
                 'required' => false,
             ))
-            ->add($isForm)
-            ->add('search', SubmitType::class)
-            ->getForm();
+            ->add($isForm);
     }
 
 }

@@ -121,30 +121,33 @@ class GroupController extends CRUDController
             ->createQueryBuilder('g')
             ->orderBy('g.id', 'DESC');
 
-        $searchForm = $this->createSearchForm()->handleRequest($request);
+        $listFilter = $this->dispatchFilter($this->createSearchFormBuilder());
 
-        if($searchForm->isValid()) {
-            if(!$searchForm->get('name')->isEmpty())
-                $queryBuilder->andWhere('g.displayName LIKE :displayName')
-                    ->setParameter('displayName', $searchForm->get('name')->getData());
-            if(!$searchForm->get('techname')->isEmpty())
-                $queryBuilder->andWhere('g.name LIKE :name')
-                    ->setParameter('name', $searchForm->get('techname')->getData());
-            if($searchForm->get('exportable')->getData() !== null)
-                $queryBuilder->andWhere('g.exportable = :exportable')
-                    ->setParameter('exportable', !!$searchForm->get('exportable')->getData());
-            if($searchForm->get('groups')->getData() !== null)
-                $queryBuilder->andWhere('g.noGroups = :noGroups')
-                    ->setParameter('noGroups', !$searchForm->get('groups')->getData());
-            if($searchForm->get('users')->getData() !== null)
-                $queryBuilder->andWhere('g.noUsers = :noUsers')
-                    ->setParameter('noUsers', !$searchForm->get('users')->getData());
-            if($searchForm->get('userjoin')->getData() !== null)
-                $queryBuilder->andWhere('g.userJoinable = :userJoinable')
-                    ->setParameter('userJoinable', !!$searchForm->get('userjoin')->getData());
-            if($searchForm->get('userleave')->getData() !== null)
-                $queryBuilder->andWhere('g.userLeaveable = :userLeaveable')
-                    ->setParameter('userLeaveable', !!$searchForm->get('userleave')->getData());
+        $searchForm = $listFilter->getSearchForm();
+        $queryBuilder->addCriteria($listFilter->getCriteria());
+
+        if ($searchForm->isValid()) {
+            if (!$searchForm->get('name')->isEmpty())
+                $queryBuilder->andWhere('g.displayName LIKE :displayName')->setParameter('displayName', $searchForm->get('name')
+                    ->getData());
+            if (!$searchForm->get('techname')->isEmpty())
+                $queryBuilder->andWhere('g.name LIKE :name')->setParameter('name', $searchForm->get('techname')
+                    ->getData());
+            if ($searchForm->get('exportable')->getData() !== null)
+                $queryBuilder->andWhere('g.exportable = :exportable')->setParameter('exportable', !!$searchForm->get('exportable')
+                    ->getData());
+            if ($searchForm->get('groups')->getData() !== null)
+                $queryBuilder->andWhere('g.noGroups = :noGroups')->setParameter('noGroups', !$searchForm->get('groups')
+                    ->getData());
+            if ($searchForm->get('users')->getData() !== null)
+                $queryBuilder->andWhere('g.noUsers = :noUsers')->setParameter('noUsers', !$searchForm->get('users')
+                    ->getData());
+            if ($searchForm->get('userjoin')->getData() !== null)
+                $queryBuilder->andWhere('g.userJoinable = :userJoinable')->setParameter('userJoinable', !!$searchForm->get('userjoin')
+                    ->getData());
+            if ($searchForm->get('userleave')->getData() !== null)
+                $queryBuilder->andWhere('g.userLeaveable = :userLeaveable')->setParameter('userLeaveable', !!$searchForm->get('userleave')
+                    ->getData());
         }
 
         if($request->attributes->get('_format') === 'gv') {
@@ -337,9 +340,10 @@ class GroupController extends CRUDController
     }
 
     /**
-     * @return FormInterface
+     *
+     * @return FormBuilderInterface
      */
-    private function createSearchForm()
+    private function createSearchFormBuilder()
     {
         $ff = $this->get('form.factory');
         /* @var $ff FormFactoryInterface */
@@ -380,9 +384,7 @@ class GroupController extends CRUDController
                 'label' => 'User leaveable',
                 'expanded' => true,
                 'required' => false,
-            ))
-            ->add('search', SubmitType::class)
-            ->getForm();
+            ));
     }
 
     /**

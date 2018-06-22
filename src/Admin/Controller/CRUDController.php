@@ -29,6 +29,9 @@ use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Admin\Event\BatchEvent;
 use Admin\AdminEvents;
+use Admin\Event\FilterListEvent;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
 abstract class CRUDController extends BaseController
 {
@@ -39,7 +42,29 @@ abstract class CRUDController extends BaseController
      */
     public function dashboardAction(Request $request)
     {
-        return $this->paginate($this->getEntityRepository()->createQueryBuilder('e'), $request);
+        return $this->paginate($this->getEntityRepository()
+            ->createQueryBuilder('e'), $request);
+    }
+
+    /**
+     *
+     * @return FilterListEvent
+     */
+    protected function dispatchFilter(FormBuilderInterface $searchFormBuilder = null)
+    {
+        if (!$searchFormBuilder) {
+            $ff = $this->get('form.factory');
+            /* @var $ff \Symfony\Component\Form\FormFactoryInterface */
+            $searchFormBuilder = $ff->createNamedBuilder('q', FormType::class, null, array(
+                'csrf_protection' => false,
+                'allow_extra_fields' => true
+            ))->setMethod('GET');
+        }
+
+        $event = new FilterListEvent($this->getEntityType(), $searchFormBuilder);
+        $this->get('event_dispatcher')->dispatch(AdminEvents::FILTER_LIST, $event);
+
+        return $event;
     }
 
     /**
