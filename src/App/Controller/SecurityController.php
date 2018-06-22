@@ -19,7 +19,6 @@
 
 namespace App\Controller;
 
-use App\AppEvents;
 use App\Event\TemplateEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,21 +48,17 @@ class SecurityController extends Controller
             }
         }
 
-        $eventDispatcher = $this->get('event_dispatcher');
-
         $templateEvent = new TemplateEvent(null, [
             'last_username' => $session->get(Security::LAST_USERNAME),
             'error' => $error
         ]);
 
         $bodyTemplateEvent = clone $templateEvent;
-        $eventDispatcher->dispatch(AppEvents::LOGIN_VIEW_BODY, $bodyTemplateEvent);
         $footerTemplateEvent = clone $templateEvent;
-        $eventDispatcher->dispatch(AppEvents::LOGIN_VIEW_FOOTER, $footerTemplateEvent);
 
         return $this->render('AppBundle:Security:login.html.twig', array(
             'bodyTemplateEvent' => $bodyTemplateEvent,
-            'footerTemplateEvent' => $footerTemplateEvent,
+            'footerTemplateEvent' => $footerTemplateEvent
         ));
     }
 }

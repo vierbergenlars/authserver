@@ -41,16 +41,16 @@ use User\UserEvents;
 
 class ProfileController extends Controller
 {
+
     /**
      * @View
      */
     public function indexAction()
     {
         $event = new TemplateEvent($this->getUser());
-        $this->container->get('event_dispatcher')->dispatch(UserEvents::USER_PROFILE_VIEW, $event);
         return [
             'userProfileEvent' => $event,
-            'data' => $event->getSubject(),
+            'data' => $event->getSubject()
         ];
     }
 
