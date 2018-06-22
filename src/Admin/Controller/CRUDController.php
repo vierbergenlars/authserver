@@ -27,6 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\NoRoute;
+use Admin\Event\BatchEvent;
+use Admin\AdminEvents;
 
 abstract class CRUDController extends BaseController
 {
@@ -84,9 +86,49 @@ abstract class CRUDController extends BaseController
         return null;
     }
 
-    protected function createBatchForm()
+    private function getBatchEvent()
     {
-        return $this->createForm(BatchType::class, null, ['actions' => $this->getBatchActions()]);
+        $event = new BatchEvent(get_class($this->createNewEntity()));
+        $em = $this->getEntityManager();
+        $actions = [];
+        // Normalize potentially doubly nested array
+        foreach ($this->getBatchActions() as $label => $nameOrArray) {
+            if (is_array($nameOrArray)) {
+                foreach ($nameOrArray as $label2 => $name) {
+                    $actions[$name] = [
+                        $label,
+                        $label2
+                    ];
+                }
+            } else {
+                $actions[$nameOrArray] = $label;
+            }
+        }
+        foreach ($actions as $name => $label) {
+            if ($name === "DELETE") {
+                $event->setAction($name, $label, function ($object) use ($em) {
+                    $em->remove($object);
+                });
+            } elseif (substr($name, 0, 6) === "PATCH_") {
+                list ($_, $property, $value) = explode('_', $name);
+                $event->setAction($name, $label, function ($object) use ($property, $value) {
+                    $method = 'set' . ucfirst($property);
+                    $object->$method(json_decode($value));
+                });
+            }
+        }
+        $this->get('event_dispatcher')->dispatch(AdminEvents::BATCH_ACTIONS, $event);
+        return $event;
+    }
+
+    protected function createBatchForm($batchEvent = null)
+    {
+        if (!$batchEvent) {
+            $batchEvent = $this->getBatchEvent();
+        }
+        return $this->createForm(BatchType::class, null, [
+            'actions' => $batchEvent->getChoices()
+        ]);
     }
 
     protected function getBatchActions()
@@ -99,34 +141,31 @@ abstract class CRUDController extends BaseController
     /**
      * Handles a submission of a batch form
      * @param Request $request
-     * @param array $callbacks Map of batch action names to a callback that gets called on the subjects array
      */
-    protected function handleBatch(Request $request, array $callbacks = array())
+    protected function handleBatch(Request $request)
     {
         $repository = $this->getEntityRepository();
-        $form = $this->createBatchForm();
+        $event = $this->getBatchEvent();
+        $form = $this->createBatchForm($event);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $subjects = $form->get('subjects')->getData();
             $action = $form->get('action')->getData();
-            if(isset($callbacks[$action])) {
-                $callbacks[$action]($subjects);
-            } else if ($action === 'DELETE') {
-                foreach ($subjects as $id => $checked) {
-                    if ($checked) {
-                        $this->getEntityManager()->remove($repository->find($id));
-                    }
-                }
-            } elseif (substr($action, 0, 6) === 'PATCH_') {
-                list($_, $property, $value) = explode('_', $action);
-                foreach ($subjects as $id => $checked) {
-                    if ($checked) {
-                        $group = $repository->find($id);
-                        $method = 'set' . ucfirst($property);
-                        $group->$method(json_decode($value));
-                    }
+
+            $checkedSubjects = [];
+            foreach ($subjects as $id => $checked) {
+                if ($checked) {
+                    $checkedSubjects[] = $id;
                 }
             }
+
+            $entitySubjects = $repository->createQueryBuilder('e')
+                ->andWhere('e.id IN(:ids)')
+                ->setParameter('ids', $checkedSubjects)
+                ->getQuery()
+                ->getResult();
+
+            $event->handleAction($action, $entitySubjects);
             $this->getEntityManager()->flush();
         }
     }
