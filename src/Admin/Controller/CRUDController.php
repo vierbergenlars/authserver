@@ -88,7 +88,7 @@ abstract class CRUDController extends BaseController
 
     private function getBatchEvent()
     {
-        $event = new BatchEvent(get_class($this->createNewEntity()));
+        $event = new BatchEvent($this->getEntityType());
         $em = $this->getEntityManager();
         $actions = [];
         // Normalize potentially doubly nested array
@@ -192,16 +192,25 @@ abstract class CRUDController extends BaseController
     }
 
     /**
+     *
+     * @return string
+     */
+    private function getEntityType()
+    {
+        return $this->getEntityRepository()->getClassName();
+    }
+
+    /**
+     *
      * @return string
      */
     abstract protected function getFormType();
 
     /**
+     *
      * @return EntityRepository
      */
     abstract protected function getEntityRepository();
 
-
     abstract protected function createNewEntity();
-
 }
