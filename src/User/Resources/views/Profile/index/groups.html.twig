@@ -15,7 +15,7 @@
             <button class="btn btn-sm btn-link" data-toggle="collapse" data-target="#add_group_form, #add_group_text">{{ icon('plus') }} Join group</button>
         </div>
         <div id="add_group_form" class="collapse">
-            {{ form(form.add_group, { action: url('user_post_group'), style: 'inline' }) }}
+            {{ form(form, { action: url('user_post_group'), style: 'inline' }) }}
         </div>
     {% endif %}
 </dd>

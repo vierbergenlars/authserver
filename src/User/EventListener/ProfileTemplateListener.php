@@ -30,6 +30,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use User\Form\EmailAddressType;
 use User\UserEvents;
+use User\Form\AddGroupType;
 
 class ProfileTemplateListener implements EventSubscriberInterface
 {
@@ -116,7 +117,8 @@ class ProfileTemplateListener implements EventSubscriberInterface
                 ->getSingleScalarResult() > 0;
         $event->addTemplate($this->getTemplateReference('groups'), [
             'groups' => $user->getGroups(),
-            'form' => $hasJoinableGroups?$this->formFactory->create(EmailAddressType::class)->createView():null,
+            'form' => $hasJoinableGroups ? $this->formFactory->create(AddGroupType::class)
+                ->createView() : null
         ]);
     }
 
