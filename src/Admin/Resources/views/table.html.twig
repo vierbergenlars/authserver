@@ -1,0 +1,39 @@
+{{ event_dispatch('Admin\\AdminEvents::DISPLAY_LIST', display_list_event) }}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                {% for title in display_list_event.columnHeadings %}
+                    <th>{{ title }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in data %}
+                <tr>
+                {% for template in display_list_event.templates %}
+                    <td>
+                        {% if loop.first and batch_form %}
+                        <label>
+                            <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if batch_disabled %}disabled{% endif %}>
+                        {% endif %}
+                        {% include template with display_list_event.getTemplateData(template)|merge({item: obj }) only %}
+                        {% if loop.first %}
+                        </label>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="panel-body text-center">
+    {% if batch_form %}
+    <div class="pull-left js--batch-form collapse">
+        {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
+        <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
+    </div>
+    {% endif %}
+    {{ knp_pagination_render(data, "", {"media_type": null}) }}
+</div>

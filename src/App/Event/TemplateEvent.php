@@ -24,13 +24,11 @@
  * Date: 24/08/17
  * Time: 16:39
  */
-
 namespace App\Event;
-
 
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-class TemplateEvent extends GenericEvent implements \Countable
+class TemplateEvent extends GenericEvent implements \Countable, TemplateEventInterface
 {
     use TemplateEventTrait;
 }

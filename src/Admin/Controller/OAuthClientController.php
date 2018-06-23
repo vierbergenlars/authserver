@@ -50,7 +50,11 @@ class OAuthClientController extends CRUDController
                 ->setParameter('name', '%'.$request->query->get('q').'%');
 
         return $this->view($this->paginate($queryBuilder, $request))
-            ->setTemplateData(array('batch_form'=>$this->createBatchForm()->createView()));
+            ->setTemplateData(array(
+            'batch_form' => $this->createBatchForm()
+                ->createView(),
+            'display_list_event' => $this->getDisplayListEvent()
+        ));
     }
 
     /**

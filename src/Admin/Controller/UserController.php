@@ -99,10 +99,15 @@ class UserController extends CRUDController
         }
         $view = $this->view($this->paginate($queryBuilder, $request))
             ->setTemplateData(array(
-                'batch_form' => $this->createBatchForm()->createView(),
-                'search_form' => $searchForm->createView(),
-            ));
-        $view->getContext()->setGroups(['admin_user_list', 'list']);
+            'batch_form' => $this->createBatchForm()
+                ->createView(),
+            'search_form' => $searchForm->createView(),
+            'display_list_event' => $this->getDisplayListEvent()
+        ));
+        $view->getContext()->setGroups([
+            'admin_user_list',
+            'list'
+        ]);
         return $view;
     }
 

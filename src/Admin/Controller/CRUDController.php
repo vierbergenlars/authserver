@@ -32,6 +32,7 @@ use Admin\AdminEvents;
 use Admin\Event\FilterListEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Admin\Event\DisplayListEvent;
 
 abstract class CRUDController extends BaseController
 {
@@ -65,6 +66,11 @@ abstract class CRUDController extends BaseController
         $this->get('event_dispatcher')->dispatch(AdminEvents::FILTER_LIST, $event);
 
         return $event;
+    }
+
+    protected function getDisplayListEvent()
+    {
+        return new DisplayListEvent($this->getEntityType());
     }
 
     /**

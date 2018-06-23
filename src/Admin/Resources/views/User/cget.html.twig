@@ -4,66 +4,7 @@
         <h3 class="panel-title">Users</h3>
     </div>
     {{ form_start(batch_form, { action: url('admin_user_batch', { _params: app.request.query.all }), style: 'inline' }) }}
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for obj in data %}
-                    <tr>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if not is_granted('ROLE_SCOPE_W_PROFILE') %}disabled{% endif %}>
-                                {{ obj.username }}
-                                {% if 'ROLE_USER' == obj.role %}
-                                {% elseif 'ROLE_SUPER_ADMIN' == obj.role %}
-                                    {{ label_danger('Super admin') }}
-                                {% elseif 'ROLE_ADMIN' == obj.role %}
-                                    {{ label_danger('Admin') }}
-                                {% endif %}
-                                {% if not obj.enabled %}
-                                    {{ label('Disabled') }}
-                                {% elseif not obj.accountNonLocked %}
-                                    {{ label('Locked') }}
-                                {% endif %}
-                            </label>
-                        </td>
-                        <td>{{ obj.displayName }}</td>
-                        <td>
-                            {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
-                                {% if obj.primaryEmailAddress %}
-                                    {{ obj.primaryEmailAddress.email }}
-                                    {% if not obj.primaryEmailAddress.verified %}
-                                        <span class="text-muted">(Not verified)</span>
-                                    {% endif %}
-                                {% else %}
-                                    <span class="text-muted">(None)</span>
-                                {% endif %}
-                            {% else %}
-                                <span class="text-muted">(Hidden)</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% include 'AdminBundle:User:cget_links.html.twig' with {obj: obj} only %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="panel-body text-center">
-        <div class="pull-left js--batch-form collapse">
-            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
-            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
-        </div>
-        {{ knp_pagination_render(data, "", {"media_type": null}) }}
-    </div>
+    {% include "AdminBundle::table.html.twig" with {batch_disabled: not is_granted('ROLE_SCOPE_W_PROFILE') } %}
     {{ form_end(batch_form) }}
 {% endblock %}
 {% block radrest_sidebar %}

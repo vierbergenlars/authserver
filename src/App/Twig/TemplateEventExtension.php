@@ -4,9 +4,10 @@ namespace App\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Twig\Environment;
-use App\Event\TemplateEvent;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\TemplateEventInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 class TemplateEventExtension extends AbstractExtension
 {
@@ -34,6 +35,10 @@ class TemplateEventExtension extends AbstractExtension
                     'html'
                 ]
             ]),
+            new TwigFunction('event_dispatch', [
+                $this,
+                'dispatchEvent'
+            ]),
             new TwigFunction('event_send', [
                 $this,
                 'sendTemplateEvent'
@@ -46,19 +51,22 @@ class TemplateEventExtension extends AbstractExtension
         ];
     }
 
-    public function renderTemplateEvent(Environment $environment, TemplateEvent $event)
+    public function renderTemplateEvent(Environment $environment, TemplateEventInterface $event)
     {
         return $environment->load(new TemplateReference('AppBundle', '', 'templateEvent', 'html', 'twig'))->render([
             'event' => $event
         ]);
     }
 
-    public function sendTemplateEvent(Environment $environment, $eventName, TemplateEvent $event)
+    public function dispatchEvent($eventName, Event $event)
     {
-        if (defined($eventName)) {
-            $eventName = constant($eventName);
-        }
+        $eventName = constant($eventName);
         $this->eventDispatcher->dispatch($eventName, $event);
+    }
+
+    public function sendTemplateEvent(Environment $environment, $eventName, TemplateEventInterface $event)
+    {
+        $this->dispatchEvent($eventName, $event);
         return $this->renderTemplateEvent($environment, $event);
     }
 }

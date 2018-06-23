@@ -43,7 +43,12 @@ class PropertyNamespaceController extends CRUDController
             ->createQueryBuilder('ns')
             ->orderBy('ns.id', 'DESC');
 
-        return $this->view($this->paginate($queryBuilder, $request))->setTemplateData(array('batch_form'=>$this->createBatchForm()->createView()));
+        return $this->view($this->paginate($queryBuilder, $request))
+            ->setTemplateData(array(
+            'batch_form' => $this->createBatchForm()
+                ->createView(),
+            'display_list_event' => $this->getDisplayListEvent()
+        ));
     }
 
     /**

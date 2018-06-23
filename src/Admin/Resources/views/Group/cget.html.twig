@@ -4,44 +4,7 @@
         <h3 class="panel-title">{{ icon('group') }} Groups</h3>
     </div>
     {{ form_start(batch_form, { action: url('admin_group_batch', { _params: app.request.query.all }), style: 'inline' }) }}
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Technical name</th>
-                    <th>Display name</th>
-                    <th>Flags</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for obj in data %}
-                    <tr>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if not is_granted('ROLE_SCOPE_W_GROUP') %}disabled{% endif %}>
-                                {{ obj.name }}
-                            </label>
-                        </td>
-                        <td>{{ obj.displayName }}</td>
-                        <td>
-                            {% include 'AdminBundle:Group:flags.html.twig' with {obj: obj} only %}
-                        </td>
-                        <td>
-                            {% include 'AdminBundle:Group:cget_links.html.twig' with {obj: obj} only %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="panel-body text-center">
-        <div class="pull-left js--batch-form collapse">
-            {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
-            <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
-        </div>
-        {{ knp_pagination_render(data, "", {"media_type": null}) }}
-    </div>
+    {% include "AdminBundle::table.html.twig" with {batch_disabled: not is_granted('ROLE_SCOPE_W_PROFILE') } %}
     {{ form_end(batch_form) }}
     {% include 'AdminBundle:Group:vizjs_embed.html.twig' %}
 {% endblock %}
