@@ -161,14 +161,15 @@ class GroupController extends CRUDController
                 ));
         }
 
-        $view = $this->view($this->paginate($queryBuilder, $request))
-            ->setTemplateData(array(
+        $data = $this->paginate($queryBuilder, $request);
+
+        $view = $this->view($data)->setTemplateData(array(
             'batch_form' => $this->createBatchForm()
                 ->createView(),
             'search_form' => $searchForm->createView(),
             'graph_form' => $this->createGraphForm($request, -1, false)
                 ->createView(),
-            'display_list_event' => $this->getDisplayListEvent()
+            'display_list_event' => $this->getDisplayListEvent($data)
         ));
         $view->getContext()->setGroups([
             'admin_group_list',

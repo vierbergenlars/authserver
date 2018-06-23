@@ -12,11 +12,14 @@ class DisplayListEvent extends Event implements TemplateEventInterface
 
     private $class;
 
+    private $entities;
+
     private $fields = [];
 
-    public function __construct($class)
+    public function __construct($class, \Traversable $entities)
     {
         $this->class = $class;
+        $this->entities = $entities;
     }
 
     /**
@@ -27,6 +30,16 @@ class DisplayListEvent extends Event implements TemplateEventInterface
     public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * The items that will be shown on the page
+     *
+     * @return \Iterator
+     */
+    public function getItems()
+    {
+        return new \IteratorIterator($this->entities);
     }
 
     /**

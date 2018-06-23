@@ -68,9 +68,9 @@ abstract class CRUDController extends BaseController
         return $event;
     }
 
-    protected function getDisplayListEvent()
+    protected function getDisplayListEvent(\Iterator $entities)
     {
-        return new DisplayListEvent($this->getEntityType());
+        return new DisplayListEvent($this->getEntityType(), $entities);
     }
 
     /**
