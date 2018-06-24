@@ -17,43 +17,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Admin\EventListener;
+namespace Admin\Event;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Admin\AdminEvents;
-use App\Entity\User;
+use App\Event\TemplateEvent;
 
-class DefaultUserDisplayListListener extends AbstractDefaultDisplayListListener implements EventSubscriberInterface
+class SidebarEvent extends TemplateEvent
 {
 
-    public static function getSubscribedEvents()
+    private $class;
+
+    /**
+     *
+     * @param string $class
+     * @param object|null $entity
+     */
+    public function __construct($class, $entity = null)
     {
-        return [
-            AdminEvents::DISPLAY_LIST => [
-                [
-                    'addUsername',
-                    150
-                ],
-                [
-                    'addDisplayName',
-                    100
-                ],
-                [
-                    'addEmail',
-                    50
-                ],
-
-                [
-                    'addActions',
-                    -100
-                ]
-
-            ]
-        ];
+        parent::__construct($entity);
+        if ($entity && !is_subclass_of($entity, $class, false)) {
+            throw new \LogicException('Can not create an event with an entity that does not match the requested class.');
+        }
+        $this->class = $class;
     }
 
-    protected function getClass()
+    /**
+     * Get the classname of the entity for which the batch actions are generated
+     *
+     * @return string
+     */
+    public function getClass()
     {
-        return User::class;
+        return $this->class;
     }
 }
