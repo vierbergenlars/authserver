@@ -34,7 +34,7 @@ class SidebarEvent extends TemplateEvent
     public function __construct($class, $entity = null)
     {
         parent::__construct($entity);
-        if ($entity && !is_subclass_of($entity, $class, false)) {
+        if ($entity && !is_a($entity, $class, false)) {
             throw new \LogicException('Can not create an event with an entity that does not match the requested class.');
         }
         $this->class = $class;

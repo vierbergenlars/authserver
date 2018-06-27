@@ -1,0 +1,28 @@
+<dt>Member of</dt><dd>
+    {% for g in subject.groupsRecursive if g != subject %}
+        <a href="{{ url('admin_group_get', {group: g.name}) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group fa-fw') }} {% if g not in subject.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in subject.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
+    {% else %}
+        <span class="text-muted">(None)</span>
+    {% endfor %}
+</dd>
+<dt>Members</dt><dd>
+    {% if subject.members|length < 20 %}
+        {% for u in subject.members %}
+            <a href="{{ url('admin_user_get', { user: u.guid }) }}">{{ icon('user fa-fw') }} <abbr title="{{ u.username }}">{{ u.displayName }}</abbr></a><br>
+        {% endfor %}
+    {% else %}
+    <a href="{{ url('admin_group_get_members', { group: subject.name }) }}">{{ icon('list fa-fw') }} Show {{ subject.members|length }} members</a><br>
+    {% endif %}
+    {% for g in subject.memberGroups %}
+        <a href="{{ url('admin_group_get', {group: g.name}) }}">{{ icon('group fa-fw') }} <abbr title="{{ g.name }}">{{ g.displayName }}</abbr></a><br>
+    {% endfor %}
+    <a href="{{ url('admin_group_get_members', { group: subject.name, all: 1 }) }}">{{ icon('list fa-fw') }} Show indirect members</a><br>
+</dd>
+{% if subject.noGroups and subject.memberGroups|length > 0 %}
+    <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
+    <dd><span class="text-warning">Group marked as {{ label('G') }}, but {{ badge(subject.memberGroups|length) }} groups are member of this group.</span></dd>
+{% endif %}
+{% if subject.noUsers and subject.members|length > 0 %}
+    <dt><span class="text-warning">{{ icon('exclamation-triangle') }}</span></dt>
+    <dd><span class="text-warning">Group marked as {{ label('U') }}, but {{ badge(subject.members|length) }} users are member of this group.</span></dd>
+{% endif %}

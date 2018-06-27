@@ -15,7 +15,13 @@
         <service class="Admin\EventListener\DefaultUserDisplayListListener">
             <tag name="kernel.event_subscriber" />
         </service>
+        <service class="Admin\EventListener\DefaultUserDisplayListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
         <service class="Admin\EventListener\DefaultGroupDisplayListListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service class="Admin\EventListener\DefaultGroupDisplayListener">
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

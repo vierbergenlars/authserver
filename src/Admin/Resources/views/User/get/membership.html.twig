@@ -1,0 +1,7 @@
+<dt>Member of</dt><dd>
+    {% for g in subject.groupsRecursive %}
+        <a href="{{ url('admin_group_get', { group: g.name }) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group') }} {% if g not in subject.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in subject.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
+    {% else %}
+        <span class="text-muted">(None)</span>
+    {% endfor %}
+</dd>

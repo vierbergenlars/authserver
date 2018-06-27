@@ -17,21 +17,39 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Admin;
+namespace Admin\EventListener;
 
-class AdminEvents
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Admin\AdminEvents;
+use App\Entity\Group;
+
+class DefaultGroupDisplayListener extends AbstractDefaultDisplayListener implements EventSubscriberInterface
 {
 
-    const BATCH_ACTIONS = 'app.admin.batch_actions';
+    public static function getSubscribedEvents()
+    {
+        return [
+            AdminEvents::DISPLAY => [
+                [
+                    'addName',
+                    150
+                ],
+                [
+                    'addFlags',
+                    100
+                ],
 
-    const FILTER_LIST = 'app.admin.filter_list';
+                [
+                    'addMembership',
+                    50
+                ]
 
-    const DISPLAY_LIST = 'app.admin.display_list';
+            ]
+        ];
+    }
 
-    const SIDEBAR = 'app.admin.sidebar';
-
-    const DISPLAY = 'app.admin.display';
-
-    private function __construct()
-    {}
+    protected function getClass()
+    {
+        return Group::class;
+    }
 }

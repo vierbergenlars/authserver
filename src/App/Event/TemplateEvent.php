@@ -31,4 +31,14 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class TemplateEvent extends GenericEvent implements \Countable, TemplateEventInterface
 {
     use TemplateEventTrait;
+
+    public function __construct($subject = null, array $attributes = [])
+    {
+        parent::__construct($subject, $attributes);
+        if ($subject !== null) {
+            $this->setGlobalData([
+                'subject' => $subject
+            ]);
+        }
+    }
 }
