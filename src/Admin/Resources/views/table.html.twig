@@ -13,7 +13,7 @@
                 <tr>
                 {% for template in display_list_event.templates %}
                     <td>
-                        {% if loop.first and batch_form %}
+                        {% if loop.first and batch_form is defined %}
                         <label>
                             <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if batch_disabled %}disabled{% endif %}>
                         {% endif %}
@@ -29,7 +29,7 @@
     </table>
 </div>
 <div class="panel-body text-center">
-    {% if batch_form %}
+    {% if batch_form is defined %}
     <div class="pull-left js--batch-form collapse">
         {{ form_row(batch_form.action) }} {{ form_row(batch_form.submit) }}
         <span class="hidden">{{ form_row(batch_form.subjects) }}</span>
