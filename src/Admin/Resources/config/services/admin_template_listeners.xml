@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service class="Admin\EventListener\Audit\DefaultAuditEventListener">
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service id="app.admin.audit.listener.base" abstract="true" class="Admin\EventListener\Audit\AuditEventListener">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="logger" />
+        </service>
+        <service parent="app.admin.audit.listener.base">
+            <argument>App\Entity\User</argument>
+            <argument type="collection">
+                <argument>groups</argument>
+                <argument>password</argument>
+                <argument>passwordResetToken</argument>
+            </argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service parent="app.admin.audit.listener.base">
+            <argument>App\Entity\Group</argument>
+            <argument type="collection">
+                <argument>groups</argument>
+            </argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service parent="app.admin.audit.listener.base">
+            <argument>App\Entity\EmailAddress</argument>
+            <argument type="collection">
+                <argument>user</argument>
+                <argument>verificationCode</argument>
+            </argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service parent="app.admin.audit.listener.base">
+            <argument>App\Entity\OAuth\Client</argument>
+            <argument type="collection">
+                <argument>groupRestriction</argument>
+            </argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service parent="app.admin.audit.listener.base">
+            <argument>App\EventListener\SwitchUserLogListener</argument>
+            <argument type="collection">
+                <argument>target_user</argument>
+            </argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+    </services>
+</container>

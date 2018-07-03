@@ -18,7 +18,7 @@
                             <input type="checkbox" name="admin_batch[subjects][{{ obj.id }}]" value="1" class="js--batch-checkbox" {% if batch_disabled %}disabled{% endif %}>
                         {% endif %}
                         {% include template with display_list_event.getTemplateData(template)|merge({item: obj }) only %}
-                        {% if loop.first %}
+                        {% if loop.first and batch_form is defined %}
                         </label>
                         {% endif %}
                     </td>

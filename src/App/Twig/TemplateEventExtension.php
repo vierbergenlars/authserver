@@ -97,7 +97,7 @@ class TemplateEventExtension extends AbstractExtension
         if (is_string($event)) {
             $event = $this->createEvent($event, $arguments);
         } else if (count($arguments) != 0) {
-            throw new \BadMethodCallException('dispatchEvent accepts only 2 parameters when an event instance is passed');
+            throw new \BadMethodCallException('event_dispatch: Only 2 parameters may be passed when an event instance is used.');
         }
         $eventName = constant($eventName);
         return $this->eventDispatcher->dispatch($eventName, $event);
@@ -148,8 +148,11 @@ class TemplateEventExtension extends AbstractExtension
      */
     public function createEvent($eventClass, array $arguments = [])
     {
+        if (!class_exists($eventClass, true)) {
+            throw new \InvalidArgumentException('event_create: ' . $eventClass . ' is not an existing class');
+        }
         if (!is_subclass_of($eventClass, Event::class, true)) {
-            throw new \DomainException('Only subclasses of Event can be created by this function');
+            throw new \DomainException('event_create: Only subclasses of Event can be created by this function');
         }
         $refl = new \ReflectionClass($eventClass);
         return $refl->newInstanceArgs($arguments);

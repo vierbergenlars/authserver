@@ -1,0 +1,5 @@
+{% if item %}
+    <a href="{{ url('admin_group_get', {group: item.name}) }}" title="{{ item.displayName }}">{{ icon('group fa-fw') }} {{ item.name }}</a>
+{% else %}
+    <span class="text-muted">{{ icon('group fa-fw') }}</span>
+{% endif %}

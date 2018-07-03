@@ -17,51 +17,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace Admin\EventListener;
+namespace Admin\EventListener\Audit;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Admin\AdminEvents;
-use Gedmo\Loggable\Entity\LogEntry;
+use Admin\AuditEvents;
+use Admin\Event\Audit\PropertyDetailsEvent;
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
+use Admin\Event\Audit\ActionEvent;
 
-class DefaultAuditDisplayListListener extends AbstractDefaultDisplayListListener implements EventSubscriberInterface
+class DefaultAuditEventListener implements EventSubscriberInterface
 {
 
     public static function getSubscribedEvents()
     {
         return [
-            AdminEvents::DISPLAY_LIST => [
-                [
-                    'addTarget',
-                    150
-                ],
-                [
-                    'addAction',
-                    100
-                ],
-                [
-                    'addUsername',
-                    50
-                ],
-                [
-                    'addDate',
-                    -50
-                ],
-                [
-                    'addActions',
-                    -100
-                ]
-
+            AuditEvents::PROPERTY_DETAILS => [
+                'onPropertyDetails',
+                -1024
+            ],
+            AuditEvents::ACTION => [
+                'onAction',
+                -1024
             ]
         ];
     }
 
-    protected function getControllerName()
+    public function onPropertyDetails(PropertyDetailsEvent $event)
     {
-        return 'Audit';
+        $event->setTemplate(new TemplateReference('AdminBundle', 'Audit', 'property/default', 'html', 'twig'));
     }
 
-    protected function getClass()
-    {
-        return LogEntry::class;
-    }
+    public function onAction(ActionEvent $event)
+    {}
 }

@@ -1,4 +1,4 @@
 {% include 'AdminBundle:Audit:format/target.html.twig' with {obj: item} only %}
-<span class="pull-right">&emsp;
-{% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:item.objectClass,id:item.objectId,em:entity_manager} only %}
+<span class="pull-right">
+{% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:item.objectClass,id:item.objectId } only %}
 </span>

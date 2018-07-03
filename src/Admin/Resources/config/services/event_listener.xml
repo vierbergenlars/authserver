@@ -8,24 +8,5 @@
             <argument type="service" id="security.authorization_checker" />
             <tag name="kernel.event_subscriber" />
         </service>
-        <service class="Admin\EventListener\DefaultFilterListListener">
-            <argument type="service" id="request_stack" />
-            <tag name="kernel.event_subscriber" />
-        </service>
-        <service class="Admin\EventListener\DefaultUserDisplayListListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-        <service class="Admin\EventListener\DefaultUserDisplayListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-        <service class="Admin\EventListener\DefaultGroupDisplayListListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-        <service class="Admin\EventListener\DefaultGroupDisplayListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
-        <service class="Admin\EventListener\DefaultAuditDisplayListListener">
-            <tag name="kernel.event_subscriber" />
-        </service>
     </services>
 </container>
