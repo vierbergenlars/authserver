@@ -1,1 +1,6 @@
-{% include 'AdminBundle:Audit:format/action.html.twig' with {action: item.action} only %}
+{% set actionTemplate = action_event.getAction(item.action) %}
+{% if actionTemplate %}
+    {% include actionTemplate %}
+{% else %}
+    {{ item.action }}
+{% endif %}

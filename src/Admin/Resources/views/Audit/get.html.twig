@@ -11,7 +11,9 @@
                 <br>
                 {% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:data.objectClass,id:data.objectId } only%}</dd>
             <dt>Action</dt><dd>
-                {% include 'AdminBundle:Audit:format/action.html.twig' with {action: data.action} %}
+            {% set actionEvent = event_create('Admin\\Event\\Audit\\ActionEvent') %}
+            {% do event_dispatch('Admin\\AuditEvents::ACTION', actionEvent) %}
+            {% include 'AdminBundle:Audit:cget/action.html.twig' with {action_event: actionEvent, item: data} only %}
             </dd>
             <dt>Version</dt><dd>{{ data.version }}</dd>
             <dt>Timestamp</dt><dd>{{ data.loggedAt|date }}</dd>

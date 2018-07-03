@@ -41,6 +41,10 @@ class ActionEvent extends Event
 
     public function getAction($actionName)
     {
-        return $this->actions[$actionName];
+        if (isset($this->actions[$actionName])) {
+            return $this->actions[$actionName];
+        } else {
+            return null;
+        }
     }
 }

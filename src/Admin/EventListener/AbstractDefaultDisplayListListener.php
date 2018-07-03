@@ -32,12 +32,12 @@ abstract class AbstractDefaultDisplayListListener
         return substr(strrchr($this->getClass(), '\\'), 1);
     }
 
-    private function isApplicable(DisplayListEvent $event)
+    protected function isApplicable(DisplayListEvent $event)
     {
         return $event->getClass() === $this->getClass();
     }
 
-    private function getTemplateReference($template)
+    protected function getTemplateReference($template)
     {
         return new TemplateReference('AdminBundle', $this->getControllerName(), 'cget/' . $template, 'html', 'twig');
     }

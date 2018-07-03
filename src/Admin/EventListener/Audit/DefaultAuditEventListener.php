@@ -48,5 +48,15 @@ class DefaultAuditEventListener implements EventSubscriberInterface
     }
 
     public function onAction(ActionEvent $event)
-    {}
+    {
+        $actions = [
+            'create',
+            'remove',
+            'update',
+            'security'
+        ];
+        foreach ($actions as $action) {
+            $event->addAction($action, new TemplateReference('AdminBundle', 'Audit', 'action/' . $action, 'html', 'twig'));
+        }
+    }
 }

@@ -22,9 +22,19 @@ namespace Admin\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Admin\AdminEvents;
 use Gedmo\Loggable\Entity\LogEntry;
+use Admin\Event\DisplayListEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Admin\Event\Audit\ActionEvent;
+use Admin\AuditEvents;
 
 class DefaultAuditDisplayListListener extends AbstractDefaultDisplayListListener implements EventSubscriberInterface
 {
+
+    /**
+     *
+     * @var ActionEvent
+     */
+    private $cachedActionEvent;
 
     public static function getSubscribedEvents()
     {
@@ -63,5 +73,20 @@ class DefaultAuditDisplayListListener extends AbstractDefaultDisplayListListener
     protected function getClass()
     {
         return LogEntry::class;
+    }
+
+    public function addAction(DisplayListEvent $event, $eventName, EventDispatcherInterface $eventDispatcher)
+    {
+        if (!$this->isApplicable($event))
+            return;
+
+        if (!$this->cachedActionEvent) {
+            $this->cachedActionEvent = new ActionEvent();
+            $eventDispatcher->dispatch(AuditEvents::ACTION, $this->cachedActionEvent);
+        }
+
+        $event->addColumn('Action', $this->getTemplateReference('action'), [
+            'action_event' => $this->cachedActionEvent
+        ]);
     }
 }
