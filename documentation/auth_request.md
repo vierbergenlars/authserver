@@ -21,7 +21,14 @@ server {
         proxy_pass https://auth.vbgn.be/api/auth_request/basic?groups[]=admin;
         proxy_pass_request_body off;
         proxy_set_header Content-Length "";
+        proxy_set_header Authorization $http_authorization;
         internal;
+
+        # Recommended settings when the authentication server is using https
+        proxy_ssl_server_name on;
+        proxy_ssl_verify on;
+        proxy_ssl_verify_depth 3;
+        proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
     }
 }
 ```
