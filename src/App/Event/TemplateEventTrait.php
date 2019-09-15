@@ -53,7 +53,7 @@ trait TemplateEventTrait
         return new \IteratorIterator($this->_getTemplates());
     }
 
-    public function getTemplateData($template)
+    public function getTemplateData(TemplateReferenceInterface $template)
     {
         return $this->_getTemplates()[$template] + $this->globalData;
     }

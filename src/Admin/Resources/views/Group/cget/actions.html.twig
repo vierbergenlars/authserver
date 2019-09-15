@@ -1,0 +1,7 @@
+{% spaceless %}
+<div class="btn-group btn-group-sm">
+    <a class="btn btn-info" href="{{ url('admin_group_get', {group: item.name}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
+    <a class="btn btn-default{% if not is_granted('ROLE_SCOPE_W_GROUP') %} disabled{% endif %}" href="{{ url('admin_group_edit', {group: item.name}) }}" title="Edit">{{ icon('edit') }} <span class="sr-only">Edit</span></a>
+    <a class="btn btn-danger{% if not is_granted('ROLE_SCOPE_W_GROUP') %} disabled{% endif %}" href="{{ url('admin_group_remove', {group: item.name}) }}" title="Delete">{{ icon('trash-o') }} <span class="sr-only">Delete</span></a>
+</div>
+{% endspaceless %}

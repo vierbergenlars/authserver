@@ -1,0 +1,12 @@
+{% if value['+'] is defined %}
+    {% for id in value['+'] %}
+        {% include 'AdminBundle:Audit:action/create.html.twig' with {} only %}&emsp;
+        {% include 'AdminBundle:Audit:format/extras.html.twig' with { cls: 'App\\Entity\\Group', id: id } only %}<br>
+    {% endfor %}
+{% endif %}
+{% if value['-'] is defined %}
+    {% for id in value['-'] %}
+        {% include 'AdminBundle:Audit:format/remove.html.twig' with {} only %}&emsp;
+        {% include 'AdminBundle:Audit:format/extras.html.twig' with { cls: 'App\\Entity\\Group', id: id } only %}<br>
+    {% endfor %}
+{% endif %}

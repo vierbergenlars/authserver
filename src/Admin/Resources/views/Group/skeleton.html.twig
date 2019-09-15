@@ -45,6 +45,11 @@
                         </div>
                     </div>
                 {% endblock %}
+                {% if group is defined %}
+                    {{ event_send('Admin\\AdminEvents::SIDEBAR', 'Admin\\Event\\SidebarEvent', 'App\\Entity\\Group', group) }}
+                {% else %}
+                    {{ event_send('Admin\\AdminEvents::SIDEBAR', 'Admin\\Event\\SidebarEvent', 'App\\Entity\\Group') }}
+                {% endif %}
             </div>
         </div>
     </div>

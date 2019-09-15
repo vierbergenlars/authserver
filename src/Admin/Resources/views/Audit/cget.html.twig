@@ -3,50 +3,7 @@
     <div class="panel-heading">
         <h3 class="panel-title">{{ icon('heartbeat') }} Audit log</h3>
     </div>
-    <div class="table-responsive">
-        {% if data|length > 0 %}
-          <table class="table">
-            <thead>
-              <tr>
-                  <th>Target</th>
-                  <th>Action</th>
-                  <th>Username</th>
-                  <th>Date</th>
-                  <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for obj in data %}
-                <tr>
-                    <td>
-                        {% include 'AdminBundle:Audit:format/target.html.twig' with {obj: obj} %}
-                        <span class="pull-right">&emsp;
-                        {% include 'AdminBundle:Audit:format/extras.html.twig' with {cls:obj.objectClass,id:obj.objectId,em:entity_manager} only %}
-                        </span>
-                    </td>
-                    <td>
-                        {% include 'AdminBundle:Audit:format/action.html.twig' with {action: obj.action} %}
-                    </td>
-                    <td>
-                        {% include 'AdminBundle:Audit:format/username.html.twig' with {username: obj.username} %}
-                    </td>
-                    <td>
-                        {{ obj.loggedAt|date }}
-                    </td>
-                  <td>
-                    <div class="btn-group btn-group-sm">
-                      <a class="btn btn-info" href="{{ url('admin_audit_get', {logEntry: obj.id}) }}" title="View">{{ icon('eye') }} <span class="sr-only">View</span></a>
-                    </div>
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% endif %}
-    </div>
-    <div class="panel-body text-center">
-        {{ knp_pagination_render(data, "", {"media_type": null}) }}
-    </div>
+    {% include 'AdminBundle::table.html.twig' %}
 {% endblock %}
 {% block radrest_sidebar %}
     {{ parent() }}

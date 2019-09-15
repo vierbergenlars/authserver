@@ -45,6 +45,11 @@
                         </div>
                     </div>
                 {% endblock %}
+                {% if user is defined %}
+                    {{ event_send('Admin\\AdminEvents::SIDEBAR', 'Admin\\Event\\SidebarEvent', 'App\\Entity\\User', user) }}
+                {% else %}
+                    {{ event_send('Admin\\AdminEvents::SIDEBAR', 'Admin\\Event\\SidebarEvent', 'App\\Entity\\User') }}
+                {% endif %}
             </div>
         </div>
     </div>

@@ -8,9 +8,9 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Login</h3>
                     </div>
-                    {% include 'AppBundle::templateEvent.html.twig' with {event: bodyTemplateEvent } only %}
+                    {{ event_send('App\\AppEvents::LOGIN_VIEW_BODY', bodyTemplateEvent) }}
                     <div class="panel-footer text-center">
-                        {% include 'AppBundle::templateEvent.html.twig' with {event: footerTemplateEvent } only %}
+                        {{ event_send('App\\AppEvents::LOGIN_VIEW_FOOTER', footerTemplateEvent) }}
                         <div class="clearfix"></div>
                     </div>
                 </div>

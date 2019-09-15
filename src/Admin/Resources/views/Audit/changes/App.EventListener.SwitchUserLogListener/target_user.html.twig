@@ -1,5 +1,0 @@
-{% if value %}
-    {% include 'AdminBundle:Audit:format/extras.html.twig' with { cls: 'App\\Entity\\User', id: value, em:entity_manager, details: true} only %}
-{% else %}
-    <span class="text-muted">(Exit impersonation)</span>
-{% endif %}

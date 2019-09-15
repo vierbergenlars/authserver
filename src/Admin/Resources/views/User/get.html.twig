@@ -6,73 +6,7 @@
 
     <div class="panel-body">
         <dl class="dl-horizontal">
-            <dt>Name</dt><dd>{{ data.displayName }}</dd>
-            <dt>Username</dt><dd>
-                {{ data.username }}
-                {% if not data.enabled %}
-                    {{ label('Disabled') }}
-                {% endif %}
-                {% if not data.accountNonLocked %}
-                    {{ label('Locked') }}
-                {% endif %}
-                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and not is_granted('ROLE_PREVIOUS_ADMIN') %}
-                    <a href="{{ url('user_profile', {'_switch_user':data.username}) }}" class="btn btn-sm btn-link">
-                        {{ icon('user-secret') }} Impersonate user
-                    </a>
-                {% endif %}
-            </dd>
-            {% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
-                <dt>Email<dt><dd>
-                    {% for e in data.emailAddresses %}
-                        {{ e.email }}
-                        {% if e.verified %}
-                            <span title="Verified">{{ label_success('V') }}</span>
-                        {% else %}
-                            <span title="Not verified">{{ label('V') }}</span>
-                        {% endif %}
-                        {% if e.primary %}
-                            {{ label_primary('Primary') }}
-                        {% endif %}
-                        <a href="{{ url('admin_audit_gets', {target: 'App\\Entity\\EmailAddress@'~e.id}) }}">{{ icon('history') }}</a>
-                        <br>
-                    {% endfor %}
-                </dd>
-            {% endif %}
-            <dt>Password authentication</dt><dd>
-                {% if data.passwordEnabled == 1 %}
-                    Enabled
-                {% elseif data.passwordEnabled == 2 %}
-                    Allow user to set initial password
-                {% elseif data.passwordEnabled == 0 %}
-                    Disabled
-                {% else %}
-                    <span class="text-danger">Invalid value: {{ data.passwordEnabled }}</span>
-                {% endif %}
-            </dd>
-            {% if data.passwordEnabled != 2 %}
-                <dt>Password</dt><dd>
-                    {% if data.passwordEnabled == 1 %}******{% endif %}
-                    <a class="btn btn-sm btn-link" href="{{ url('user_password_forgot', { user: data.username }) }}">Reset</a>
-                </dd>
-            {% endif %}
-            <dt>Local flags</dt><dd>
-                {% if 'ROLE_USER' == data.role %}
-                    <span class="text-muted">(None)</span>
-                {% elseif 'ROLE_SUPER_ADMIN' == data.role %}
-                    {{ label_danger('Super admin') }}
-                {% elseif 'ROLE_ADMIN' == data.role %}
-                    {{ label_danger('Admin') }}
-                {% else %}
-                    {{ data.role }}
-                {% endif %}
-            </dd>
-            <dt>Member of</dt><dd>
-                {% for g in data.groupsRecursive %}
-                    <a href="{{ url('admin_group_get', { group: g.name }) }}" {% if g.exportable %}class="text-success"{% endif %}>{{ icon('group') }} {% if g not in data.groups %}+ {% endif %}<abbr title="{{ g.name }}{% if g in data.groups %} (Direct){% endif %}{% if g.exportable %} (Exportable){% endif %}">{{ g.displayName }}</abbr></a><br>
-                {% else %}
-                    <span class="text-muted">(None)</span>
-                {% endfor %}
-            </dd>
+            {{ event_send('Admin\\AdminEvents::DISPLAY', 'App\\Event\\TemplateEvent', data) }}
         </dl>
     </div>
 {% endblock %}

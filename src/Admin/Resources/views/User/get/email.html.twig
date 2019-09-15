@@ -1,0 +1,17 @@
+{% if is_granted('ROLE_SCOPE_R_PROFILE_EMAIL') %}
+    <dt>Email<dt><dd>
+        {% for e in subject.emailAddresses %}
+            {{ e.email }}
+            {% if e.verified %}
+                <span title="Verified">{{ label_success('V') }}</span>
+            {% else %}
+                <span title="Not verified">{{ label('V') }}</span>
+            {% endif %}
+            {% if e.primary %}
+                {{ label_primary('Primary') }}
+            {% endif %}
+            <a href="{{ url('admin_audit_gets', {target: 'App\\Entity\\EmailAddress@'~e.id}) }}">{{ icon('history') }}</a>
+            <br>
+        {% endfor %}
+    </dd>
+{% endif %}

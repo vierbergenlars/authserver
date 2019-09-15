@@ -1,0 +1,5 @@
+{% if item %}
+    <a href="{{ url('admin_apikey_get', {apikey: item.id}) }}">{{ icon('key fa-fw') }} {{ item.name }}</a>
+{% else %}
+    <span class="text-muted">{{ icon('key fa-fw') }}</span>
+{% endif %}

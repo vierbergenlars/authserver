@@ -1,0 +1,5 @@
+{% if item %}
+    <a href="{{ url('admin_user_get', {user: item.guid}) }}" title="{{ item.displayName }}">{{ icon('user fa-fw') }} {{ item.username }}</a>
+{% else %}
+    <span class="text-muted">{{ icon('user fa-fw') }}</span>
+{% endif %}

@@ -1,0 +1,11 @@
+<dt>Local flags</dt><dd>
+    {% if 'ROLE_USER' == subject.role %}
+        <span class="text-muted">(None)</span>
+    {% elseif 'ROLE_SUPER_ADMIN' == subject.role %}
+        {{ label_danger('Super admin') }}
+    {% elseif 'ROLE_ADMIN' == subject.role %}
+        {{ label_danger('Admin') }}
+    {% else %}
+        {{ subject.role }}
+    {% endif %}
+</dd>

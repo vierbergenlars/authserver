@@ -1,0 +1,12 @@
+{{ item.username }}
+{% if 'ROLE_USER' == item.role %}
+{% elseif 'ROLE_SUPER_ADMIN' == item.role %}
+    {{ label_danger('Super admin') }}
+{% elseif 'ROLE_ADMIN' == item.role %}
+    {{ label_danger('Admin') }}
+{% endif %}
+{% if not item.enabled %}
+    {{ label('Disabled') }}
+{% elseif not item.accountNonLocked %}
+    {{ label('Locked') }}
+{% endif %}

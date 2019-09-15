@@ -1,0 +1,14 @@
+<dt>Username</dt><dd>
+    {{ subject.username }}
+    {% if not subject.enabled %}
+        {{ label('Disabled') }}
+    {% endif %}
+    {% if not subject.accountNonLocked %}
+        {{ label('Locked') }}
+    {% endif %}
+    {% if is_granted('ROLE_ALLOWED_TO_SWITCH') and not is_granted('ROLE_PREVIOUS_ADMIN') %}
+        <a href="{{ url('user_profile', {'_switch_user':subject.username}) }}" class="btn btn-sm btn-link">
+            {{ icon('user-secret') }} Impersonate user
+        </a>
+    {% endif %}
+</dd>

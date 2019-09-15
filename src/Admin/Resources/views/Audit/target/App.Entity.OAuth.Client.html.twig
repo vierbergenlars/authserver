@@ -1,0 +1,5 @@
+{% if item %}
+    <a href="{{ url('admin_oauth_client_get', {client: item.id}) }}">{{ icon('cube fa-fw') }} {{ item.name }}</a>
+{% else %}
+    <span class="text-muted">{{ icon('cube fa-fw') }}</span>
+{% endif %}
