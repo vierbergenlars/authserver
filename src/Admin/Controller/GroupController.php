@@ -26,6 +26,7 @@ use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,6 +47,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  */
 class GroupController extends CRUDController
 {
+    /**
+     * @View
+     * @NoRoute
+     */
+    public function dashboardAction(Request $request)
+    {
+        return parent::dashboardAction($request);
+    }
+
     public function flagsAction(Request $request, Group $group)
     {
         $form = $this->get('form.factory')

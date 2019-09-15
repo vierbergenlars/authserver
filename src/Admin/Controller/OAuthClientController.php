@@ -37,6 +37,15 @@ class OAuthClientController extends CRUDController
 {
     /**
      * @View
+     * @NoRoute
+     */
+    public function dashboardAction(Request $request)
+    {
+        return parent::dashboardAction($request);
+    }
+
+    /**
+     * @View
      * @Get(name="s")
      */
     public function cgetAction(Request $request)
