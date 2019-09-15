@@ -26,6 +26,7 @@ use App\Form\UserType;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\NoRoute;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Patch;
@@ -46,6 +47,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class UserController extends CRUDController
 {
+    /**
+     * @View
+     * @NoRoute
+     */
+    public function dashboardAction(Request $request)
+    {
+        return parent::dashboardAction($request);
+    }
+
     /**
      * @View
      * @Get(name="s")

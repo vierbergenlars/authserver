@@ -25,8 +25,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\Controller\Annotations\NoRoute;
 use Admin\Event\BatchEvent;
 use Admin\AdminEvents;
 use Admin\Event\FilterListEvent;
@@ -37,11 +35,7 @@ use Admin\Event\DisplayListEvent;
 abstract class CRUDController extends BaseController
 {
 
-    /**
-     * @View
-     * @NoRoute
-     */
-    public function dashboardAction(Request $request)
+    protected function dashboardAction(Request $request)
     {
         return $this->paginate($this->getEntityRepository()
             ->createQueryBuilder('e'), $request);
